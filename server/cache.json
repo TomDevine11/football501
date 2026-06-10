@@ -1345,5 +1345,19 @@
   "attrs:james rodriguez": {
     "nationality": "Colombia",
     "position": "midfielder"
+  },
+  "attrs:phil foden": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "cat:intl-european-fwd-goals:phil foden": {
+    "stat": 4,
+    "breakdown": {
+      "goals": 4
+    }
+  },
+  "attrs:wayne rooney": {
+    "nationality": "England",
+    "position": "forward"
   }
 }

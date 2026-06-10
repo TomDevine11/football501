@@ -422,7 +422,10 @@ async function fetchPlayerAttrs(playerName, { needClubs = false } = {}) {
   const cacheKey = `attrs:${normName(playerName)}`
   if (cache[cacheKey]) {
     const cached = cache[cacheKey]
-    if (!needClubs || cached.clubs !== undefined) return cached
+    // Don't trust a cached entry with no position — likely a transient
+    // Wikipedia lookup failure that got cached alongside a successful
+    // nationality lookup. Retry rather than permanently sticking with it.
+    if (cached.position != null && (!needClubs || cached.clubs !== undefined)) return cached
   }
 
   return dedupe(`${cacheKey}:${needClubs}`, () => fetchPlayerAttrsUncached(playerName, needClubs))
