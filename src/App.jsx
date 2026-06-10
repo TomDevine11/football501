@@ -630,24 +630,24 @@ export default function App() {
   // ── Backfill positions for suggestions TheSportsDB couldn't classify ──
   // (retired players shown as "Manager", players missing from TSDB, local
   // fallback players, etc.) so every player box gets a position badge.
-  // Capped + sequential + cached to avoid hammering TheSportsDB's rate
-  // limit, which previously starved the main player-search requests.
+  // Fired off in parallel and cached (both client- and server-side) so
+  // re-renders don't refetch — the server's own concurrency limiter keeps
+  // this from hammering TheSportsDB/Wikipedia.
   useEffect(() => {
     const missing = suggestions
       .filter(p => p.position == null && !positionAttempts.current.has(p.name))
-      .slice(0, 3)
     if (!missing.length) return
 
     let cancelled = false
+    for (const player of missing) positionAttempts.current.add(player.name)
     ;(async () => {
-      for (const player of missing) {
-        positionAttempts.current.add(player.name)
-        const position = await fetchPlayerPosition(player.name)
-        if (cancelled) return
-        if (position) {
-          setSuggestions(prev => prev.map(p => p.name === player.name ? { ...p, position } : p))
-        }
-      }
+      const results = await Promise.all(missing.map(player => fetchPlayerPosition(player.name)))
+      if (cancelled) return
+      const positions = new Map(missing.map((player, i) => [player.name, results[i]]))
+      setSuggestions(prev => prev.map(p => positions.has(p.name) && positions.get(p.name)
+        ? { ...p, position: positions.get(p.name) }
+        : p
+      ))
     })()
     return () => { cancelled = true }
   }, [suggestions])

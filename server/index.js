@@ -362,6 +362,28 @@ function nationalityFromWikiHTML(html) {
   return nationality
 }
 
+// Extract senior international goals from the infobox "International career"
+// section — sums goals across all senior-team rows, skipping youth teams
+// (e.g. "England U21").
+function internationalGoalsFromWikiHTML(html) {
+  const $ = cheerio.load(html)
+  const header = $('.infobox-header').filter((_, el) => /international career/i.test($(el).text())).first()
+  if (!header.length) return null
+
+  let total = 0, found = false
+  let row = header.closest('tr').next()
+  while (row.length && !row.find('.infobox-header').length) {
+    const team      = row.find('.infobox-data-a').text().trim()
+    const goalsText = row.find('.infobox-data-c').text().trim()
+    if (team && !/u-?\d{2}\b/i.test(team)) {
+      const m = goalsText.match(/\((\d+)\)/)
+      if (m) { total += parseInt(m[1]); found = true }
+    }
+    row = row.next()
+  }
+  return found ? total : null
+}
+
 // Extract clubs from career stats table (first column across all season rows)
 function clubsFromWikiHTML(html) {
   const $ = cheerio.load(html)
@@ -562,6 +584,27 @@ async function fetchStatFromWikipedia(playerName, objectiveId) {
   }
 }
 
+// Fallback for players with fewer than 50 international goals (not on the
+// Tier-1 list) — parse their senior international goal tally directly from
+// their Wikipedia infobox.
+async function fetchInternationalGoals(playerName) {
+  try {
+    const results = await wikiSearch(playerName)
+    for (const r of results.slice(0, 3)) {
+      const html  = await wikiArticleHTML(r.title)
+      const goals = internationalGoalsFromWikiHTML(html)
+      if (goals !== null) {
+        console.log(`  Wikipedia ✓ international goals "${playerName}": ${goals}`)
+        return goals
+      }
+    }
+    return null
+  } catch (err) {
+    console.warn(`  International goals Wikipedia error for "${playerName}": ${err.message}`)
+    return null
+  }
+}
+
 // Tier-1 list fetching & parsing
 const STATMUSE_COMP = {
   'ucl-career-goals':          'champions-league-goals',
@@ -753,10 +796,15 @@ app.get('/api/category-stat', async (req, res) => {
   let stat, breakdown
 
   if (competition === 'international') {
-    // Use Tier-1 Wikipedia 50+ international goals list
+    // Tier-1: Wikipedia 50+ international goals list (instant)
     const t1 = cache['data:international-goals'] ?? {}
     const hit = t1[playerName] ?? getIndex('international-goals')[norm(playerName)]?.stat
-    stat      = hit ?? 0
+    if (hit !== undefined) {
+      stat = hit
+    } else {
+      // Tier 3: player has fewer than 50 — parse their actual tally from Wikipedia
+      stat = await dedupe(pKey, () => fetchInternationalGoals(playerName)) ?? 0
+    }
     breakdown = { goals: stat }
   } else {
     const multi = await dedupe(pKey, () => fetchMultiStat(playerName, competition, statTypes))
