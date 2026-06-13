@@ -1359,5 +1359,304 @@
   "attrs:wayne rooney": {
     "nationality": "England",
     "position": "forward"
+  },
+  "attrs:thiago silva": {
+    "nationality": "Brazil",
+    "position": "defender"
+  },
+  "attrs:simone inzaghi": {
+    "nationality": "Italy",
+    "position": "forward"
+  },
+  "attrs:davor suker": {
+    "nationality": "Croatia",
+    "position": "forward"
+  },
+  "attrs:kenny dalglish": {
+    "nationality": "Scotland",
+    "position": "forward"
+  },
+  "attrs:isidro langara": {
+    "nationality": null,
+    "position": "forward"
+  },
+  "attrs:damien duff": {
+    "nationality": "Ireland",
+    "position": null
+  },
+  "cat:pl-eu-mid-goals-assists:david silva": {
+    "stat": 149,
+    "breakdown": {
+      "goals": 59,
+      "assists": 90
+    }
+  },
+  "attrs:freddie ljungberg": {
+    "nationality": "Sweden",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:bernardo silva": {
+    "stat": 94,
+    "breakdown": {
+      "goals": 45,
+      "assists": 49
+    }
+  },
+  "attrs:zlatan ibrahimovic": {
+    "nationality": "Sweden",
+    "position": "forward"
+  },
+  "attrs:bryan robson": {
+    "nationality": "England",
+    "position": "midfielder"
+  },
+  "attrs:gabriel batistuta": {
+    "nationality": "Argentina",
+    "position": "forward"
+  },
+  "attrs:rafael leao": {
+    "nationality": "Portugal",
+    "position": "forward"
+  },
+  "attrs:radamel falcao": {
+    "nationality": "Colombia",
+    "position": "forward"
+  },
+  "cat:pl-eu-mid-goals-assists:cesc fabregas": {
+    "stat": 158,
+    "breakdown": {
+      "goals": 50,
+      "assists": 108
+    }
+  },
+  "attrs:mesut ozil": {
+    "nationality": "Germany",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:mesut ozil": {
+    "stat": 83,
+    "breakdown": {
+      "goals": 33,
+      "assists": 50
+    }
+  },
+  "attrs:santillana": {
+    "nationality": "Spain",
+    "position": "forward"
+  },
+  "attrs:bukayo saka": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "attrs:hugo sanchez": {
+    "nationality": "Mexico",
+    "position": "forward"
+  },
+  "attrs:samuel etoo": {
+    "nationality": "Cameroon",
+    "position": "forward"
+  },
+  "attrs:sandor kocsis": {
+    "nationality": null,
+    "position": "forward"
+  },
+  "attrs:pablo sanchez sanchez": {
+    "nationality": null,
+    "position": "defender"
+  },
+  "attrs:cesar rodriguez": {
+    "nationality": "Venezuela",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:kevin de bruyne": {
+    "stat": 189,
+    "breakdown": {
+      "goals": 72,
+      "assists": 117
+    }
+  },
+  "attrs:ally mccoist": {
+    "nationality": "Scotland",
+    "position": "forward"
+  },
+  "attrs:trent alexanderarnold": {
+    "nationality": "England",
+    "position": "defender"
+  },
+  "cat:pl-eu-mid-goals-assists:xabi alonso": {
+    "stat": 31,
+    "breakdown": {
+      "goals": 14,
+      "assists": 17
+    }
+  },
+  "attrs:christian eriksen": {
+    "nationality": "Denmark",
+    "position": "midfielder"
+  },
+  "attrs:teddy sheringham": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "cat:pl-eu-mid-goals-assists:christian eriksen": {
+    "stat": 130,
+    "breakdown": {
+      "goals": 55,
+      "assists": 75
+    }
+  },
+  "attrs:robbie fowler": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "attrs:romario": {
+    "nationality": "Brazil",
+    "position": "forward"
+  },
+  "attrs:rodri": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "attrs:robbie keane": {
+    "nationality": "Ireland",
+    "position": "forward"
+  },
+  "attrs:diego forlan": {
+    "nationality": "Uruguay",
+    "position": "forward"
+  },
+  "attrs:just fontaine": {
+    "nationality": null,
+    "position": "forward"
+  },
+  "attrs:ivan rakitic": {
+    "nationality": "Croatia",
+    "position": "midfielder"
+  },
+  "attrs:lilian thuram": {
+    "nationality": "France",
+    "position": "defender"
+  },
+  "attrs:aaron ramsey": {
+    "nationality": "Wales",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:aaron ramsey": {
+    "stat": 85,
+    "breakdown": {
+      "goals": 40,
+      "assists": 45
+    }
+  },
+  "attrs:frank rijkaard": {
+    "nationality": "Netherlands",
+    "position": "midfielder"
+  },
+  "attrs:gordon banks": {
+    "nationality": "England",
+    "position": "goalkeeper"
+  },
+  "attrs:les ferdinand": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "attrs:romelu lukaku": {
+    "nationality": "Belgium",
+    "position": "forward"
+  },
+  "attrs:joao felix": {
+    "nationality": "Portugal",
+    "position": "forward"
+  },
+  "attrs:ferenc puskas": {
+    "nationality": "Hungary",
+    "position": "forward"
+  },
+  "attrs:rio ferdinand": {
+    "nationality": "England",
+    "position": "defender"
+  },
+  "attrs:niall quinn": {
+    "nationality": "Northern Ireland",
+    "position": "defender"
+  },
+  "attrs:andres iniesta": {
+    "nationality": "Spain",
+    "position": "midfielder"
+  },
+  "attrs:aurelien tchouameni": {
+    "nationality": "France",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:bastian schweinsteiger": {
+    "stat": 1,
+    "breakdown": {
+      "goals": 1,
+      "assists": 0
+    }
+  },
+  "cat:laliga-argentine-fwd-goals:lionel messi": {
+    "stat": 474,
+    "breakdown": {
+      "goals": 474
+    }
+  },
+  "attrs:abedi pele": {
+    "nationality": "Ghana",
+    "position": "midfielder"
+  },
+  "attrs:dion dublin": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "cat:laliga-argentine-fwd-goals:angel di maria": {
+    "stat": 22,
+    "breakdown": {
+      "goals": 22
+    }
+  },
+  "attrs:peter shilton": {
+    "nationality": "England",
+    "position": "goalkeeper"
+  },
+  "attrs:phil neville": {
+    "nationality": "England",
+    "position": "defender"
+  },
+  "cat:laliga-argentine-fwd-goals:gonzalo higuain": {
+    "stat": 107,
+    "breakdown": {
+      "goals": 107
+    }
+  },
+  "attrs:jamie carragher": {
+    "nationality": "England",
+    "position": "defender"
+  },
+  "attrs:theodoros zagorakis": {
+    "nationality": "Greece",
+    "position": "midfielder"
+  },
+  "cat:laliga-argentine-fwd-goals:sergio aguero": {
+    "stat": 74,
+    "breakdown": {
+      "goals": 74
+    }
+  },
+  "attrs:julian alvarez": {
+    "nationality": "Argentina",
+    "position": "forward"
+  },
+  "cat:laliga-argentine-fwd-goals:julian alvarez": {
+    "stat": 25,
+    "breakdown": {
+      "goals": 25
+    }
+  },
+  "cat:intl-south-am-fwd-goals:diego forlan": {
+    "stat": 36,
+    "breakdown": {
+      "goals": 36
+    }
   }
 }
