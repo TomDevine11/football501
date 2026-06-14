@@ -49,33 +49,18 @@ function headFor(route) {
   return lines.join('\n    ')
 }
 
+// The #root placeholder shown before the SPA boots. Deliberately a minimal,
+// app-consistent loading screen (dark background, brand + tagline) rather than
+// a full text page — otherwise users see a jarring "different page" flash on
+// every load when React mounts and replaces #root. The page's real, indexable
+// content lives in the live React DOM (which Google renders) and the SEO
+// signals (title, meta, canonical, Open Graph, JSON-LD incl. FAQ) are baked
+// into <head> above, so nothing is lost for ranking.
 function staticBody(route) {
-  const link = (p, name) => `<a href="${p}" style="color:#34d399;text-decoration:none">${esc(name)}</a>`
-  let h = `<main style="min-height:100vh;background:#0a0a0a;max-width:40rem;margin:0 auto;padding:2.5rem 1.25rem;color:#e5e7eb;font-family:system-ui,-apple-system,sans-serif">`
-  h += `<h1 style="font-size:1.9rem;font-weight:800;color:#fff;margin:0 0 .25rem">${esc(route.h1)}</h1>`
-  h += `<p style="color:#9ca3af;margin:0 0 .75rem">${esc(route.tagline)}</p>`
-  if (route.about) h += `<p style="color:#9ca3af;line-height:1.6;margin:0 0 1rem">${esc(route.about)}</p>`
-  if (route.path !== '/') h += `<p style="margin:0 0 1.5rem">${link(route.path, '▶ Play ' + route.name)}</p>`
-
-  if (route.howTo?.length) {
-    h += `<h2 style="color:#fff;font-size:1.15rem;margin:1.5rem 0 .5rem">How to play ${esc(route.name)}</h2><ol style="color:#9ca3af;line-height:1.6">`
-    for (const s of route.howTo) h += `<li>${esc(s)}</li>`
-    h += `</ol>`
-  }
-  if (route.faq?.length) {
-    h += `<h2 style="color:#fff;font-size:1.15rem;margin:1.5rem 0 .5rem">Frequently asked questions</h2><dl>`
-    for (const f of route.faq) h += `<dt style="color:#e5e7eb;font-weight:600;margin-top:.85rem">${esc(f.q)}</dt><dd style="color:#9ca3af;margin:.15rem 0 0">${esc(f.a)}</dd>`
-    h += `</dl>`
-  }
-
-  const others = indexableRoutes().filter(o => o.path !== route.path && o.path !== '/')
-  const navItems = route.path === '/'
-    ? indexableRoutes().filter(o => o.path !== '/')
-    : [{ path: '/', name: 'Football Trivia Games' }, ...others]
-  h += `<nav aria-label="Football trivia games" style="margin-top:1.75rem"><h2 style="color:#fff;font-size:1.15rem;margin:0 0 .5rem">${route.path === '/' ? 'Our games' : 'More football trivia games'}</h2><ul style="line-height:1.9;padding-left:1.1rem">`
-  for (const o of navItems) h += `<li>${link(o.path, o.name)}</li>`
-  h += `</ul></nav></main>`
-  return h
+  return `<div style="min-height:100vh;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;font-family:system-ui,-apple-system,sans-serif">`
+    + `<h1 style="color:#fff;font-size:1.75rem;font-weight:800;margin:0">${esc(route.h1)}</h1>`
+    + `<p style="color:#9ca3af;margin:.5rem 0 0;max-width:34rem">${esc(route.tagline)}</p>`
+    + `</div>`
 }
 
 function buildPage(route) {
