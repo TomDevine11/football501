@@ -11,7 +11,7 @@ const MAX_LIVES = 3
 const TSDB = 'https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p='
 const EXCLUDE_SPORTS = new Set(['basketball','american football','baseball','ice hockey','tennis','golf','cricket','rugby','swimming','athletics','motorsport','cycling','boxing','mma'])
 
-export default function FootballTicTacToe() {
+export default function FootballTicTacToe({ onBackToModes }) {
   const [grid] = useState(() => getDailyGrid())
   const [filled, setFilled] = useState({}) // cellIndex -> player name
   const [lives, setLives] = useState(MAX_LIVES)
@@ -46,8 +46,9 @@ export default function FootballTicTacToe() {
   // ── Reveal assignment for unfilled cells once the game ends ───────
   const revealAssignment = useMemo(() => {
     if (phase === 'playing') return null
-    return findAssignment(grid.candidates, usedNames) || []
-  }, [phase, grid.candidates, usedNames])
+    // Reveal famous example answers (the NOTABLE set), not obscure ones.
+    return findAssignment(grid.reveal, usedNames) || []
+  }, [phase, grid.reveal, usedNames])
 
   // ── Suggestions dropdown ──────────────────────────────────────────
   // Searches the full player universe (TheSportsDB + local lists), NOT just
@@ -203,9 +204,15 @@ export default function FootballTicTacToe() {
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       {/* Header */}
       <div className="w-full max-w-lg flex items-center justify-between mb-6">
-        <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
-          ← All games
-        </Link>
+        {onBackToModes ? (
+          <button onClick={onBackToModes} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+            ← Modes
+          </button>
+        ) : (
+          <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+            ← All games
+          </Link>
+        )}
         <div className="score-number text-xl text-gray-500 tracking-wider">TICTACTOE</div>
         <div className="flex items-center gap-1 text-sm tabular-nums">
           {Array.from({ length: MAX_LIVES }, (_, i) => (

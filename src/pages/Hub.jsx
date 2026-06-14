@@ -2,15 +2,6 @@ import { Link } from 'react-router-dom'
 
 const GAMES = [
   {
-    to: '/501',
-    emoji: '🎯',
-    title: 'Football 501',
-    tagline: 'The football darts trivia game',
-    description: 'Count down from 501 by naming footballers. Each player\'s career stat is deducted from your score — land between 0 and −10 to checkout.',
-    color: 'hover:border-green-600 hover:ring-green-600/30',
-    accent: 'text-green-400',
-  },
-  {
     to: '/tenable',
     emoji: '🔺',
     title: 'Football Tenable',
@@ -33,9 +24,26 @@ const GAMES = [
     emoji: '❌⭕',
     title: 'Football TicTacToe',
     tagline: 'Two categories, one player',
-    description: 'A daily 3x3 grid where every row and column is a football category. Fill a square by naming a player who fits both — no repeats allowed.',
+    description: 'A daily 3x3 grid where every row and column is a football category. Fill a square by naming a player who fits both — or play a friend 1v1.',
     color: 'hover:border-purple-500 hover:ring-purple-500/30',
     accent: 'text-purple-400',
+  },
+  {
+    to: '/teammates',
+    emoji: '🕵️',
+    title: 'Guess the Player',
+    tagline: 'Name the mystery player',
+    description: 'A teammate is revealed one at a time. Work out who the mystery player is in 5 guesses — each wrong answer reveals another teammate.',
+    color: 'hover:border-pink-500 hover:ring-pink-500/30',
+    accent: 'text-pink-400',
+  },
+  {
+    to: '/501',
+    emoji: '🎯',
+    title: 'Football 501',
+    tagline: 'The football darts trivia game',
+    description: 'Count down from 501 by naming footballers. Each player\'s career stat is deducted from your score — land between 0 and −10 to checkout.',
+    disabled: true,
   },
 ]
 
@@ -53,24 +61,36 @@ export default function Hub() {
       <div className="w-full max-w-2xl">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {GAMES.map(game => (
-            <Link
-              key={game.to}
-              to={game.to}
-              className={`group relative bg-gray-900 border border-gray-800 ${game.color} rounded-xl p-6 text-left transition-all duration-200 cursor-pointer ring-1 ring-transparent`}
-            >
-              <div className="text-4xl mb-3">{game.emoji}</div>
-              <div className="text-white font-bold text-xl leading-tight">{game.title}</div>
-              <div className={`${game.accent} text-sm mt-1 font-medium`}>{game.tagline}</div>
-              <div className="mt-3 text-gray-600 text-xs leading-relaxed">{game.description}</div>
-              <div className="absolute top-4 right-4 text-gray-700 group-hover:text-gray-400 transition-colors text-xl">→</div>
-            </Link>
+            game.disabled ? (
+              <div
+                key={game.to}
+                aria-disabled="true"
+                className="relative bg-gray-900/50 border border-gray-800/50 rounded-xl p-6 text-left opacity-60 cursor-not-allowed select-none"
+              >
+                <div className="text-4xl mb-3 grayscale opacity-60">{game.emoji}</div>
+                <div className="text-gray-400 font-bold text-xl leading-tight">{game.title}</div>
+                <div className="text-gray-600 text-sm mt-1 font-medium">{game.tagline}</div>
+                <div className="mt-3 text-gray-700 text-xs leading-relaxed">{game.description}</div>
+                <div className="absolute top-4 right-4">
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-gray-500 bg-gray-800/80 border border-gray-700 rounded-full px-2.5 py-1">
+                    Coming soon
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={game.to}
+                to={game.to}
+                className={`group relative bg-gray-900 border border-gray-800 ${game.color} rounded-xl p-6 text-left transition-all duration-200 cursor-pointer ring-1 ring-transparent`}
+              >
+                <div className="text-4xl mb-3">{game.emoji}</div>
+                <div className="text-white font-bold text-xl leading-tight">{game.title}</div>
+                <div className={`${game.accent} text-sm mt-1 font-medium`}>{game.tagline}</div>
+                <div className="mt-3 text-gray-600 text-xs leading-relaxed">{game.description}</div>
+                <div className="absolute top-4 right-4 text-gray-700 group-hover:text-gray-400 transition-colors text-xl">→</div>
+              </Link>
+            )
           ))}
-
-          <div className="relative bg-gray-900/50 border border-gray-800/50 rounded-xl p-6 text-left">
-            <div className="text-4xl mb-3 opacity-40">⚽</div>
-            <div className="text-gray-500 font-bold text-xl leading-tight">More coming soon</div>
-            <div className="text-gray-600 text-sm mt-1 font-medium">New gamemodes are in the works</div>
-          </div>
         </div>
       </div>
     </div>

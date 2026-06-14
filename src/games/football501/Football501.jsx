@@ -5,6 +5,7 @@ import { MODES } from '../../data/modes'
 import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
+import { validateGuess as validate501, isSourced as isSourced501 } from '../../data/five01'
 
 const MAX_SCORE    = 501
 const CHECKOUT_MIN = -10
@@ -628,29 +629,48 @@ export default function Football501() {
     }
 
     let statScore, breakdown
-    try {
-      const result = await fetchCategoryStat(player.name, challenge.id)
 
-      if (!result.filterMatch) {
+    if (isSourced501(challenge.id)) {
+      // Sourced challenge: validate by pure lookup against the authoritative
+      // top-scorer table — deterministic, no network, no prose parsing. The
+      // leaderboard IS the eligible set, so anything not on it is honestly
+      // rejected rather than guessed at.
+      const local = validate501(challenge.id, player.name)
+      setIsLookingUp(false)
+      if (local.status === 'valid') {
+        statScore = local.value
+        breakdown = local.breakdown
+      } else {
+        const reason = local.status === 'ambiguous'
+          ? `Ambiguous — did you mean ${local.options.join(' or ')}?`
+          : `${player.name} isn't on the ${challenge.title}`
+        recordAndAdvance({ player, valid: false, statScore: null, reason, scoreAtTime })
+        return
+      }
+    } else {
+      // Legacy live lookup (kept for any non-sourced challenge).
+      try {
+        const result = await fetchCategoryStat(player.name, challenge.id)
+        if (!result.filterMatch) {
+          recordAndAdvance({
+            player, valid: false, statScore: null,
+            reason: result.reason || 'Not eligible for this category',
+            scoreAtTime,
+          })
+          return
+        }
+        statScore = result.stat ?? 0
+        breakdown = result.breakdown ?? {}
+      } catch (err) {
         recordAndAdvance({
-          player, valid: false, statScore: null,
-          reason: result.reason || 'Not eligible for this category',
+          player, valid: false,
+          reason: `Server error — is the stats server running? (${err.message})`,
           scoreAtTime,
         })
         return
+      } finally {
+        setIsLookingUp(false)
       }
-
-      statScore = result.stat ?? 0
-      breakdown = result.breakdown ?? {}
-    } catch (err) {
-      recordAndAdvance({
-        player, valid: false,
-        reason: `Server error — is the stats server running? (${err.message})`,
-        scoreAtTime,
-      })
-      return
-    } finally {
-      setIsLookingUp(false)
     }
 
     if (!isValidDartsScore(statScore)) {
@@ -739,7 +759,6 @@ export default function Football501() {
 
   // ── Game screen ───────────────────────────────────────────────
   const validCount = history.filter(g => g.valid).length
-  const colors = MODE_COLORS[selectedMode?.color] ?? MODE_COLORS.purple
   const currentPlayer = players[currentPlayerIndex]
 
   return (

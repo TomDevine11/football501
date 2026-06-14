@@ -70,6 +70,12 @@ body {
 
 .pyramid-pulse { animation: pyramid-pulse 0.18s ease-in-out; }
 .cell-reveal { animation: cell-reveal 0.35s ease-out; }
+
+@keyframes clue-reveal {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+.clue-reveal { animation: clue-reveal 0.3s ease-out; }
 .shake { animation: shake 0.4s ease-in-out; }
 
 @keyframes tile-pop {

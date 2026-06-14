@@ -1131,7 +1131,7 @@
   },
   "attrs:javier mascherano": {
     "nationality": "Argentina",
-    "position": null
+    "position": "defender"
   },
   "attrs:hernan crespo": {
     "nationality": "Argentina",
@@ -1382,7 +1382,7 @@
   },
   "attrs:damien duff": {
     "nationality": "Ireland",
-    "position": null
+    "position": "forward"
   },
   "cat:pl-eu-mid-goals-assists:david silva": {
     "stat": 149,
@@ -1658,5 +1658,105 @@
     "breakdown": {
       "goals": 36
     }
+  },
+  "attrs:rashidi yekini": {
+    "nationality": null,
+    "position": "forward"
+  },
+  "cat:pl-eu-mid-goals-assists:frank lampard": {
+    "stat": 279,
+    "breakdown": {
+      "goals": 177,
+      "assists": 102
+    }
+  },
+  "attrs:terry butcher": {
+    "nationality": null,
+    "position": "defender"
+  },
+  "attrs:ali daei": {
+    "nationality": null,
+    "position": "forward"
+  },
+  "attrs:tim cahill": {
+    "nationality": "Australia",
+    "position": "forward"
+  },
+  "attrs:youri tielemans": {
+    "nationality": "Belgium",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:youri tielemans": {
+    "stat": 63,
+    "breakdown": {
+      "goals": 26,
+      "assists": 37
+    }
+  },
+  "attrs:jared borgetti": {
+    "nationality": null,
+    "position": "forward"
+  },
+  "attrs:gareth barry": {
+    "nationality": "England",
+    "position": "midfielder"
+  },
+  "attrs:gareth bale": {
+    "nationality": "Wales",
+    "position": "forward"
+  },
+  "attrs:thibaut courtois": {
+    "nationality": "Belgium",
+    "position": "goalkeeper"
+  },
+  "attrs:nat lofthouse": {
+    "nationality": null,
+    "position": "forward"
+  },
+  "attrs:dwight yorke": {
+    "nationality": "Trinidad and Tobago",
+    "position": "forward"
+  },
+  "attrs:georginio wijnaldum": {
+    "nationality": "Netherlands",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:georginio wijnaldum": {
+    "stat": 43,
+    "breakdown": {
+      "goals": 27,
+      "assists": 16
+    }
+  },
+  "attrs:sol campbell": {
+    "nationality": "United Kingdom",
+    "position": null
+  },
+  "attrs:bobby charlton": {
+    "nationality": "England",
+    "position": "forward"
+  },
+  "attrs:harvey elliott": {
+    "nationality": "England",
+    "position": "midfielder"
+  },
+  "cat:pl-eu-mid-goals-assists:harvey elliott": {
+    "stat": 15,
+    "breakdown": {
+      "goals": 5,
+      "assists": 10
+    }
+  },
+  "attrs:vinicius jr": {
+    "nationality": "Brazil",
+    "position": "forward"
+  },
+  "attrs:lev yashin": {
+    "nationality": "Russia",
+    "position": "goalkeeper"
+  },
+  "attrs:andrew cole": {
+    "nationality": null,
+    "position": "forward"
   }
 }

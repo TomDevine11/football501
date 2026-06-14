@@ -1,6 +1,10 @@
 import { famousPlayers } from './famousPlayers'
 import { getFlagFromNationality } from '../utils/flags'
 
+// The daily answer is drawn from a curated, self-contained pool — no runtime
+// lookup. AS_OF records when the pool was last reviewed.
+export const WORDLE_AS_OF = '2026-06-13'
+
 // Strip accents/punctuation and uppercase, leaving only A-Z.
 export function normalizeLetters(str) {
   return str

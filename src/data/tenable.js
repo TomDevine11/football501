@@ -1,6 +1,13 @@
 // Football Tenable — daily "name the top 10" trivia questions.
 // Each question has exactly 10 distinct ranked answers. `aliases` cover
 // common spellings/nicknames so the fuzzy guess-matcher can accept them.
+//
+// These are precomputed CLOSED answer sets shipped with the question — the
+// "GOOD" pattern from the architecture review (validate against the stored
+// set, never query at runtime). AS_OF records when the rankings were last
+// verified; the validator test enforces the answer-set shape in CI.
+
+export const TENABLE_AS_OF = '2026-06-13'
 
 export const TENABLE_QUESTIONS = [
   {
