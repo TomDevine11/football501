@@ -718,7 +718,10 @@ app.set('trust proxy', 1)
 // whole app can be hosted from this single server/port.
 const DIST_DIR = path.join(__dirname, '..', 'dist')
 if (fs.existsSync(DIST_DIR)) {
-  app.use(express.static(DIST_DIR))
+  // index:false so static never auto-serves index.html — the SPA fallback below
+  // controls HTML routing and serves the per-route prerendered file. redirect:false
+  // avoids 301s that would add trailing slashes (and diverge from canonical URLs).
+  app.use(express.static(DIST_DIR, { index: false, redirect: false }))
 }
 
 // Per-IP rate limit on the API — generous enough for normal gameplay
@@ -859,10 +862,21 @@ app.get('/api/data/:id', (req, res) => {
   res.json({ count: Object.keys(data).length, players: Object.fromEntries(Object.entries(data).sort(([,a],[,b]) => b - a)) })
 })
 
-// SPA fallback — any non-/api route serves the built index.html
+// SPA fallback — serve the prerendered HTML for the requested route (each route
+// has its own dist/<path>/index.html with unique SEO head + crawlable content),
+// falling back to the home shell for anything unrecognised.
 if (fs.existsSync(DIST_DIR)) {
-  app.get(/^(?!\/api).*/, (_req, res) => {
-    res.sendFile(path.join(DIST_DIR, 'index.html'))
+  const HOME = path.join(DIST_DIR, 'index.html')
+  app.get(/^(?!\/api).*/, (req, res) => {
+    const clean = req.path.replace(/\/+$/, '').replace(/^\/+/, '')
+    if (clean) {
+      const candidate = path.join(DIST_DIR, clean, 'index.html')
+      // guard against path traversal, then serve the prerendered route if present
+      if (candidate.startsWith(DIST_DIR + path.sep) && fs.existsSync(candidate)) {
+        return res.sendFile(candidate)
+      }
+    }
+    res.sendFile(HOME)
   })
 }
 

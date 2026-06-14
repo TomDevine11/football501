@@ -1,4 +1,8 @@
 import { Link } from 'react-router-dom'
+import Seo from '../seo/Seo'
+import { routeByPath } from '../seo/seoConfig'
+
+const HOME_FAQ = routeByPath('/').faq
 
 const GAMES = [
   {
@@ -50,11 +54,12 @@ const GAMES = [
 export default function Hub() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
+      <Seo path="/" />
       <div className="mb-10 text-center">
         <div className="text-gray-500 text-sm uppercase tracking-widest mb-2 font-medium">Welcome to</div>
-        <h1 className="score-number text-6xl md:text-7xl text-white mb-4">FOOTBALL TRIVIA</h1>
+        <h1 className="score-number text-5xl md:text-7xl text-white mb-4">Football Trivia Games</h1>
         <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">
-          A growing collection of football trivia games. Pick a gamemode to get started.
+          Free daily football trivia games — pick a gamemode and play. No sign-up, no download.
         </p>
       </div>
 
@@ -92,6 +97,18 @@ export default function Hub() {
             )
           ))}
         </div>
+
+        <section className="mt-12 text-left">
+          <h2 className="text-white font-semibold text-lg mb-3">Frequently asked questions</h2>
+          <dl className="space-y-4">
+            {HOME_FAQ.map((f, i) => (
+              <div key={i}>
+                <dt className="text-gray-200 text-sm font-medium">{f.q}</dt>
+                <dd className="text-gray-500 text-sm mt-1 leading-relaxed">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
       </div>
     </div>
   )

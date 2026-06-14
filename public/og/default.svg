@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a0a"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="10" fill="#16a34a"/>
+  <text x="80" y="250" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="92" font-weight="800" fill="#ffffff">Football Trivia Games</text>
+  <text x="80" y="330" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="40" font-weight="500" fill="#9ca3af">Free daily football quiz games</text>
+  <g font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="30" font-weight="600">
+    <rect x="80"  y="420" width="240" height="70" rx="14" fill="#1f2937"/>
+    <text x="200" y="465" fill="#facc15" text-anchor="middle">Wordle</text>
+    <rect x="345" y="420" width="300" height="70" rx="14" fill="#1f2937"/>
+    <text x="495" y="465" fill="#c084fc" text-anchor="middle">Tic-Tac-Toe</text>
+    <rect x="670" y="420" width="240" height="70" rx="14" fill="#1f2937"/>
+    <text x="790" y="465" fill="#f472b6" text-anchor="middle">Guess</text>
+    <rect x="935" y="420" width="185" height="70" rx="14" fill="#1f2937"/>
+    <text x="1027" y="465" fill="#22d3ee" text-anchor="middle">Tenable</text>
+  </g>
+  <text x="80" y="560" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="28" fill="#6b7280">footballtriviagames.onrender.com</text>
+  <text x="1080" y="180" font-size="140" text-anchor="middle">⚽</text>
+</svg>
