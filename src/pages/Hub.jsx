@@ -51,6 +51,15 @@ const GAMES = [
     accent: 'text-cyan-400',
   },
   {
+    to: '/world-cup',
+    emoji: '🏆',
+    title: 'Guess the World Cup',
+    tagline: 'Name the tournament from clues',
+    description: 'Clues about a mystery World Cup are revealed one at a time — host, top scorer, finalists, winner. Guess the year in 5 tries. Every World Cup, 1930–2026.',
+    color: 'hover:border-amber-500 hover:ring-amber-500/30',
+    accent: 'text-amber-400',
+  },
+  {
     to: '/501',
     emoji: '🎯',
     title: 'Football 501',
