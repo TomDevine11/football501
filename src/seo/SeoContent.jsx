@@ -12,7 +12,8 @@ export default function SeoContent({ path }) {
   return (
     <section className="w-full max-w-lg mx-auto mt-12 mb-4 text-left border-t border-gray-800/60 pt-8">
       <h1 className="text-2xl font-bold text-white mb-1">{r.h1}</h1>
-      <p className="text-gray-400 text-sm mb-6">{r.tagline}</p>
+      <p className="text-gray-400 text-sm mb-3">{r.tagline}</p>
+      {r.about && <p className="text-gray-500 text-sm leading-relaxed mb-6">{r.about}</p>}
 
       {r.howTo?.length > 0 && (
         <>

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import Seo from '../seo/Seo'
 import { routeByPath } from '../seo/seoConfig'
 
-const HOME_FAQ = routeByPath('/').faq
+const HOME = routeByPath('/')
 
 const GAMES = [
   {
@@ -99,9 +99,12 @@ export default function Hub() {
         </div>
 
         <section className="mt-12 text-left">
+          <h2 className="text-white font-semibold text-lg mb-3">About Football Trivia Games</h2>
+          <p className="text-gray-500 text-sm leading-relaxed mb-8">{HOME.about}</p>
+
           <h2 className="text-white font-semibold text-lg mb-3">Frequently asked questions</h2>
           <dl className="space-y-4">
-            {HOME_FAQ.map((f, i) => (
+            {HOME.faq.map((f, i) => (
               <div key={i}>
                 <dt className="text-gray-200 text-sm font-medium">{f.q}</dt>
                 <dd className="text-gray-500 text-sm mt-1 leading-relaxed">{f.a}</dd>

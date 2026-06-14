@@ -53,7 +53,8 @@ function staticBody(route) {
   const link = (p, name) => `<a href="${p}" style="color:#34d399;text-decoration:none">${esc(name)}</a>`
   let h = `<main style="min-height:100vh;background:#0a0a0a;max-width:40rem;margin:0 auto;padding:2.5rem 1.25rem;color:#e5e7eb;font-family:system-ui,-apple-system,sans-serif">`
   h += `<h1 style="font-size:1.9rem;font-weight:800;color:#fff;margin:0 0 .25rem">${esc(route.h1)}</h1>`
-  h += `<p style="color:#9ca3af;margin:0 0 1rem">${esc(route.tagline)}</p>`
+  h += `<p style="color:#9ca3af;margin:0 0 .75rem">${esc(route.tagline)}</p>`
+  if (route.about) h += `<p style="color:#9ca3af;line-height:1.6;margin:0 0 1rem">${esc(route.about)}</p>`
   if (route.path !== '/') h += `<p style="margin:0 0 1.5rem">${link(route.path, '▶ Play ' + route.name)}</p>`
 
   if (route.howTo?.length) {
