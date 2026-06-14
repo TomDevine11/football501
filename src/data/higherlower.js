@@ -1,37 +1,28 @@
-// "Higher or Lower" — compare two players by global fame, measured as the
-// number of language editions of Wikipedia they appear in (the `fame` signal
-// already on every canonical player). A reliable, universal number we have for
-// thousands of players, so the streak never runs out and both sides are always
-// recognisable.
+// "Higher or Lower" — compare two footballers on a real stat you choose:
+// all-time goals in the Premier League, La Liga, Bundesliga, the Champions
+// League, or for their country. Players come from the sourced top-scorer
+// leaderboards (src/data/canonical/stats.generated.json via five01), so every
+// name is a genuine record-holder — no obscure tail.
 
-import { allPlayers } from './canonical/facts.js'
-import { getFlagFromNationality } from '../utils/flags.js'
+import { ROSTERS, CHALLENGE_META } from './five01.js'
 
-const MIN_FAME = 35 // keep both players recognisable
+export const STAT_MODES = ['intl-goals', 'prem-goals', 'laliga-goals', 'ucl-goals', 'bundesliga-goals']
+  .filter(id => ROSTERS[id] && Object.keys(ROSTERS[id]).length >= 12)
+  .map(id => ({ id, label: CHALLENGE_META[id].statLabel, competition: CHALLENGE_META[id].competition }))
 
-export const POOL = allPlayers()
-  .filter(p => p.fame >= MIN_FAME && p.displayName)
-  .map(p => ({
-    name: p.displayName,
-    fame: p.fame,
-    nationality: p.nationalities[0] || '',
-    flag: getFlagFromNationality(p.nationalities[0] || ''),
-  }))
+export function poolFor(modeId) {
+  return Object.entries(ROSTERS[modeId] || {}).map(([name, e]) => ({ name, value: e.value }))
+}
 
-export const POOL_SIZE = POOL.length
-export const METRIC = 'Wikipedia language editions'
-
-// Pick a random player, optionally excluding some names.
-export function randomPlayer(exclude = new Set()) {
-  if (POOL.length <= exclude.size) return POOL[Math.floor(Math.random() * POOL.length)]
+export function randomFrom(pool, exclude = new Set()) {
+  if (pool.length <= exclude.size) return pool[Math.floor(Math.random() * pool.length)]
   let p
-  do { p = POOL[Math.floor(Math.random() * POOL.length)] } while (exclude.has(p.name))
+  do { p = pool[Math.floor(Math.random() * pool.length)] } while (exclude.has(p.name))
   return p
 }
 
-// Is `challenger` a correct "higher"/"lower" call against `current`?
 // Ties count as correct either way.
 export function isCorrect(direction, current, challenger) {
-  if (challenger.fame === current.fame) return true
-  return direction === 'higher' ? challenger.fame > current.fame : challenger.fame < current.fame
+  if (challenger.value === current.value) return true
+  return direction === 'higher' ? challenger.value > current.value : challenger.value < current.value
 }

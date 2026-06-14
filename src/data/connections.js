@@ -7,7 +7,13 @@
 // three categories — so the puzzle always has exactly one valid solution (the
 // TicTacToe lesson: guarantee solvability, never ship an ambiguous board).
 
-import { membersOf, notableMembersOf, getPlayer, CATEGORY_KEYS } from './canonical/facts.js'
+import { membersOf, getPlayer, CATEGORY_KEYS } from './canonical/facts.js'
+
+// Only use genuinely well-known players (Wikipedia language-edition count).
+const STAR_FAME = 48
+// Choose each group's four from the most famous exclusive members (a small
+// fame-ranked shortlist), seeded for daily variety — never the obscure tail.
+const SHORTLIST = 8
 
 const CATEGORIES = [
   ...CATEGORY_KEYS.clubs.map(v => ({ type: 'club', value: v })),
@@ -35,22 +41,29 @@ function shuffle(array, rng) {
   return a
 }
 
+// Members of a category that are (a) famous and (b) exclusive to it among the
+// chosen categories, ranked most-famous first.
+function starExclusive(cat, otherBroadSets) {
+  return [...membersOf(cat)]
+    .map(id => getPlayer(id))
+    .filter(p => p && p.fame >= STAR_FAME && !otherBroadSets.some(s => s.has(p.id)))
+    .sort((a, b) => b.fame - a.fame)
+}
+
 export function getConnectionsForDay(dayIndex) {
   for (let attempt = 0; attempt < 4000; attempt++) {
     const rng = seededRandom(dayIndex * 7919 + attempt + 1)
     const cats = shuffle(CATEGORIES, rng).slice(0, 4)
 
     const broad = cats.map(c => membersOf(c))
-    const exclusive = cats.map((c, i) => {
-      const others = broad.filter((_, j) => j !== i)
-      return [...notableMembersOf(c)].filter(id => !others.some(s => s.has(id)))
-    })
+    const exclusive = cats.map((c, i) => starExclusive(c, broad.filter((_, j) => j !== i)))
     if (exclusive.some(ex => ex.length < 4)) continue
 
+    // Pick four from each group's most-famous shortlist (seeded for variety).
     const groups = cats.map((c, i) => ({
       category: c,
       label: categoryLabel(c),
-      players: shuffle(exclusive[i], rng).slice(0, 4).map(id => getPlayer(id).displayName),
+      players: shuffle(exclusive[i].slice(0, SHORTLIST), rng).slice(0, 4).map(p => p.displayName),
     }))
     const all = groups.flatMap(g => g.players)
     if (new Set(all).size !== 16) continue
