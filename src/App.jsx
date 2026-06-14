@@ -12,6 +12,8 @@ const TicTacToeMenu = lazy(() => import('./games/tictactoe/TicTacToeMenu'))
 const GuessByTeammates = lazy(() => import('./games/teammates/GuessByTeammates'))
 const CareerPath = lazy(() => import('./games/careers/CareerPath'))
 const WorldCupGuess = lazy(() => import('./games/worldcup/WorldCupGuess'))
+const HigherLower = lazy(() => import('./games/higherlower/HigherLower'))
+const FootballConnections = lazy(() => import('./games/connections/FootballConnections'))
 
 const Loading = () => <div className="min-h-screen bg-gray-950" aria-busy="true" />
 
@@ -27,6 +29,8 @@ export default function App() {
         <Route path="/teammates" element={<GamePage path="/teammates"><GuessByTeammates /></GamePage>} />
         <Route path="/career-path" element={<GamePage path="/career-path"><CareerPath /></GamePage>} />
         <Route path="/world-cup" element={<GamePage path="/world-cup"><WorldCupGuess /></GamePage>} />
+        <Route path="/connections" element={<GamePage path="/connections"><FootballConnections /></GamePage>} />
+        <Route path="/higher-or-lower" element={<GamePage path="/higher-or-lower"><HigherLower /></GamePage>} />
       </Routes>
     </Suspense>
   )

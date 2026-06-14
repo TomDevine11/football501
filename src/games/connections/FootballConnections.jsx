@@ -1,0 +1,144 @@
+import { useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { getDailyConnections, shuffleNames } from '../../data/connections'
+
+const MAX_LIVES = 4
+const GROUP_COLORS = [
+  'bg-amber-800/40 border-amber-600',
+  'bg-green-800/40 border-green-600',
+  'bg-blue-800/40 border-blue-600',
+  'bg-purple-800/40 border-purple-600',
+]
+const keyOf = names => [...names].sort().join('|')
+
+export default function FootballConnections() {
+  const [puzzle] = useState(() => getDailyConnections())
+  const [solved, setSolved] = useState([])        // [{ groupIndex, label, players }]
+  const [selected, setSelected] = useState([])    // names
+  const [lives, setLives] = useState(MAX_LIVES)
+  const [order, setOrder] = useState(() => puzzle.tiles)
+  const [message, setMessage] = useState('')
+  const [pastGuesses, setPastGuesses] = useState(new Set())
+  const [shake, setShake] = useState(false)
+
+  const solvedNames = useMemo(() => new Set(solved.flatMap(s => s.players)), [solved])
+  const remaining = order.filter(n => !solvedNames.has(n))
+  const won = solved.length === 4
+  const lost = lives <= 0 && !won
+  const over = won || lost
+
+  const toggle = (name) => {
+    if (over) return
+    setMessage('')
+    setSelected(sel => sel.includes(name) ? sel.filter(n => n !== name) : sel.length < 4 ? [...sel, name] : sel)
+  }
+
+  const submit = () => {
+    if (selected.length !== 4 || over) return
+    const key = keyOf(selected)
+    if (pastGuesses.has(key)) { setMessage('Already guessed'); return }
+
+    const match = puzzle.groups.findIndex(g => keyOf(g.players) === key)
+    if (match >= 0) {
+      setSolved(s => [...s, { groupIndex: match, label: puzzle.groups[match].label, players: puzzle.groups[match].players }])
+      setSelected([])
+      setMessage('')
+      return
+    }
+
+    // wrong — record, deduct a life, hint if one away
+    setPastGuesses(p => new Set(p).add(key))
+    const oneAway = puzzle.groups.some(g => g.players.filter(p => selected.includes(p)).length === 3)
+    setLives(l => l - 1)
+    setMessage(oneAway ? 'So close — one away!' : 'Not a group')
+    setShake(true); setTimeout(() => setShake(false), 400)
+    setSelected([])
+  }
+
+  const shuffleTiles = () => {
+    setOrder([...solved.flatMap(s => s.players), ...shuffleNames(remaining)])
+  }
+
+  // On loss, reveal the groups not yet solved.
+  const revealed = lost
+    ? puzzle.groups.map((g, i) => ({ groupIndex: i, label: g.label, players: g.players }))
+        .filter(g => !solved.some(s => s.groupIndex === g.groupIndex))
+    : []
+  const shownGroups = [...solved, ...revealed]
+
+  return (
+    <div className="min-h-screen flex flex-col items-center px-4 py-8">
+      <div className="w-full max-w-lg flex items-center justify-between mb-5">
+        <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>
+        <div className="score-number text-xl text-gray-500 tracking-wider">CONNECTIONS</div>
+        <div className="flex items-center gap-1">
+          {Array.from({ length: MAX_LIVES }, (_, i) => (
+            <span key={i} className={`w-2.5 h-2.5 rounded-full ${i < lives ? 'bg-gray-300' : 'bg-gray-800'}`} />
+          ))}
+        </div>
+      </div>
+
+      <div className="w-full max-w-lg mb-4">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
+          <div className="text-white font-bold text-sm">Find the four groups of four</div>
+          <div className="text-gray-500 text-xs mt-0.5">Every player belongs to exactly one group. Select four and submit — four wrong guesses ends it.</div>
+        </div>
+      </div>
+
+      <div className="w-full max-w-lg space-y-2">
+        {/* Solved / revealed group bars */}
+        {shownGroups.map(g => (
+          <div key={g.groupIndex} className={`rounded-xl border px-4 py-3 text-center ${GROUP_COLORS[g.groupIndex]}`}>
+            <div className="text-white font-bold text-xs uppercase tracking-wide">{g.label}</div>
+            <div className="text-gray-200 text-sm mt-0.5">{g.players.join(', ')}</div>
+          </div>
+        ))}
+
+        {/* Remaining tiles */}
+        {!over && (
+          <div className={`grid grid-cols-4 gap-2 ${shake ? 'shake' : ''}`}>
+            {remaining.map(name => {
+              const isSel = selected.includes(name)
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => toggle(name)}
+                  className={`aspect-square rounded-lg border px-1 flex items-center justify-center text-center text-[11px] sm:text-xs font-semibold leading-tight transition-colors ${
+                    isSel ? 'border-green-500 bg-gray-700 text-white' : 'border-gray-800 bg-gray-900 text-gray-300 hover:border-gray-600'
+                  }`}
+                >
+                  {name}
+                </button>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {message && <div className="w-full max-w-lg mt-3 text-center text-sm text-amber-400">{message}</div>}
+
+      {!over && (
+        <div className="w-full max-w-lg mt-4 flex gap-3">
+          <button onClick={shuffleTiles} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-xl py-3 transition-colors">Shuffle</button>
+          <button onClick={() => setSelected([])} disabled={!selected.length} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 disabled:opacity-40 text-sm font-medium rounded-xl py-3 transition-colors">Deselect</button>
+          <button onClick={submit} disabled={selected.length !== 4} className="flex-1 bg-green-700 hover:bg-green-600 disabled:opacity-40 text-white text-sm font-semibold rounded-xl py-3 transition-colors">Submit</button>
+        </div>
+      )}
+
+      {over && (
+        <div className="w-full max-w-lg flex flex-col items-center text-center mt-5">
+          <div className="text-5xl mb-2">{won ? '🎉' : '💔'}</div>
+          <h2 className={`score-number text-3xl mb-1 ${won ? 'text-green-400' : 'text-red-400'}`}>
+            {won ? 'SOLVED!' : 'OUT OF GUESSES'}
+          </h2>
+          <p className="text-gray-400">
+            {won
+              ? <>You found all four groups with <span className="text-white font-bold">{MAX_LIVES - lives}</span> mistake{MAX_LIVES - lives === 1 ? '' : 's'}.</>
+              : 'Come back tomorrow for a new puzzle.'}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}

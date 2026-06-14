@@ -27,6 +27,8 @@ const CARDS = {
   teammates: { title: 'Guess the Player', subtitle: 'Identify the footballer from their teammates', accent: '#ec4899' },
   'career-path': { title: 'Career Path', subtitle: 'Name the player who played for every club', accent: '#06b6d4' },
   'world-cup': { title: 'Guess the World Cup', subtitle: 'Name the tournament from the clues', accent: '#f59e0b' },
+  connections: { title: 'Football Connections', subtitle: 'Find the four groups of four', accent: '#14b8a6' },
+  'higher-or-lower': { title: 'Higher or Lower', subtitle: 'Pick the more famous player and build a streak', accent: '#f97316' },
   tenable:   { title: 'Football Tenable', subtitle: 'Name as many of the top 10 as you can', accent: '#eab308' },
 }
 
