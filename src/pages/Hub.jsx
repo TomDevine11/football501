@@ -42,6 +42,15 @@ const GAMES = [
     accent: 'text-pink-400',
   },
   {
+    to: '/career-path',
+    emoji: '🧭',
+    title: 'Career Path',
+    tagline: 'Guess the player from their clubs',
+    description: 'A mystery player\'s clubs are revealed one at a time. Name the player who played for every club shown — in 5 guesses or fewer.',
+    color: 'hover:border-cyan-500 hover:ring-cyan-500/30',
+    accent: 'text-cyan-400',
+  },
+  {
     to: '/501',
     emoji: '🎯',
     title: 'Football 501',

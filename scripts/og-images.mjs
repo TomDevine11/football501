@@ -25,6 +25,7 @@ const CARDS = {
   wordle:    { title: 'Football Wordle', subtitle: "Guess the footballer's surname in six tries", accent: '#3b82f6' },
   tictactoe: { title: 'Football Tic-Tac-Toe', subtitle: 'Name a player who fits both categories', accent: '#a855f7' },
   teammates: { title: 'Guess the Player', subtitle: 'Identify the footballer from their teammates', accent: '#ec4899' },
+  'career-path': { title: 'Career Path', subtitle: 'Name the player who played for every club', accent: '#06b6d4' },
   tenable:   { title: 'Football Tenable', subtitle: 'Name as many of the top 10 as you can', accent: '#eab308' },
 }
 
