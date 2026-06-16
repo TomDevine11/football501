@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import Hub from './pages/Hub'
 import GamePage from './seo/GamePage'
+import ScrollToTop from './components/ScrollToTop'
 
 // Lazy-load each game so its (sometimes heavy) data only downloads on its own
 // route — the hub and lighter games stay fast, which helps Core Web Vitals.
@@ -19,8 +20,10 @@ const Loading = () => <div className="min-h-screen bg-gray-950" aria-busy="true"
 
 export default function App() {
   return (
-    <Suspense fallback={<Loading />}>
-      <Routes>
+    <>
+      <ScrollToTop />
+      <Suspense fallback={<Loading />}>
+        <Routes>
         <Route path="/" element={<Hub />} />
         <Route path="/501" element={<GamePage path="/501"><Football501 /></GamePage>} />
         <Route path="/tenable" element={<GamePage path="/tenable"><FootballTenable /></GamePage>} />
@@ -31,7 +34,8 @@ export default function App() {
         <Route path="/world-cup" element={<GamePage path="/world-cup"><WorldCupGuess /></GamePage>} />
         <Route path="/connections" element={<GamePage path="/connections"><FootballConnections /></GamePage>} />
         <Route path="/higher-or-lower" element={<GamePage path="/higher-or-lower"><HigherLower /></GamePage>} />
-      </Routes>
-    </Suspense>
+        </Routes>
+      </Suspense>
+    </>
   )
 }
