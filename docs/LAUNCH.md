@@ -111,7 +111,31 @@ verification/hosting plumbing.
 
 ---
 
-## 5. Realistic timeline
+## 5. Monetisation (later — not now)
+
+Ads pay ~$1–$5 per 1,000 pageviews for this niche, so they're only worth it once
+you have steady traffic (a few thousand pageviews/month), and adding them early
+hurts page speed (an SEO factor) and gets AdSense applications rejected for "site
+not ready." So hold off — but the wiring is already in place.
+
+**Ad slots are reserved and render NOTHING** until switched on
+(`src/ads/adsConfig.js` → `ADS_ENABLED = false`). Placements: a footer slot on
+every game page and one on the home page. Zero performance/SEO impact while off.
+
+**To turn ads on when ready:**
+1. Get a Google AdSense account → note your publisher id (`ca-pub-…`).
+2. Add the AdSense script to `index.html` `<head>`:
+   ```html
+   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+   ```
+3. In AdSense, create ad units → copy their slot ids.
+4. In `src/ads/adsConfig.js`: set `ADSENSE_CLIENT`, fill in `AD_SLOTS`, and set
+   `ADS_ENABLED = true`. Commit + push.
+
+That's it — the `<AdSlot>` components light up automatically. Better-paying
+networks (Ezoic, then Mediavine/AdThrive) become options as traffic grows.
+
+## 6. Realistic timeline
 
 | When | What to expect |
 |------|----------------|

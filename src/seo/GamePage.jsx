@@ -1,5 +1,6 @@
 import Seo from './Seo'
 import SeoContent from './SeoContent'
+import AdSlot from '../ads/AdSlot'
 import { routeByPath } from './seoConfig'
 
 // Wraps a game route with its SEO head + (for indexable games) the visible
@@ -14,6 +15,7 @@ export default function GamePage({ path, children }) {
       {!route.noindex && (
         <div className="px-4 pb-16">
           <SeoContent path={path} />
+          <AdSlot name="game-footer" />
         </div>
       )}
     </>

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Seo from '../seo/Seo'
 import GameIcon from '../components/GameIcon'
+import AdSlot from '../ads/AdSlot'
 import { routeByPath } from '../seo/seoConfig'
 
 const HOME = routeByPath('/')
@@ -149,6 +150,8 @@ export default function Hub() {
             ))}
           </dl>
         </section>
+
+        <AdSlot name="hub-footer" />
       </div>
     </div>
   )
