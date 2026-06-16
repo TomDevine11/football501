@@ -1,11 +1,15 @@
 name: Keep alive
 
-# Render's free tier spins the service down after ~15 minutes of inactivity,
-# and the 30–60s cold start makes Googlebot (and users) hit a slow/failed
-# response — which is why Search Console reports the sitemap "couldn't fetch".
-# This pings the site on a schedule so it stays awake. GitHub may delay
-# scheduled runs, so for best reliability also add an external monitor
-# (e.g. UptimeRobot, free, 5-minute interval) hitting the same URL.
+# CRITICAL: Render's free tier spins the service down after ~15 min idle. While
+# it is suspended, Render serves a default "User-agent: * / Disallow: /"
+# robots.txt — which BLOCKS the whole site from Google. (When the app is awake it
+# serves our real Allow-all robots.txt.) So if the site sleeps, Googlebot sees
+# Disallow and won't crawl. This pings the site to keep it awake.
+#
+# GitHub's scheduler is NOT reliable enough on its own (runs can be delayed past
+# the 15-min sleep window). You MUST also add an external monitor — UptimeRobot
+# or cron-job.org, free, 5-minute interval — hitting the same URL. The bulletproof
+# fix is Render's paid tier (never sleeps).
 #
 # To switch domains: change SITE below (and SITE_URL in src/seo/seoConfig.js).
 
@@ -14,7 +18,7 @@ env:
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # every ~10 minutes
+    - cron: '*/5 * * * *' # every ~5 minutes (GitHub may still delay these)
   workflow_dispatch: {}
 
 jobs:

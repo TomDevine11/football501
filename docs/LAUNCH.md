@@ -18,20 +18,30 @@ Practical steps to get the site found, indexed, and gaining traffic. Read the
 
 ---
 
-## 1. Keep the site awake (fixes the sitemap "couldn't fetch")
+## 1. Keep the site awake (CRITICAL — this was blocking Google entirely)
 
-Render's free tier sleeps after ~15 min idle; the 30–60s cold start makes
-Googlebot time out → "couldn't fetch."
+Render's free tier sleeps after ~15 min idle. **While the service is suspended,
+Render serves a default `User-agent: * / Disallow: /` robots.txt that blocks the
+entire site from Google.** When the app is awake it serves our real Allow-all
+robots.txt. So if the site sleeps, Googlebot sees "Disallow" and won't crawl —
+this is almost certainly the main reason for the early zero impressions.
 
-- ✅ **GitHub Action** (`.github/workflows/keepalive.yml`) pings the site every
-  ~10 min. Trigger it once manually: repo → Actions → "Keep alive" → "Run
-  workflow". (GitHub's scheduler can lag, so also do the next step.)
-- ⬜ **UptimeRobot** (free, more reliable): https://uptimerobot.com → Add New
-  Monitor → HTTP(s) → URL `https://footballtriviagames.onrender.com` →
-  interval **5 minutes**. This both keeps it awake and alerts you to downtime.
+Verified: warm → robots.txt is `Allow: /` (ours); asleep → `Disallow: /`
+(Render's). The only fix is to never let it sleep.
 
-After it's been awake ~a day, **re-submit the sitemap** (next section) — it
-should fetch cleanly.
+- ✅ **GitHub Action** (`.github/workflows/keepalive.yml`) pings every ~5 min.
+  Trigger it once now: repo → Actions → "Keep alive" → "Run workflow".
+- ⬜ **REQUIRED: external monitor** — GitHub's scheduler lags and isn't enough on
+  its own. Add one (free, 2-min signup):
+  - **UptimeRobot** (https://uptimerobot.com) → Add Monitor → HTTP(s) →
+    `https://footballtriviagames.onrender.com` → interval **5 minutes**, or
+  - **cron-job.org** (https://cron-job.org) → same URL, every 5 minutes.
+- 💡 **Bulletproof option:** Render's paid tier (~$7/mo) never sleeps, so robots
+  is always correct. Worth it once the site has traffic.
+
+After it has been continuously awake for ~24h, Google re-fetches robots.txt
+(it caches it up to a day), sees Allow, and the block clears. Then re-submit the
+sitemap and re-request indexing.
 
 ---
 
