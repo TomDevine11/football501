@@ -23,6 +23,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [gaveUp, setGaveUp] = useState(false)
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false)
+  const [answersCell, setAnswersCell] = useState(null) // cell whose full answer list is open
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
@@ -260,9 +261,11 @@ export default function FootballTicTacToe({ onBackToModes }) {
                   <button
                     key={c}
                     type="button"
-                    onClick={() => selectCell(idx)}
-                    disabled={phase !== 'playing' || !!playerName}
-                    className={`aspect-square w-full rounded-lg border flex flex-col items-center justify-center text-center px-1 transition-colors ${
+                    onClick={() => gameOver ? setAnswersCell(idx) : selectCell(idx)}
+                    disabled={phase === 'playing' && !!playerName}
+                    className={`relative aspect-square w-full rounded-lg border flex flex-col items-center justify-center text-center px-1 transition-colors ${
+                      gameOver ? 'cursor-pointer hover:ring-1 hover:ring-gray-500' : ''
+                    } ${
                       playerName
                         ? 'border-green-600 bg-green-900/20 cell-reveal'
                         : revealName
@@ -272,6 +275,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
                             : 'border-gray-800 bg-gray-900 hover:border-gray-600'
                     }`}
                   >
+                    {gameOver && <span className="absolute top-1 right-1 text-[10px] opacity-50">🔍</span>}
                     {playerName ? (
                       <>
                         <span className="text-base sm:text-lg">✅</span>
@@ -289,6 +293,12 @@ export default function FootballTicTacToe({ onBackToModes }) {
           ))}
         </div>
       </div>
+
+      {phase !== 'playing' && (
+        <div className="w-full max-w-lg -mt-3 mb-4 text-center text-xs text-gray-500">
+          🔍 Tap any square to see every player who fits it.
+        </div>
+      )}
 
       {phase === 'playing' && selectedCell != null && (
         <>
@@ -381,6 +391,41 @@ export default function FootballTicTacToe({ onBackToModes }) {
                 Yes, give up
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* All-answers reveal for a finished square */}
+      {answersCell != null && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-30 px-4" onClick={() => setAnswersCell(null)}>
+          <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-5 max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="text-center mb-1 leading-tight">
+              <span className="text-yellow-400 text-xs font-medium">{categoryLabel(grid.rowCategories[Math.floor(answersCell / 3)])}</span>
+              <span className="text-gray-600 text-xs"> + </span>
+              <span className="text-blue-400 text-xs font-medium">{categoryLabel(grid.colCategories[answersCell % 3])}</span>
+            </div>
+            <div className="text-gray-500 text-xs text-center mb-3">{grid.candidates[answersCell].length} possible answers</div>
+            <div className="overflow-y-auto -mx-1 px-1">
+              <div className="grid grid-cols-2 gap-1.5">
+                {grid.candidates[answersCell].map(name => (
+                  <div
+                    key={name}
+                    className={`text-xs rounded px-2 py-1.5 leading-tight ${
+                      name === filled[answersCell] ? 'bg-green-900/50 text-green-300 font-semibold' : 'bg-gray-800/60 text-gray-300'
+                    }`}
+                  >
+                    {name}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAnswersCell(null)}
+              className="mt-4 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}

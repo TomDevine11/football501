@@ -53,8 +53,12 @@ function intersectIds(a, b) {
 function notableCandidates(rowCat, colCat) {
   return namesOf(intersectIds(notableMembersOf(rowCat), notableMembersOf(colCat)))
 }
+// Every valid player for the cell, most famous first — used for validation and
+// for the "view all answers" reveal once a game ends.
 function broadCandidates(rowCat, colCat) {
-  return namesOf(intersectIds(membersOf(rowCat), membersOf(colCat)))
+  const ids = [...intersectIds(membersOf(rowCat), membersOf(colCat))]
+  ids.sort((a, b) => (getPlayer(b)?.fame || 0) - (getPlayer(a)?.fame || 0))
+  return ids.map(id => getPlayer(id)?.displayName).filter(Boolean)
 }
 
 // --- Solvability check (System of Distinct Representatives) ---------------
