@@ -6,6 +6,11 @@ name: Keep alive
 # This pings the site on a schedule so it stays awake. GitHub may delay
 # scheduled runs, so for best reliability also add an external monitor
 # (e.g. UptimeRobot, free, 5-minute interval) hitting the same URL.
+#
+# To switch domains: change SITE below (and SITE_URL in src/seo/seoConfig.js).
+
+env:
+  SITE: https://footballtriviagames.onrender.com
 
 on:
   schedule:
@@ -18,5 +23,5 @@ jobs:
     steps:
       - name: Wake the site
         run: |
-          curl -fsS --max-time 90 https://footballtriviagames.onrender.com/ > /dev/null && echo "home ok"
-          curl -fsS --max-time 90 https://footballtriviagames.onrender.com/sitemap.xml > /dev/null && echo "sitemap ok"
+          curl -fsS --max-time 90 "$SITE/" > /dev/null && echo "home ok"
+          curl -fsS --max-time 90 "$SITE/sitemap.xml" > /dev/null && echo "sitemap ok"
