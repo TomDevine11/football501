@@ -13,12 +13,42 @@ export const TEAMMATES_AS_OF = data.meta?.fetchedAt || ''
 export const TARGET_COUNT = data.players.length
 export const MAX_CLUES = 5
 
-// Build a playable round: pick the most recognisable teammates, then reveal
-// them LEAST-famous first so the clues get easier as the game goes on.
+// Tidy a few messy Wikidata team labels for the end-of-round reveal.
+function cleanTeam(label) {
+  return label
+    .replace(/\bFc\b/g, 'FC')
+    .replace(/\s+(Club de Fútbol|Fútbol Club|S\.?K\.?|Calcio\b.*)$/i, '')
+    .replace(/\.$/, '')
+    .trim()
+}
+
+// Build a playable round. Spread the clues across the DIFFERENT teams the
+// mystery player turned out for — one (most-famous) teammate from each team in
+// turn — so a well-travelled player's clues cover their career rather than
+// clustering at one club. Then reveal least-famous first so it gets easier.
 function buildClues(teammates) {
-  const top = [...teammates].sort((a, b) => b.fame - a.fame).slice(0, MAX_CLUES)
-  top.sort((a, b) => a.fame - b.fame) // ascending → hardest clue first
-  return top.map(t => ({ name: t.name, team: t.team, flag: getFlagFromNationality(t.nationality) }))
+  const byTeam = new Map() // team -> teammates, most famous first
+  for (const t of [...teammates].sort((a, b) => b.fame - a.fame)) {
+    if (!byTeam.has(t.team)) byTeam.set(t.team, [])
+    byTeam.get(t.team).push(t)
+  }
+  // Teams are iterated in the order their most-famous member appeared, so the
+  // biggest teams lead. Round-robin one per team until we have MAX_CLUES.
+  const teams = [...byTeam.keys()]
+  const picked = []
+  for (let round = 0; picked.length < MAX_CLUES; round++) {
+    let progressed = false
+    for (const team of teams) {
+      const list = byTeam.get(team)
+      if (round < list.length) {
+        picked.push(list[round]); progressed = true
+        if (picked.length >= MAX_CLUES) break
+      }
+    }
+    if (!progressed) break
+  }
+  picked.sort((a, b) => a.fame - b.fame) // hardest (least famous) clue first
+  return picked.map(t => ({ name: t.name, team: cleanTeam(t.team), flag: getFlagFromNationality(t.nationality) }))
 }
 
 export function getRandomTarget() {
