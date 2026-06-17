@@ -37,7 +37,7 @@ const GAMES = [
   {
     to: '/teammates',
     emoji: '🕵️',
-    title: 'Guess the Player',
+    title: 'Teammates',
     tagline: 'Name the mystery player',
     description: 'A teammate is revealed one at a time. Work out who the mystery player is in 5 guesses — each wrong answer reveals another teammate.',
     color: 'hover:border-pink-500 hover:ring-pink-500/30',

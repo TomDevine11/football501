@@ -28,13 +28,13 @@ const ICONS = {
       <path d="M10.3 10.3l3.4 3.4M13.7 10.3l-3.4 3.4" {...S} />
     </>
   ),
-  // Magnifier over a player silhouette — "guess the player"
+  // Two people — "teammates"
   teammates: (
     <>
-      <circle cx="10.5" cy="10" r="6.2" {...S} />
-      <path d="M15 14.6L20.5 20.5" {...S} />
-      <circle cx="10.5" cy="8.6" r="1.7" {...S} />
-      <path d="M7.7 13.2a3 3 0 0 1 5.6 0" {...S} />
+      <path d="M16 20.5v-1.8a3.8 3.8 0 0 0-3.8-3.8H6.3a3.8 3.8 0 0 0-3.8 3.8v1.8" {...S} />
+      <circle cx="9.2" cy="7.3" r="3.8" {...S} />
+      <path d="M21.5 20.5v-1.8a3.8 3.8 0 0 0-2.85-3.67" {...S} />
+      <path d="M15.6 3.7a3.8 3.8 0 0 1 0 7.2" {...S} />
     </>
   ),
   // Connected path with nodes — "career path"

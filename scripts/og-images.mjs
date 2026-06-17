@@ -24,7 +24,7 @@ const CARDS = {
   default:   { title: 'Football Trivia Games', subtitle: 'Free daily football quiz games', accent: '#16a34a' },
   wordle:    { title: 'Football Wordle', subtitle: "Guess the footballer's surname in six tries", accent: '#3b82f6' },
   tictactoe: { title: 'Football Tic-Tac-Toe', subtitle: 'Name a player who fits both categories', accent: '#a855f7' },
-  teammates: { title: 'Guess the Player', subtitle: 'Identify the footballer from their teammates', accent: '#ec4899' },
+  teammates: { title: 'Teammates', subtitle: 'Identify the footballer from their teammates', accent: '#ec4899' },
   'career-path': { title: 'Career Path', subtitle: 'Name the player who played for every club', accent: '#06b6d4' },
   'world-cup': { title: 'Guess the World Cup', subtitle: 'Name the tournament from the clues', accent: '#f59e0b' },
   connections: { title: 'Football Connections', subtitle: 'Find the four groups of four', accent: '#14b8a6' },
