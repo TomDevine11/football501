@@ -292,13 +292,22 @@ export default function TicTacToeVersus({ onBackToModes }) {
       )}
 
       {result == null && (
-        <button
-          type="button"
-          onClick={skipTurn}
-          className="mt-3 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
-        >
-          Skip {MARK[turn]}’s go →
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={skipTurn}
+            className="mt-3 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
+          >
+            Skip {MARK[turn]}’s go →
+          </button>
+          <button
+            type="button"
+            onClick={playAgain}
+            className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors"
+          >
+            ↻ New grid
+          </button>
+        </>
       )}
     </div>
   )
