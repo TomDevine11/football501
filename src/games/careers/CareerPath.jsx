@@ -60,6 +60,16 @@ export default function CareerPath() {
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedIndex(i => Math.max(i - 1, -1)) }
   }
 
+  // Skip this go: reveal the next club but still use one of your tries.
+  const skip = () => {
+    if (!active) return
+    setInput('')
+    setGuesses(g => [...g, { text: 'Skipped', correct: false, skipped: true }])
+    if (revealed < MAX_CLUES) setRevealed(r => r + 1)
+    else setPhase('lost')
+    setTimeout(() => inputRef.current?.focus(), 0)
+  }
+
   const newGame = () => {
     setTarget(getRandomTarget())
     setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1)
@@ -141,6 +151,12 @@ export default function CareerPath() {
         </form>
       )}
 
+      {active && (
+        <button type="button" onClick={skip} className="mt-3 text-xs text-gray-500 hover:text-gray-300 transition-colors">
+          Can’t think of anyone? Skip this clue →
+        </button>
+      )}
+
       {phase !== 'playing' && (
         <div className="w-full max-w-lg flex flex-col items-center text-center mt-1 mb-4">
           <div className="text-5xl mb-2">{phase === 'won' ? '🎉' : '💔'}</div>
@@ -162,9 +178,9 @@ export default function CareerPath() {
           <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">Your guesses</div>
           <div className="rounded-xl border border-gray-800 overflow-hidden divide-y divide-gray-800/40">
             {guesses.map((g, i) => (
-              <div key={i} className={`flex items-center justify-between px-4 py-2.5 ${g.correct ? 'flash-valid' : 'flash-invalid'}`}>
-                <span className="text-sm text-white truncate">{g.text}</span>
-                <span className={`text-xs font-semibold shrink-0 ${g.correct ? 'text-green-400' : 'text-red-500'}`}>{g.correct ? '✓' : '✗'}</span>
+              <div key={i} className={`flex items-center justify-between px-4 py-2.5 ${g.correct ? 'flash-valid' : g.skipped ? '' : 'flash-invalid'}`}>
+                <span className={`text-sm truncate ${g.skipped ? 'text-gray-500 italic' : 'text-white'}`}>{g.text}</span>
+                <span className={`text-xs font-semibold shrink-0 ${g.correct ? 'text-green-400' : g.skipped ? 'text-gray-500' : 'text-red-500'}`}>{g.correct ? '✓' : g.skipped ? '↷' : '✗'}</span>
               </div>
             ))}
           </div>
