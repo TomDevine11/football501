@@ -71,6 +71,15 @@ export default function TicTacToeVersus({ onBackToModes }) {
     setInput('')
   }
 
+  // Skip your go: pass the turn to the other player without claiming a square.
+  const skipTurn = () => {
+    if (result != null) return
+    setLastWrong({ by: turn, skipped: true })
+    setTurn(t => (t === 'X' ? 'O' : 'X'))
+    setSelectedCell(null)
+    setInput('')
+  }
+
   const submitGuess = (text) => {
     if (selectedCell == null || result != null) return
     const match = resolveGuess(text, grid.candidates[selectedCell], usedNames)
@@ -139,14 +148,21 @@ export default function TicTacToeVersus({ onBackToModes }) {
 
       {/* Wrong-guess alert — clear, persistent, explains why */}
       {result == null && lastWrong && (
-        <div className={`w-full max-w-lg mb-3 rounded-xl border border-red-800 bg-red-900/25 px-5 py-3 text-center ${shake ? 'shake' : ''}`}>
-          <div className="text-red-300 text-sm font-semibold">
-            ✗ Wrong — Player {MARK[lastWrong.by]} guessed “{lastWrong.text}”
+        lastWrong.skipped ? (
+          <div className={`w-full max-w-lg mb-3 rounded-xl border border-gray-700 bg-gray-800/40 px-5 py-3 text-center ${shake ? 'shake' : ''}`}>
+            <div className="text-gray-300 text-sm font-semibold">Player {MARK[lastWrong.by]} skipped their go</div>
+            <div className="text-gray-500 text-xs mt-0.5">Turn passes to Player {MARK[turn]}.</div>
           </div>
-          <div className="text-red-400/90 text-xs mt-0.5">
-            {lastWrong.text} {lastWrong.why}. Turn passes to Player {MARK[turn]}.
+        ) : (
+          <div className={`w-full max-w-lg mb-3 rounded-xl border border-red-800 bg-red-900/25 px-5 py-3 text-center ${shake ? 'shake' : ''}`}>
+            <div className="text-red-300 text-sm font-semibold">
+              ✗ Wrong — Player {MARK[lastWrong.by]} guessed “{lastWrong.text}”
+            </div>
+            <div className="text-red-400/90 text-xs mt-0.5">
+              {lastWrong.text} {lastWrong.why}. Turn passes to Player {MARK[turn]}.
+            </div>
           </div>
-        </div>
+        )
       )}
 
       {/* Turn / result banner */}
@@ -273,6 +289,16 @@ export default function TicTacToeVersus({ onBackToModes }) {
 
       {result == null && selectedCell == null && (
         <p className="text-gray-600 text-xs mt-1">Tap an empty square to take your turn. A wrong answer passes the turn — no square is lost.</p>
+      )}
+
+      {result == null && (
+        <button
+          type="button"
+          onClick={skipTurn}
+          className="mt-3 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
+        >
+          Skip {MARK[turn]}’s go →
+        </button>
       )}
     </div>
   )
