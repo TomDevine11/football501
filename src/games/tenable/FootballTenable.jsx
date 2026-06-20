@@ -6,6 +6,8 @@ import { clubs } from '../../data/clubs'
 import { getFlagFromNationality } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
+import DailyStats from '../../components/DailyStats'
+import { recordResult } from '../../data/dailyStats'
 
 const MAX_LIVES = 3
 
@@ -40,6 +42,10 @@ export default function FootballTenable() {
   const [input, setInput] = useState('')
   const [history, setHistory] = useState([])
   const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
+  const [dailyStats, setDailyStats] = useState(null)
+  useEffect(() => {
+    if (phase !== 'playing') setDailyStats(recordResult('tenable', phase === 'won'))
+  }, [phase])
   const [pulseRow, setPulseRow] = useState(null)
   const [pendingRank, setPendingRank] = useState(null)
   const [shake, setShake] = useState(false)
@@ -387,9 +393,10 @@ export default function FootballTenable() {
         <div className="w-full max-w-lg flex flex-col items-center text-center mt-2 mb-6">
           <div className="text-6xl mb-3">🏆</div>
           <h2 className="score-number text-4xl text-green-400 mb-2">PYRAMID COMPLETE!</h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-400 mb-2">
             You found all 10 with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.
           </p>
+          <DailyStats game="tenable" stats={dailyStats} />
           <ShareCard text={shareText} />
         </div>
       )}
@@ -398,9 +405,10 @@ export default function FootballTenable() {
         <div className="w-full max-w-lg flex flex-col items-center text-center mt-2 mb-6">
           <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
           <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? 'GAVE UP' : 'GAME OVER'}</h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-400 mb-2">
             You found <span className="text-white font-bold">{correctCount}/10</span> before {gaveUp ? 'giving up' : 'running out of lives'}.
           </p>
+          <DailyStats game="tenable" stats={dailyStats} />
           <ShareCard text={shareText} />
           <div className="w-full bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mt-6">
             <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Full answer list</div>

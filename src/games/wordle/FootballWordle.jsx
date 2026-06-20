@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { getDailyWordlePlayer } from '../../data/wordle'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
+import DailyStats from '../../components/DailyStats'
+import { recordResult } from '../../data/dailyStats'
 
 const MAX_GUESSES = 6
 
@@ -48,6 +50,10 @@ export default function FootballWordle() {
   const [guesses, setGuesses] = useState([])
   const [current, setCurrent] = useState('')
   const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
+  const [dailyStats, setDailyStats] = useState(null)
+  useEffect(() => {
+    if (phase !== 'playing') setDailyStats(recordResult('wordle', phase === 'won'))
+  }, [phase])
   const [shake, setShake] = useState(false)
   const [flippingRow, setFlippingRow] = useState(null)
   const [bounceRow, setBounceRow] = useState(null)
@@ -240,9 +246,10 @@ export default function FootballWordle() {
           <p className="text-gray-400 mb-1">
             It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}
           </p>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-gray-500 text-sm">
             Solved in <span className="text-white font-bold">{guesses.length}</span>/{MAX_GUESSES}
           </p>
+          <DailyStats game="wordle" stats={dailyStats} />
           <ShareCard text={shareText} />
         </div>
       )}
@@ -251,9 +258,10 @@ export default function FootballWordle() {
         <div className="w-full max-w-lg flex flex-col items-center text-center mb-6">
           <div className="text-6xl mb-3">💔</div>
           <h2 className="score-number text-4xl text-red-400 mb-2">GAME OVER</h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-400 mb-2">
             It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}
           </p>
+          <DailyStats game="wordle" stats={dailyStats} />
           <ShareCard text={shareText} />
         </div>
       )}

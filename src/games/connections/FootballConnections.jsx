@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getDailyConnections, shuffleNames } from '../../data/connections'
+import DailyStats from '../../components/DailyStats'
+import { recordResult } from '../../data/dailyStats'
 
 const MAX_LIVES = 4
 const GROUP_COLORS = [
@@ -26,6 +28,9 @@ export default function FootballConnections() {
   const won = solved.length === 4
   const lost = lives <= 0 && !won
   const over = won || lost
+
+  const [dailyStats, setDailyStats] = useState(null)
+  useEffect(() => { if (over) setDailyStats(recordResult('connections', won)) }, [over, won])
 
   const toggle = (name) => {
     if (over) return
@@ -137,6 +142,7 @@ export default function FootballConnections() {
               ? <>You found all four groups with <span className="text-white font-bold">{MAX_LIVES - lives}</span> mistake{MAX_LIVES - lives === 1 ? '' : 's'}.</>
               : 'Come back tomorrow for a new puzzle.'}
           </p>
+          <DailyStats game="connections" stats={dailyStats} />
         </div>
       )}
     </div>
