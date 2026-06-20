@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { SQUADS, buildMatcher, matchPlayer } from '../../data/wcsquads'
 import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
+import { ShareCard } from '../../components/ShareCard'
+import { SITE_URL } from '../../utils/site'
 
 export default function WorldCupSquads() {
   const [squad, setSquad] = useState(null)
@@ -90,6 +92,10 @@ export default function WorldCupSquads() {
   }
 
   // ── Game ──────────────────────────────────────────────────────────
+  const squadShareText = [
+    `🏆 World Cup Squads — I named ${named.size}/${squad.players.length} of the ${squad.nation} ${squad.year} winning squad!`,
+    SITE_URL,
+  ].join('\n\n')
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
@@ -152,12 +158,14 @@ export default function WorldCupSquads() {
           <div className="text-4xl mb-1">🏆</div>
           <h2 className="score-number text-2xl text-green-400 mb-1">FULL SQUAD!</h2>
           <p className="text-gray-400 text-sm mb-3">You named all {squad.players.length}.</p>
-          <button onClick={back} className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+          <ShareCard text={squadShareText} />
+          <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
         </div>
       ) : revealed ? (
         <div className="w-full max-w-lg text-center mt-5">
           <p className="text-gray-300 text-sm mb-3">You named <span className="text-white font-bold">{named.size}</span> of {squad.players.length}.</p>
-          <button onClick={back} className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+          <ShareCard text={squadShareText} />
+          <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
         </div>
       ) : (
         <button onClick={() => setRevealed(true)} className="mt-5 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">

@@ -201,6 +201,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
   const shareText = [
     `❌⭕ Football TicTacToe`,
     `${filledCount}/9 squares · ${MAX_LIVES - lives}/${MAX_LIVES} lives lost`,
+    ...(phase === 'won' && dailyStats?.currentStreak ? [`🔥 ${dailyStats.currentStreak}-day streak`] : []),
     '',
     ...shareRows,
     '',

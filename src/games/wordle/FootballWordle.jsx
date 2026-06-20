@@ -134,6 +134,7 @@ export default function FootballWordle() {
   const shareText = [
     `⚽ Football Wordle`,
     phase === 'won' ? `Guessed in ${guesses.length}/${MAX_GUESSES}` : `X/${MAX_GUESSES}`,
+    ...(phase === 'won' && dailyStats?.currentStreak ? [`🔥 ${dailyStats.currentStreak}-day streak`] : []),
     '',
     shareGrid,
     '',

@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom'
 import { getDailyConnections, shuffleNames } from '../../data/connections'
 import DailyStats from '../../components/DailyStats'
 import { recordResult } from '../../data/dailyStats'
+import { ShareCard } from '../../components/ShareCard'
+import { SITE_URL } from '../../utils/site'
 
 const MAX_LIVES = 4
+const SHARE_EMOJI = ['🟨', '🟩', '🟦', '🟪'] // per group index
 const GROUP_COLORS = [
   'bg-amber-800/40 border-amber-600',
   'bg-green-800/40 border-green-600',
@@ -21,6 +24,7 @@ export default function FootballConnections() {
   const [order, setOrder] = useState(() => puzzle.tiles)
   const [message, setMessage] = useState('')
   const [pastGuesses, setPastGuesses] = useState(new Set())
+  const [guessRows, setGuessRows] = useState([]) // each row: group index per selected tile
   const [shake, setShake] = useState(false)
 
   const solvedNames = useMemo(() => new Set(solved.flatMap(s => s.players)), [solved])
@@ -42,6 +46,9 @@ export default function FootballConnections() {
     if (selected.length !== 4 || over) return
     const key = keyOf(selected)
     if (pastGuesses.has(key)) { setMessage('Already guessed'); return }
+
+    // record this guess as a colour row (the group each selected tile belongs to)
+    setGuessRows(rows => [...rows, selected.map(n => puzzle.groups.findIndex(g => g.players.includes(n)))])
 
     const match = puzzle.groups.findIndex(g => keyOf(g.players) === key)
     if (match >= 0) {
@@ -70,6 +77,17 @@ export default function FootballConnections() {
         .filter(g => !solved.some(s => s.groupIndex === g.groupIndex))
     : []
   const shownGroups = [...solved, ...revealed]
+
+  const mistakes = MAX_LIVES - lives
+  const shareText = [
+    'Football Connections',
+    won ? (mistakes ? `Solved with ${mistakes} mistake${mistakes === 1 ? '' : 's'}` : 'Solved with no mistakes!') : 'Missed it',
+    ...(won && dailyStats?.currentStreak ? [`🔥 ${dailyStats.currentStreak}-day streak`] : []),
+    '',
+    ...guessRows.map(r => r.map(g => SHARE_EMOJI[g]).join('')),
+    '',
+    SITE_URL,
+  ].join('\n')
 
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
@@ -143,6 +161,7 @@ export default function FootballConnections() {
               : 'Come back tomorrow for a new puzzle.'}
           </p>
           <DailyStats game="connections" stats={dailyStats} />
+          <ShareCard text={shareText} />
         </div>
       )}
     </div>

@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { getRandomTarget, matchesTarget, MAX_CLUES } from '../../data/teammates'
 import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
+import { ShareCard } from '../../components/ShareCard'
+import { SITE_URL } from '../../utils/site'
 
 export default function GuessByTeammates() {
   const [target, setTarget] = useState(() => getRandomTarget())
@@ -172,11 +174,17 @@ export default function GuessByTeammates() {
           <h2 className={`score-number text-3xl mb-1 ${phase === 'won' ? 'text-green-400' : 'text-red-400'}`}>
             {phase === 'won' ? 'CORRECT!' : 'OUT OF GUESSES'}
           </h2>
-          <p className="text-gray-400 mb-1">
+          <p className="text-gray-400 mb-3">
             The mystery player was <span className="text-white font-bold">{target.name}</span>
             {phase === 'won' && guesses.length > 0 && <> — in {guesses.length} {guesses.length === 1 ? 'guess' : 'guesses'}</>}.
           </p>
-          <button onClick={newGame} className="mt-4 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">
+          <ShareCard text={[
+            phase === 'won'
+              ? `🕵️ Teammates — I guessed the mystery footballer in ${guesses.length}/${MAX_CLUES} clues!`
+              : `🕵️ Teammates — it stumped me. Can you name the mystery footballer?`,
+            SITE_URL,
+          ].join('\n\n')} />
+          <button onClick={newGame} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">
             New player
           </button>
         </div>

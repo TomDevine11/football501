@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { STAT_MODES, poolFor, randomFrom, isCorrect } from '../../data/higherlower'
+import { ShareCard } from '../../components/ShareCard'
+import { SITE_URL } from '../../utils/site'
 
 const BEST_KEY = 'ftg-higherlower-best'
 
@@ -128,8 +130,12 @@ export default function HigherLower() {
             Streak: <span className="text-white font-bold">{streak}</span>
             {streak >= best && streak > 0 && <span className="text-amber-400"> — new best!</span>}
           </p>
-          <p className="text-gray-600 text-xs mb-4">{challenger.name} scored {challenger.value} {mode.label}.</p>
-          <div className="flex gap-3">
+          <p className="text-gray-600 text-xs mb-3">{challenger.name} scored {challenger.value} {mode.label}.</p>
+          <ShareCard text={[
+            `⬆️ Higher or Lower (${mode.label}) — streak of ${streak}! Best: ${best}.`,
+            SITE_URL,
+          ].join('\n\n')} />
+          <div className="flex gap-3 mt-2">
             <button onClick={() => startMode(mode)} className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Play again</button>
             <button onClick={() => setMode(null)} className="border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-lg px-6 py-2.5 transition-colors">Change stat</button>
           </div>
