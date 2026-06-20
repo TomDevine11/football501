@@ -49,17 +49,45 @@ function headFor(route) {
   return lines.join('\n    ')
 }
 
-// The #root placeholder shown before the SPA boots. Deliberately a minimal,
-// app-consistent loading screen (dark background, brand + tagline) rather than
-// a full text page — otherwise users see a jarring "different page" flash on
-// every load when React mounts and replaces #root. The page's real, indexable
-// content lives in the live React DOM (which Google renders) and the SEO
-// signals (title, meta, canonical, Open Graph, JSON-LD incl. FAQ) are baked
-// into <head> above, so nothing is lost for ranking.
+// Crawlable supporting content + internal links, mirroring what the app renders
+// visibly (SeoContent / Hub). Kept visually hidden so it adds no visual flash,
+// but it's present in the raw HTML for first-pass indexing, non-JS crawlers, and
+// — importantly — link discovery, so Google can find every game page from the
+// homepage's static HTML without having to render JavaScript first.
+function crawlable(route) {
+  const link = (p, name) => `<a href="${p}">${esc(name)}</a>`
+  let h = ''
+  if (route.about) h += `<p>${esc(route.about)}</p>`
+  if (route.howTo?.length) {
+    h += `<h2>How to play ${esc(route.name)}</h2><ol>`
+    for (const s of route.howTo) h += `<li>${esc(s)}</li>`
+    h += `</ol>`
+  }
+  if (route.faq?.length) {
+    h += `<h2>Frequently asked questions</h2><dl>`
+    for (const f of route.faq) h += `<dt>${esc(f.q)}</dt><dd>${esc(f.a)}</dd>`
+    h += `</dl>`
+  }
+  const others = indexableRoutes().filter(o => o.path !== route.path)
+  h += `<nav aria-label="Football trivia games"><h2>More football trivia games</h2><ul>`
+  if (route.path !== '/') h += `<li>${link('/', 'Football Trivia Games')}</li>`
+  for (const o of others.filter(o => o.path !== '/')) h += `<li>${link(o.path, o.name)}</li>`
+  h += `</ul></nav>`
+  return h
+}
+
+// The #root content shown before the SPA boots: a minimal, app-consistent
+// loading screen (dark background, brand + tagline) — so there's no jarring
+// flash when React replaces #root — PLUS a visually-hidden block with the full
+// crawlable content and internal links. Both are inside #root and cleared on
+// mount, so the visible UX is unchanged. Head also carries title/meta/canonical/
+// Open Graph/JSON-LD, so crawlers get the complete picture from static HTML.
+const SR_ONLY = 'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0'
 function staticBody(route) {
   return `<div style="min-height:100vh;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;font-family:system-ui,-apple-system,sans-serif">`
     + `<h1 style="color:#fff;font-size:1.75rem;font-weight:800;margin:0">${esc(route.h1)}</h1>`
     + `<p style="color:#9ca3af;margin:.5rem 0 0;max-width:34rem">${esc(route.tagline)}</p>`
+    + `<div style="${SR_ONLY}">${crawlable(route)}</div>`
     + `</div>`
 }
 
