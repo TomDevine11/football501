@@ -1,13 +1,15 @@
 import { Fragment, useState, useRef, useEffect, useMemo } from 'react'
-import { getRandomGrid, categoryLabel, resolveGuess, normalizeName } from '../../data/tictactoe'
+import { getRandomGrid, buildGrid, categoryLabel, resolveGuess, normalizeName } from '../../data/tictactoe'
 import { usePlayerSuggestions } from './usePlayerSuggestions'
 import { getWinner, isFull } from './winner'
+import GridBuilder from './GridBuilder'
 
 const MARK = { X: '❌', O: '⭕' }
 const MARK_COLOR = { X: 'text-red-400', O: 'text-blue-400' }
 
 export default function TicTacToeVersus({ onBackToModes }) {
-  const [grid, setGrid] = useState(() => getRandomGrid())
+  const [grid, setGrid] = useState(null)         // null = setup screen
+  const [building, setBuilding] = useState(false) // showing the grid builder
   const [owners, setOwners] = useState({})       // cellIndex -> 'X' | 'O'
   const [cellPlayers, setCellPlayers] = useState({}) // cellIndex -> player name
   const [turn, setTurn] = useState('X')
@@ -123,15 +125,49 @@ export default function TicTacToeVersus({ onBackToModes }) {
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedIndex(i => Math.max(i - 1, -1)) }
   }
 
-  const playAgain = () => {
-    const nextStarter = starter === 'X' ? 'O' : 'X'
-    setGrid(getRandomGrid())
+  const resetBoard = (nextStarter) => {
     setOwners({}); setCellPlayers({})
     setStarter(nextStarter); setTurn(nextStarter)
     setSelectedCell(null); setInput(''); setResult(null); setLastWrong(null)
   }
+  const startRandom = () => { setGrid(getRandomGrid()); setScores({ X: 0, O: 0 }); resetBoard('X') }
+  const startCustom = (rowCats, colCats) => { setGrid(buildGrid(rowCats, colCats)); setBuilding(false); setScores({ X: 0, O: 0 }); resetBoard('X') }
+  const playAgain = () => resetBoard(starter === 'X' ? 'O' : 'X') // same grid, keep scores
+  const toSetup = () => { setGrid(null); setBuilding(false); setScores({ X: 0, O: 0 }); resetBoard('X') }
 
   const winningLine = result && result !== 'draw' ? result.line : []
+
+  // ── Grid builder ──────────────────────────────────────────────────
+  if (building) return <GridBuilder onBuild={startCustom} onCancel={() => setBuilding(false)} />
+
+  // ── Setup: choose a random or custom grid ─────────────────────────
+  if (!grid) {
+    return (
+      <div className="min-h-screen flex flex-col items-center px-4 py-8">
+        <div className="w-full max-w-lg flex items-center justify-between mb-6">
+          <button onClick={onBackToModes} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Modes</button>
+          <div className="score-number text-xl text-gray-500 tracking-wider">1v1</div>
+          <div className="w-12" />
+        </div>
+        <div className="w-full max-w-lg text-center mb-6">
+          <h1 className="text-2xl font-bold text-white mb-1">Local 1v1</h1>
+          <p className="text-gray-500 text-sm">Two players, one device. Choose your grid.</p>
+        </div>
+        <div className="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button onClick={startRandom} className="bg-gray-900 border border-gray-800 hover:border-green-600 hover:ring-1 hover:ring-green-600/30 rounded-xl p-6 text-left transition-all">
+            <div className="text-3xl mb-2">🎲</div>
+            <div className="text-white font-bold text-lg">Random grid</div>
+            <div className="text-gray-500 text-xs mt-1">A fresh, solvable grid picked for you.</div>
+          </button>
+          <button onClick={() => setBuilding(true)} className="bg-gray-900 border border-gray-800 hover:border-purple-500 hover:ring-1 hover:ring-purple-500/30 rounded-xl p-6 text-left transition-all">
+            <div className="text-3xl mb-2">🛠️</div>
+            <div className="text-white font-bold text-lg">Build your own</div>
+            <div className="text-gray-500 text-xs mt-1">Choose the categories for every row and column.</div>
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
@@ -181,9 +217,14 @@ export default function TicTacToeVersus({ onBackToModes }) {
             ) : (
               <div className={`font-bold text-lg ${MARK_COLOR[result.mark]}`}>Player {MARK[result.mark]} wins! 🎉</div>
             )}
-            <button onClick={playAgain} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-5 py-2 transition-colors">
-              Play again
-            </button>
+            <div className="mt-3 flex items-center justify-center gap-3">
+              <button onClick={playAgain} className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-5 py-2 transition-colors">
+                Play again
+              </button>
+              <button onClick={toSetup} className="border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-lg px-5 py-2 transition-colors">
+                New grid
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -302,7 +343,7 @@ export default function TicTacToeVersus({ onBackToModes }) {
           </button>
           <button
             type="button"
-            onClick={playAgain}
+            onClick={toSetup}
             className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors"
           >
             ↻ New grid

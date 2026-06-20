@@ -133,6 +133,22 @@ export function getDailyGrid() {
   return getGridForDay(dayIndex)
 }
 
+// Build a grid from explicitly chosen categories (1v1 "build your own"). No
+// solvability gate — the builder UI shows each cell's candidate count so players
+// can avoid empty pairings themselves. `candidates` = every valid player per
+// cell (validation), `reveal` = famous examples (give-up).
+export function buildGrid(rowCats, colCats) {
+  const candidates = []
+  const reveal = []
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      candidates.push(broadCandidates(rowCats[r], colCats[c]))
+      reveal.push(notableCandidates(rowCats[r], colCats[c]))
+    }
+  }
+  return { rowCategories: rowCats, colCategories: colCats, candidates, reveal }
+}
+
 // A fresh random (but still fully solvable) grid — used for replayable modes
 // like local 1v1, where each match should get a different board.
 export function getRandomGrid() {
