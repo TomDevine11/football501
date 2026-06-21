@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { getRandomTarget, matchesTarget, MAX_CLUES } from '../../data/teammates'
+import { getRandomTarget, getDailyTarget, matchesTarget, MAX_CLUES } from '../../data/teammates'
 import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
+import DailyStats from '../../components/DailyStats'
+import ModeToggle from '../../components/ModeToggle'
+import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
 export default function GuessByTeammates() {
-  const [target, setTarget] = useState(() => getRandomTarget())
+  const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
+  const [target, setTarget] = useState(() => getDailyTarget())
   const [revealed, setRevealed] = useState(1)      // clues shown so far (1..MAX_CLUES)
   const [guesses, setGuesses] = useState([])       // { text, correct }
   const [input, setInput] = useState('')
@@ -14,10 +18,15 @@ export default function GuessByTeammates() {
   const [dismissed, setDismissed] = useState(false)
   const [phase, setPhase] = useState('playing')    // 'playing' | 'won' | 'lost'
   const [shake, setShake] = useState(false)
+  const [dailyStats, setDailyStats] = useState(null)
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
   const active = phase === 'playing'
+  // Only Daily mode records stats/streaks.
+  useEffect(() => {
+    if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('teammates', phase === 'won'))
+  }, [phase, mode])
   const usedNames = useMemo(() => new Set(), [])
   const { suggestions, isSearching } = usePlayerSuggestions(input, active, usedNames)
 
@@ -72,9 +81,10 @@ export default function GuessByTeammates() {
     setTimeout(() => inputRef.current?.focus(), 0)
   }
 
-  const newGame = () => {
-    setTarget(getRandomTarget())
-    setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1)
+  const newGame = (m) => {
+    setMode(m)
+    setTarget(m === 'daily' ? getDailyTarget() : getRandomTarget())
+    setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1); setDailyStats(null)
   }
 
   const cluesToShow = phase === 'playing' ? revealed : MAX_CLUES
@@ -88,6 +98,8 @@ export default function GuessByTeammates() {
         <div className="score-number text-xl text-gray-500 tracking-wider">TEAMMATES</div>
         <div className="text-sm tabular-nums text-gray-500">{phase === 'playing' ? `${guessesLeft} left` : ''}</div>
       </div>
+
+      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
 
       {/* Intro */}
       <div className="w-full max-w-lg mb-5">
@@ -178,15 +190,16 @@ export default function GuessByTeammates() {
             The mystery player was <span className="text-white font-bold">{target.name}</span>
             {phase === 'won' && guesses.length > 0 && <> — in {guesses.length} {guesses.length === 1 ? 'guess' : 'guesses'}</>}.
           </p>
+          {mode === 'daily' && <DailyStats game="teammates" stats={dailyStats} />}
           <ShareCard text={[
             phase === 'won'
               ? `🕵️ Teammates — I guessed the mystery footballer in ${guesses.length}/${MAX_CLUES} clues!`
               : `🕵️ Teammates — it stumped me. Can you name the mystery footballer?`,
             SITE_URL,
           ].join('\n\n')} />
-          <button onClick={newGame} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">
-            New player
-          </button>
+          {mode === 'unlimited'
+            ? <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New player →</button>
+            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new mystery player — or switch to Unlimited above.</p>}
         </div>
       )}
 

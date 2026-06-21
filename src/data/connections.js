@@ -86,3 +86,8 @@ export function getDailyConnections() {
   const dayIndex = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
   return getConnectionsForDay(dayIndex)
 }
+
+// A random puzzle for Unlimited/practice mode (never affects daily stats).
+export function getRandomConnections() {
+  return getConnectionsForDay(100000 + Math.floor(Math.random() * 1e9))
+}

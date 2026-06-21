@@ -17,8 +17,23 @@ function years(c) {
   return c.to ? `${c.from}–${c.to}` : `${c.from}–`
 }
 
-export function getRandomTarget() {
-  const p = data.players[Math.floor(Math.random() * data.players.length)]
+function toRound(p) {
   const clues = p.clubs.slice(0, MAX_CLUES).map(c => ({ club: c.name, years: years(c) }))
   return { name: p.name, clues }
+}
+
+export function getRandomTarget() {
+  return toRound(data.players[Math.floor(Math.random() * data.players.length)])
+}
+
+// Deterministic mystery player for a given day (Daily mode → stats/streaks).
+export function getTargetForDay(dayIndex) {
+  const n = data.players.length
+  return toRound(data.players[((dayIndex % n) + n) % n])
+}
+
+export function getDailyTarget() {
+  const now = new Date()
+  const dayIndex = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
+  return getTargetForDay(dayIndex)
 }

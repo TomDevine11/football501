@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { getDailyWordlePlayer } from '../../data/wordle'
+import { getDailyWordlePlayer, getRandomWordlePlayer } from '../../data/wordle'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
+import ModeToggle from '../../components/ModeToggle'
 import { recordResult } from '../../data/dailyStats'
 
 const MAX_GUESSES = 6
@@ -44,7 +45,8 @@ function evaluateGuess(guess, answer) {
 }
 
 export default function FootballWordle() {
-  const [question] = useState(() => getDailyWordlePlayer())
+  const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
+  const [question, setQuestion] = useState(() => getDailyWordlePlayer())
   const answer = question.surname
 
   const [guesses, setGuesses] = useState([])
@@ -52,8 +54,15 @@ export default function FootballWordle() {
   const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
   const [dailyStats, setDailyStats] = useState(null)
   useEffect(() => {
-    if (phase !== 'playing') setDailyStats(recordResult('wordle', phase === 'won'))
-  }, [phase])
+    // Only Daily mode records stats/streaks.
+    if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('wordle', phase === 'won'))
+  }, [phase, mode])
+
+  const newGame = (m) => {
+    setMode(m)
+    setQuestion(m === 'daily' ? getDailyWordlePlayer() : getRandomWordlePlayer())
+    setGuesses([]); setCurrent(''); setPhase('playing'); setDailyStats(null)
+  }
   const [shake, setShake] = useState(false)
   const [flippingRow, setFlippingRow] = useState(null)
   const [bounceRow, setBounceRow] = useState(null)
@@ -152,10 +161,12 @@ export default function FootballWordle() {
         <div className="text-sm text-gray-700 tabular-nums">{guesses.length}/{MAX_GUESSES}</div>
       </div>
 
+      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
+
       {/* Hint card */}
       <div className="w-full max-w-lg mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">Guess today's footballer</div>
+          <div className="text-white font-bold text-sm">{mode === 'daily' ? "Guess today's footballer" : 'Guess the footballer'}</div>
           <div className="text-gray-500 text-xs mt-0.5">{answer.length}-letter surname · {MAX_GUESSES} guesses</div>
         </div>
       </div>
@@ -250,8 +261,11 @@ export default function FootballWordle() {
           <p className="text-gray-500 text-sm">
             Solved in <span className="text-white font-bold">{guesses.length}</span>/{MAX_GUESSES}
           </p>
-          <DailyStats game="wordle" stats={dailyStats} />
+          {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
           <ShareCard text={shareText} />
+          {mode === 'unlimited' && (
+            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New word →</button>
+          )}
         </div>
       )}
 
@@ -262,8 +276,11 @@ export default function FootballWordle() {
           <p className="text-gray-400 mb-2">
             It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}
           </p>
-          <DailyStats game="wordle" stats={dailyStats} />
+          {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
           <ShareCard text={shareText} />
+          {mode === 'unlimited' && (
+            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New word →</button>
+          )}
         </div>
       )}
     </div>

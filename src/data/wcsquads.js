@@ -32,6 +32,18 @@ export function buildMatcher(squad) {
   return { full, surname }
 }
 
+// Deterministic "squad of the day" — everyone names the same team today.
+export function getSquadForDay(dayIndex) {
+  const n = SQUADS.length
+  return SQUADS[((dayIndex % n) + n) % n]
+}
+
+export function getDailySquad() {
+  const now = new Date()
+  const dayIndex = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
+  return getSquadForDay(dayIndex)
+}
+
 // Returns the canonical squad name the guess matches, or null.
 export function matchPlayer(matcher, input) {
   const q = normalize(input)

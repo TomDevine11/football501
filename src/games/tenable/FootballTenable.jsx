@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { getDailyTenableQuestion } from '../../data/tenable'
+import { getDailyTenableQuestion, getRandomTenableQuestion } from '../../data/tenable'
 import { players as localPlayers } from '../../data/players'
 import { clubs } from '../../data/clubs'
 import { getFlagFromNationality } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
+import ModeToggle from '../../components/ModeToggle'
 import { recordResult } from '../../data/dailyStats'
 
 const MAX_LIVES = 3
@@ -36,7 +37,8 @@ function answerMatches(guessNorm, answer) {
 }
 
 export default function FootballTenable() {
-  const [question] = useState(() => getDailyTenableQuestion())
+  const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
+  const [question, setQuestion] = useState(() => getDailyTenableQuestion())
   const [revealed, setRevealed] = useState({}) // rank -> answer
   const [lives, setLives] = useState(MAX_LIVES)
   const [input, setInput] = useState('')
@@ -44,8 +46,16 @@ export default function FootballTenable() {
   const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
   const [dailyStats, setDailyStats] = useState(null)
   useEffect(() => {
-    if (phase !== 'playing') setDailyStats(recordResult('tenable', phase === 'won'))
-  }, [phase])
+    // Only Daily mode records stats/streaks.
+    if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('tenable', phase === 'won'))
+  }, [phase, mode])
+
+  const newGame = (m) => {
+    setMode(m)
+    setQuestion(m === 'daily' ? getDailyTenableQuestion() : getRandomTenableQuestion())
+    setRevealed({}); setLives(MAX_LIVES); setInput(''); setHistory([])
+    setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false)
+  }
   const [pulseRow, setPulseRow] = useState(null)
   const [pendingRank, setPendingRank] = useState(null)
   const [shake, setShake] = useState(false)
@@ -261,6 +271,8 @@ export default function FootballTenable() {
         </div>
       </div>
 
+      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
+
       {/* Question card */}
       <div className="w-full max-w-lg mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4">
@@ -397,8 +409,11 @@ export default function FootballTenable() {
           <p className="text-gray-400 mb-2">
             You found all 10 with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.
           </p>
-          <DailyStats game="tenable" stats={dailyStats} />
+          {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
           <ShareCard text={shareText} />
+          {mode === 'unlimited' && (
+            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New question →</button>
+          )}
         </div>
       )}
 
@@ -409,8 +424,11 @@ export default function FootballTenable() {
           <p className="text-gray-400 mb-2">
             You found <span className="text-white font-bold">{correctCount}/10</span> before {gaveUp ? 'giving up' : 'running out of lives'}.
           </p>
-          <DailyStats game="tenable" stats={dailyStats} />
+          {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
           <ShareCard text={shareText} />
+          {mode === 'unlimited' && (
+            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New question →</button>
+          )}
           <div className="w-full bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mt-6">
             <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Full answer list</div>
             <div className="divide-y divide-gray-800/50">

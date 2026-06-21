@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { SQUADS, buildMatcher, matchPlayer } from '../../data/wcsquads'
+import { SQUADS, buildMatcher, matchPlayer, getDailySquad } from '../../data/wcsquads'
 import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
+import DailyStats from '../../components/DailyStats'
+import ModeToggle from '../../components/ModeToggle'
+import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
 export default function WorldCupSquads() {
-  const [squad, setSquad] = useState(null)
+  const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
+  const [squad, setSquad] = useState(() => getDailySquad())
   const [named, setNamed] = useState(() => new Set())
   const [input, setInput] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
@@ -14,6 +18,7 @@ export default function WorldCupSquads() {
   const [revealed, setRevealed] = useState(false)
   const [flash, setFlash] = useState('')
   const [shake, setShake] = useState(false)
+  const [dailyStats, setDailyStats] = useState(null)
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
@@ -34,6 +39,11 @@ export default function WorldCupSquads() {
   }, [])
 
   const complete = squad && named.size === squad.players.length
+  const over = !!squad && (complete || revealed)
+  // Daily mode records a score (squad members named) once the round ends.
+  useEffect(() => {
+    if (over && mode === 'daily') setDailyStats(recordResult('wcsquads', true, named.size))
+  }, [over, mode]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const submit = (text) => {
     if (!active || !text.trim()) return
@@ -62,10 +72,15 @@ export default function WorldCupSquads() {
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedIndex(i => Math.max(i - 1, -1)) }
   }
 
-  const pick = (s) => { setSquad(s); setNamed(new Set()); setRevealed(false); setInput(''); setFlash('') }
-  const back = () => { setSquad(null); setNamed(new Set()); setRevealed(false); setInput(''); setFlash('') }
+  const reset = (s) => { setSquad(s); setNamed(new Set()); setRevealed(false); setInput(''); setFlash(''); setDailyStats(null) }
+  const pick = (s) => reset(s)                  // unlimited: chosen squad
+  const back = () => reset(null)                // unlimited: back to picker
+  const switchMode = (m) => {                   // toggle daily ⇄ unlimited
+    setMode(m)
+    reset(m === 'daily' ? getDailySquad() : null)
+  }
 
-  // ── Squad picker ──────────────────────────────────────────────────
+  // ── Squad picker (Unlimited only) ─────────────────────────────────
   if (!squad) {
     return (
       <div className="min-h-screen flex flex-col items-center px-4 py-8">
@@ -74,6 +89,7 @@ export default function WorldCupSquads() {
           <div className="score-number text-xl text-gray-500 tracking-wider">WORLD CUP SQUADS</div>
           <div className="w-16" />
         </div>
+        <ModeToggle mode={mode} onChange={switchMode} className="mb-6" />
         <div className="w-full max-w-lg text-center mb-6">
           <h1 className="text-2xl font-bold text-white mb-1">Name the Winning Squad</h1>
           <p className="text-gray-500 text-sm">Pick a World Cup-winning team and recall as many of the squad as you can.</p>
@@ -99,14 +115,18 @@ export default function WorldCupSquads() {
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
-        <button onClick={back} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Change squad</button>
+        {mode === 'unlimited'
+          ? <button onClick={back} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Change squad</button>
+          : <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>}
         <div className="score-number text-xl text-gray-500 tracking-wider">WORLD CUP SQUADS</div>
         <div className="text-sm tabular-nums text-gray-400">{named.size}/{squad.players.length}</div>
       </div>
 
+      <ModeToggle mode={mode} onChange={switchMode} className="mb-4" />
+
       <div className="w-full max-w-lg mb-4 text-center">
         <h1 className="text-xl font-bold text-white">{squad.nation} {squad.year}</h1>
-        <p className="text-gray-500 text-xs">World Cup winners — name the squad</p>
+        <p className="text-gray-500 text-xs">{mode === 'daily' ? "Today's squad — name the winners" : 'World Cup winners — name the squad'}</p>
       </div>
 
       {active && (
@@ -158,14 +178,20 @@ export default function WorldCupSquads() {
           <div className="text-4xl mb-1">🏆</div>
           <h2 className="score-number text-2xl text-green-400 mb-1">FULL SQUAD!</h2>
           <p className="text-gray-400 text-sm mb-3">You named all {squad.players.length}.</p>
+          {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
           <ShareCard text={squadShareText} />
-          <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+          {mode === 'unlimited'
+            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new squad — or switch to Unlimited above.</p>}
         </div>
       ) : revealed ? (
         <div className="w-full max-w-lg text-center mt-5">
           <p className="text-gray-300 text-sm mb-3">You named <span className="text-white font-bold">{named.size}</span> of {squad.players.length}.</p>
+          {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
           <ShareCard text={squadShareText} />
-          <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+          {mode === 'unlimited'
+            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new squad — or switch to Unlimited above.</p>}
         </div>
       ) : (
         <button onClick={() => setRevealed(true)} className="mt-5 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">

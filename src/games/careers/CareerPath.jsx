@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { getRandomTarget, matchesTarget, MAX_CLUES } from '../../data/careers'
+import { getRandomTarget, getDailyTarget, matchesTarget, MAX_CLUES } from '../../data/careers'
 import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
+import DailyStats from '../../components/DailyStats'
+import ModeToggle from '../../components/ModeToggle'
+import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
 export default function CareerPath() {
-  const [target, setTarget] = useState(() => getRandomTarget())
+  const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
+  const [target, setTarget] = useState(() => getDailyTarget())
   const [revealed, setRevealed] = useState(1)
   const [guesses, setGuesses] = useState([])
   const [input, setInput] = useState('')
@@ -14,10 +18,15 @@ export default function CareerPath() {
   const [dismissed, setDismissed] = useState(false)
   const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
   const [shake, setShake] = useState(false)
+  const [dailyStats, setDailyStats] = useState(null)
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
   const active = phase === 'playing'
+  // Only Daily mode records stats/streaks.
+  useEffect(() => {
+    if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('careers', phase === 'won'))
+  }, [phase, mode])
   const usedNames = useMemo(() => new Set(), [])
   const { suggestions, isSearching } = usePlayerSuggestions(input, active, usedNames)
 
@@ -72,9 +81,10 @@ export default function CareerPath() {
     setTimeout(() => inputRef.current?.focus(), 0)
   }
 
-  const newGame = () => {
-    setTarget(getRandomTarget())
-    setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1)
+  const newGame = (m) => {
+    setMode(m)
+    setTarget(m === 'daily' ? getDailyTarget() : getRandomTarget())
+    setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1); setDailyStats(null)
   }
 
   const cluesToShow = phase === 'playing' ? revealed : MAX_CLUES
@@ -87,6 +97,8 @@ export default function CareerPath() {
         <div className="score-number text-xl text-gray-500 tracking-wider">CAREER PATH</div>
         <div className="text-sm tabular-nums text-gray-500">{phase === 'playing' ? `${guessesLeft} left` : ''}</div>
       </div>
+
+      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
 
       <div className="w-full max-w-lg mb-5">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
@@ -173,15 +185,16 @@ export default function CareerPath() {
             The mystery player was <span className="text-white font-bold">{target.name}</span>
             {phase === 'won' && guesses.length > 0 && <> — in {guesses.length} {guesses.length === 1 ? 'guess' : 'guesses'}</>}.
           </p>
+          {mode === 'daily' && <DailyStats game="careers" stats={dailyStats} />}
           <ShareCard text={[
             phase === 'won'
               ? `🧭 Career Path — I guessed the player in ${guesses.length}/${MAX_CLUES} clubs!`
               : `🧭 Career Path — it stumped me. Can you guess the player from their career?`,
             SITE_URL,
           ].join('\n\n')} />
-          <button onClick={newGame} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">
-            New player
-          </button>
+          {mode === 'unlimited'
+            ? <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New player →</button>
+            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new career path — or switch to Unlimited above.</p>}
         </div>
       )}
 

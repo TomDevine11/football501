@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getDailyConnections, shuffleNames } from '../../data/connections'
+import { getDailyConnections, getRandomConnections, shuffleNames } from '../../data/connections'
 import DailyStats from '../../components/DailyStats'
+import ModeToggle from '../../components/ModeToggle'
 import { recordResult } from '../../data/dailyStats'
 import { ShareCard } from '../../components/ShareCard'
 import { SITE_URL } from '../../utils/site'
@@ -17,7 +18,8 @@ const GROUP_COLORS = [
 const keyOf = names => [...names].sort().join('|')
 
 export default function FootballConnections() {
-  const [puzzle] = useState(() => getDailyConnections())
+  const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
+  const [puzzle, setPuzzle] = useState(() => getDailyConnections())
   const [solved, setSolved] = useState([])        // [{ groupIndex, label, players }]
   const [selected, setSelected] = useState([])    // names
   const [lives, setLives] = useState(MAX_LIVES)
@@ -34,7 +36,16 @@ export default function FootballConnections() {
   const over = won || lost
 
   const [dailyStats, setDailyStats] = useState(null)
-  useEffect(() => { if (over) setDailyStats(recordResult('connections', won)) }, [over, won])
+  // Only Daily mode records stats/streaks.
+  useEffect(() => { if (over && mode === 'daily') setDailyStats(recordResult('connections', won)) }, [over, won, mode])
+
+  const newGame = (m) => {
+    setMode(m)
+    const p = m === 'daily' ? getDailyConnections() : getRandomConnections()
+    setPuzzle(p); setOrder(p.tiles)
+    setSolved([]); setSelected([]); setLives(MAX_LIVES); setMessage('')
+    setPastGuesses(new Set()); setGuessRows([]); setDailyStats(null)
+  }
 
   const toggle = (name) => {
     if (over) return
@@ -101,6 +112,8 @@ export default function FootballConnections() {
         </div>
       </div>
 
+      <ModeToggle mode={mode} onChange={newGame} className="mb-4" />
+
       <div className="w-full max-w-lg mb-4">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
           <div className="text-white font-bold text-sm">Find the four groups of four</div>
@@ -158,10 +171,13 @@ export default function FootballConnections() {
           <p className="text-gray-400">
             {won
               ? <>You found all four groups with <span className="text-white font-bold">{MAX_LIVES - lives}</span> mistake{MAX_LIVES - lives === 1 ? '' : 's'}.</>
-              : 'Come back tomorrow for a new puzzle.'}
+              : mode === 'daily' ? 'Come back tomorrow for a new puzzle.' : 'Better luck on the next one.'}
           </p>
-          <DailyStats game="connections" stats={dailyStats} />
+          {mode === 'daily' && <DailyStats game="connections" stats={dailyStats} />}
           <ShareCard text={shareText} />
+          {mode === 'unlimited' && (
+            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New puzzle →</button>
+          )}
         </div>
       )}
     </div>

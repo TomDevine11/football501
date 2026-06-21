@@ -1,11 +1,12 @@
 import { Fragment, useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { getDailyGrid, categoryLabel, resolveGuess, findAssignment, normalizeName } from '../../data/tictactoe'
+import { getDailyGrid, getRandomGrid, categoryLabel, resolveGuess, findAssignment, normalizeName } from '../../data/tictactoe'
 import { players as localPlayers } from '../../data/players'
 import { getFlagFromNationality } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
+import ModeToggle from '../../components/ModeToggle'
 import { recordResult } from '../../data/dailyStats'
 
 const MAX_LIVES = 3
@@ -14,7 +15,8 @@ const TSDB = 'https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p='
 const EXCLUDE_SPORTS = new Set(['basketball','american football','baseball','ice hockey','tennis','golf','cricket','rugby','swimming','athletics','motorsport','cycling','boxing','mma'])
 
 export default function FootballTicTacToe({ onBackToModes }) {
-  const [grid] = useState(() => getDailyGrid())
+  const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
+  const [grid, setGrid] = useState(() => getDailyGrid())
   const [filled, setFilled] = useState({}) // cellIndex -> player name
   const [lives, setLives] = useState(MAX_LIVES)
   const [selectedCell, setSelectedCell] = useState(null)
@@ -23,13 +25,21 @@ export default function FootballTicTacToe({ onBackToModes }) {
   const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
   const [dailyStats, setDailyStats] = useState(null)
   useEffect(() => {
-    if (phase !== 'playing') setDailyStats(recordResult('tictactoe', phase === 'won'))
-  }, [phase])
+    // Only Daily mode records stats/streaks.
+    if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('tictactoe', phase === 'won'))
+  }, [phase, mode])
   const [shake, setShake] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [gaveUp, setGaveUp] = useState(false)
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false)
   const [answersCell, setAnswersCell] = useState(null) // cell whose full answer list is open
+
+  const newGame = (m) => {
+    setMode(m)
+    setGrid(m === 'daily' ? getDailyGrid() : getRandomGrid())
+    setFilled({}); setLives(MAX_LIVES); setSelectedCell(null); setInput(''); setHistory([])
+    setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false); setAnswersCell(null)
+  }
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
@@ -228,6 +238,8 @@ export default function FootballTicTacToe({ onBackToModes }) {
           ))}
         </div>
       </div>
+
+      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
 
       {/* Intro card */}
       <div className="w-full max-w-lg mb-6">
@@ -444,8 +456,11 @@ export default function FootballTicTacToe({ onBackToModes }) {
           <p className="text-gray-400 mb-2">
             You filled all 9 squares with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.
           </p>
-          <DailyStats game="tictactoe" stats={dailyStats} />
+          {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
           <ShareCard text={shareText} />
+          {mode === 'unlimited' && (
+            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New grid →</button>
+          )}
         </div>
       )}
 
@@ -456,8 +471,11 @@ export default function FootballTicTacToe({ onBackToModes }) {
           <p className="text-gray-400 mb-2">
             You filled <span className="text-white font-bold">{filledCount}/9</span> squares before {gaveUp ? 'giving up' : 'running out of lives'}.
           </p>
-          <DailyStats game="tictactoe" stats={dailyStats} />
+          {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
           <ShareCard text={shareText} />
+          {mode === 'unlimited' && (
+            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New grid →</button>
+          )}
         </div>
       )}
 

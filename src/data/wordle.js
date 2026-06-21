@@ -38,9 +38,18 @@ function buildPool() {
 
 const POOL = buildPool()
 
+export function getWordlePlayerForDay(dayIndex) {
+  return POOL[((dayIndex % POOL.length) + POOL.length) % POOL.length]
+}
+
 // Same daily-rotation pattern used by Football Tenable: changes at local midnight.
 export function getDailyWordlePlayer() {
   const now = new Date()
   const dayIndex = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
-  return POOL[dayIndex % POOL.length]
+  return getWordlePlayerForDay(dayIndex)
+}
+
+// A random answer for Unlimited/practice mode (never affects daily stats).
+export function getRandomWordlePlayer() {
+  return POOL[Math.floor(Math.random() * POOL.length)]
 }

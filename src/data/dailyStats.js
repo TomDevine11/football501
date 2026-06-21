@@ -1,8 +1,12 @@
-// Local daily-game stats + streaks (per browser, no backend).
-// Tracks, per game: games played, wins, current win streak, max streak.
-// "Win" is defined by each game (Wordle solved, TicTacToe grid filled,
-// Connections solved, Tenable all 10). A streak continues only across
-// consecutive days; a loss or a missed day resets it.
+// Local daily-game stats + streaks (per browser, no backend). Only DAILY mode
+// records here — unlimited/practice play never touches these.
+//
+// Two shapes, both stored the same way:
+//   • win/lose games  → streak = consecutive winning days; show Played/Win%/Streak/Max
+//   • score games     → streak = consecutive days PLAYED; also track `best` score;
+//                        show Played/Best/Streak/Max
+// recordResult(game, won, score?): pass won=true for a "successful" day (a win,
+// or simply having played a score game), and the score for score games.
 
 const KEY = 'ftg-stats-v1'
 
@@ -18,15 +22,14 @@ function save(all) {
   try { localStorage.setItem(KEY, JSON.stringify(all)) } catch { /* storage unavailable */ }
 }
 
-const blank = () => ({ played: 0, wins: 0, currentStreak: 0, maxStreak: 0, lastPlayed: null, lastWin: null })
+const blank = () => ({ played: 0, wins: 0, currentStreak: 0, maxStreak: 0, best: 0, lastPlayed: null, lastWin: null })
 
 export function getStats(game) {
   return { ...blank(), ...(load()[game] || {}) }
 }
 
-// Record today's result once. Idempotent per day (replaying the same day's
-// puzzle won't double-count). Returns the updated stats.
-export function recordResult(game, won) {
+// Record today's result once (idempotent per day). Returns the updated stats.
+export function recordResult(game, won, score = null) {
   const all = load()
   const day = todayIndex()
   const s = { ...blank(), ...(all[game] || {}) }
@@ -41,6 +44,7 @@ export function recordResult(game, won) {
   } else {
     s.currentStreak = 0
   }
+  if (score != null && score > s.best) s.best = score
   s.lastPlayed = day
   all[game] = s
   save(all)

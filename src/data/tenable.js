@@ -240,10 +240,20 @@ export const TENABLE_QUESTIONS = [
   },
 ]
 
+export function getTenableQuestionForDay(dayIndex) {
+  const n = TENABLE_QUESTIONS.length
+  return TENABLE_QUESTIONS[((dayIndex % n) + n) % n]
+}
+
 // Deterministic "question of the day" — changes at local midnight,
 // cycles through the question list (repeats once exhausted).
 export function getDailyTenableQuestion() {
   const now = new Date()
   const dayIndex = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
-  return TENABLE_QUESTIONS[dayIndex % TENABLE_QUESTIONS.length]
+  return getTenableQuestionForDay(dayIndex)
+}
+
+// A random question for Unlimited/practice mode (never affects daily stats).
+export function getRandomTenableQuestion() {
+  return TENABLE_QUESTIONS[Math.floor(Math.random() * TENABLE_QUESTIONS.length)]
 }
