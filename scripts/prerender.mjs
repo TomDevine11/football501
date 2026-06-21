@@ -58,6 +58,12 @@ function crawlable(route) {
   const link = (p, name) => `<a href="${p}">${esc(name)}</a>`
   let h = ''
   if (route.about) h += `<p>${esc(route.about)}</p>`
+  if (route.sections?.length) {
+    for (const s of route.sections) {
+      h += `<h2>${esc(s.h2)}</h2>`
+      for (const p of s.body) h += `<p>${esc(p)}</p>`
+    }
+  }
   if (route.howTo?.length) {
     h += `<h2>How to play ${esc(route.name)}</h2><ol>`
     for (const s of route.howTo) h += `<li>${esc(s)}</li>`

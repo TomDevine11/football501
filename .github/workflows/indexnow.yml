@@ -1,0 +1,29 @@
+name: IndexNow ping
+
+# After a push to main, Render auto-deploys the new build. Once it's live we ping
+# IndexNow so Bing/Yandex recrawl the changed pages within hours. (Google ignores
+# IndexNow and relies on the sitemap + links instead.) The job waits for the
+# deploy to finish, then verifies the key file is live before submitting.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'index.html'
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Wait for Render to deploy
+        run: sleep 240
+      - name: Submit URLs to IndexNow
+        run: node scripts/indexnow.mjs

@@ -18,6 +18,9 @@ export const absolute = (path) => (path === '/' ? SITE_URL + '/' : SITE_URL + pa
 
 // One entry per route. Titles ≤ ~60 chars, descriptions ~150–160 chars,
 // keyword-rich and unique (duplicate titles/descriptions are a ranking killer).
+// `sections` adds longer-form, unique on-page copy (rendered visibly by
+// SeoContent and into the prerendered static HTML) so each page is substantial
+// rather than thin — which helps it get crawled AND indexed, not just discovered.
 export const ROUTES = [
   {
     path: '/',
@@ -29,10 +32,27 @@ export const ROUTES = [
     tagline: 'A growing collection of free daily football trivia games. No sign-up, just play.',
     about: 'Football Trivia Games brings together the best free daily football quiz games in one place. Test your knowledge with Football Wordle, fill a Football Tic-Tac-Toe grid, race against the clock in Football Tenable, or guess the mystery player from their teammates — all playable instantly in your browser on mobile or desktop.',
     howTo: [],
+    sections: [
+      {
+        h2: 'Free football games you can play every day',
+        body: [
+          'Every game here is completely free, runs instantly in your browser, and needs no account, app or download. Pick a game, play a round in a couple of minutes, then come back tomorrow for a fresh challenge.',
+          'Most games have a Daily mode — the same puzzle for everyone, with a win streak to protect — plus an Unlimited mode for endless practice that never touches your stats.',
+        ],
+      },
+      {
+        h2: 'A game for every kind of football fan',
+        body: [
+          'Word-game lovers can tackle Football Wordle; quiz buffs will enjoy Football Tenable and Football Connections; and anyone who knows their transfers will fly through Teammates and Career Path. Test your memory with Name the Winning Squad, or chase a streak in Higher or Lower. Whether you follow the Premier League, La Liga, the Champions League or the World Cup, there is a daily football game here for you.',
+        ],
+      },
+    ],
     faq: [
       { q: 'What is Football Trivia Games?', a: 'Football Trivia Games is a free collection of daily football quiz games — including Football Wordle, Football Tic-Tac-Toe, Football Tenable and Guess the Player — playable in your browser with no sign-up.' },
       { q: 'Are the games free to play?', a: 'Yes. Every game is completely free, runs in your browser, and needs no account or download.' },
       { q: 'Do new puzzles appear every day?', a: 'Yes. The daily games refresh at local midnight, and the guessing and 1v1 modes can be replayed as often as you like.' },
+      { q: 'Can I play more than once a day?', a: 'Yes — most games have an Unlimited mode for endless practice alongside the once-a-day Daily challenge, and the 1v1 and guessing modes can be replayed any time.' },
+      { q: 'Can I play on my phone?', a: 'Yes. Every game works in any mobile or desktop browser, with no app to install.' },
     ],
     schema: 'WebSite',
     priority: '1.0',
@@ -54,10 +74,26 @@ export const ROUTES = [
       'Green means the letter is in the right spot; yellow means right letter, wrong spot; grey means it is not in the surname.',
       'Solve the surname within six guesses to win.',
     ],
+    sections: [
+      {
+        h2: 'Tips for Football Wordle',
+        body: [
+          'Open with a surname packed with common letters so you light up as many greens and yellows as possible — names rich in vowels and letters like R, S, T and N make a strong first guess.',
+          'Accents are ignored, so you never have to spell a name with its exact diacritics — just get the letters right and let the colours guide you.',
+        ],
+      },
+      {
+        h2: 'How it differs from the original Wordle',
+        body: [
+          'Instead of a fixed five-letter word, you are guessing a real footballer’s surname, which can be longer or shorter than five letters. Every answer is a genuinely famous player, so Football Wordle rewards football knowledge as much as word skill.',
+        ],
+      },
+    ],
     faq: [
       { q: 'What is Football Wordle?', a: "Football Wordle is a daily word game where you guess a famous footballer's surname in six tries, using green and yellow colour clues just like Wordle." },
       { q: 'How many guesses do I get?', a: 'You get six guesses to find the footballer’s surname.' },
       { q: 'Does the footballer change every day?', a: 'Yes — a new footballer is selected each day and refreshes at local midnight.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily gives everyone the same footballer each day and tracks your win streak; Unlimited serves random players for endless practice without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.9',
@@ -79,10 +115,25 @@ export const ROUTES = [
       'No player can be used twice on the same grid.',
       'In the daily mode, fill all nine squares before your lives run out. In 1v1, take turns and get three in a row to win.',
     ],
+    sections: [
+      {
+        h2: 'Tips & strategy',
+        body: [
+          'Look for versatile players who satisfy several categories at once — a well-travelled international who has won major trophies can unlock multiple squares. Start with the square you find hardest, because once a player is used they cannot be reused anywhere else on the grid.',
+        ],
+      },
+      {
+        h2: 'The categories you will see',
+        body: [
+          'Rows and columns are drawn from clubs, leagues, nationalities and trophies — for example “Played for Real Madrid”, “Premier League”, “Brazil international” or “Won the Ballon d’Or”. Every daily grid is checked to be solvable with famous players, so there is always a satisfying answer for each square.',
+        ],
+      },
+    ],
     faq: [
       { q: 'How does Football Tic-Tac-Toe work?', a: 'Each row and column of the 3x3 grid is a football category. To claim a square you name a player who fits both the row and the column — for example a player who played for a given club AND won a given trophy.' },
-      { q: 'Can I play Football Tic-Tac-Toe with a friend?', a: 'Yes. The 1v1 mode lets two players share one device, taking turns to claim squares. The first to three in a row wins.' },
+      { q: 'Can I play Football Tic-Tac-Toe with a friend?', a: 'Yes. The 1v1 mode lets two players share one device, taking turns to claim squares. The first to three in a row wins, and you can even build your own grid by choosing the categories.' },
       { q: 'Does the daily grid change every day?', a: 'Yes — the daily challenge generates a fresh, solvable grid each day.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily is one shared grid a day that tracks your win streak; Unlimited generates random grids for endless practice without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.9',
@@ -104,10 +155,25 @@ export const ROUTES = [
       'Guess who the mystery player is. A wrong guess reveals another teammate.',
       'Work it out within five guesses to win.',
     ],
+    sections: [
+      {
+        h2: 'Tips for guessing the player',
+        body: [
+          'Use the first teammate to pin down an era and a club, then let each new clue narrow the nationality and position. Spread your early guesses across different players who fit the clues rather than fixating on a single name.',
+        ],
+      },
+      {
+        h2: 'Where the clues come from',
+        body: [
+          'Each revealed teammate genuinely played alongside the mystery footballer at a club or national team during overlapping seasons, and the clues are deliberately spread across the different teams of their career — so a well-travelled player’s clues cover their whole journey.',
+        ],
+      },
+    ],
     faq: [
       { q: 'How do I play Guess the Player?', a: 'You are shown one real teammate of a mystery footballer. Guess who the mystery player is; each wrong guess reveals another teammate, up to five clues.' },
       { q: 'How many guesses do I get?', a: 'You get five guesses, with a new teammate revealed after each wrong answer.' },
       { q: 'Are the teammates accurate?', a: 'Yes — teammates are players who genuinely shared a club or national team during overlapping years.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily sets one mystery player a day and tracks your win streak; Unlimited gives you random players to practise with, without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.9',
@@ -129,10 +195,25 @@ export const ROUTES = [
       'Guess who the player is — a wrong guess reveals the next club they played for.',
       'Identify the player who played for every club shown, within five guesses.',
     ],
+    sections: [
+      {
+        h2: 'Tips for cracking the career path',
+        body: [
+          'The order and years of the clubs are your biggest clues — a distinctive transfer between two clubs in a particular season often gives the player away. Counter-intuitively, journeyman players with many clubs can be easier to spot than one-club legends.',
+        ],
+      },
+      {
+        h2: 'Career Path vs Teammates',
+        body: [
+          'Both games ask you to name a mystery footballer, but Career Path reveals the clubs they played for in order, while Teammates reveals the players they lined up alongside. Try both to see which style suits your knowledge best.',
+        ],
+      },
+    ],
     faq: [
       { q: 'How do I play Career Path?', a: 'You are shown one club from a mystery footballer’s career. Guess who it is; each wrong guess reveals another club they played for, up to five clubs.' },
       { q: 'How many guesses do I get?', a: 'You get five guesses, with a new club revealed after each wrong answer.' },
       { q: 'Are the career paths accurate?', a: 'Yes — the clubs come from each player’s real senior career, shown in the order they played for them.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily sets one career path a day and tracks your win streak; Unlimited gives you random players to practise with, without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.9',
@@ -154,10 +235,25 @@ export const ROUTES = [
       'Every correct answer reveals its place on the list.',
       'Three wrong guesses ends the game — how many of the ten can you name?',
     ],
+    sections: [
+      {
+        h2: 'Tips for Football Tenable',
+        body: [
+          'Brain-dump the obvious answers first to bank easy points, then work through the list by era, nationality or club to flush out the names you are missing. With only three lives, it pays to be sure before you commit to a guess.',
+        ],
+      },
+      {
+        h2: 'About the top-10 format',
+        body: [
+          'Inspired by the TV quiz, every Football Tenable question has exactly ten correct answers — such as a competition’s all-time top scorers, a club’s record appearance-makers, or the teams with the most titles — and your job is to name as many as you can.',
+        ],
+      },
+    ],
     faq: [
       { q: 'What is Football Tenable?', a: 'Football Tenable is a daily football trivia game where you try to name all ten answers to a top-10 question — such as a competition’s all-time top scorers — before making three mistakes.' },
       { q: 'How many lives do I have?', a: 'You can make up to three wrong guesses before the game ends.' },
       { q: 'Is there a new question each day?', a: 'Yes — a new top-10 question appears every day.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily is one shared question a day that tracks your win streak; Unlimited serves random questions for endless practice without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.9',
@@ -179,10 +275,25 @@ export const ROUTES = [
       'Each correct name fills in its place; the counter tracks how many of the full squad you have.',
       'Recall as many as you can — then reveal the rest to see who you missed.',
     ],
+    sections: [
+      {
+        h2: 'Tips for naming the squad',
+        body: [
+          'Work through the team position by position — start with the famous starting XI, then dig into the substitutes and squad players who are easy to forget. Running through the matches you remember from the tournament often jogs loose the deeper cuts.',
+        ],
+      },
+      {
+        h2: 'The winning squads',
+        body: [
+          'Play any World Cup-winning squad from England 1966 right through to Argentina 2022, including iconic teams like Brazil 1970, Italy 1982, France 1998, Italy 2006 and Spain 2010. Each squad is sourced from the official tournament record, reserves and all.',
+        ],
+      },
+    ],
     faq: [
       { q: 'How do I play Name the Winning Squad?', a: 'Pick a World Cup-winning team and type the players from its squad. Every correct name is revealed and counted; try to name the whole 22-to-26-man squad.' },
       { q: 'Which teams can I play?', a: 'Every World Cup-winning squad from England 1966 through to Argentina 2022.' },
       { q: 'Where do the squads come from?', a: 'The squads are sourced from Wikipedia’s official record of FIFA World Cup winning players.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily gives everyone the same “squad of the day” and tracks your best score and day streak; Unlimited lets you pick any winning squad to practise, without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.9',
@@ -204,10 +315,20 @@ export const ROUTES = [
       'A correct group locks in and reveals its category; a wrong guess costs one of four lives.',
       'Solve all four groups before you run out of guesses.',
     ],
+    sections: [
+      {
+        h2: 'Tips for Football Connections',
+        body: [
+          'Start with the group you are most certain about, but watch for decoys — a player who looks like an obvious fit for one group may actually be there to complete another. When you are stuck, look for the four players that share the least obvious link.',
+          'Every puzzle has exactly one solution: each of the 16 players belongs to a single group, so there are no genuine overlaps designed to trick you — only your own assumptions.',
+        ],
+      },
+    ],
     faq: [
       { q: 'How do I play Football Connections?', a: 'Sixteen footballers hide four groups of four — by club, nationality or trophy. Pick four that belong together and submit; find all four groups within four mistakes.' },
       { q: 'Is there a new puzzle every day?', a: 'Yes — a fresh Football Connections puzzle is generated each day.' },
       { q: 'Does every puzzle have a single solution?', a: 'Yes. Each of the 16 players belongs to exactly one group, so there is always one correct way to solve it.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily is one shared puzzle a day that tracks your win streak; Unlimited generates random puzzles for endless practice without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.9',
@@ -229,10 +350,25 @@ export const ROUTES = [
       'Decide whether the second player scored more or fewer goals.',
       'A correct guess extends your streak; one wrong guess ends the run.',
     ],
+    sections: [
+      {
+        h2: 'Tips for Higher or Lower',
+        body: [
+          'Get to know the record scorers at the top of each list — once you have a feel for who sits near the all-time peaks, comparisons become much easier. Remember that a tie counts as correct either way, so the closest calls are not always a trap.',
+        ],
+      },
+      {
+        h2: 'The stats you compare',
+        body: [
+          'Choose from all-time top scorers of the Premier League, La Liga, Bundesliga and the UEFA Champions League, or international goals for a country. Every player shown is a real record-holder, so there are no obscure names — just how well you know the goalscoring charts.',
+        ],
+      },
+    ],
     faq: [
       { q: 'How does Football Higher or Lower work?', a: 'You choose a goalscoring stat, then compare two footballers and pick which scored more. Correct guesses build a streak; one mistake ends it.' },
       { q: 'Which stats can I play?', a: 'All-time top scorers of the Premier League, La Liga, Bundesliga, the UEFA Champions League, and international goals for their country.' },
       { q: 'Does the game ever end?', a: 'Only when you guess wrong — new players keep coming, so the only limit is your streak.' },
+      { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily gives everyone the same chain of players each day and tracks your best score and day streak; Unlimited lets you pick a stat and play endless random rounds without affecting your stats.' },
     ],
     schema: 'VideoGame',
     priority: '0.8',

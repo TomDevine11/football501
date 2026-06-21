@@ -15,6 +15,15 @@ export default function SeoContent({ path }) {
       <p className="text-gray-400 text-sm mb-3">{r.tagline}</p>
       {r.about && <p className="text-gray-500 text-sm leading-relaxed mb-6">{r.about}</p>}
 
+      {r.sections?.map((s, i) => (
+        <div key={i} className="mb-6">
+          <h2 className="text-white font-semibold text-base mb-2">{s.h2}</h2>
+          {s.body.map((p, j) => (
+            <p key={j} className="text-gray-500 text-sm leading-relaxed mb-2 last:mb-0">{p}</p>
+          ))}
+        </div>
+      ))}
+
       {r.howTo?.length > 0 && (
         <>
           <h2 className="text-white font-semibold text-base mb-2">How to play {r.name}</h2>
