@@ -54,6 +54,22 @@ describe('Tenable answer-set integrity', () => {
     }
   })
 
+  it('tie-pool questions are well-formed', () => {
+    for (const q of TENABLE_QUESTIONS) {
+      if (q.tieValue == null) continue
+      expect(Array.isArray(q.tiePool), q.id).toBe(true)
+      expect(q.tiePool.length, q.id).toBeGreaterThan(0)
+      // at least one listed answer sits at the tie value (the joint slot)
+      expect(q.answers.some(a => a.value === q.tieValue), q.id).toBe(true)
+      const listed = new Set(q.answers.map(a => normalize(a.text)))
+      for (const p of q.tiePool) {
+        expect(p.text, `${q.id} tiePool entry text`).toBeTruthy()
+        // a tie-pool entry must not duplicate one of the listed 10
+        expect(listed.has(normalize(p.text)), `${q.id}: ${p.text} duplicates a listed answer`).toBe(false)
+      }
+    }
+  })
+
   it('daily question is deterministic and in-range', () => {
     const q = getDailyTenableQuestion()
     expect(TENABLE_QUESTIONS).toContain(q)

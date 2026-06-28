@@ -7,7 +7,7 @@
 // set, never query at runtime). AS_OF records when the rankings were last
 // verified; the validator test enforces the answer-set shape in CI.
 
-export const TENABLE_AS_OF = '2026-06-28'
+export const TENABLE_AS_OF = '2026-06-29'
 
 export const TENABLE_QUESTIONS = [
   {
@@ -74,16 +74,16 @@ export const TENABLE_QUESTIONS = [
     emoji: '🏅',
     description: "Name the 10 players who have won the Ballon d'Or the most times.",
     answers: [
-      { rank: 1,  text: 'Lionel Messi',         detail: '8 wins', aliases: ['messi', 'leo messi'] },
-      { rank: 2,  text: 'Cristiano Ronaldo',    detail: '5 wins', aliases: ['ronaldo', 'cr7'] },
-      { rank: 3,  text: 'Johan Cruyff',         detail: '3 wins', aliases: ['cruyff'] },
-      { rank: 4,  text: 'Michel Platini',       detail: '3 wins', aliases: ['platini'] },
-      { rank: 5,  text: 'Marco van Basten',     detail: '3 wins', aliases: ['van basten'] },
-      { rank: 6,  text: 'Franz Beckenbauer',    detail: '2 wins', aliases: ['beckenbauer'] },
-      { rank: 7,  text: 'Alfredo Di Stéfano',   detail: '2 wins', aliases: ['di stefano', 'alfredo di stefano'] },
-      { rank: 8,  text: 'Kevin Keegan',         detail: '2 wins', aliases: ['keegan'] },
-      { rank: 9,  text: 'Karl-Heinz Rummenigge',detail: '2 wins', aliases: ['rummenigge'] },
-      { rank: 10, text: 'Ronaldinho',           detail: '1 win',  aliases: ['ronaldinho gaucho'] },
+      { rank: 1,  text: 'Lionel Messi',          detail: '8 wins', aliases: ['messi', 'leo messi'] },
+      { rank: 2,  text: 'Cristiano Ronaldo',     detail: '5 wins', aliases: ['cristiano', 'cr7'] },
+      { rank: 3,  text: 'Johan Cruyff',          detail: '3 wins', aliases: ['cruyff'] },
+      { rank: 4,  text: 'Michel Platini',        detail: '3 wins', aliases: ['platini'] },
+      { rank: 5,  text: 'Marco van Basten',      detail: '3 wins', aliases: ['van basten'] },
+      { rank: 6,  text: 'Alfredo Di Stéfano',    detail: '2 wins', aliases: ['di stefano', 'alfredo di stefano'] },
+      { rank: 7,  text: 'Franz Beckenbauer',     detail: '2 wins', aliases: ['beckenbauer'] },
+      { rank: 8,  text: 'Kevin Keegan',          detail: '2 wins', aliases: ['keegan'] },
+      { rank: 9,  text: 'Karl-Heinz Rummenigge', detail: '2 wins', aliases: ['rummenigge'] },
+      { rank: 10, text: 'Ronaldo Nazário',       detail: '2 wins', aliases: ['ronaldo nazario', 'r9', 'o fenomeno', 'o fenômeno', 'ronaldo brazil'] },
     ],
   },
   {
@@ -112,16 +112,25 @@ export const TENABLE_QUESTIONS = [
     emoji: '🏆',
     description: 'Name the 10 clubs that have won the European Cup / Champions League the most times.',
     answers: [
-      { rank: 1,  text: 'Real Madrid',       detail: '15 titles', aliases: ['real madrid'] },
-      { rank: 2,  text: 'AC Milan',          detail: '7 titles',  aliases: ['ac milan', 'milan'] },
-      { rank: 3,  text: 'Bayern Munich',     detail: '6 titles',  aliases: ['bayern munich', 'bayern', 'fc bayern'] },
-      { rank: 4,  text: 'Liverpool',         detail: '6 titles',  aliases: ['liverpool fc', 'liverpool'] },
-      { rank: 5,  text: 'Barcelona',         detail: '5 titles',  aliases: ['fc barcelona', 'barca', 'barça'] },
-      { rank: 6,  text: 'Ajax',              detail: '4 titles',  aliases: ['ajax amsterdam'] },
-      { rank: 7,  text: 'Manchester United', detail: '3 titles',  aliases: ['man united', 'man utd', 'manchester united'] },
-      { rank: 8,  text: 'Inter Milan',       detail: '3 titles',  aliases: ['inter milan', 'inter', 'internazionale'] },
-      { rank: 9,  text: 'Chelsea',           detail: '2 titles',  aliases: ['chelsea fc'] },
-      { rank: 10, text: 'Juventus',          detail: '2 titles',  aliases: ['juventus fc', 'juve'] },
+      { rank: 1,  text: 'Real Madrid',       detail: '15 titles', value: 15, aliases: ['real madrid'] },
+      { rank: 2,  text: 'AC Milan',          detail: '7 titles',  value: 7,  aliases: ['ac milan', 'milan'] },
+      { rank: 3,  text: 'Bayern Munich',     detail: '6 titles',  value: 6,  aliases: ['bayern munich', 'bayern', 'fc bayern'] },
+      { rank: 4,  text: 'Liverpool',         detail: '6 titles',  value: 6,  aliases: ['liverpool fc', 'liverpool'] },
+      { rank: 5,  text: 'Barcelona',         detail: '5 titles',  value: 5,  aliases: ['fc barcelona', 'barca', 'barça'] },
+      { rank: 6,  text: 'Ajax',              detail: '4 titles',  value: 4,  aliases: ['ajax amsterdam'] },
+      { rank: 7,  text: 'Manchester United', detail: '3 titles',  value: 3,  aliases: ['man united', 'man utd', 'manchester united'] },
+      { rank: 8,  text: 'Inter Milan',       detail: '3 titles',  value: 3,  aliases: ['inter milan', 'inter', 'internazionale'] },
+      { rank: 9,  text: 'Chelsea',           detail: '2 titles',  value: 2,  aliases: ['chelsea fc'] },
+      { rank: 10, text: 'Juventus',          detail: '2 titles',  value: 2,  aliases: ['juventus fc', 'juve'] },
+    ],
+    // The 10th spot is a tie: six clubs have 2 European Cups, but only two slots
+    // exist — so any 2-title club counts for the joint-9th/10th places.
+    tieValue: 2,
+    tiePool: [
+      { text: 'Benfica',             aliases: ['sl benfica', 'benfica'] },
+      { text: 'Porto',               aliases: ['fc porto', 'porto'] },
+      { text: 'Nottingham Forest',   aliases: ['nottingham forest', 'forest', 'nottm forest'] },
+      { text: 'Paris Saint-Germain', aliases: ['psg', 'paris saint-germain', 'paris saint germain', 'paris sg'] },
     ],
   },
   {
@@ -226,16 +235,16 @@ export const TENABLE_QUESTIONS = [
     emoji: '🥇',
     description: 'Name the 10 clubs with the most English top-flight league titles (including the old First Division).',
     answers: [
-      { rank: 1,  text: 'Manchester United', detail: '20 titles', aliases: ['man united', 'man utd', 'manchester united'] },
-      { rank: 2,  text: 'Liverpool',         detail: '19 titles', aliases: ['liverpool fc', 'liverpool'] },
-      { rank: 3,  text: 'Arsenal',           detail: '13 titles', aliases: ['arsenal fc', 'gunners'] },
-      { rank: 4,  text: 'Everton',           detail: '9 titles',  aliases: ['everton fc'] },
-      { rank: 5,  text: 'Manchester City',   detail: '8 titles',  aliases: ['man city', 'manchester city'] },
-      { rank: 6,  text: 'Aston Villa',       detail: '7 titles',  aliases: ['aston villa', 'villa'] },
-      { rank: 7,  text: 'Chelsea',           detail: '6 titles',  aliases: ['chelsea fc'] },
-      { rank: 8,  text: 'Sunderland',        detail: '6 titles',  aliases: ['sunderland afc'] },
-      { rank: 9,  text: 'Newcastle United',  detail: '4 titles',  aliases: ['newcastle', 'newcastle united', 'nufc'] },
-      { rank: 10, text: 'Sheffield Wednesday', detail: '4 titles', aliases: ['sheff wed', 'sheffield wednesday'] },
+      { rank: 1,  text: 'Manchester United',   detail: '20 titles', aliases: ['man united', 'man utd', 'manchester united'] },
+      { rank: 2,  text: 'Liverpool',           detail: '20 titles', aliases: ['liverpool fc', 'liverpool'] },
+      { rank: 3,  text: 'Arsenal',             detail: '14 titles', aliases: ['arsenal fc', 'gunners'] },
+      { rank: 4,  text: 'Manchester City',     detail: '10 titles', aliases: ['man city', 'manchester city'] },
+      { rank: 5,  text: 'Everton',             detail: '9 titles',  aliases: ['everton fc'] },
+      { rank: 6,  text: 'Aston Villa',         detail: '7 titles',  aliases: ['aston villa', 'villa'] },
+      { rank: 7,  text: 'Sunderland',          detail: '6 titles',  aliases: ['sunderland afc'] },
+      { rank: 8,  text: 'Chelsea',             detail: '6 titles',  aliases: ['chelsea fc'] },
+      { rank: 9,  text: 'Sheffield Wednesday', detail: '4 titles',  aliases: ['sheff wed', 'sheffield wednesday'] },
+      { rank: 10, text: 'Newcastle United',    detail: '4 titles',  aliases: ['newcastle', 'newcastle united', 'nufc'] },
     ],
   },
 ]

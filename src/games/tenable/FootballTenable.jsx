@@ -55,9 +55,11 @@ export default function FootballTenable() {
     setQuestion(m === 'daily' ? getDailyTenableQuestion() : getRandomTenableQuestion())
     setRevealed({}); setLives(MAX_LIVES); setInput(''); setHistory([])
     setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false)
+    setPendingRank(null); setPendingAnswer(null); setPulseRow(null)
   }
   const [pulseRow, setPulseRow] = useState(null)
   const [pendingRank, setPendingRank] = useState(null)
+  const [pendingAnswer, setPendingAnswer] = useState(null) // what to reveal at pendingRank (for tie-pool fills)
   const [shake, setShake] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [gaveUp, setGaveUp] = useState(false)
@@ -78,9 +80,10 @@ export default function FootballTenable() {
       setPulseRow(step)
       if (step === targetRow) {
         timer = setTimeout(() => {
-          setRevealed(prev => ({ ...prev, [pendingRank]: answersByRank[pendingRank] }))
+          setRevealed(prev => ({ ...prev, [pendingRank]: pendingAnswer || answersByRank[pendingRank] }))
           setPulseRow(null)
           setPendingRank(null)
+          setPendingAnswer(null)
         }, 350)
       } else {
         step -= 1
@@ -195,12 +198,28 @@ export default function FootballTenable() {
     const norm = normalize(text)
     if (!norm) return
     const match = question.answers.find(a => answerMatches(norm, a))
+    // Tie-pool match: a player/club tied at the cutoff value who isn't one of the
+    // listed 10 but is equally valid for a joint slot (e.g. any club with 2
+    // European Cups). They fill the lowest unfilled tied slot.
+    const pooled = !match && question.tieValue != null
+      ? (question.tiePool || []).find(p => answerMatches(norm, p))
+      : null
+    const alreadyNamed = pooled && Object.values(revealed).some(a => normalize(a.text) === normalize(pooled.text))
+    const tieSlot = pooled && !alreadyNamed
+      ? question.answers.find(a => a.value === question.tieValue && !revealed[a.rank] && pendingRank !== a.rank)
+      : null
 
     if (match && revealed[match.rank]) {
       setHistory(prev => [...prev, { text, correct: 'duplicate' }])
     } else if (match) {
       setHistory(prev => [...prev, { text, correct: true, rank: match.rank }])
       setPendingRank(match.rank)
+    } else if (pooled && (alreadyNamed || !tieSlot)) {
+      setHistory(prev => [...prev, { text, correct: 'duplicate' }])
+    } else if (tieSlot) {
+      setHistory(prev => [...prev, { text, correct: true, rank: tieSlot.rank }])
+      setPendingAnswer({ rank: tieSlot.rank, text: pooled.text, detail: tieSlot.detail })
+      setPendingRank(tieSlot.rank)
     } else {
       setHistory(prev => [...prev, { text, correct: false }])
       setLives(l => Math.max(0, l - 1))
