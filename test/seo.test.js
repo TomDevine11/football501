@@ -8,7 +8,7 @@ const get = (tags, key) => tags.find(t => t.name === key || t.property === key)?
 
 describe('SEO route config integrity', () => {
   it('uses the configured canonical domain everywhere', () => {
-    expect(SITE_URL).toBe('https://footballtriviagames.onrender.com')
+    expect(SITE_URL).toBe('https://triviverse.com')
     expect(absolute('/')).toBe(SITE_URL + '/')
     expect(absolute('/wordle')).toBe(SITE_URL + '/wordle')
   })

@@ -714,6 +714,22 @@ const app = express()
 // rate limiting keys on the real client IP, not the proxy's.
 app.set('trust proxy', 1)
 
+// ── Canonical-domain 301 redirect (opt-in) ───────────────────────
+// Sends the old onrender subdomain and the www host to the primary domain so
+// links/SEO consolidate on one URL. OFF by default to avoid any outage while
+// the custom domain's DNS/SSL is still propagating — enable it in Render only
+// AFTER https://triviverse.com is confirmed live, by setting:
+//   REDIRECT_TO_CANONICAL=1   (and optionally CANONICAL_HOST, default below)
+const CANONICAL_HOST = process.env.CANONICAL_HOST || 'triviverse.com'
+if (process.env.REDIRECT_TO_CANONICAL === '1') {
+  app.use((req, res, next) => {
+    const hostname = (req.headers.host || '').split(':')[0]
+    // Never redirect local dev, health checks without a host, or the canonical host itself.
+    if (!hostname || hostname === CANONICAL_HOST || hostname === 'localhost' || hostname === '127.0.0.1') return next()
+    return res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`)
+  })
+}
+
 // Serve the built frontend (npm run build → dist/) if it exists, so the
 // whole app can be hosted from this single server/port.
 const DIST_DIR = path.join(__dirname, '..', 'dist')

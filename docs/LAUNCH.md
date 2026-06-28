@@ -36,6 +36,8 @@ Verified: warm → robots.txt is `Allow: /` (ours); asleep → `Disallow: /`
   - **UptimeRobot** (https://uptimerobot.com) → Add Monitor → HTTP(s) →
     `https://footballtriviagames.onrender.com` → interval **5 minutes**, or
   - **cron-job.org** (https://cron-job.org) → same URL, every 5 minutes.
+  - Note: monitor the **onrender URL** (it always wakes the service). Once
+    `https://triviverse.com` is live you can switch the monitor to it.
 - 💡 **Bulletproof option:** Render's paid tier (~$7/mo) never sleeps, so robots
   is always correct. Worth it once the site has traffic.
 
@@ -50,11 +52,10 @@ sitemap and re-request indexing.
 1. **Submit the sitemap:** GSC → Sitemaps → enter `sitemap.xml` → Submit.
    (If it still says "couldn't fetch" immediately after, wait a day with the
    keep-alive running, then hit Refresh.)
-2. **Request indexing for each page:** GSC → URL Inspection → paste each URL →
-   "Request indexing". Do all of them:
-   - `https://footballtriviagames.onrender.com/`
-   - `/wordle`  ·  `/tictactoe`  ·  `/teammates`  ·  `/career-path`
-   - `/world-cup`  ·  `/connections`  ·  `/higher-or-lower`  ·  `/tenable`
+2. **Don't spam "Request indexing".** It's a ~10/day manual recrawl tool and does
+   NOT control how many pages get indexed — the sitemap is the real channel. Use
+   it once on the homepage at most. For "Crawled – currently not indexed," asking
+   again does nothing; only backlinks + time + a trusted domain move it.
 3. **Check coverage** over the following weeks: GSC → Pages. You want each game
    URL listed as indexed.
 
@@ -82,11 +83,19 @@ increases organic spread — worth adding next.
 
 ---
 
-## 4. Switch to a custom domain (recommended, ~$12/yr)
+## 4. Custom domain — triviverse.com (DONE in code)
 
-An `onrender.com` subdomain is a shared domain you don't fully own — it carries
-less trust and you can't build domain authority the same way. Do this **early**,
-before you've built links pointing at the onrender URL.
+The site now uses **https://triviverse.com** (`SITE_URL` in `src/seo/seoConfig.js`).
+An `onrender.com` subdomain is a shared domain you don't fully own — less trust,
+and harder to build authority — so we moved off it early, before building links.
+
+**After triviverse.com is confirmed live on Render (200 + valid SSL):**
+- Set env var `REDIRECT_TO_CANONICAL=1` in the Render dashboard so the old
+  onrender URL and `www` 301-redirect to `triviverse.com` (consolidates SEO).
+  (Leave it OFF until the domain is live, or the old URL would redirect to a
+  not-yet-working domain.)
+- Add `triviverse.com` as a new GSC property, verify it, and submit `sitemap.xml`.
+- The IndexNow workflow auto-pings the new URLs on the next deploy.
 
 **Steps (you):**
 1. Buy the domain (e.g. Namecheap/Cloudflare/Porkbun).

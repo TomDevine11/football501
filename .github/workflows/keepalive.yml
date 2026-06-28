@@ -11,10 +11,15 @@ name: Keep alive
 # or cron-job.org, free, 5-minute interval — hitting the same URL. The bulletproof
 # fix is Render's paid tier (never sleeps).
 #
-# To switch domains: change SITE below (and SITE_URL in src/seo/seoConfig.js).
+# During/after the domain switch we ping BOTH URLs: the onrender URL always
+# routes to the Render service (guaranteeing it wakes even before custom-domain
+# DNS/SSL is live), and the primary triviverse.com URL warms the public path
+# once it resolves. Each ping is independent, so one failing doesn't stop the
+# other. Once the migration is settled you can drop the onrender RENDER_URL.
 
 env:
-  SITE: https://footballtriviagames.onrender.com
+  PRIMARY: https://triviverse.com
+  RENDER_URL: https://footballtriviagames.onrender.com
 
 on:
   schedule:
@@ -27,5 +32,6 @@ jobs:
     steps:
       - name: Wake the site
         run: |
-          curl -fsS --max-time 90 "$SITE/" > /dev/null && echo "home ok"
-          curl -fsS --max-time 90 "$SITE/sitemap.xml" > /dev/null && echo "sitemap ok"
+          curl -fsS --max-time 90 "$RENDER_URL/" > /dev/null && echo "render home ok" || echo "render ping failed"
+          curl -fsS --max-time 90 "$PRIMARY/" > /dev/null && echo "primary home ok" || echo "primary ping failed (DNS not live yet?)"
+          curl -fsS --max-time 90 "$PRIMARY/sitemap.xml" > /dev/null && echo "primary sitemap ok" || true
