@@ -7,7 +7,7 @@
 // set, never query at runtime). AS_OF records when the rankings were last
 // verified; the validator test enforces the answer-set shape in CI.
 
-export const TENABLE_AS_OF = '2026-06-13'
+export const TENABLE_AS_OF = '2026-06-28'
 
 export const TENABLE_QUESTIONS = [
   {
@@ -39,13 +39,13 @@ export const TENABLE_QUESTIONS = [
       { rank: 1,  text: 'Alan Shearer',     detail: '260 goals', aliases: ['shearer'] },
       { rank: 2,  text: 'Harry Kane',       detail: '213 goals', aliases: ['kane'] },
       { rank: 3,  text: 'Wayne Rooney',     detail: '208 goals', aliases: ['rooney'] },
-      { rank: 4,  text: 'Andrew Cole',      detail: '187 goals', aliases: ['andy cole', 'cole'] },
-      { rank: 5,  text: 'Sergio Agüero',    detail: '184 goals', aliases: ['aguero', 'sergio aguero', 'kun aguero'] },
-      { rank: 6,  text: 'Frank Lampard',    detail: '177 goals', aliases: ['lampard'] },
-      { rank: 7,  text: 'Thierry Henry',    detail: '175 goals', aliases: ['henry'] },
-      { rank: 8,  text: 'Robbie Fowler',    detail: '163 goals', aliases: ['fowler'] },
-      { rank: 9,  text: 'Jermain Defoe',    detail: '162 goals', aliases: ['defoe'] },
-      { rank: 10, text: 'Michael Owen',     detail: '150 goals', aliases: ['owen'] },
+      { rank: 4,  text: 'Mohamed Salah',    detail: '193 goals', aliases: ['salah', 'mo salah', 'mohamed salah'] },
+      { rank: 5,  text: 'Andrew Cole',      detail: '187 goals', aliases: ['andy cole', 'cole'] },
+      { rank: 6,  text: 'Sergio Agüero',    detail: '184 goals', aliases: ['aguero', 'sergio aguero', 'kun aguero'] },
+      { rank: 7,  text: 'Frank Lampard',    detail: '177 goals', aliases: ['lampard'] },
+      { rank: 8,  text: 'Thierry Henry',    detail: '175 goals', aliases: ['henry'] },
+      { rank: 9,  text: 'Robbie Fowler',    detail: '163 goals', aliases: ['fowler'] },
+      { rank: 10, text: 'Jermain Defoe',    detail: '162 goals', aliases: ['defoe'] },
     ],
   },
   {
@@ -57,14 +57,14 @@ export const TENABLE_QUESTIONS = [
     answers: [
       { rank: 1,  text: 'Cristiano Ronaldo',  detail: '140 goals', aliases: ['ronaldo', 'cr7'] },
       { rank: 2,  text: 'Lionel Messi',       detail: '129 goals', aliases: ['messi', 'leo messi'] },
-      { rank: 3,  text: 'Robert Lewandowski', detail: '100+ goals', aliases: ['lewandowski'] },
+      { rank: 3,  text: 'Robert Lewandowski', detail: '109 goals', aliases: ['lewandowski'] },
       { rank: 4,  text: 'Karim Benzema',      detail: '90 goals',  aliases: ['benzema'] },
       { rank: 5,  text: 'Raúl',               detail: '71 goals',  aliases: ['raul', 'raul gonzalez'] },
-      { rank: 6,  text: 'Thomas Müller',      detail: '60+ goals', aliases: ['thomas muller', 'muller', 'müller'] },
-      { rank: 7,  text: 'Ruud van Nistelrooy',detail: '56 goals',  aliases: ['van nistelrooy', 'ruud van nistelrooy'] },
-      { rank: 8,  text: 'Zlatan Ibrahimović', detail: '48 goals',  aliases: ['ibrahimovic', 'zlatan'] },
-      { rank: 9,  text: 'Andriy Shevchenko',  detail: '48 goals',  aliases: ['shevchenko'] },
-      { rank: 10, text: 'Kylian Mbappé',      detail: '45+ goals', aliases: ['mbappe', 'kylian mbappe', 'mbappé'] },
+      { rank: 6,  text: 'Kylian Mbappé',      detail: '70 goals',  aliases: ['mbappe', 'kylian mbappe', 'mbappé'] },
+      { rank: 7,  text: 'Erling Haaland',     detail: '57 goals',  aliases: ['haaland', 'erling haaland'] },
+      { rank: 8,  text: 'Thomas Müller',      detail: '57 goals',  aliases: ['thomas muller', 'muller', 'müller'] },
+      { rank: 9,  text: 'Ruud van Nistelrooy',detail: '56 goals',  aliases: ['van nistelrooy', 'ruud van nistelrooy'] },
+      { rank: 10, text: 'Harry Kane',         detail: '54 goals',  aliases: ['harry kane'] },
     ],
   },
   {
@@ -150,16 +150,16 @@ export const TENABLE_QUESTIONS = [
     emoji: '👕',
     description: 'Name the 10 players with the most Premier League appearances.',
     answers: [
-      { rank: 1,  text: 'Gareth Barry',  detail: '653 apps', aliases: ['barry'] },
-      { rank: 2,  text: 'Ryan Giggs',    detail: '632 apps', aliases: ['giggs'] },
-      { rank: 3,  text: 'Frank Lampard', detail: '609 apps', aliases: ['lampard'] },
-      { rank: 4,  text: 'David James',   detail: '572 apps', aliases: ['david james'] },
-      { rank: 5,  text: 'Gary Speed',    detail: '535 apps', aliases: ['speed'] },
-      { rank: 6,  text: 'Emile Heskey',  detail: '516 apps', aliases: ['heskey'] },
-      { rank: 7,  text: 'Mark Schwarzer',detail: '514 apps', aliases: ['schwarzer'] },
-      { rank: 8,  text: 'Jamie Carragher',detail: '508 apps', aliases: ['carragher'] },
-      { rank: 9,  text: 'Phil Neville',  detail: '505 apps', aliases: ['phil neville'] },
-      { rank: 10, text: 'Wayne Rooney',  detail: '491 apps', aliases: ['rooney'] },
+      { rank: 1,  text: 'James Milner',  detail: '658 apps', aliases: ['milner', 'james milner'] },
+      { rank: 2,  text: 'Gareth Barry',  detail: '653 apps', aliases: ['barry'] },
+      { rank: 3,  text: 'Ryan Giggs',    detail: '632 apps', aliases: ['giggs'] },
+      { rank: 4,  text: 'Frank Lampard', detail: '609 apps', aliases: ['lampard'] },
+      { rank: 5,  text: 'David James',   detail: '572 apps', aliases: ['david james'] },
+      { rank: 6,  text: 'Gary Speed',    detail: '535 apps', aliases: ['speed'] },
+      { rank: 7,  text: 'Emile Heskey',  detail: '516 apps', aliases: ['heskey'] },
+      { rank: 8,  text: 'Mark Schwarzer',detail: '514 apps', aliases: ['schwarzer'] },
+      { rank: 9,  text: 'Jamie Carragher',detail: '508 apps', aliases: ['carragher'] },
+      { rank: 10, text: 'Phil Neville',  detail: '505 apps', aliases: ['phil neville'] },
     ],
   },
   {
