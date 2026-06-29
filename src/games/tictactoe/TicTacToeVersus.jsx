@@ -4,8 +4,9 @@ import { usePlayerSuggestions } from './usePlayerSuggestions'
 import { getWinner, isFull } from './winner'
 import GridBuilder from './GridBuilder'
 import CategoryIcon from '../../components/CategoryIcon'
+import Mark from './Mark'
 
-const MARK = { X: '❌', O: '⭕' }
+const MARK = { X: 'X', O: 'O' } // letters for inline text; <Mark> renders the glyph
 const MARK_COLOR = { X: 'text-red-400', O: 'text-blue-400' }
 
 export default function TicTacToeVersus({ onBackToModes }) {
@@ -177,9 +178,9 @@ export default function TicTacToeVersus({ onBackToModes }) {
         <button onClick={onBackToModes} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Modes</button>
         <div className="score-number text-xl text-gray-500 tracking-wider">1v1</div>
         <div className="flex items-center gap-2 text-sm tabular-nums">
-          <span className={MARK_COLOR.X}>❌ {scores.X}</span>
+          <span className={`inline-flex items-center gap-1 ${MARK_COLOR.X}`}><Mark mark="X" size={15} /> {scores.X}</span>
           <span className="text-gray-700">·</span>
-          <span className={MARK_COLOR.O}>⭕ {scores.O}</span>
+          <span className={`inline-flex items-center gap-1 ${MARK_COLOR.O}`}><Mark mark="O" size={15} /> {scores.O}</span>
         </div>
       </div>
 
@@ -267,7 +268,7 @@ export default function TicTacToeVersus({ onBackToModes }) {
                   >
                     {owner ? (
                       <>
-                        <span className="text-base sm:text-lg">{MARK[owner]}</span>
+                        <Mark mark={owner} size={28} />
                         <span className="text-[10px] sm:text-xs font-medium text-gray-300 leading-tight mt-1 line-clamp-2">{cellPlayers[idx]}</span>
                       </>
                     ) : (

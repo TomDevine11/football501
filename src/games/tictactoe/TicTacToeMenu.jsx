@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import FootballTicTacToe from './FootballTicTacToe'
 import TicTacToeVersus from './TicTacToeVersus'
+import Mark from './Mark'
 
 export default function TicTacToeMenu() {
   const [mode, setMode] = useState(null) // null | 'solo' | 'versus'
@@ -19,7 +20,7 @@ export default function TicTacToeMenu() {
         </div>
 
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">❌⭕</div>
+          <div className="flex items-center justify-center gap-2 mb-3"><Mark mark="X" size={40} /><Mark mark="O" size={40} /></div>
           <h1 className="score-number text-3xl text-white mb-2">Football TicTacToe</h1>
           <p className="text-gray-500 text-sm">Every row and column is a football category. Choose how you want to play.</p>
         </div>
@@ -42,7 +43,7 @@ export default function TicTacToeMenu() {
             <div className="text-3xl mb-3">⚔️</div>
             <div className="text-white font-bold text-lg">Local 1v1</div>
             <div className="text-purple-400 text-sm mt-1 font-medium">Two players, one device</div>
-            <div className="text-gray-600 text-xs mt-3 leading-relaxed">Take turns claiming squares with ❌ and ⭕. First to three in a row wins.</div>
+            <div className="text-gray-600 text-xs mt-3 leading-relaxed">Take turns claiming squares with X and O. First to three in a row wins.</div>
           </button>
         </div>
       </div>
