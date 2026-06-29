@@ -16,6 +16,7 @@
 import { writeFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
+import { resolveQidNames, isQid } from './fix-qid-names.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT = path.join(__dirname, '..', '..', 'src', 'data', 'teammates.generated.json')
@@ -105,6 +106,10 @@ async function main() {
     process.stderr.write(`  ✓ ${title}: ${mates.length} teammates\n`)
     await sleep(700)
   }
+
+  // Resolve any bare-QID teammate names (entities with no English label).
+  const fix = await resolveQidNames(out.players.flatMap(p => p.teammates.map(m => m.name)).filter(isQid))
+  for (const p of out.players) for (const m of p.teammates) if (fix[m.name]) m.name = fix[m.name]
 
   writeFileSync(OUT, JSON.stringify(out, null, 1))
   process.stderr.write(`\nWrote ${OUT}\n  ${out.players.length} playable targets\n`)

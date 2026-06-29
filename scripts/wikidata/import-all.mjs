@@ -21,6 +21,7 @@ import { writeFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import * as cheerio from 'cheerio'
+import { resolveQidNames, isQid } from './fix-qid-names.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT = path.join(__dirname, '..', '..', 'src', 'data', 'canonical', 'wikidata.generated.json')
@@ -192,6 +193,11 @@ async function main() {
   process.stderr.write(`  ↓ trophy FIFA World Cup (Wikipedia)… `)
   out.trophies['FIFA World Cup'] = (await worldCupWinners()).map(name => ({ name, fame: 0 }))
   process.stderr.write(`${out.trophies['FIFA World Cup'].length}\n`)
+
+  // Resolve any bare-QID player names (entities with no English label).
+  const groups = [...Object.values(out.clubs), ...Object.values(out.nationalities), ...Object.values(out.trophies)]
+  const fix = await resolveQidNames(groups.flat().map(p => p.name).filter(isQid))
+  for (const arr of groups) for (const p of arr) if (fix[p.name]) p.name = fix[p.name]
 
   writeFileSync(OUT, JSON.stringify(out, null, 1))
   const cm = Object.values(out.clubs).reduce((a, c) => a + c.length, 0)
