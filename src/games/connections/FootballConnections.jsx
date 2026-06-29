@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getDailyConnections, getRandomConnections, shuffleNames } from '../../data/connections'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 import { ShareCard } from '../../components/ShareCard'
 import { SITE_URL } from '../../utils/site'
@@ -125,7 +126,10 @@ export default function FootballConnections() {
         {/* Solved / revealed group bars */}
         {shownGroups.map(g => (
           <div key={g.groupIndex} className={`rounded-xl border px-4 py-3 text-center ${GROUP_COLORS[g.groupIndex]}`}>
-            <div className="text-white font-bold text-xs uppercase tracking-wide">{g.label}</div>
+            <div className="flex items-center justify-center gap-1.5">
+              <CategoryIcon category={puzzle.groups[g.groupIndex].category} size={18} />
+              <div className="text-white font-bold text-xs uppercase tracking-wide">{g.label}</div>
+            </div>
             <div className="text-gray-200 text-sm mt-0.5">{g.players.join(', ')}</div>
           </div>
         ))}

@@ -7,6 +7,7 @@ import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 
 const MAX_LIVES = 3
@@ -259,16 +260,18 @@ export default function FootballTicTacToe({ onBackToModes }) {
           <div />
           {/* column headers */}
           {grid.colCategories.map((cat, i) => (
-            <div key={`col-${i}`} className="flex items-center justify-center text-center px-1 py-2 text-[10px] sm:text-xs font-bold text-blue-400 leading-tight">
-              {categoryLabel(cat)}
+            <div key={`col-${i}`} className="flex flex-col items-center justify-center text-center px-1 py-2 gap-1 text-[10px] sm:text-xs font-bold text-blue-400 leading-tight">
+              <CategoryIcon category={cat} size={24} />
+              <span>{categoryLabel(cat)}</span>
             </div>
           ))}
 
           {/* rows */}
           {[0, 1, 2].map(r => (
             <Fragment key={r}>
-              <div className="flex items-center justify-center text-center px-1 text-[10px] sm:text-xs font-bold text-yellow-400 leading-tight">
-                {categoryLabel(grid.rowCategories[r])}
+              <div className="flex flex-col items-center justify-center text-center px-1 gap-1 text-[10px] sm:text-xs font-bold text-yellow-400 leading-tight">
+                <CategoryIcon category={grid.rowCategories[r]} size={24} />
+                <span>{categoryLabel(grid.rowCategories[r])}</span>
               </div>
               {[0, 1, 2].map(c => {
                 const idx = r * 3 + c

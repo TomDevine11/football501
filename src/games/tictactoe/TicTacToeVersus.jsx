@@ -3,6 +3,7 @@ import { getRandomGrid, buildGrid, categoryLabel, resolveGuess, normalizeName } 
 import { usePlayerSuggestions } from './usePlayerSuggestions'
 import { getWinner, isFull } from './winner'
 import GridBuilder from './GridBuilder'
+import CategoryIcon from '../../components/CategoryIcon'
 
 const MARK = { X: '❌', O: '⭕' }
 const MARK_COLOR = { X: 'text-red-400', O: 'text-blue-400' }
@@ -234,14 +235,16 @@ export default function TicTacToeVersus({ onBackToModes }) {
         <div className="grid gap-1.5 mx-auto" style={{ gridTemplateColumns: `minmax(70px, 1fr) repeat(3, minmax(90px, 1fr))`, width: 'fit-content', minWidth: '100%' }}>
           <div />
           {grid.colCategories.map((cat, i) => (
-            <div key={`col-${i}`} className="flex items-center justify-center text-center px-1 py-2 text-[10px] sm:text-xs font-bold text-blue-400 leading-tight">
-              {categoryLabel(cat)}
+            <div key={`col-${i}`} className="flex flex-col items-center justify-center text-center px-1 py-2 gap-1 text-[10px] sm:text-xs font-bold text-blue-400 leading-tight">
+              <CategoryIcon category={cat} size={24} />
+              <span>{categoryLabel(cat)}</span>
             </div>
           ))}
           {[0, 1, 2].map(r => (
             <Fragment key={r}>
-              <div className="flex items-center justify-center text-center px-1 text-[10px] sm:text-xs font-bold text-yellow-400 leading-tight">
-                {categoryLabel(grid.rowCategories[r])}
+              <div className="flex flex-col items-center justify-center text-center px-1 gap-1 text-[10px] sm:text-xs font-bold text-yellow-400 leading-tight">
+                <CategoryIcon category={grid.rowCategories[r]} size={24} />
+                <span>{categoryLabel(grid.rowCategories[r])}</span>
               </div>
               {[0, 1, 2].map(c => {
                 const idx = r * 3 + c
