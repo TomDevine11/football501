@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getRandomTarget, getDailyTarget, matchesTarget, MAX_CLUES } from '../../data/careers'
 import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
+import Crest from '../../components/Crest'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import { recordResult } from '../../data/dailyStats'
@@ -114,6 +115,7 @@ export default function CareerPath() {
           {target.clues.slice(0, cluesToShow).map((clue, i) => (
             <div key={i} className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 clue-reveal">
               <span className="text-gray-600 text-xs font-bold w-5 tabular-nums">{i + 1}</span>
+              <Crest name={clue.club} size={30} />
               <div className="flex-1 min-w-0">
                 <div className="text-white text-sm font-semibold truncate">{clue.club}</div>
                 {clue.years && <div className="text-gray-500 text-xs">{clue.years}</div>}
