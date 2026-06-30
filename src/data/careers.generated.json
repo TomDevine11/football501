@@ -2,7 +2,7 @@
  "meta": {
   "source": "wikidata:P54 club spells",
   "minClubs": 5,
-  "fetchedAt": "2026-06-14"
+  "fetchedAt": "2026-06-30"
  },
  "players": [
   {
@@ -2429,6 +2429,7565 @@
      "to": ""
     }
    ]
+  },
+  {
+   "name": "Lionel Messi",
+   "clubs": [
+    {
+     "name": "Newell's Old Boys",
+     "from": "1995",
+     "to": "2000"
+    },
+    {
+     "name": "FC Barcelona C",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "FC Barcelona Juvenil A",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "FC Barcelona Atlètic",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2004",
+     "to": "2021"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2021",
+     "to": "2023"
+    },
+    {
+     "name": "Inter Miami",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Diego Maradona",
+   "clubs": [
+    {
+     "name": "Argentinos Juniors",
+     "from": "1976",
+     "to": "1981"
+    },
+    {
+     "name": "Boca Juniors",
+     "from": "1981",
+     "to": "1982"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1982",
+     "to": "1984"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "1984",
+     "to": "1991"
+    },
+    {
+     "name": "Sevilla",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "Newell's Old Boys",
+     "from": "1993",
+     "to": "1994"
+    }
+   ]
+  },
+  {
+   "name": "Mario Kempes",
+   "clubs": [
+    {
+     "name": "Club Sport Emelec",
+     "from": "1970",
+     "to": "1973"
+    },
+    {
+     "name": "Club Atlético Rosario Central",
+     "from": "1974",
+     "to": "1976"
+    },
+    {
+     "name": "Valencia",
+     "from": "1976",
+     "to": "1981"
+    },
+    {
+     "name": "Club Atlético River Plate",
+     "from": "1981",
+     "to": "1982"
+    },
+    {
+     "name": "Hércules",
+     "from": "1984",
+     "to": "1986"
+    },
+    {
+     "name": "First Vienna",
+     "from": "1986",
+     "to": "1987"
+    },
+    {
+     "name": "SKN St. Pölten",
+     "from": "1987",
+     "to": "1990"
+    },
+    {
+     "name": "VSE St. Pölten",
+     "from": "1987",
+     "to": "1990"
+    },
+    {
+     "name": "Kremser",
+     "from": "1990",
+     "to": "1992"
+    },
+    {
+     "name": "Madura United",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "C.C.D. Arturo Fernández Vial",
+     "from": "1995",
+     "to": "1995"
+    }
+   ]
+  },
+  {
+   "name": "Javier Mascherano",
+   "clubs": [
+    {
+     "name": "Club Atlético River Plate",
+     "from": "2003",
+     "to": "2005"
+    },
+    {
+     "name": "S.C. Corinthians Paulista",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "West Ham United",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2007",
+     "to": "2010"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2010",
+     "to": "2018"
+    },
+    {
+     "name": "Hebei",
+     "from": "2018",
+     "to": "2019"
+    },
+    {
+     "name": "Estudiantes de La Plata",
+     "from": "2019",
+     "to": "2020"
+    }
+   ]
+  },
+  {
+   "name": "Claudio Caniggia",
+   "clubs": [
+    {
+     "name": "Club Atlético River Plate",
+     "from": "1985",
+     "to": "1988"
+    },
+    {
+     "name": "Hellas Verona",
+     "from": "1988",
+     "to": "1989"
+    },
+    {
+     "name": "Atalanta",
+     "from": "1989",
+     "to": "1992"
+    },
+    {
+     "name": "AS Roma",
+     "from": "1992",
+     "to": "1994"
+    },
+    {
+     "name": "S.L. Benfica",
+     "from": "1994",
+     "to": "1995"
+    },
+    {
+     "name": "Boca Juniors",
+     "from": "1995",
+     "to": "1998"
+    },
+    {
+     "name": "Dundee",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Rangers",
+     "from": "2001",
+     "to": "2003"
+    },
+    {
+     "name": "Qatar",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "Wembley",
+     "from": "2012",
+     "to": "2012"
+    }
+   ]
+  },
+  {
+   "name": "Rodrigo De Paul",
+   "clubs": [
+    {
+     "name": "Racing Club",
+     "from": "2012",
+     "to": "2014"
+    },
+    {
+     "name": "Valencia",
+     "from": "2014",
+     "to": "2016"
+    },
+    {
+     "name": "Udinese",
+     "from": "2016",
+     "to": "2021"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2021",
+     "to": ""
+    },
+    {
+     "name": "Inter Miami",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Ronaldinho",
+   "clubs": [
+    {
+     "name": "Grêmio FBPA",
+     "from": "1998",
+     "to": "2001"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2001",
+     "to": "2003"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2003",
+     "to": "2008"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "Clube de Regatas do Flamengo",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Clube Atlético Mineiro",
+     "from": "2012",
+     "to": "2014"
+    },
+    {
+     "name": "Querétaro",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Fluminense",
+     "from": "2015",
+     "to": "2015"
+    }
+   ]
+  },
+  {
+   "name": "Rivaldo",
+   "clubs": [
+    {
+     "name": "Paulista Futebol Clube",
+     "from": "1989",
+     "to": "1990"
+    },
+    {
+     "name": "Santa Cruz Futebol Clube",
+     "from": "1991",
+     "to": "1992"
+    },
+    {
+     "name": "Mogi Mirim Esporte Clube",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "S.C. Corinthians Paulista",
+     "from": "1993",
+     "to": "1994"
+    },
+    {
+     "name": "Sociedade Esportiva Palmeiras",
+     "from": "1994",
+     "to": "1996"
+    },
+    {
+     "name": "Deportivo de A Coruña",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1997",
+     "to": "2002"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2002",
+     "to": "2003"
+    },
+    {
+     "name": "Olympiacos",
+     "from": "2004",
+     "to": "2007"
+    },
+    {
+     "name": "Cruzeiro E.C",
+     "from": "2004",
+     "to": "2004"
+    },
+    {
+     "name": "A.E.K",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "AEK Athens",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "F.C. Bunyodkor",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "São Paulo",
+     "from": "2011",
+     "to": "2011"
+    },
+    {
+     "name": "Kabuscorp S.C",
+     "from": "2012",
+     "to": "2012"
+    },
+    {
+     "name": "Associação Desportiva São Caetano",
+     "from": "2013",
+     "to": "2013"
+    }
+   ]
+  },
+  {
+   "name": "Roberto Carlos",
+   "clubs": [
+    {
+     "name": "FC Anzhi Makhachkala",
+     "from": "0001",
+     "to": "2012"
+    },
+    {
+     "name": "União São João E.C",
+     "from": "1991",
+     "to": "1993"
+    },
+    {
+     "name": "Clube Atlético Mineiro",
+     "from": "1992",
+     "to": "1992"
+    },
+    {
+     "name": "Sociedade Esportiva Palmeiras",
+     "from": "1993",
+     "to": "1995"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "1996",
+     "to": "2007"
+    },
+    {
+     "name": "Fenerbahçe Istanbul",
+     "from": "2007",
+     "to": "2009"
+    },
+    {
+     "name": "S.C. Corinthians Paulista",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Odisha",
+     "from": "2015",
+     "to": "2016"
+    }
+   ]
+  },
+  {
+   "name": "Garrincha",
+   "clubs": [
+    {
+     "name": "Botafogo F.R",
+     "from": "1953",
+     "to": "1965"
+    },
+    {
+     "name": "S.C. Corinthians Paulista",
+     "from": "1966",
+     "to": "1966"
+    },
+    {
+     "name": "CR Vasco da Gama",
+     "from": "1967",
+     "to": "1967"
+    },
+    {
+     "name": "Associação Atlética Portuguesa",
+     "from": "1967",
+     "to": "1967"
+    },
+    {
+     "name": "Clube de Regatas do Flamengo",
+     "from": "1968",
+     "to": "1969"
+    },
+    {
+     "name": "Junior de Barranquilla",
+     "from": "1968",
+     "to": "1968"
+    },
+    {
+     "name": "Olaria Atlético Clube",
+     "from": "1972",
+     "to": "1972"
+    }
+   ]
+  },
+  {
+   "name": "Bebeto",
+   "clubs": [
+    {
+     "name": "E.C. Vitória",
+     "from": "1983",
+     "to": "1983"
+    },
+    {
+     "name": "Clube de Regatas do Flamengo",
+     "from": "1983",
+     "to": "1989"
+    },
+    {
+     "name": "CR Vasco da Gama",
+     "from": "1989",
+     "to": "1991"
+    },
+    {
+     "name": "Deportivo de A Coruña",
+     "from": "1992",
+     "to": "1996"
+    },
+    {
+     "name": "Cruzeiro E.C",
+     "from": "1997",
+     "to": "1997"
+    },
+    {
+     "name": "Sevilla",
+     "from": "1997",
+     "to": "1997"
+    },
+    {
+     "name": "Botafogo F.R",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Toros Neza",
+     "from": "1999",
+     "to": "1999"
+    },
+    {
+     "name": "Kashima Antlers",
+     "from": "2000",
+     "to": "2000"
+    },
+    {
+     "name": "Al Ittihad",
+     "from": "2002",
+     "to": "2002"
+    }
+   ]
+  },
+  {
+   "name": "Casemiro",
+   "clubs": [
+    {
+     "name": "São Paulo",
+     "from": "2010",
+     "to": "2013"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "Real Madrid Castilla",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "FC Porto",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2022",
+     "to": "2026"
+    }
+   ]
+  },
+  {
+   "name": "Thiago Silva",
+   "clubs": [
+    {
+     "name": "Fluminense",
+     "from": "1998",
+     "to": "2000"
+    },
+    {
+     "name": "Barcelona Esporte Clube",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Pedrabranca Futebol Clube",
+     "from": "2002",
+     "to": "2003"
+    },
+    {
+     "name": "Esporte Clube Juventude",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "FC Porto",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "FC Porto B",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "FC Dinamo Moscow",
+     "from": "2005",
+     "to": "2005"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2009",
+     "to": "2012"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2012",
+     "to": "2020"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2020",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Richarlison",
+   "clubs": [
+    {
+     "name": "América Futebol Clube",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Fluminense",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Watford",
+     "from": "2017",
+     "to": "2018"
+    },
+    {
+     "name": "Everton",
+     "from": "2018",
+     "to": "2022"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2022",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Raphinha",
+   "clubs": [
+    {
+     "name": "Avaí Futebol Clube",
+     "from": "2015",
+     "to": "2015"
+    },
+    {
+     "name": "Vitória S.C",
+     "from": "2016",
+     "to": "2018"
+    },
+    {
+     "name": "Vitória S.C. B",
+     "from": "2016",
+     "to": "2016"
+    },
+    {
+     "name": "Sporting CP",
+     "from": "2018",
+     "to": "2019"
+    },
+    {
+     "name": "Stade Rennais",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Leeds United",
+     "from": "2020",
+     "to": "2022"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2022",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Philippe Coutinho",
+   "clubs": [
+    {
+     "name": "Inter Milan",
+     "from": "2008",
+     "to": "2013"
+    },
+    {
+     "name": "CR Vasco da Gama",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "RCD Espanyol de Barcelona",
+     "from": "2012",
+     "to": "2012"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2013",
+     "to": "2018"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2018",
+     "to": "2022"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2022",
+     "to": "2022"
+    },
+    {
+     "name": "Al-Duhail",
+     "from": "2023",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Roberto Firmino",
+   "clubs": [
+    {
+     "name": "Figueirense Futebol Clube",
+     "from": "2009",
+     "to": "2011"
+    },
+    {
+     "name": "TSG 1899 Hoffenheim",
+     "from": "2011",
+     "to": "2015"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2015",
+     "to": "2023"
+    },
+    {
+     "name": "Al Ahli",
+     "from": "2023",
+     "to": "2025"
+    },
+    {
+     "name": "Al Sadd Sports Club",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Miroslav Klose",
+   "clubs": [
+    {
+     "name": "FC 08 Homburg",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "1",
+     "from": "1999",
+     "to": "2004"
+    },
+    {
+     "name": "1",
+     "from": "1999",
+     "to": "2001"
+    },
+    {
+     "name": "SV Werder Bremen",
+     "from": "2004",
+     "to": "2007"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2007",
+     "to": "2011"
+    },
+    {
+     "name": "SS Lazio",
+     "from": "2011",
+     "to": "2016"
+    }
+   ]
+  },
+  {
+   "name": "Lukas Podolski",
+   "clubs": [
+    {
+     "name": "1",
+     "from": "2003",
+     "to": "2006"
+    },
+    {
+     "name": "1",
+     "from": "2003",
+     "to": "2003"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2006",
+     "to": "2009"
+    },
+    {
+     "name": "FC Bayern Munich II",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "Arsenal",
+     "from": "2012",
+     "to": "2015"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2015",
+     "to": "2015"
+    },
+    {
+     "name": "Galatasaray S.K",
+     "from": "2015",
+     "to": "2017"
+    },
+    {
+     "name": "Vissel Kobe",
+     "from": "2017",
+     "to": "2020"
+    },
+    {
+     "name": "Antalyaspor",
+     "from": "2020",
+     "to": "2021"
+    },
+    {
+     "name": "Górnik Zabrze",
+     "from": "2021",
+     "to": "2026"
+    }
+   ]
+  },
+  {
+   "name": "Sami Khedira",
+   "clubs": [
+    {
+     "name": "VfB Stuttgart II",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "VfB Stuttgart",
+     "from": "2006",
+     "to": "2010"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2010",
+     "to": "2015"
+    },
+    {
+     "name": "Juventus",
+     "from": "2015",
+     "to": "2021"
+    },
+    {
+     "name": "Hertha BSC",
+     "from": "2021",
+     "to": "2021"
+    }
+   ]
+  },
+  {
+   "name": "Timo Werner",
+   "clubs": [
+    {
+     "name": "VfB Stuttgart",
+     "from": "2013",
+     "to": "2016"
+    },
+    {
+     "name": "VfB Stuttgart II",
+     "from": "2014",
+     "to": "2014"
+    },
+    {
+     "name": "RB Leipzig",
+     "from": "2016",
+     "to": "2020"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2020",
+     "to": "2022"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2024",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "Serge Gnabry",
+   "clubs": [
+    {
+     "name": "Arsenal",
+     "from": "2012",
+     "to": "2016"
+    },
+    {
+     "name": "West Bromwich Albion",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "SV Werder Bremen",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2017",
+     "to": "http"
+    },
+    {
+     "name": "TSG 1899 Hoffenheim",
+     "from": "2017",
+     "to": "2018"
+    }
+   ]
+  },
+  {
+   "name": "Michael Ballack",
+   "clubs": [
+    {
+     "name": "Chemnitzer",
+     "from": "1995",
+     "to": "1997"
+    },
+    {
+     "name": "1",
+     "from": "1997",
+     "to": "1999"
+    },
+    {
+     "name": "1",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "Bayer 04 Leverkusen",
+     "from": "1999",
+     "to": "2002"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2002",
+     "to": "2006"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2006",
+     "to": "2010"
+    }
+   ]
+  },
+  {
+   "name": "Cristiano Ronaldo",
+   "clubs": [
+    {
+     "name": "Sporting CP",
+     "from": "2002",
+     "to": "2003"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2003",
+     "to": "2009"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2009",
+     "to": "2018"
+    },
+    {
+     "name": "Juventus",
+     "from": "2018",
+     "to": "2021"
+    },
+    {
+     "name": "Al-Nassr",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Deco",
+   "clubs": [
+    {
+     "name": "Nacional Atlético Clube",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "S.C. Corinthians Paulista",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Centro Sportivo Alagoano",
+     "from": "1997",
+     "to": "1997"
+    },
+    {
+     "name": "S.L. Benfica",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "F.C. Alverca",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "S.C. Salgueiros",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "FC Porto",
+     "from": "1999",
+     "to": "2004"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2004",
+     "to": "2008"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "Fluminense",
+     "from": "2010",
+     "to": "2013"
+    }
+   ]
+  },
+  {
+   "name": "Bruno Fernandes",
+   "clubs": [
+    {
+     "name": "Novara",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "Udinese",
+     "from": "2013",
+     "to": "2016"
+    },
+    {
+     "name": "U.C. Sampdoria",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Sporting CP",
+     "from": "2017",
+     "to": "2020"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2020",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Bernardo Silva",
+   "clubs": [
+    {
+     "name": "S.L. Benfica",
+     "from": "2013",
+     "to": "2015"
+    },
+    {
+     "name": "S.L. Benfica B",
+     "from": "2013",
+     "to": "2015"
+    },
+    {
+     "name": "AS Monaco",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2017",
+     "to": "2026"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Ricardo Quaresma",
+   "clubs": [
+    {
+     "name": "Sporting CP B",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Sporting CP",
+     "from": "2001",
+     "to": "2003"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "FC Porto",
+     "from": "2004",
+     "to": "2008"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "Beşiktaş J.K. (Football)",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "Shabab AlAhli Dubai Club",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "Kasımpaşa S.K",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Vitória S.C",
+     "from": "2020",
+     "to": "2022"
+    }
+   ]
+  },
+  {
+   "name": "Thierry Henry",
+   "clubs": [
+    {
+     "name": "AS Monaco",
+     "from": "1994",
+     "to": "1999"
+    },
+    {
+     "name": "Juventus",
+     "from": "1999",
+     "to": "1999"
+    },
+    {
+     "name": "Arsenal",
+     "from": "1999",
+     "to": "2007"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2007",
+     "to": "2010"
+    },
+    {
+     "name": "Red Bull New York",
+     "from": "2010",
+     "to": "2014"
+    }
+   ]
+  },
+  {
+   "name": "Karim Benzema",
+   "clubs": [
+    {
+     "name": "Olympique Lyonnais Reserves and Academy",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Olympique Lyonnais",
+     "from": "2004",
+     "to": "2009"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2009",
+     "to": "2023"
+    },
+    {
+     "name": "Al Ittihad",
+     "from": "2023",
+     "to": "2026"
+    },
+    {
+     "name": "Al Hilal SFC",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Marcel Desailly",
+   "clubs": [
+    {
+     "name": "FC Nantes",
+     "from": "1986",
+     "to": "1992"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1993",
+     "to": "1998"
+    },
+    {
+     "name": "Chelsea",
+     "from": "1998",
+     "to": "2004"
+    },
+    {
+     "name": "Al-Gharafa",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "Qatar",
+     "from": "2005",
+     "to": "2006"
+    }
+   ]
+  },
+  {
+   "name": "Didier Deschamps",
+   "clubs": [
+    {
+     "name": "FC Nantes",
+     "from": "1985",
+     "to": "1989"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "1989",
+     "to": "1994"
+    },
+    {
+     "name": "FC Girondins de Bordeaux",
+     "from": "1990",
+     "to": "1991"
+    },
+    {
+     "name": "Juventus",
+     "from": "1994",
+     "to": "1999"
+    },
+    {
+     "name": "Chelsea",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "Valencia",
+     "from": "2000",
+     "to": "2001"
+    }
+   ]
+  },
+  {
+   "name": "Patrick Vieira",
+   "clubs": [
+    {
+     "name": "AS Cannes",
+     "from": "1993",
+     "to": "1995"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "Arsenal",
+     "from": "1996",
+     "to": "2005"
+    },
+    {
+     "name": "Juventus",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2006",
+     "to": "2010"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2010",
+     "to": "2011"
+    }
+   ]
+  },
+  {
+   "name": "Eric Cantona",
+   "clubs": [
+    {
+     "name": "AJ Auxerre",
+     "from": "1983",
+     "to": "1988"
+    },
+    {
+     "name": "FC Martigues",
+     "from": "1985",
+     "to": "1986"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "1988",
+     "to": "1991"
+    },
+    {
+     "name": "Montpellier Hérault Sport Club",
+     "from": "1989",
+     "to": "1990"
+    },
+    {
+     "name": "FC Girondins de Bordeaux",
+     "from": "1989",
+     "to": "1989"
+    },
+    {
+     "name": "Nîmes Olympique",
+     "from": "1991",
+     "to": "1991"
+    },
+    {
+     "name": "Leeds United",
+     "from": "1992",
+     "to": "1992"
+    },
+    {
+     "name": "Manchester United",
+     "from": "1992",
+     "to": "1997"
+    }
+   ]
+  },
+  {
+   "name": "Jean-Pierre Papin",
+   "clubs": [
+    {
+     "name": "Valenciennes",
+     "from": "1984",
+     "to": "1985"
+    },
+    {
+     "name": "Club Brugge K.V",
+     "from": "1985",
+     "to": "1986"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "1986",
+     "to": "1992"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1992",
+     "to": "1994"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "1994",
+     "to": "1996"
+    },
+    {
+     "name": "FC Girondins de Bordeaux",
+     "from": "1996",
+     "to": "1998"
+    },
+    {
+     "name": "En Avant de Guingamp",
+     "from": "1998",
+     "to": "1998"
+    },
+    {
+     "name": "JS Saint-Pierroise",
+     "from": "1999",
+     "to": "1999"
+    }
+   ]
+  },
+  {
+   "name": "Laurent Blanc",
+   "clubs": [
+    {
+     "name": "Montpellier Hérault Sport Club",
+     "from": "1983",
+     "to": "1991"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "1991",
+     "to": "1992"
+    },
+    {
+     "name": "Nîmes Olympique",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "AS Saint-Étienne",
+     "from": "1993",
+     "to": "1995"
+    },
+    {
+     "name": "AJ Auxerre",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "1997",
+     "to": "1999"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "1999",
+     "to": "2001"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2001",
+     "to": "2003"
+    }
+   ]
+  },
+  {
+   "name": "Bixente Lizarazu",
+   "clubs": [
+    {
+     "name": "FC Girondins de Bordeaux",
+     "from": "1988",
+     "to": "1996"
+    },
+    {
+     "name": "Basque Country regional football team",
+     "from": "1993",
+     "to": "1993"
+    },
+    {
+     "name": "Athletic Club",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "1997",
+     "to": "2004"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2004",
+     "to": "2005"
+    }
+   ]
+  },
+  {
+   "name": "Fabien Barthez",
+   "clubs": [
+    {
+     "name": "Toulouse",
+     "from": "1990",
+     "to": "1992"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "1992",
+     "to": "1995"
+    },
+    {
+     "name": "AS Monaco",
+     "from": "1995",
+     "to": "2000"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2000",
+     "to": "2004"
+    },
+    {
+     "name": "FC Nantes",
+     "from": "2006",
+     "to": "2007"
+    }
+   ]
+  },
+  {
+   "name": "Olivier Giroud",
+   "clubs": [
+    {
+     "name": "Grenoble Foot 38",
+     "from": "2005",
+     "to": "2008"
+    },
+    {
+     "name": "FC Istres",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "Tours",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "Montpellier Hérault Sport Club",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "Arsenal",
+     "from": "2012",
+     "to": "2018"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2018",
+     "to": "2021"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2021",
+     "to": "2024"
+    },
+    {
+     "name": "Los Angeles",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "Lille OSC",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Kingsley Coman",
+   "clubs": [
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Juventus",
+     "from": "2014",
+     "to": "2017"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2015",
+     "to": "2017"
+    },
+    {
+     "name": "Al-Nassr",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Christopher Nkunku",
+   "clubs": [
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2015",
+     "to": "2019"
+    },
+    {
+     "name": "RB Leipzig",
+     "from": "2019",
+     "to": "2023"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2023",
+     "to": "2025"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "David Villa",
+   "clubs": [
+    {
+     "name": "Sporting de Gijón B",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Sporting de Gijón",
+     "from": "2001",
+     "to": "2003"
+    },
+    {
+     "name": "Asturias autonomous football team",
+     "from": "2001",
+     "to": "2002"
+    },
+    {
+     "name": "Real Zaragoza",
+     "from": "2003",
+     "to": "2005"
+    },
+    {
+     "name": "Valencia",
+     "from": "2005",
+     "to": "2010"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2010",
+     "to": "2013"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "New York City",
+     "from": "2014",
+     "to": "2018"
+    },
+    {
+     "name": "Melbourne City",
+     "from": "2014",
+     "to": "2014"
+    },
+    {
+     "name": "Vissel Kobe",
+     "from": "2019",
+     "to": "2020"
+    }
+   ]
+  },
+  {
+   "name": "Xabi Alonso",
+   "clubs": [
+    {
+     "name": "Antiguoko",
+     "from": "1990",
+     "to": "1999"
+    },
+    {
+     "name": "Real Sociedad B",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "Real Sociedad",
+     "from": "2000",
+     "to": "2004"
+    },
+    {
+     "name": "SD Eibar",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Basque Country regional football team",
+     "from": "2001",
+     "to": "2012"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2004",
+     "to": "2009"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2009",
+     "to": "2014"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2014",
+     "to": "2017"
+    }
+   ]
+  },
+  {
+   "name": "Sergio Busquets",
+   "clubs": [
+    {
+     "name": "CD Badia",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "EF Barberà Andalucía",
+     "from": "1996",
+     "to": "1999"
+    },
+    {
+     "name": "UE Lleida",
+     "from": "1999",
+     "to": "2003"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2000",
+     "to": "2023"
+    },
+    {
+     "name": "UFB Jàbac i Terrassa",
+     "from": "2003",
+     "to": "2005"
+    },
+    {
+     "name": "FC Barcelona C",
+     "from": "2006",
+     "to": "2006"
+    },
+    {
+     "name": "FC Barcelona Atlètic",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "Inter Miami",
+     "from": "2023",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "David Silva",
+   "clubs": [
+    {
+     "name": "Valencia",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "SD Eibar",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "Valencia",
+     "from": "2004",
+     "to": "2010"
+    },
+    {
+     "name": "RC Celta de Vigo",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2010",
+     "to": "2020"
+    },
+    {
+     "name": "Real Sociedad",
+     "from": "2020",
+     "to": "2023"
+    }
+   ]
+  },
+  {
+   "name": "Fernando Morientes",
+   "clubs": [
+    {
+     "name": "Albacete Balompié",
+     "from": "1993",
+     "to": "1995"
+    },
+    {
+     "name": "Real Zaragoza",
+     "from": "1995",
+     "to": "1997"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "1997",
+     "to": "2005"
+    },
+    {
+     "name": "AS Monaco",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "Valencia",
+     "from": "2006",
+     "to": "2009"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "DAV Santa Ana",
+     "from": "2015",
+     "to": "2015"
+    }
+   ]
+  },
+  {
+   "name": "Pep Guardiola",
+   "clubs": [
+    {
+     "name": "FC Barcelona Atlètic",
+     "from": "1984",
+     "to": "1990"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1990",
+     "to": "2001"
+    },
+    {
+     "name": "Brescia",
+     "from": "2001",
+     "to": "2002"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2002",
+     "to": "2003"
+    },
+    {
+     "name": "Al Ahli",
+     "from": "2003",
+     "to": "2005"
+    },
+    {
+     "name": "Dorados de Sinaloa",
+     "from": "2005",
+     "to": "2006"
+    }
+   ]
+  },
+  {
+   "name": "Luis Enrique",
+   "clubs": [
+    {
+     "name": "Sporting de Gijón B",
+     "from": "1988",
+     "to": "1990"
+    },
+    {
+     "name": "Sporting de Gijón",
+     "from": "1989",
+     "to": "1991"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "1991",
+     "to": "1996"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1996",
+     "to": "2004"
+    },
+    {
+     "name": "Asturias autonomous football team",
+     "from": "2000",
+     "to": "2000"
+    }
+   ]
+  },
+  {
+   "name": "Marco Asensio",
+   "clubs": [
+    {
+     "name": "CF Platges de Calvià",
+     "from": "2003",
+     "to": "2006"
+    },
+    {
+     "name": "RCD Mallorca",
+     "from": "2006",
+     "to": "2013"
+    },
+    {
+     "name": "RCD Mallorca B",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2014",
+     "to": "2023"
+    },
+    {
+     "name": "RCD Espanyol de Barcelona",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2023",
+     "to": "2025"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2025",
+     "to": "2025"
+    },
+    {
+     "name": "Fenerbahçe Istanbul",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Dani Olmo",
+   "clubs": [
+    {
+     "name": "RCD Espanyol de Barcelona",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2007",
+     "to": "2014"
+    },
+    {
+     "name": "GNK Dinamo Zagreb",
+     "from": "2015",
+     "to": "2020"
+    },
+    {
+     "name": "GNK Dinamo Zagreb Academy",
+     "from": "2015",
+     "to": "2017"
+    },
+    {
+     "name": "RB Leipzig",
+     "from": "2020",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Marc Cucurella",
+   "clubs": [
+    {
+     "name": "FC Barcelona Atlètic",
+     "from": "2016",
+     "to": "2018"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2017",
+     "to": "2020"
+    },
+    {
+     "name": "SD Eibar",
+     "from": "2018",
+     "to": "2019"
+    },
+    {
+     "name": "Getafe",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Brighton & Hove Albion",
+     "from": "2021",
+     "to": "2022"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2022",
+     "to": "2026"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Nico Williams",
+   "clubs": [
+    {
+     "name": "CD Pamplona",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "Club Atlético Osasuna",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "Athletic Club",
+     "from": "2013",
+     "to": "2019"
+    },
+    {
+     "name": "CD Baskonia",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Athletic Bilbao B",
+     "from": "2020",
+     "to": "2021"
+    }
+   ]
+  },
+  {
+   "name": "Roberto Baggio",
+   "clubs": [
+    {
+     "name": "Vicenza",
+     "from": "1982",
+     "to": "1985"
+    },
+    {
+     "name": "ACF Fiorentina",
+     "from": "1985",
+     "to": "1990"
+    },
+    {
+     "name": "Juventus",
+     "from": "1990",
+     "to": "1995"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1995",
+     "to": "1997"
+    },
+    {
+     "name": "Bologna",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "1998",
+     "to": "2000"
+    },
+    {
+     "name": "Brescia",
+     "from": "2000",
+     "to": "2004"
+    }
+   ]
+  },
+  {
+   "name": "Fabio Cannavaro",
+   "clubs": [
+    {
+     "name": "SSC Napoli",
+     "from": "1992",
+     "to": "1995"
+    },
+    {
+     "name": "Parma",
+     "from": "1995",
+     "to": "2002"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2002",
+     "to": "2004"
+    },
+    {
+     "name": "Juventus",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2006",
+     "to": "2009"
+    },
+    {
+     "name": "Shabab AlAhli Dubai Club",
+     "from": "2010",
+     "to": "2011"
+    }
+   ]
+  },
+  {
+   "name": "Andrea Pirlo",
+   "clubs": [
+    {
+     "name": "Brescia",
+     "from": "1995",
+     "to": "1998"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "1998",
+     "to": "2001"
+    },
+    {
+     "name": "AS Reggina 1914",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2001",
+     "to": "2011"
+    },
+    {
+     "name": "Juventus",
+     "from": "2011",
+     "to": "2015"
+    },
+    {
+     "name": "New York City",
+     "from": "2015",
+     "to": "2017"
+    }
+   ]
+  },
+  {
+   "name": "Filippo Inzaghi",
+   "clubs": [
+    {
+     "name": "Piacenza",
+     "from": "1991",
+     "to": "1995"
+    },
+    {
+     "name": "Società",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "Hellas Verona",
+     "from": "1993",
+     "to": "1994"
+    },
+    {
+     "name": "Parma",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "Atalanta",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Juventus",
+     "from": "1997",
+     "to": "2001"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2001",
+     "to": "2012"
+    }
+   ]
+  },
+  {
+   "name": "Marco Materazzi",
+   "clubs": [
+    {
+     "name": "A.C.R. Messina",
+     "from": "1990",
+     "to": "1991"
+    },
+    {
+     "name": "Marsala",
+     "from": "1993",
+     "to": "1994"
+    },
+    {
+     "name": "F.C. Trapani 1905",
+     "from": "1994",
+     "to": "1995"
+    },
+    {
+     "name": "A.C. Perugia",
+     "from": "1995",
+     "to": "1998"
+    },
+    {
+     "name": "A.C. Carpi",
+     "from": "1996",
+     "to": "1996"
+    },
+    {
+     "name": "Everton",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2001",
+     "to": "2011"
+    },
+    {
+     "name": "Chennaiyin",
+     "from": "2014",
+     "to": "2014"
+    }
+   ]
+  },
+  {
+   "name": "Gennaro Gattuso",
+   "clubs": [
+    {
+     "name": "A.C. Perugia",
+     "from": "1995",
+     "to": "1997"
+    },
+    {
+     "name": "Rangers",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "U.S. Salernitana 1919",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1999",
+     "to": "2012"
+    },
+    {
+     "name": "FC Sion",
+     "from": "2012",
+     "to": "2013"
+    }
+   ]
+  },
+  {
+   "name": "Gianluca Zambrotta",
+   "clubs": [
+    {
+     "name": "Como 1907",
+     "from": "1994",
+     "to": "1997"
+    },
+    {
+     "name": "SSC Bari",
+     "from": "1997",
+     "to": "1999"
+    },
+    {
+     "name": "Juventus",
+     "from": "1999",
+     "to": "2006"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2006",
+     "to": "2008"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2008",
+     "to": "2012"
+    },
+    {
+     "name": "FC Chiasso",
+     "from": "2013",
+     "to": "2014"
+    }
+   ]
+  },
+  {
+   "name": "Antonio Cassano",
+   "clubs": [
+    {
+     "name": "SSC Bari",
+     "from": "1999",
+     "to": "2001"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2001",
+     "to": "2006"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2006",
+     "to": "2008"
+    },
+    {
+     "name": "U.C. Sampdoria",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "Parma",
+     "from": "2013",
+     "to": "2015"
+    },
+    {
+     "name": "Hellas Verona",
+     "from": "2017",
+     "to": "2017"
+    }
+   ]
+  },
+  {
+   "name": "Luca Toni",
+   "clubs": [
+    {
+     "name": "Modena",
+     "from": "1994",
+     "to": "1996"
+    },
+    {
+     "name": "Empoli",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "US Fiorenzuola 1922",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "Atletico Roma",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "A.S. Lodigiani",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Treviso F.B.C. 1993",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "Vicenza",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Brescia",
+     "from": "2001",
+     "to": "2003"
+    },
+    {
+     "name": "Palermo",
+     "from": "2003",
+     "to": "2005"
+    },
+    {
+     "name": "ACF Fiorentina",
+     "from": "2005",
+     "to": "2007"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2007",
+     "to": "2010"
+    },
+    {
+     "name": "FC Bayern Munich II",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "Genoa CFC",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Juventus",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Alshariqa",
+     "from": "2012",
+     "to": "2012"
+    },
+    {
+     "name": "Hellas Verona",
+     "from": "2013",
+     "to": "2016"
+    }
+   ]
+  },
+  {
+   "name": "Giorgio Chiellini",
+   "clubs": [
+    {
+     "name": "US Livorno 1915",
+     "from": "2000",
+     "to": "2002"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2002",
+     "to": "2004"
+    },
+    {
+     "name": "Juventus",
+     "from": "2004",
+     "to": "2022"
+    },
+    {
+     "name": "ACF Fiorentina",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "Los Angeles",
+     "from": "2022",
+     "to": "2023"
+    }
+   ]
+  },
+  {
+   "name": "Leonardo Bonucci",
+   "clubs": [
+    {
+     "name": "Inter Milan",
+     "from": "2005",
+     "to": "2009"
+    },
+    {
+     "name": "Treviso F.B.C. 1993",
+     "from": "2007",
+     "to": "2009"
+    },
+    {
+     "name": "Pisa",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "Genoa CFC",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "SSC Bari",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "Juventus",
+     "from": "2010",
+     "to": "2017"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2017",
+     "to": "2018"
+    },
+    {
+     "name": "1",
+     "from": "2023",
+     "to": "2024"
+    },
+    {
+     "name": "Fenerbahçe Istanbul",
+     "from": "2024",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Ciro Immobile",
+   "clubs": [
+    {
+     "name": "Juventus",
+     "from": "2009",
+     "to": "2012"
+    },
+    {
+     "name": "Siena",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "U.S. Grosseto 1912",
+     "from": "2011",
+     "to": "2011"
+    },
+    {
+     "name": "Delfino Pescara 1936",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Genoa CFC",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "Torino",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Sevilla",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "SS Lazio",
+     "from": "2016",
+     "to": "2024"
+    },
+    {
+     "name": "Beşiktaş J.K. (Football)",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "Bologna",
+     "from": "2025",
+     "to": "2026"
+    },
+    {
+     "name": "Paris",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Lorenzo Insigne",
+   "clubs": [
+    {
+     "name": "SSC Napoli",
+     "from": "2009",
+     "to": "2022"
+    },
+    {
+     "name": "Calcio Foggia 1920",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Cavese 1919",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "Delfino Pescara 1936",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Toronto",
+     "from": "2022",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "Paolo Rossi",
+   "clubs": [
+    {
+     "name": "Juventus",
+     "from": "1973",
+     "to": "1975"
+    },
+    {
+     "name": "Como 1907",
+     "from": "1975",
+     "to": "1976"
+    },
+    {
+     "name": "Vicenza",
+     "from": "1976",
+     "to": "1980"
+    },
+    {
+     "name": "A.C. Perugia",
+     "from": "1979",
+     "to": "1980"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1985",
+     "to": "1986"
+    },
+    {
+     "name": "Hellas Verona",
+     "from": "1986",
+     "to": "1987"
+    }
+   ]
+  },
+  {
+   "name": "Gianfranco Zola",
+   "clubs": [
+    {
+     "name": "Nuorese",
+     "from": "1984",
+     "to": "1986"
+    },
+    {
+     "name": "S.E.F. Torres 1903",
+     "from": "1986",
+     "to": "1989"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "1989",
+     "to": "1993"
+    },
+    {
+     "name": "Parma",
+     "from": "1993",
+     "to": "1996"
+    },
+    {
+     "name": "Chelsea",
+     "from": "1996",
+     "to": "2003"
+    },
+    {
+     "name": "Cagliari",
+     "from": "2003",
+     "to": "2005"
+    }
+   ]
+  },
+  {
+   "name": "David Beckham",
+   "clubs": [
+    {
+     "name": "Manchester United",
+     "from": "1992",
+     "to": "2003"
+    },
+    {
+     "name": "Preston North End",
+     "from": "1994",
+     "to": "1995"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2003",
+     "to": "2007"
+    },
+    {
+     "name": "LA Galaxy",
+     "from": "2007",
+     "to": "2012"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2013",
+     "to": "2013"
+    }
+   ]
+  },
+  {
+   "name": "Frank Lampard",
+   "clubs": [
+    {
+     "name": "West Ham United",
+     "from": "1995",
+     "to": "2001"
+    },
+    {
+     "name": "Swansea City",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2001",
+     "to": "2014"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "New York City",
+     "from": "2015",
+     "to": "2016"
+    }
+   ]
+  },
+  {
+   "name": "Rio Ferdinand",
+   "clubs": [
+    {
+     "name": "West Ham United",
+     "from": "1996",
+     "to": "2000"
+    },
+    {
+     "name": "AFC Bournemouth",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Leeds United",
+     "from": "2000",
+     "to": "2002"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2002",
+     "to": "2014"
+    },
+    {
+     "name": "Queens Park Rangers",
+     "from": "2014",
+     "to": "2015"
+    }
+   ]
+  },
+  {
+   "name": "Gary Lineker",
+   "clubs": [
+    {
+     "name": "Leicester City",
+     "from": "1976",
+     "to": "1978"
+    },
+    {
+     "name": "Everton",
+     "from": "1985",
+     "to": "1986"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1986",
+     "to": "1989"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "1989",
+     "to": "1992"
+    },
+    {
+     "name": "Nagoya Grampus",
+     "from": "1993",
+     "to": "1994"
+    }
+   ]
+  },
+  {
+   "name": "Paul Gascoigne",
+   "clubs": [
+    {
+     "name": "Newcastle United",
+     "from": "1985",
+     "to": "1988"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "1988",
+     "to": "1992"
+    },
+    {
+     "name": "SS Lazio",
+     "from": "1992",
+     "to": "1995"
+    },
+    {
+     "name": "Rangers",
+     "from": "1995",
+     "to": "1998"
+    },
+    {
+     "name": "Middlesbrough",
+     "from": "1998",
+     "to": "2000"
+    },
+    {
+     "name": "Everton",
+     "from": "2000",
+     "to": "2002"
+    },
+    {
+     "name": "Burnley",
+     "from": "2002",
+     "to": "2002"
+    },
+    {
+     "name": "Gansu Tianma",
+     "from": "2003",
+     "to": "2003"
+    },
+    {
+     "name": "Boston United",
+     "from": "2004",
+     "to": "2004"
+    }
+   ]
+  },
+  {
+   "name": "Chris Waddle",
+   "clubs": [
+    {
+     "name": "Tow Law Town",
+     "from": "1978",
+     "to": "1980"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "1982",
+     "to": "1985"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "1985",
+     "to": "1989"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "1989",
+     "to": "1992"
+    },
+    {
+     "name": "Sheffield Wednesday",
+     "from": "1992",
+     "to": "1996"
+    },
+    {
+     "name": "Bradford City",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Falkirk",
+     "from": "1996",
+     "to": "1996"
+    },
+    {
+     "name": "Sunderland",
+     "from": "1997",
+     "to": "1997"
+    },
+    {
+     "name": "Burnley",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "Torquay United",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Worksop Town",
+     "from": "2000",
+     "to": "2002"
+    },
+    {
+     "name": "Stocksbridge Park Steels",
+     "from": "2002",
+     "to": "2002"
+    },
+    {
+     "name": "Glapwell",
+     "from": "2002",
+     "to": "2002"
+    },
+    {
+     "name": "Hallam",
+     "from": "2013",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Teddy Sheringham",
+   "clubs": [
+    {
+     "name": "Millwall",
+     "from": "1983",
+     "to": "1991"
+    },
+    {
+     "name": "Djurgårdens IF Fotboll",
+     "from": "1985",
+     "to": "1985"
+    },
+    {
+     "name": "Aldershot",
+     "from": "1985",
+     "to": "1985"
+    },
+    {
+     "name": "Nottingham Forest",
+     "from": "1991",
+     "to": "1992"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "1992",
+     "to": "1997"
+    },
+    {
+     "name": "Manchester United",
+     "from": "1997",
+     "to": "2001"
+    },
+    {
+     "name": "Portsmouth",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "West Ham United",
+     "from": "2004",
+     "to": "2007"
+    },
+    {
+     "name": "Colchester United",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "Stevenage",
+     "from": "2015",
+     "to": "2015"
+    }
+   ]
+  },
+  {
+   "name": "Raheem Sterling",
+   "clubs": [
+    {
+     "name": "Liverpool",
+     "from": "2012",
+     "to": "2015"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2015",
+     "to": "2022"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2022",
+     "to": "2026"
+    },
+    {
+     "name": "Arsenal",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "2026",
+     "to": "2026"
+    }
+   ]
+  },
+  {
+   "name": "Jadon Sancho",
+   "clubs": [
+    {
+     "name": "Borussia Dortmund II",
+     "from": "2017",
+     "to": "2017"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2017",
+     "to": "2021"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2021",
+     "to": ""
+    },
+    {
+     "name": "Chelsea",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Harry Maguire",
+   "clubs": [
+    {
+     "name": "Sheffield United",
+     "from": "2011",
+     "to": "2014"
+    },
+    {
+     "name": "Hull City",
+     "from": "2014",
+     "to": "2017"
+    },
+    {
+     "name": "Wigan Athletic",
+     "from": "2015",
+     "to": "2015"
+    },
+    {
+     "name": "Leicester City",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2019",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Jordan Pickford",
+   "clubs": [
+    {
+     "name": "Sunderland",
+     "from": "2011",
+     "to": "2017"
+    },
+    {
+     "name": "Darlington",
+     "from": "2012",
+     "to": "2012"
+    },
+    {
+     "name": "Burton Albion",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "Alfreton Town",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "Bradford City",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Carlisle United",
+     "from": "2014",
+     "to": "2014"
+    },
+    {
+     "name": "Preston North End",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Everton",
+     "from": "2017",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Kieran Trippier",
+   "clubs": [
+    {
+     "name": "Manchester City",
+     "from": "2009",
+     "to": "2012"
+    },
+    {
+     "name": "Barnsley",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "Burnley",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2015",
+     "to": "2019"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2019",
+     "to": "2022"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "2022",
+     "to": "2026"
+    },
+    {
+     "name": "Wolverhampton Wanderers",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Jordan Henderson",
+   "clubs": [
+    {
+     "name": "Sunderland",
+     "from": "2008",
+     "to": "2011"
+    },
+    {
+     "name": "Coventry City",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2011",
+     "to": "2023"
+    },
+    {
+     "name": "Al-Ettifaq",
+     "from": "2023",
+     "to": "2024"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "Brentford",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Kyle Walker",
+   "clubs": [
+    {
+     "name": "Northampton Town",
+     "from": "2008",
+     "to": "2008"
+    },
+    {
+     "name": "Sheffield United",
+     "from": "2008",
+     "to": "2009"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2009",
+     "to": "2017"
+    },
+    {
+     "name": "Queens Park Rangers",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2011",
+     "to": "2011"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2017",
+     "to": "2025"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2025",
+     "to": "2025"
+    },
+    {
+     "name": "Burnley",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Jack Wilshere",
+   "clubs": [
+    {
+     "name": "Arsenal",
+     "from": "2008",
+     "to": "2018"
+    },
+    {
+     "name": "Bolton Wanderers",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "AFC Bournemouth",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "West Ham United",
+     "from": "2018",
+     "to": "2020"
+    },
+    {
+     "name": "Aarhus Gymnastikforening",
+     "from": "2022",
+     "to": "2022"
+    }
+   ]
+  },
+  {
+   "name": "Michael Carrick",
+   "clubs": [
+    {
+     "name": "Swindon Town",
+     "from": "1999",
+     "to": "1999"
+    },
+    {
+     "name": "West Ham United",
+     "from": "1999",
+     "to": "2004"
+    },
+    {
+     "name": "Birmingham City",
+     "from": "2000",
+     "to": "2000"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2006",
+     "to": "2018"
+    }
+   ]
+  },
+  {
+   "name": "Robbie Fowler",
+   "clubs": [
+    {
+     "name": "Liverpool",
+     "from": "1993",
+     "to": "2001"
+    },
+    {
+     "name": "Leeds United",
+     "from": "2001",
+     "to": "2003"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2003",
+     "to": "2006"
+    },
+    {
+     "name": "Cardiff City",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "Blackburn Rovers",
+     "from": "2008",
+     "to": "2008"
+    },
+    {
+     "name": "Northern Fury",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "Perth Glory",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Muangthong United",
+     "from": "2011",
+     "to": "2012"
+    }
+   ]
+  },
+  {
+   "name": "Ian Wright",
+   "clubs": [
+    {
+     "name": "Crystal Palace",
+     "from": "1985",
+     "to": "1991"
+    },
+    {
+     "name": "Arsenal",
+     "from": "1991",
+     "to": "1998"
+    },
+    {
+     "name": "West Ham United",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Celtic",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "Nottingham Forest",
+     "from": "1999",
+     "to": "1999"
+    },
+    {
+     "name": "Burnley",
+     "from": "2000",
+     "to": "2000"
+    }
+   ]
+  },
+  {
+   "name": "Johan Cruyff",
+   "clubs": [
+    {
+     "name": "AFC Ajax",
+     "from": "1964",
+     "to": "1973"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1973",
+     "to": "1978"
+    },
+    {
+     "name": "Los Angeles Aztecs",
+     "from": "1979",
+     "to": "1979"
+    },
+    {
+     "name": "Washington Diplomats",
+     "from": "1980",
+     "to": "1981"
+    },
+    {
+     "name": "Levante UD",
+     "from": "1981",
+     "to": "1981"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "1983",
+     "to": "1984"
+    }
+   ]
+  },
+  {
+   "name": "Ruud Gullit",
+   "clubs": [
+    {
+     "name": "AFC DWS",
+     "from": "1975",
+     "to": "1979"
+    },
+    {
+     "name": "HFC Haarlem",
+     "from": "1979",
+     "to": "1982"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "1982",
+     "to": "1985"
+    },
+    {
+     "name": "PSV Eindhoven",
+     "from": "1985",
+     "to": "1987"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1987",
+     "to": "1993"
+    },
+    {
+     "name": "U.C. Sampdoria",
+     "from": "1993",
+     "to": "1994"
+    },
+    {
+     "name": "Chelsea",
+     "from": "1995",
+     "to": "1998"
+    }
+   ]
+  },
+  {
+   "name": "Clarence Seedorf",
+   "clubs": [
+    {
+     "name": "AFC Ajax",
+     "from": "1992",
+     "to": "1995"
+    },
+    {
+     "name": "U.C. Sampdoria",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "1996",
+     "to": "1999"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2000",
+     "to": "2003"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2002",
+     "to": "2011"
+    },
+    {
+     "name": "Botafogo F.R",
+     "from": "2012",
+     "to": "2014"
+    }
+   ]
+  },
+  {
+   "name": "Edgar Davids",
+   "clubs": [
+    {
+     "name": "AFC Ajax",
+     "from": "1991",
+     "to": "1996"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Juventus",
+     "from": "1997",
+     "to": "2004"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2004",
+     "to": "2004"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2005",
+     "to": "2007"
+    },
+    {
+     "name": "Crystal Palace",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "Barnet",
+     "from": "2012",
+     "to": "2014"
+    }
+   ]
+  },
+  {
+   "name": "Patrick Kluivert",
+   "clubs": [
+    {
+     "name": "AFC Ajax",
+     "from": "1994",
+     "to": "1997"
+    },
+    {
+     "name": "AC Milan",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1998",
+     "to": "2004"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "2004",
+     "to": "2005"
+    },
+    {
+     "name": "Valencia",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "PSV Eindhoven",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "Lille OSC",
+     "from": "2007",
+     "to": "2008"
+    }
+   ]
+  },
+  {
+   "name": "Arjen Robben",
+   "clubs": [
+    {
+     "name": "VV Bedum",
+     "from": "1989",
+     "to": "1996"
+    },
+    {
+     "name": "FC Groningen",
+     "from": "1996",
+     "to": "2000"
+    },
+    {
+     "name": "PSV Eindhoven",
+     "from": "2002",
+     "to": "2004"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2004",
+     "to": "2007"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2007",
+     "to": "2009"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2009",
+     "to": "2019"
+    }
+   ]
+  },
+  {
+   "name": "Jaap Stam",
+   "clubs": [
+    {
+     "name": "PEC Zwolle",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "SC Cambuur",
+     "from": "1993",
+     "to": "1995"
+    },
+    {
+     "name": "Willem II",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "PSV Eindhoven",
+     "from": "1996",
+     "to": "1998"
+    },
+    {
+     "name": "Manchester United",
+     "from": "1998",
+     "to": "2001"
+    },
+    {
+     "name": "SS Lazio",
+     "from": "2001",
+     "to": "2004"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "2006",
+     "to": "2007"
+    }
+   ]
+  },
+  {
+   "name": "Dirk Kuyt",
+   "clubs": [
+    {
+     "name": "FC Utrecht",
+     "from": "1998",
+     "to": "2003"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "2003",
+     "to": "2006"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2006",
+     "to": "2012"
+    },
+    {
+     "name": "Fenerbahçe Istanbul",
+     "from": "2012",
+     "to": "2015"
+    },
+    {
+     "name": "Quick Boys",
+     "from": "2018",
+     "to": "2018"
+    }
+   ]
+  },
+  {
+   "name": "Ronald Koeman",
+   "clubs": [
+    {
+     "name": "FC Groningen",
+     "from": "1980",
+     "to": "1983"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "1983",
+     "to": "1986"
+    },
+    {
+     "name": "PSV Eindhoven",
+     "from": "1986",
+     "to": "1989"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1989",
+     "to": "1995"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "1995",
+     "to": "1997"
+    }
+   ]
+  },
+  {
+   "name": "Marc Overmars",
+   "clubs": [
+    {
+     "name": "Go Ahead Eagles",
+     "from": "1990",
+     "to": "1991"
+    },
+    {
+     "name": "Willem II",
+     "from": "1991",
+     "to": "1992"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "1992",
+     "to": "1997"
+    },
+    {
+     "name": "Arsenal",
+     "from": "1997",
+     "to": "2000"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2000",
+     "to": "2004"
+    }
+   ]
+  },
+  {
+   "name": "Georginio Wijnaldum",
+   "clubs": [
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "2007",
+     "to": "2011"
+    },
+    {
+     "name": "PSV Eindhoven",
+     "from": "2011",
+     "to": "2015"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2016",
+     "to": "2021"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2021",
+     "to": "2023"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2022",
+     "to": "2023"
+    },
+    {
+     "name": "Al-Ettifaq",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Memphis Depay",
+   "clubs": [
+    {
+     "name": "PSV Eindhoven",
+     "from": "2011",
+     "to": "2015"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2015",
+     "to": "2017"
+    },
+    {
+     "name": "Olympique Lyonnais",
+     "from": "2017",
+     "to": "2021"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2021",
+     "to": "2023"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2023",
+     "to": "2024"
+    },
+    {
+     "name": "S.C. Corinthians Paulista",
+     "from": "2024",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Tijjani Reijnders",
+   "clubs": [
+    {
+     "name": "Jong AZ",
+     "from": "2017",
+     "to": "2021"
+    },
+    {
+     "name": "PEC Zwolle",
+     "from": "2017",
+     "to": "2017"
+    },
+    {
+     "name": "AZ Alkmaar",
+     "from": "2018",
+     "to": "2023"
+    },
+    {
+     "name": "RKC Waalwijk",
+     "from": "2020",
+     "to": "2020"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2023",
+     "to": "2025"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Kevin De Bruyne",
+   "clubs": [
+    {
+     "name": "K.R.C. Genk",
+     "from": "2008",
+     "to": "2012"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2012",
+     "to": "2014"
+    },
+    {
+     "name": "SV Werder Bremen",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "VfL Wolfsburg",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2015",
+     "to": "2025"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Axel Witsel",
+   "clubs": [
+    {
+     "name": "Standard Liège",
+     "from": "2006",
+     "to": "2011"
+    },
+    {
+     "name": "S.L. Benfica",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "FC Zenit Saint Petersburg",
+     "from": "2012",
+     "to": "2016"
+    },
+    {
+     "name": "Tianjin Tianhai",
+     "from": "2017",
+     "to": "2018"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2018",
+     "to": "2022"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2022",
+     "to": "2025"
+    },
+    {
+     "name": "Girona",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Dries Mertens",
+   "clubs": [
+    {
+     "name": "KAA Gent",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "SC Eendracht Aalst",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "AGOVV Apeldoorn",
+     "from": "2006",
+     "to": "2009"
+    },
+    {
+     "name": "FC Utrecht",
+     "from": "2009",
+     "to": "2011"
+    },
+    {
+     "name": "PSV Eindhoven",
+     "from": "2011",
+     "to": "2013"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "2013",
+     "to": "2022"
+    },
+    {
+     "name": "Galatasaray S.K",
+     "from": "2022",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "Yannick Carrasco",
+   "clubs": [
+    {
+     "name": "AS Monaco",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "AS Monaco",
+     "from": "2012",
+     "to": "2015"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2015",
+     "to": "2018"
+    },
+    {
+     "name": "Dalian Professional",
+     "from": "2018",
+     "to": "2020"
+    },
+    {
+     "name": "Al-Shabab",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Jan Vertonghen",
+   "clubs": [
+    {
+     "name": "AFC Ajax",
+     "from": "2006",
+     "to": "2012"
+    },
+    {
+     "name": "RKC Waalwijk",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2012",
+     "to": "2020"
+    },
+    {
+     "name": "S.L. Benfica",
+     "from": "2020",
+     "to": "2022"
+    },
+    {
+     "name": "R.S.C. Anderlecht",
+     "from": "2022",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "Toby Alderweireld",
+   "clubs": [
+    {
+     "name": "AFC Ajax",
+     "from": "2008",
+     "to": "2013"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2013",
+     "to": "2015"
+    },
+    {
+     "name": "Southampton",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2015",
+     "to": "2021"
+    },
+    {
+     "name": "Al-Duhail",
+     "from": "2021",
+     "to": "2022"
+    },
+    {
+     "name": "Royal Antwerp",
+     "from": "2022",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "Leandro Trossard",
+   "clubs": [
+    {
+     "name": "K.R.C. Genk",
+     "from": "2011",
+     "to": ""
+    },
+    {
+     "name": "K.V.C. Westerlo",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Lommel SK",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "Oud-Heverlee Leuven",
+     "from": "2015",
+     "to": ""
+    },
+    {
+     "name": "Brighton & Hove Albion",
+     "from": "2019",
+     "to": "2023"
+    },
+    {
+     "name": "Arsenal",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Erling Haaland",
+   "clubs": [
+    {
+     "name": "Bryne FK",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Molde FK",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "FC Red Bull Salzburg",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2020",
+     "to": "2022"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2022",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Domagoj Vida",
+   "clubs": [
+    {
+     "name": "NK Osijek",
+     "from": "2006",
+     "to": "2010"
+    },
+    {
+     "name": "Bayer 04 Leverkusen",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "GNK Dinamo Zagreb",
+     "from": "2011",
+     "to": "2013"
+    },
+    {
+     "name": "FC Dynamo Kyiv",
+     "from": "2013",
+     "to": "2017"
+    },
+    {
+     "name": "Beşiktaş J.K. (Football)",
+     "from": "2018",
+     "to": "2022"
+    },
+    {
+     "name": "AEK Athens",
+     "from": "2022",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Dejan Lovren",
+   "clubs": [
+    {
+     "name": "NK Inter Zaprešić",
+     "from": "2006",
+     "to": "2008"
+    },
+    {
+     "name": "GNK Dinamo Zagreb",
+     "from": "2006",
+     "to": "2009"
+    },
+    {
+     "name": "Olympique Lyonnais",
+     "from": "2010",
+     "to": "2013"
+    },
+    {
+     "name": "Southampton",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2014",
+     "to": "2020"
+    },
+    {
+     "name": "FC Zenit Saint Petersburg",
+     "from": "2020",
+     "to": "2023"
+    },
+    {
+     "name": "PAOK",
+     "from": "2024",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Enzo Francescoli",
+   "clubs": [
+    {
+     "name": "Montevideo Wanderers",
+     "from": "1980",
+     "to": "1982"
+    },
+    {
+     "name": "Club Atlético River Plate",
+     "from": "1983",
+     "to": "1986"
+    },
+    {
+     "name": "Racing Club de France",
+     "from": "1986",
+     "to": "1989"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "1989",
+     "to": "1990"
+    },
+    {
+     "name": "Cagliari",
+     "from": "1990",
+     "to": "1993"
+    },
+    {
+     "name": "Torino",
+     "from": "1993",
+     "to": "1994"
+    }
+   ]
+  },
+  {
+   "name": "Robert Lewandowski",
+   "clubs": [
+    {
+     "name": "Znicz Pruszków",
+     "from": "2006",
+     "to": "2008"
+    },
+    {
+     "name": "Lech Poznań",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2010",
+     "to": "2014"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2014",
+     "to": "2022"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2022",
+     "to": "2026"
+    },
+    {
+     "name": "Chicago Fire",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Arkadiusz Milik",
+   "clubs": [
+    {
+     "name": "Rozwój Katowice",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Górnik Zabrze",
+     "from": "2011",
+     "to": "2013"
+    },
+    {
+     "name": "Bayer 04 Leverkusen",
+     "from": "2013",
+     "to": "2015"
+    },
+    {
+     "name": "FC Augsburg",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "2016",
+     "to": "2022"
+    },
+    {
+     "name": "Olympique de Marseille",
+     "from": "2021",
+     "to": "2022"
+    },
+    {
+     "name": "Juventus",
+     "from": "2022",
+     "to": "2023"
+    }
+   ]
+  },
+  {
+   "name": "Henrik Larsson",
+   "clubs": [
+    {
+     "name": "Högaborgs BK",
+     "from": "1977",
+     "to": "1988"
+    },
+    {
+     "name": "Helsingborgs IF",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "1993",
+     "to": "1997"
+    },
+    {
+     "name": "Celtic",
+     "from": "1997",
+     "to": "2004"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2007",
+     "to": "2007"
+    },
+    {
+     "name": "Råå IF",
+     "from": "2012",
+     "to": "2012"
+    }
+   ]
+  },
+  {
+   "name": "Freddie Ljungberg",
+   "clubs": [
+    {
+     "name": "Halmstads BK",
+     "from": "1994",
+     "to": "1998"
+    },
+    {
+     "name": "Arsenal",
+     "from": "1998",
+     "to": "2007"
+    },
+    {
+     "name": "West Ham United",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "Seattle Sounders",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "Chicago Fire",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "Shimizu S-Pulse",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Celtic",
+     "from": "2011",
+     "to": "2011"
+    },
+    {
+     "name": "Mumbai City",
+     "from": "2014",
+     "to": "2014"
+    }
+   ]
+  },
+  {
+   "name": "Alexander Isak",
+   "clubs": [
+    {
+     "name": "AIK Fotboll",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "Willem II",
+     "from": "2019",
+     "to": "2019"
+    },
+    {
+     "name": "Real Sociedad",
+     "from": "2019",
+     "to": "2022"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "2022",
+     "to": "2025"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Michael Laudrup",
+   "clubs": [
+    {
+     "name": "Kjøbenhavns Boldklub",
+     "from": "1981",
+     "to": "1982"
+    },
+    {
+     "name": "Brøndby IF",
+     "from": "1982",
+     "to": "1983"
+    },
+    {
+     "name": "Juventus",
+     "from": "1983",
+     "to": "1983"
+    },
+    {
+     "name": "SS Lazio",
+     "from": "1983",
+     "to": "1985"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1989",
+     "to": "1994"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "1994",
+     "to": "1996"
+    },
+    {
+     "name": "Vissel Kobe",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "1997",
+     "to": "1998"
+    }
+   ]
+  },
+  {
+   "name": "Peter Schmeichel",
+   "clubs": [
+    {
+     "name": "Gladsaxe-Hero",
+     "from": "1981",
+     "to": "1984"
+    },
+    {
+     "name": "Hvidovre IF",
+     "from": "1984",
+     "to": "1987"
+    },
+    {
+     "name": "Brøndby IF",
+     "from": "1987",
+     "to": "1991"
+    },
+    {
+     "name": "Manchester United",
+     "from": "1991",
+     "to": "1999"
+    },
+    {
+     "name": "Sporting CP",
+     "from": "1999",
+     "to": "2001"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2001",
+     "to": "2002"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2002",
+     "to": "2003"
+    }
+   ]
+  },
+  {
+   "name": "Christian Eriksen",
+   "clubs": [
+    {
+     "name": "Middelfart Boldklub",
+     "from": "1995",
+     "to": "2005"
+    },
+    {
+     "name": "Odense Boldklub",
+     "from": "2005",
+     "to": "2008"
+    },
+    {
+     "name": "Ajax Youth Academy",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "2010",
+     "to": "2013"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2013",
+     "to": "2020"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2020",
+     "to": "2021"
+    },
+    {
+     "name": "Brentford",
+     "from": "2022",
+     "to": "2022"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2022",
+     "to": "2025"
+    },
+    {
+     "name": "VfL Wolfsburg",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Andriy Yarmolenko",
+   "clubs": [
+    {
+     "name": "FC Desna Chernihiv",
+     "from": "2006",
+     "to": "2006"
+    },
+    {
+     "name": "FC Dynamo-2 Kyiv",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "FC Dynamo Kyiv",
+     "from": "2008",
+     "to": "2017"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2017",
+     "to": "2018"
+    },
+    {
+     "name": "West Ham United",
+     "from": "2018",
+     "to": "2022"
+    },
+    {
+     "name": "Al Ain",
+     "from": "2022",
+     "to": "2023"
+    }
+   ]
+  },
+  {
+   "name": "Mohamed Salah",
+   "clubs": [
+    {
+     "name": "Al Mokawloon Al Arab",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "FC Basel",
+     "from": "2012",
+     "to": "2014"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "ACF Fiorentina",
+     "from": "2015",
+     "to": "2015"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2017",
+     "to": "2026"
+    }
+   ]
+  },
+  {
+   "name": "Omar Marmoush",
+   "clubs": [
+    {
+     "name": "Wadi Degla",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "VfL Wolfsburg II",
+     "from": "2017",
+     "to": "2020"
+    },
+    {
+     "name": "VfL Wolfsburg",
+     "from": "2020",
+     "to": "2023"
+    },
+    {
+     "name": "FC St. Pauli",
+     "from": "2021",
+     "to": "2021"
+    },
+    {
+     "name": "VfB Stuttgart",
+     "from": "2021",
+     "to": "2022"
+    },
+    {
+     "name": "Eintracht Frankfurt",
+     "from": "2023",
+     "to": "2025"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Kalidou Koulibaly",
+   "clubs": [
+    {
+     "name": "FC Metz II",
+     "from": "2009",
+     "to": "2011"
+    },
+    {
+     "name": "FC Metz",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "K.R.C. Genk",
+     "from": "2012",
+     "to": "2014"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "2014",
+     "to": "2022"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2022",
+     "to": "2023"
+    },
+    {
+     "name": "Al Hilal SFC",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Idrissa Gueye",
+   "clubs": [
+    {
+     "name": "Diambars",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "Lille OSC II",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "Lille OSC",
+     "from": "2010",
+     "to": "2015"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Everton",
+     "from": "2016",
+     "to": "2019"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2019",
+     "to": "2022"
+    }
+   ]
+  },
+  {
+   "name": "Roger Milla",
+   "clubs": [
+    {
+     "name": "Léopards Douala",
+     "from": "1970",
+     "to": "1974"
+    },
+    {
+     "name": "Tonnerre Yaoundé",
+     "from": "1974",
+     "to": "1977"
+    },
+    {
+     "name": "Valenciennes",
+     "from": "1977",
+     "to": "1979"
+    },
+    {
+     "name": "AS Monaco",
+     "from": "1979",
+     "to": "1980"
+    },
+    {
+     "name": "SC Bastia",
+     "from": "1980",
+     "to": "1984"
+    },
+    {
+     "name": "AS Saint-Étienne",
+     "from": "1984",
+     "to": "1986"
+    },
+    {
+     "name": "Montpellier Hérault Sport Club",
+     "from": "1986",
+     "to": "1989"
+    },
+    {
+     "name": "JS Saint-Pierroise",
+     "from": "1989",
+     "to": "1990"
+    },
+    {
+     "name": "Sporting Toulon Var",
+     "from": "1990",
+     "to": "1990"
+    },
+    {
+     "name": "Madura United",
+     "from": "1994",
+     "to": "1995"
+    },
+    {
+     "name": "Bali United",
+     "from": "1995",
+     "to": "1996"
+    }
+   ]
+  },
+  {
+   "name": "Vincent Aboubakar",
+   "clubs": [
+    {
+     "name": "Coton",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "AC Monza",
+     "from": "2010",
+     "to": "2013"
+    },
+    {
+     "name": "F.C. Lorient",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "FC Porto",
+     "from": "2014",
+     "to": ""
+    },
+    {
+     "name": "Beşiktaş J.K. (Football)",
+     "from": "2016",
+     "to": "2017"
+    }
+   ]
+  },
+  {
+   "name": "Wilfried Zaha",
+   "clubs": [
+    {
+     "name": "Crystal Palace",
+     "from": "2010",
+     "to": "2013"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2013",
+     "to": "2015"
+    },
+    {
+     "name": "Cardiff City",
+     "from": "2014",
+     "to": "2014"
+    },
+    {
+     "name": "Galatasaray S.K",
+     "from": "2023",
+     "to": ""
+    },
+    {
+     "name": "Olympique Lyonnais",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "Charlotte",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Michael Essien",
+   "clubs": [
+    {
+     "name": "SC Bastia",
+     "from": "2000",
+     "to": "2003"
+    },
+    {
+     "name": "Olympique Lyonnais",
+     "from": "2003",
+     "to": "2005"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2005",
+     "to": "2014"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Panathinaikos",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Persib Bandung",
+     "from": "2017",
+     "to": "2018"
+    },
+    {
+     "name": "Səbail FK",
+     "from": "2019",
+     "to": "2020"
+    }
+   ]
+  },
+  {
+   "name": "Asamoah Gyan",
+   "clubs": [
+    {
+     "name": "Liberty Professionals",
+     "from": "2003",
+     "to": "2003"
+    },
+    {
+     "name": "Udinese",
+     "from": "2003",
+     "to": "2008"
+    },
+    {
+     "name": "Modena",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Stade Rennais",
+     "from": "2008",
+     "to": "2010"
+    },
+    {
+     "name": "Sunderland",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "Al Ain",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Shanghai Port",
+     "from": "2015",
+     "to": "2017"
+    },
+    {
+     "name": "Shabab AlAhli Dubai Club",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Kayserispor",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "NorthEast United",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Legon Cities",
+     "from": "2020",
+     "to": "2021"
+    }
+   ]
+  },
+  {
+   "name": "Thomas Partey",
+   "clubs": [
+    {
+     "name": "Atlético Madrid B",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "RCD Mallorca",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2013",
+     "to": "2020"
+    },
+    {
+     "name": "Unión Deportiva Almería",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Arsenal",
+     "from": "2020",
+     "to": "2025"
+    },
+    {
+     "name": "Villarreal",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Jay-Jay Okocha",
+   "clubs": [
+    {
+     "name": "Borussia Neunkirchen",
+     "from": "1991",
+     "to": "1991"
+    },
+    {
+     "name": "Eintracht Frankfurt",
+     "from": "1992",
+     "to": "1996"
+    },
+    {
+     "name": "Fenerbahçe Istanbul",
+     "from": "1996",
+     "to": "1998"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "1998",
+     "to": "2002"
+    },
+    {
+     "name": "Bolton Wanderers",
+     "from": "2002",
+     "to": "2006"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2002",
+     "to": "2002"
+    },
+    {
+     "name": "Qatar",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "Hull City",
+     "from": "2007",
+     "to": "2008"
+    }
+   ]
+  },
+  {
+   "name": "Nwankwo Kanu",
+   "clubs": [
+    {
+     "name": "Heartland",
+     "from": "1992",
+     "to": "1993"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "1993",
+     "to": "1996"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "1996",
+     "to": "1999"
+    },
+    {
+     "name": "Arsenal",
+     "from": "1999",
+     "to": "2004"
+    },
+    {
+     "name": "West Bromwich Albion",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Portsmouth",
+     "from": "2006",
+     "to": "2012"
+    }
+   ]
+  },
+  {
+   "name": "Victor Osimhen",
+   "clubs": [
+    {
+     "name": "VfL Wolfsburg",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "Royal Charleroi S.C",
+     "from": "2018",
+     "to": "2019"
+    },
+    {
+     "name": "Lille OSC",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "SSC Napoli",
+     "from": "2020",
+     "to": "2025"
+    },
+    {
+     "name": "Galatasaray S.K",
+     "from": "2024",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "Ademola Lookman",
+   "clubs": [
+    {
+     "name": "Charlton Athletic",
+     "from": "2015",
+     "to": "2017"
+    },
+    {
+     "name": "Everton",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "RB Leipzig",
+     "from": "2018",
+     "to": "2022"
+    },
+    {
+     "name": "Fulham",
+     "from": "2020",
+     "to": "2021"
+    },
+    {
+     "name": "Leicester City",
+     "from": "2021",
+     "to": "2022"
+    },
+    {
+     "name": "Atalanta",
+     "from": "2022",
+     "to": "2026"
+    },
+    {
+     "name": "Atlético Madrid",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Riyad Mahrez",
+   "clubs": [
+    {
+     "name": "Quimper Kerfeunteun",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "Le Havre",
+     "from": "2011",
+     "to": "2013"
+    },
+    {
+     "name": "Leicester City",
+     "from": "2014",
+     "to": "2018"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2018",
+     "to": "2023"
+    },
+    {
+     "name": "Al Ahli",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Achraf Hakimi",
+   "clubs": [
+    {
+     "name": "Real Madrid Castilla",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2017",
+     "to": "2020"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2018",
+     "to": "2020"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2020",
+     "to": "2021"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2021",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Hakim Ziyech",
+   "clubs": [
+    {
+     "name": "SC Heerenveen",
+     "from": "2012",
+     "to": "2014"
+    },
+    {
+     "name": "FC Twente",
+     "from": "2014",
+     "to": "2016"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "2016",
+     "to": "2020"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2020",
+     "to": "2024"
+    },
+    {
+     "name": "Galatasaray S.K",
+     "from": "2023",
+     "to": "2024"
+    },
+    {
+     "name": "Al-Duhail",
+     "from": "2025",
+     "to": "2025"
+    },
+    {
+     "name": "Wydad Athletic Club",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Youssef En-Nesyri",
+   "clubs": [
+    {
+     "name": "Málaga",
+     "from": "2016",
+     "to": "2018"
+    },
+    {
+     "name": "Atlético Malagueño",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "CD Leganés",
+     "from": "2018",
+     "to": "2020"
+    },
+    {
+     "name": "Sevilla",
+     "from": "2020",
+     "to": "2024"
+    },
+    {
+     "name": "Fenerbahçe Istanbul",
+     "from": "2024",
+     "to": "2026"
+    },
+    {
+     "name": "Al Ittihad",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Sofyan Amrabat",
+   "clubs": [
+    {
+     "name": "FC Utrecht",
+     "from": "2014",
+     "to": "2017"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "2017",
+     "to": "2018"
+    },
+    {
+     "name": "Club Brugge K.V",
+     "from": "2018",
+     "to": "2020"
+    },
+    {
+     "name": "Hellas Verona",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "ACF Fiorentina",
+     "from": "2020",
+     "to": "2025"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2023",
+     "to": "2024"
+    },
+    {
+     "name": "Fenerbahçe Istanbul",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "Real Betis Balompié",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Guillermo Ochoa",
+   "clubs": [
+    {
+     "name": "Club América",
+     "from": "2003",
+     "to": "2011"
+    },
+    {
+     "name": "A.C. Ajaccio",
+     "from": "2011",
+     "to": "2014"
+    },
+    {
+     "name": "Málaga",
+     "from": "2014",
+     "to": "2017"
+    },
+    {
+     "name": "Granada",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Standard Liège",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "U.S. Salernitana 1919",
+     "from": "2022",
+     "to": "2024"
+    },
+    {
+     "name": "AVS Futebol SAD",
+     "from": "2024",
+     "to": "2025"
+    },
+    {
+     "name": "AEL Limassol",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Carlos Vela",
+   "clubs": [
+    {
+     "name": "Arsenal",
+     "from": "2005",
+     "to": "2012"
+    },
+    {
+     "name": "RC Celta de Vigo",
+     "from": "2006",
+     "to": "2006"
+    },
+    {
+     "name": "UD Salamanca",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "Club Atlético Osasuna",
+     "from": "2007",
+     "to": "2008"
+    },
+    {
+     "name": "West Bromwich Albion",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Real Sociedad",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Los Angeles",
+     "from": "2018",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Landon Donovan",
+   "clubs": [
+    {
+     "name": "IMG Soccer Academy",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Bayer 04 Leverkusen",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "San Jose Earthquakes",
+     "from": "2001",
+     "to": "2004"
+    },
+    {
+     "name": "LA Galaxy",
+     "from": "2005",
+     "to": "2014"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "Everton",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "Club León",
+     "from": "2018",
+     "to": "2018"
+    }
+   ]
+  },
+  {
+   "name": "Tim Howard",
+   "clubs": [
+    {
+     "name": "North Jersey Imperials",
+     "from": "1997",
+     "to": "1997"
+    },
+    {
+     "name": "Generation Adidas",
+     "from": "1998",
+     "to": "1998"
+    },
+    {
+     "name": "Red Bull New York",
+     "from": "1998",
+     "to": "2003"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2003",
+     "to": "2007"
+    },
+    {
+     "name": "Everton",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "Colorado Rapids",
+     "from": "2016",
+     "to": "2019"
+    },
+    {
+     "name": "Memphis 901",
+     "from": "2020",
+     "to": "2020"
+    }
+   ]
+  },
+  {
+   "name": "Carlos Valderrama",
+   "clubs": [
+    {
+     "name": "Millonarios",
+     "from": "1981",
+     "to": "1984"
+    },
+    {
+     "name": "Deportivo Cali",
+     "from": "1985",
+     "to": "1988"
+    },
+    {
+     "name": "Montpellier Hérault Sport Club",
+     "from": "1988",
+     "to": "1991"
+    },
+    {
+     "name": "Real Valladolid",
+     "from": "1991",
+     "to": "1992"
+    },
+    {
+     "name": "Deportivo Independiente Medellín",
+     "from": "1992",
+     "to": "1992"
+    },
+    {
+     "name": "Junior de Barranquilla",
+     "from": "1993",
+     "to": "1995"
+    },
+    {
+     "name": "Tampa Bay Mutiny",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Miami Fusion",
+     "from": "1998",
+     "to": "1998"
+    },
+    {
+     "name": "Colorado Rapids",
+     "from": "2001",
+     "to": "2002"
+    }
+   ]
+  },
+  {
+   "name": "Faustino Asprilla",
+   "clubs": [
+    {
+     "name": "Cúcuta Deportivo",
+     "from": "1988",
+     "to": "1989"
+    },
+    {
+     "name": "Atlético Nacional",
+     "from": "1989",
+     "to": "1992"
+    },
+    {
+     "name": "Parma",
+     "from": "1992",
+     "to": "1995"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "1996",
+     "to": "1998"
+    },
+    {
+     "name": "Sociedade Esportiva Palmeiras",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "Fluminense",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Atlante",
+     "from": "2001",
+     "to": "2002"
+    },
+    {
+     "name": "Estudiantes de La Plata",
+     "from": "2003",
+     "to": "2004"
+    },
+    {
+     "name": "Club Universidad de Chile",
+     "from": "2003",
+     "to": "2003"
+    },
+    {
+     "name": "Cortuluá",
+     "from": "2004",
+     "to": "2004"
+    }
+   ]
+  },
+  {
+   "name": "Yerry Mina",
+   "clubs": [
+    {
+     "name": "Deportivo Pasto",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Independiente Santa Fe",
+     "from": "2014",
+     "to": "2016"
+    },
+    {
+     "name": "Sociedade Esportiva Palmeiras",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2018",
+     "to": "2018"
+    },
+    {
+     "name": "Everton",
+     "from": "2018",
+     "to": "2023"
+    },
+    {
+     "name": "ACF Fiorentina",
+     "from": "2023",
+     "to": "2024"
+    },
+    {
+     "name": "Cagliari",
+     "from": "2024",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Claudio Bravo",
+   "clubs": [
+    {
+     "name": "Club Social y Deportivo Colo Colo",
+     "from": "2001",
+     "to": "2006"
+    },
+    {
+     "name": "Real Sociedad",
+     "from": "2006",
+     "to": "2014"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "2014",
+     "to": "2016"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2016",
+     "to": "2020"
+    },
+    {
+     "name": "Real Betis Balompié",
+     "from": "2020",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Patrik Schick",
+   "clubs": [
+    {
+     "name": "AC Sparta Prague",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Bohemians 1905",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "U.C. Sampdoria",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2017",
+     "to": "2020"
+    },
+    {
+     "name": "RB Leipzig",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Bayer 04 Leverkusen",
+     "from": "2020",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Xherdan Shaqiri",
+   "clubs": [
+    {
+     "name": "FC Basel",
+     "from": "2007",
+     "to": "2009"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2012",
+     "to": "2015"
+    },
+    {
+     "name": "Stoke City",
+     "from": "2015",
+     "to": "2018"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2015",
+     "to": "2015"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2018",
+     "to": "2021"
+    },
+    {
+     "name": "Olympique Lyonnais",
+     "from": "2021",
+     "to": "2022"
+    },
+    {
+     "name": "Chicago Fire",
+     "from": "2022",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Granit Xhaka",
+   "clubs": [
+    {
+     "name": "FC Basel",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "Borussia Mönchengladbach",
+     "from": "2012",
+     "to": "2016"
+    },
+    {
+     "name": "Arsenal",
+     "from": "2016",
+     "to": "2023"
+    },
+    {
+     "name": "Bayer 04 Leverkusen",
+     "from": "2023",
+     "to": "2025"
+    },
+    {
+     "name": "Sunderland",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Yann Sommer",
+   "clubs": [
+    {
+     "name": "FC Basel",
+     "from": "2005",
+     "to": "2007"
+    },
+    {
+     "name": "FC Vaduz",
+     "from": "2007",
+     "to": "2009"
+    },
+    {
+     "name": "Grasshopper Club Zürich",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "Borussia Mönchengladbach",
+     "from": "2014",
+     "to": "2023"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2023",
+     "to": "2023"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2023",
+     "to": "2026"
+    }
+   ]
+  },
+  {
+   "name": "Manuel Akanji",
+   "clubs": [
+    {
+     "name": "FC Winterthur",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "FC Basel",
+     "from": "2015",
+     "to": "2018"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2018",
+     "to": "2022"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2022",
+     "to": ""
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Breel Embolo",
+   "clubs": [
+    {
+     "name": "FC Basel",
+     "from": "2014",
+     "to": "2016"
+    },
+    {
+     "name": "Schalke 04",
+     "from": "2016",
+     "to": "2019"
+    },
+    {
+     "name": "Borussia Mönchengladbach",
+     "from": "2019",
+     "to": "2022"
+    },
+    {
+     "name": "AS Monaco",
+     "from": "2022",
+     "to": "2025"
+    },
+    {
+     "name": "Stade Rennais",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "David Alaba",
+   "clubs": [
+    {
+     "name": "FK Austria Wien",
+     "from": "2002",
+     "to": "2008"
+    },
+    {
+     "name": "FC Bayern Munich II",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2010",
+     "to": "2021"
+    },
+    {
+     "name": "TSG 1899 Hoffenheim",
+     "from": "2011",
+     "to": "2011"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2021",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Marcel Sabitzer",
+   "clubs": [
+    {
+     "name": "Admira Wacker",
+     "from": "2010",
+     "to": "2013"
+    },
+    {
+     "name": "SK Rapid Wien",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "RB Leipzig",
+     "from": "2014",
+     "to": "2021"
+    },
+    {
+     "name": "FC Red Bull Salzburg",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2021",
+     "to": "2023"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2023",
+     "to": "2023"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2023",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Hristo Stoichkov",
+   "clubs": [
+    {
+     "name": "FC Maritsa Plovdiv",
+     "from": "1977",
+     "to": "1981"
+    },
+    {
+     "name": "FC Hebros",
+     "from": "1982",
+     "to": "1984"
+    },
+    {
+     "name": "PFC CSKA Sofia",
+     "from": "1984",
+     "to": "1990"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1990",
+     "to": "1995"
+    },
+    {
+     "name": "Parma",
+     "from": "1995",
+     "to": "1996"
+    },
+    {
+     "name": "Al-Nassr",
+     "from": "1998",
+     "to": "1998"
+    },
+    {
+     "name": "Kashiwa Reysol",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Chicago Fire",
+     "from": "2000",
+     "to": "2002"
+    },
+    {
+     "name": "D.C. United",
+     "from": "2003",
+     "to": "2003"
+    }
+   ]
+  },
+  {
+   "name": "Gheorghe Hagi",
+   "clubs": [
+    {
+     "name": "SSC Farul Constanța",
+     "from": "1982",
+     "to": "1983"
+    },
+    {
+     "name": "FC Sportul Studențesc București",
+     "from": "1983",
+     "to": "1987"
+    },
+    {
+     "name": "FCSB",
+     "from": "1987",
+     "to": "1990"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "1990",
+     "to": "1992"
+    },
+    {
+     "name": "Brescia",
+     "from": "1992",
+     "to": "1994"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1994",
+     "to": "1996"
+    },
+    {
+     "name": "Galatasaray S.K",
+     "from": "1996",
+     "to": "2001"
+    }
+   ]
+  },
+  {
+   "name": "Angelos Charisteas",
+   "clubs": [
+    {
+     "name": "Aris Thessaloniki",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "Athinaikos",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "SV Werder Bremen",
+     "from": "2002",
+     "to": "2005"
+    },
+    {
+     "name": "AFC Ajax",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "Feyenoord Rotterdam",
+     "from": "2006",
+     "to": "2007"
+    },
+    {
+     "name": "1",
+     "from": "2007",
+     "to": "2010"
+    },
+    {
+     "name": "Bayer 04 Leverkusen",
+     "from": "2009",
+     "to": "2009"
+    },
+    {
+     "name": "AC Arles",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "Schalke 04",
+     "from": "2011",
+     "to": "2011"
+    },
+    {
+     "name": "Panetolikos",
+     "from": "2011",
+     "to": "2013"
+    },
+    {
+     "name": "Al-Nassr",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "Alshariqa",
+     "from": "2013",
+     "to": "2013"
+    },
+    {
+     "name": "Sydney Olympic",
+     "from": "2014",
+     "to": "2014"
+    }
+   ]
+  },
+  {
+   "name": "Aron Gunnarsson",
+   "clubs": [
+    {
+     "name": "Þór Akureyri",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "AZ Alkmaar",
+     "from": "2006",
+     "to": "2008"
+    },
+    {
+     "name": "Coventry City",
+     "from": "2008",
+     "to": "2011"
+    },
+    {
+     "name": "Cardiff City",
+     "from": "2011",
+     "to": "2019"
+    },
+    {
+     "name": "Al-Arabi",
+     "from": "2019",
+     "to": "2024"
+    },
+    {
+     "name": "Al-Gharafa",
+     "from": "2024",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Damien Duff",
+   "clubs": [
+    {
+     "name": "Blackburn Rovers",
+     "from": "1996",
+     "to": "2003"
+    },
+    {
+     "name": "Chelsea",
+     "from": "2003",
+     "to": "2006"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "2006",
+     "to": "2009"
+    },
+    {
+     "name": "Fulham",
+     "from": "2009",
+     "to": "2014"
+    },
+    {
+     "name": "Melbourne City",
+     "from": "2014",
+     "to": "2015"
+    },
+    {
+     "name": "Shamrock Rovers",
+     "from": "2015",
+     "to": "2015"
+    }
+   ]
+  },
+  {
+   "name": "Shay Given",
+   "clubs": [
+    {
+     "name": "Blackburn Rovers",
+     "from": "1994",
+     "to": "1997"
+    },
+    {
+     "name": "Swindon Town",
+     "from": "1994",
+     "to": "1994"
+    },
+    {
+     "name": "Sunderland",
+     "from": "1996",
+     "to": "1996"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "1997",
+     "to": "2009"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2009",
+     "to": "2011"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2011",
+     "to": "2015"
+    },
+    {
+     "name": "Middlesbrough",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Stoke City",
+     "from": "2015",
+     "to": "2017"
+    }
+   ]
+  },
+  {
+   "name": "Robbie Keane",
+   "clubs": [
+    {
+     "name": "Wolverhampton Wanderers",
+     "from": "1997",
+     "to": "1999"
+    },
+    {
+     "name": "Coventry City",
+     "from": "1999",
+     "to": "2000"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Leeds United",
+     "from": "2001",
+     "to": "2001"
+    },
+    {
+     "name": "Tottenham Hotspur",
+     "from": "2002",
+     "to": "2008"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2008",
+     "to": "2009"
+    },
+    {
+     "name": "Celtic",
+     "from": "2010",
+     "to": "2010"
+    },
+    {
+     "name": "West Ham United",
+     "from": "2011",
+     "to": "2011"
+    },
+    {
+     "name": "LA Galaxy",
+     "from": "2011",
+     "to": "2016"
+    },
+    {
+     "name": "Aston Villa",
+     "from": "2012",
+     "to": "2012"
+    },
+    {
+     "name": "ATK",
+     "from": "2017",
+     "to": "2018"
+    }
+   ]
+  },
+  {
+   "name": "Liam Brady",
+   "clubs": [
+    {
+     "name": "Arsenal",
+     "from": "1973",
+     "to": "1980"
+    },
+    {
+     "name": "Juventus",
+     "from": "1980",
+     "to": "1982"
+    },
+    {
+     "name": "U.C. Sampdoria",
+     "from": "1982",
+     "to": "1984"
+    },
+    {
+     "name": "Inter Milan",
+     "from": "1984",
+     "to": "1986"
+    },
+    {
+     "name": "Ascoli",
+     "from": "1986",
+     "to": "1987"
+    },
+    {
+     "name": "West Ham United",
+     "from": "1987",
+     "to": "1990"
+    }
+   ]
+  },
+  {
+   "name": "Ian Rush",
+   "clubs": [
+    {
+     "name": "Chester City",
+     "from": "1978",
+     "to": "1980"
+    },
+    {
+     "name": "Liverpool",
+     "from": "1980",
+     "to": "1986"
+    },
+    {
+     "name": "Juventus",
+     "from": "1986",
+     "to": "1988"
+    },
+    {
+     "name": "Leeds United",
+     "from": "1996",
+     "to": "1997"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "1997",
+     "to": "1998"
+    },
+    {
+     "name": "Sheffield United",
+     "from": "1998",
+     "to": "1998"
+    },
+    {
+     "name": "Wrexham",
+     "from": "1998",
+     "to": "1999"
+    },
+    {
+     "name": "Sydney Olympic",
+     "from": "1999",
+     "to": "2000"
+    }
+   ]
+  },
+  {
+   "name": "Mark Hughes",
+   "clubs": [
+    {
+     "name": "Manchester United",
+     "from": "1980",
+     "to": "1986"
+    },
+    {
+     "name": "FC Barcelona",
+     "from": "1986",
+     "to": "1988"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "1987",
+     "to": "1988"
+    },
+    {
+     "name": "Chelsea",
+     "from": "1995",
+     "to": "1998"
+    },
+    {
+     "name": "Southampton",
+     "from": "1998",
+     "to": "2000"
+    },
+    {
+     "name": "Everton",
+     "from": "2000",
+     "to": "2000"
+    },
+    {
+     "name": "Blackburn Rovers",
+     "from": "2000",
+     "to": "2002"
+    }
+   ]
+  },
+  {
+   "name": "Gary Speed",
+   "clubs": [
+    {
+     "name": "Leeds United",
+     "from": "1988",
+     "to": "1996"
+    },
+    {
+     "name": "Everton",
+     "from": "1996",
+     "to": "1998"
+    },
+    {
+     "name": "Newcastle United",
+     "from": "1998",
+     "to": "2004"
+    },
+    {
+     "name": "Bolton Wanderers",
+     "from": "2004",
+     "to": "2008"
+    },
+    {
+     "name": "Sheffield United",
+     "from": "2008",
+     "to": "2010"
+    }
+   ]
+  },
+  {
+   "name": "Aaron Ramsey",
+   "clubs": [
+    {
+     "name": "Cardiff City",
+     "from": "2006",
+     "to": "2008"
+    },
+    {
+     "name": "Arsenal",
+     "from": "2008",
+     "to": "2019"
+    },
+    {
+     "name": "Nottingham Forest",
+     "from": "2010",
+     "to": "2011"
+    },
+    {
+     "name": "Juventus",
+     "from": "2019",
+     "to": "2022"
+    },
+    {
+     "name": "Rangers",
+     "from": "2022",
+     "to": "2022"
+    },
+    {
+     "name": "OGC Nice",
+     "from": "2022",
+     "to": "2023"
+    },
+    {
+     "name": "Pumas UNAM",
+     "from": "2025",
+     "to": "2025"
+    }
+   ]
+  },
+  {
+   "name": "Graeme Souness",
+   "clubs": [
+    {
+     "name": "Tottenham Hotspur",
+     "from": "1970",
+     "to": "1972"
+    },
+    {
+     "name": "Middlesbrough",
+     "from": "1972",
+     "to": "1978"
+    },
+    {
+     "name": "Montreal Olympique",
+     "from": "1972",
+     "to": "1972"
+    },
+    {
+     "name": "Liverpool",
+     "from": "1978",
+     "to": "1984"
+    },
+    {
+     "name": "West Adelaide Soccer Club",
+     "from": "1978",
+     "to": "1978"
+    },
+    {
+     "name": "U.C. Sampdoria",
+     "from": "1984",
+     "to": "1986"
+    },
+    {
+     "name": "Rangers",
+     "from": "1986",
+     "to": "1991"
+    }
+   ]
+  },
+  {
+   "name": "Harry Kewell",
+   "clubs": [
+    {
+     "name": "Leeds United",
+     "from": "1996",
+     "to": "2003"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2003",
+     "to": "2008"
+    },
+    {
+     "name": "Galatasaray S.K",
+     "from": "2008",
+     "to": "2011"
+    },
+    {
+     "name": "Melbourne Victory",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Melbourne City",
+     "from": "2013",
+     "to": "2014"
+    },
+    {
+     "name": "Al-Gharafa",
+     "from": "2013",
+     "to": "2013"
+    }
+   ]
+  },
+  {
+   "name": "Tim Cahill",
+   "clubs": [
+    {
+     "name": "Millwall",
+     "from": "1998",
+     "to": "2004"
+    },
+    {
+     "name": "Everton",
+     "from": "2004",
+     "to": "2012"
+    },
+    {
+     "name": "Red Bull New York",
+     "from": "2012",
+     "to": "2015"
+    },
+    {
+     "name": "Shanghai Shenhua",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Zhejiang Professional",
+     "from": "2016",
+     "to": "2016"
+    },
+    {
+     "name": "Melbourne City",
+     "from": "2016",
+     "to": "2017"
+    },
+    {
+     "name": "Jamshedpur",
+     "from": "2018",
+     "to": "2019"
+    }
+   ]
+  },
+  {
+   "name": "Hidetoshi Nakata",
+   "clubs": [
+    {
+     "name": "Shonan Bellmare",
+     "from": "1995",
+     "to": "1998"
+    },
+    {
+     "name": "A.C. Perugia",
+     "from": "1998",
+     "to": "2000"
+    },
+    {
+     "name": "AS Roma",
+     "from": "2000",
+     "to": "2001"
+    },
+    {
+     "name": "Parma",
+     "from": "2001",
+     "to": "2004"
+    },
+    {
+     "name": "Bologna",
+     "from": "2004",
+     "to": "2004"
+    },
+    {
+     "name": "ACF Fiorentina",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Bolton Wanderers",
+     "from": "2005",
+     "to": "2006"
+    }
+   ]
+  },
+  {
+   "name": "Keisuke Honda",
+   "clubs": [
+    {
+     "name": "Nagoya Grampus",
+     "from": "2004",
+     "to": "2007"
+    },
+    {
+     "name": "VVV-Venlo",
+     "from": "2007",
+     "to": "2009"
+    },
+    {
+     "name": "PFC CSKA Moscow",
+     "from": "2009",
+     "to": "2013"
+    },
+    {
+     "name": "AC Milan",
+     "from": "2014",
+     "to": "2017"
+    },
+    {
+     "name": "CF Pachuca",
+     "from": "2017",
+     "to": "2018"
+    },
+    {
+     "name": "Melbourne Victory",
+     "from": "2018",
+     "to": "2019"
+    },
+    {
+     "name": "SBV Vitesse",
+     "from": "2019",
+     "to": "2019"
+    },
+    {
+     "name": "Botafogo F.R",
+     "from": "2020",
+     "to": "2020"
+    },
+    {
+     "name": "Neftchi Baku PFC",
+     "from": "2021",
+     "to": "2021"
+    },
+    {
+     "name": "FK Sūduva",
+     "from": "2021",
+     "to": "2022"
+    },
+    {
+     "name": "Paro",
+     "from": "2024",
+     "to": "2024"
+    }
+   ]
+  },
+  {
+   "name": "Shinji Kagawa",
+   "clubs": [
+    {
+     "name": "Cerezo Osaka",
+     "from": "2006",
+     "to": "2010"
+    },
+    {
+     "name": "Borussia Dortmund",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2012",
+     "to": "2014"
+    },
+    {
+     "name": "Borussia Dortmund II",
+     "from": "2018",
+     "to": "2018"
+    },
+    {
+     "name": "Beşiktaş J.K. (Football)",
+     "from": "2019",
+     "to": "2019"
+    },
+    {
+     "name": "Real Zaragoza",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "PAOK",
+     "from": "2021",
+     "to": "2021"
+    },
+    {
+     "name": "Sint-Truidense V.V",
+     "from": "2022",
+     "to": "2023"
+    }
+   ]
+  },
+  {
+   "name": "Shunsuke Nakamura",
+   "clubs": [
+    {
+     "name": "Yokohama F. Marinos",
+     "from": "1997",
+     "to": "2002"
+    },
+    {
+     "name": "AS Reggina 1914",
+     "from": "2002",
+     "to": "2005"
+    },
+    {
+     "name": "Celtic",
+     "from": "2005",
+     "to": "2009"
+    },
+    {
+     "name": "RCD Espanyol de Barcelona",
+     "from": "2009",
+     "to": "2010"
+    },
+    {
+     "name": "Júbilo Iwata",
+     "from": "2017",
+     "to": "2019"
+    },
+    {
+     "name": "Yokohama",
+     "from": "2019",
+     "to": "2022"
+    }
+   ]
+  },
+  {
+   "name": "Wataru Endo",
+   "clubs": [
+    {
+     "name": "Shonan Bellmare",
+     "from": "2010",
+     "to": "2015"
+    },
+    {
+     "name": "Urawa Red Diamonds",
+     "from": "2016",
+     "to": "2018"
+    },
+    {
+     "name": "Sint-Truidense V.V",
+     "from": "2018",
+     "to": "2020"
+    },
+    {
+     "name": "VfB Stuttgart",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Liverpool",
+     "from": "2023",
+     "to": "http"
+    }
+   ]
+  },
+  {
+   "name": "Takefusa Kubo",
+   "clubs": [
+    {
+     "name": "FC Tokyo",
+     "from": "2016",
+     "to": "2019"
+    },
+    {
+     "name": "Yokohama F. Marinos",
+     "from": "2018",
+     "to": "2019"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2019",
+     "to": "2022"
+    },
+    {
+     "name": "RCD Mallorca",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Villarreal",
+     "from": "2020",
+     "to": "2021"
+    },
+    {
+     "name": "Getafe",
+     "from": "2021",
+     "to": "2021"
+    },
+    {
+     "name": "Real Sociedad",
+     "from": "2022",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Hwang Hee-chan",
+   "clubs": [
+    {
+     "name": "FC Liefering",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "FC Red Bull Salzburg",
+     "from": "2015",
+     "to": "2020"
+    },
+    {
+     "name": "Hamburger SV",
+     "from": "2018",
+     "to": "2019"
+    },
+    {
+     "name": "RB Leipzig",
+     "from": "2020",
+     "to": "2022"
+    },
+    {
+     "name": "Wolverhampton Wanderers",
+     "from": "2021",
+     "to": "2022"
+    }
+   ]
+  },
+  {
+   "name": "Keylor Navas",
+   "clubs": [
+    {
+     "name": "Deportivo Saprissa",
+     "from": "2005",
+     "to": "2010"
+    },
+    {
+     "name": "Albacete Balompié",
+     "from": "2010",
+     "to": "2012"
+    },
+    {
+     "name": "Levante UD",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Real Madrid",
+     "from": "2014",
+     "to": "2019"
+    },
+    {
+     "name": "Paris Saint-Germain",
+     "from": "2019",
+     "to": "2024"
+    },
+    {
+     "name": "Nottingham Forest",
+     "from": "2023",
+     "to": "2023"
+    },
+    {
+     "name": "Newell's Old Boys",
+     "from": "2025",
+     "to": "2025"
+    },
+    {
+     "name": "Pumas UNAM",
+     "from": "2025",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Antonio Valencia",
+   "clubs": [
+    {
+     "name": "Club Deportivo El Nacional",
+     "from": "2003",
+     "to": "2005"
+    },
+    {
+     "name": "Recreativo de Huelva",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "Villarreal",
+     "from": "2005",
+     "to": "2008"
+    },
+    {
+     "name": "Wigan Athletic",
+     "from": "2006",
+     "to": "2008"
+    },
+    {
+     "name": "Manchester United",
+     "from": "2009",
+     "to": "2019"
+    },
+    {
+     "name": "Liga Deportiva Universitaria de Quito",
+     "from": "2019",
+     "to": "2020"
+    },
+    {
+     "name": "Querétaro",
+     "from": "2020",
+     "to": "2021"
+    }
+   ]
+  },
+  {
+   "name": "Roque Santa Cruz",
+   "clubs": [
+    {
+     "name": "Club Olimpia",
+     "from": "1997",
+     "to": "1999"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "1999",
+     "to": "2007"
+    },
+    {
+     "name": "FC Bayern Munich II",
+     "from": "2005",
+     "to": "2006"
+    },
+    {
+     "name": "Blackburn Rovers",
+     "from": "2007",
+     "to": "2009"
+    },
+    {
+     "name": "Manchester City",
+     "from": "2009",
+     "to": "2013"
+    },
+    {
+     "name": "Real Betis Balompié",
+     "from": "2011",
+     "to": "2012"
+    },
+    {
+     "name": "Málaga",
+     "from": "2012",
+     "to": "2013"
+    },
+    {
+     "name": "Cruz Azul",
+     "from": "2015",
+     "to": "2016"
+    },
+    {
+     "name": "Club Libertad",
+     "from": "2022",
+     "to": "2025"
+    },
+    {
+     "name": "Club Nacional",
+     "from": "2026",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "name": "Paolo Guerrero",
+   "clubs": [
+    {
+     "name": "Club Alianza Lima",
+     "from": "1991",
+     "to": "2001"
+    },
+    {
+     "name": "FC Bayern Munich II",
+     "from": "2002",
+     "to": "2006"
+    },
+    {
+     "name": "FC Bayern Munich",
+     "from": "2004",
+     "to": "2006"
+    },
+    {
+     "name": "Hamburger SV",
+     "from": "2006",
+     "to": "2012"
+    },
+    {
+     "name": "S.C. Corinthians Paulista",
+     "from": "2012",
+     "to": "2015"
+    },
+    {
+     "name": "Clube de Regatas do Flamengo",
+     "from": "2015",
+     "to": "2018"
+    },
+    {
+     "name": "S.C. Internacional",
+     "from": "2018",
+     "to": "2021"
+    },
+    {
+     "name": "Avaí Futebol Clube",
+     "from": "2022",
+     "to": "2023"
+    },
+    {
+     "name": "Racing Club",
+     "from": "2023",
+     "to": "2023"
+    },
+    {
+     "name": "Liga Deportiva Universitaria de Quito",
+     "from": "2023",
+     "to": "2023"
+    },
+    {
+     "name": "CD Universidad César Vallejo",
+     "from": "2024",
+     "to": "2024"
+    }
+   ]
   }
+ ],
+ "tried": [
+  "Robin van Persie",
+  "Andriy Shevchenko",
+  "Wayne Rooney",
+  "Lionel Messi",
+  "Diego Maradona",
+  "Alfredo Di Stefano",
+  "Sergio Aguero",
+  "Mario Kempes",
+  "Juan Roman Riquelme",
+  "Gonzalo Higuain",
+  "Paulo Dybala",
+  "Angel Di Maria",
+  "Javier Mascherano",
+  "Hernan Crespo",
+  "Claudio Caniggia",
+  "Javier Zanetti",
+  "Juan Sebastian Veron",
+  "Lautaro Martinez",
+  "Julian Alvarez",
+  "Enzo Fernandez",
+  "Nicolas Otamendi",
+  "Emiliano Martinez",
+  "Rodrigo De Paul",
+  "Ronaldo",
+  "Ronaldinho",
+  "Romario",
+  "Rivaldo",
+  "Roberto Carlos",
+  "Socrates",
+  "Garrincha",
+  "Bebeto",
+  "Neymar",
+  "Adriano",
+  "Casemiro",
+  "Marcelo",
+  "Thiago Silva",
+  "Fabinho",
+  "Vinicius Junior",
+  "Richarlison",
+  "Raphinha",
+  "Rodrygo",
+  "Alisson",
+  "Ederson",
+  "Philippe Coutinho",
+  "Roberto Firmino",
+  "Gabriel Jesus",
+  "Bruno Guimaraes",
+  "Lucas Paqueta",
+  "Endrick",
+  "Antony",
+  "Franz Beckenbauer",
+  "Gerd Muller",
+  "Thomas Muller",
+  "Jurgen Klinsmann",
+  "Lothar Matthaus",
+  "Rudi Voller",
+  "Oliver Kahn",
+  "Miroslav Klose",
+  "Lukas Podolski",
+  "Bastian Schweinsteiger",
+  "Philipp Lahm",
+  "Sami Khedira",
+  "Manuel Neuer",
+  "Toni Kroos",
+  "Mats Hummels",
+  "Jerome Boateng",
+  "Ilkay Gundogan",
+  "Timo Werner",
+  "Kai Havertz",
+  "Serge Gnabry",
+  "Michael Ballack",
+  "Karl-Heinz Rummenigge",
+  "Marco Reus",
+  "Leon Goretzka",
+  "Leroy Sane",
+  "Jamal Musiala",
+  "Florian Wirtz",
+  "Cristiano Ronaldo",
+  "Luis Figo",
+  "Eusebio",
+  "Rui Costa",
+  "Deco",
+  "Nani",
+  "Pepe",
+  "Bruno Fernandes",
+  "Bernardo Silva",
+  "Joao Felix",
+  "Joao Cancelo",
+  "Ruben Dias",
+  "Ricardo Quaresma",
+  "Rafael Leao",
+  "Vitinha",
+  "Goncalo Ramos",
+  "Zinedine Zidane",
+  "Thierry Henry",
+  "Michel Platini",
+  "Kylian Mbappe",
+  "Antoine Griezmann",
+  "Paul Pogba",
+  "N'Golo Kante",
+  "Karim Benzema",
+  "Marcus Thuram",
+  "Marcel Desailly",
+  "Didier Deschamps",
+  "Patrick Vieira",
+  "Eric Cantona",
+  "Jean-Pierre Papin",
+  "Laurent Blanc",
+  "Bixente Lizarazu",
+  "Fabien Barthez",
+  "Claude Makelele",
+  "Franck Ribery",
+  "Raphael Varane",
+  "Olivier Giroud",
+  "Kingsley Coman",
+  "Ousmane Dembele",
+  "William Saliba",
+  "Aurelien Tchouameni",
+  "Eduardo Camavinga",
+  "Mike Maignan",
+  "Christopher Nkunku",
+  "Andres Iniesta",
+  "Iker Casillas",
+  "Carles Puyol",
+  "Sergio Ramos",
+  "Gerard Pique",
+  "David Villa",
+  "Xabi Alonso",
+  "Sergio Busquets",
+  "David Silva",
+  "Raul Gonzalez",
+  "Fernando Morientes",
+  "Fernando Hierro",
+  "Pep Guardiola",
+  "Luis Enrique",
+  "Emilio Butragueno",
+  "Marco Asensio",
+  "Isco Alarcon",
+  "Alvaro Morata",
+  "Dani Carvajal",
+  "Marcos Llorente",
+  "Dani Olmo",
+  "Pedri Gonzalez",
+  "Lamine Yamal",
+  "Marc Cucurella",
+  "Rodri Hernandez",
+  "Mikel Oyarzabal",
+  "Nico Williams",
+  "Ferran Torres",
+  "Roberto Baggio",
+  "Paolo Maldini",
+  "Fabio Cannavaro",
+  "Gianluigi Buffon",
+  "Andrea Pirlo",
+  "Francesco Totti",
+  "Alessandro Del Piero",
+  "Filippo Inzaghi",
+  "Marco Materazzi",
+  "Gennaro Gattuso",
+  "Alessandro Nesta",
+  "Gianluca Zambrotta",
+  "Antonio Cassano",
+  "Luca Toni",
+  "Marco Verratti",
+  "Giorgio Chiellini",
+  "Leonardo Bonucci",
+  "Ciro Immobile",
+  "Lorenzo Insigne",
+  "Gianluigi Donnarumma",
+  "Nicolo Barella",
+  "Federico Chiesa",
+  "Luigi Riva",
+  "Paolo Rossi",
+  "Gianfranco Zola",
+  "Gianluca Vialli",
+  "Roberto Mancini",
+  "David Beckham",
+  "Steven Gerrard",
+  "Frank Lampard",
+  "John Terry",
+  "Rio Ferdinand",
+  "Paul Scholes",
+  "Gary Neville",
+  "Alan Shearer",
+  "Gary Lineker",
+  "Paul Gascoigne",
+  "Bryan Robson",
+  "Glenn Hoddle",
+  "Chris Waddle",
+  "Matthew Le Tissier",
+  "Teddy Sheringham",
+  "Raheem Sterling",
+  "Jadon Sancho",
+  "Phil Foden",
+  "Jude Bellingham",
+  "Marcus Rashford",
+  "Harry Maguire",
+  "John Stones",
+  "Jordan Pickford",
+  "Kieran Trippier",
+  "Jordan Henderson",
+  "Trent Alexander-Arnold",
+  "Jack Grealish",
+  "Declan Rice",
+  "Kyle Walker",
+  "Theo Walcott",
+  "Jack Wilshere",
+  "Michael Carrick",
+  "Robbie Fowler",
+  "Ian Wright",
+  "John Barnes",
+  "Bukayo Saka",
+  "Cole Palmer",
+  "Ollie Watkins",
+  "Johan Cruyff",
+  "Marco Van Basten",
+  "Dennis Bergkamp",
+  "Ruud Gullit",
+  "Frank Rijkaard",
+  "Clarence Seedorf",
+  "Edgar Davids",
+  "Patrick Kluivert",
+  "Arjen Robben",
+  "Robin Van Persie",
+  "Ruud Van Nistelrooy",
+  "Jaap Stam",
+  "Edwin Van der Sar",
+  "Frank De Boer",
+  "Dirk Kuyt",
+  "Rafael Van der Vaart",
+  "Ronald Koeman",
+  "Marc Overmars",
+  "Stefan De Vrij",
+  "Georginio Wijnaldum",
+  "Memphis Depay",
+  "Matthijs De Ligt",
+  "Cody Gakpo",
+  "Xavi Simons",
+  "Tijjani Reijnders",
+  "Eden Hazard",
+  "Kevin De Bruyne",
+  "Thibaut Courtois",
+  "Vincent Kompany",
+  "Axel Witsel",
+  "Marouane Fellaini",
+  "Dries Mertens",
+  "Yannick Carrasco",
+  "Jan Vertonghen",
+  "Toby Alderweireld",
+  "Youri Tielemans",
+  "Jeremy Doku",
+  "Leandro Trossard",
+  "Timothy Castagne",
+  "Erling Haaland",
+  "Martin Odegaard",
+  "Luka Modric",
+  "Ivan Rakitic",
+  "Mario Mandzukic",
+  "Ivan Perisic",
+  "Mateo Kovacic",
+  "Marcelo Brozovic",
+  "Domagoj Vida",
+  "Dejan Lovren",
+  "Davor Suker",
+  "Zvonimir Boban",
+  "Slaven Bilic",
+  "Darijo Srna",
+  "Josko Gvardiol",
+  "Nikola Vlasic",
+  "Andrej Kramaric",
+  "Luis Suarez",
+  "Diego Forlan",
+  "Diego Godin",
+  "Jose Maria Gimenez",
+  "Rodrigo Bentancur",
+  "Federico Valverde",
+  "Darwin Nunez",
+  "Enzo Francescoli",
+  "Ronald Araujo",
+  "Robert Lewandowski",
+  "Zbigniew Boniek",
+  "Wojciech Szczesny",
+  "Arkadiusz Milik",
+  "Piotr Zielinski",
+  "Zlatan Ibrahimovic",
+  "Henrik Larsson",
+  "Freddie Ljungberg",
+  "Emil Forsberg",
+  "Alexander Isak",
+  "Dejan Kulusevski",
+  "Michael Laudrup",
+  "Peter Schmeichel",
+  "Christian Eriksen",
+  "Pierre-Emile Hojbjerg",
+  "Andriy Yarmolenko",
+  "Oleksandr Zinchenko",
+  "Mykhaylo Mudryk",
+  "Mohamed Salah",
+  "Omar Marmoush",
+  "Sadio Mane",
+  "Kalidou Koulibaly",
+  "Idrissa Gueye",
+  "Nicolas Jackson",
+  "Edouard Mendy",
+  "Roger Milla",
+  "Andre Onana",
+  "Vincent Aboubakar",
+  "Yaya Toure",
+  "Wilfried Zaha",
+  "Nicolas Pepe",
+  "Franck Kessie",
+  "Sebastien Haller",
+  "Michael Essien",
+  "Asamoah Gyan",
+  "Andre Ayew",
+  "Mohammed Kudus",
+  "Thomas Partey",
+  "Jay-Jay Okocha",
+  "Nwankwo Kanu",
+  "John Obi Mikel",
+  "Victor Osimhen",
+  "Ademola Lookman",
+  "Alex Iwobi",
+  "Samuel Chukwueze",
+  "Riyad Mahrez",
+  "Achraf Hakimi",
+  "Hakim Ziyech",
+  "Youssef En-Nesyri",
+  "Sofyan Amrabat",
+  "Javier Hernandez",
+  "Rafael Marquez",
+  "Cuauhtemoc Blanco",
+  "Hirving Lozano",
+  "Guillermo Ochoa",
+  "Carlos Vela",
+  "Raul Jimenez",
+  "Andres Guardado",
+  "Landon Donovan",
+  "Tim Howard",
+  "Clint Dempsey",
+  "Christian Pulisic",
+  "Weston McKennie",
+  "Tyler Adams",
+  "Yunus Musah",
+  "Carlos Valderrama",
+  "Faustino Asprilla",
+  "James Rodriguez",
+  "Rene Higuita",
+  "Yerry Mina",
+  "Luis Diaz",
+  "Alexis Sanchez",
+  "Claudio Bravo",
+  "Marcelo Salas",
+  "Ivan Zamorano",
+  "Pavel Nedved",
+  "Tomas Rosicky",
+  "Petr Cech",
+  "Patrik Schick",
+  "Xherdan Shaqiri",
+  "Granit Xhaka",
+  "Yann Sommer",
+  "Manuel Akanji",
+  "Breel Embolo",
+  "David Alaba",
+  "Marko Arnautovic",
+  "Marcel Sabitzer",
+  "Nemanja Vidic",
+  "Dejan Stankovic",
+  "Branislav Ivanovic",
+  "Aleksandar Mitrovic",
+  "Dusan Vlahovic",
+  "Dusan Tadic",
+  "Nemanja Matic",
+  "Andrei Arshavin",
+  "Hristo Stoichkov",
+  "Gheorghe Hagi",
+  "Ferenc Puskas",
+  "Angelos Charisteas",
+  "Hakan Sukur",
+  "Hakan Calhanoglu",
+  "Kenan Yildiz",
+  "Arda Guler",
+  "Marek Hamsik",
+  "Edin Dzeko",
+  "Miralem Pjanic",
+  "Gylfi Sigurdsson",
+  "Aron Gunnarsson",
+  "Roy Keane",
+  "Damien Duff",
+  "Shay Given",
+  "Robbie Keane",
+  "Paul McGrath",
+  "Liam Brady",
+  "Gareth Bale",
+  "Ryan Giggs",
+  "Ian Rush",
+  "Mark Hughes",
+  "Gary Speed",
+  "Aaron Ramsey",
+  "Kenny Dalglish",
+  "Denis Law",
+  "Graeme Souness",
+  "Andy Robertson",
+  "Scott McTominay",
+  "Harry Kewell",
+  "Tim Cahill",
+  "Alphonso Davies",
+  "Jonathan David",
+  "Hidetoshi Nakata",
+  "Keisuke Honda",
+  "Shinji Kagawa",
+  "Shunsuke Nakamura",
+  "Wataru Endo",
+  "Kaoru Mitoma",
+  "Takefusa Kubo",
+  "Ritsu Doan",
+  "Kim Min-jae",
+  "Hwang Hee-chan",
+  "Keylor Navas",
+  "Antonio Valencia",
+  "Moises Caicedo",
+  "Piero Hincapie",
+  "Roque Santa Cruz",
+  "Jose Luis Chilavert",
+  "Miguel Almiron",
+  "Paolo Guerrero",
+  "Jefferson Farfan"
  ]
 }

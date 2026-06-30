@@ -56,8 +56,10 @@ async function api(base, params, tries = 3) {
   }
 }
 
-// National sides (senior, youth, B, Olympic) to drop from a club career.
-const NATIONAL_TEAM = /national\s+(under-?\d+\s+|amateur\s+|youth\s+)?(association\s+)?football\s+(B\s+)?team|olympic football team/i
+// National sides (senior, youth, B, Olympic, beach, "football" or "soccer"
+// team) to drop from a club career. Broad on purpose — anything "national …
+// team", any "olympic … team", or beach soccer is not a club.
+const NATIONAL_TEAM = /national.*team|olympic.*team|beach soccer/i
 
 async function resolveQids(titles) {
   const out = {}
