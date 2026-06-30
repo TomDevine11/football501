@@ -13,9 +13,11 @@
 // Run:    node scripts/wikidata/import-careers.mjs   (needs network)
 // ─────────────────────────────────────────────────────────────────────────
 
-import { writeFileSync } from 'fs'
+import { writeFileSync, readFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
+import { resolveQidNames, isQid } from './fix-qid-names.mjs'
+import { famousPlayers } from '../../src/data/famousPlayers.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT = path.join(__dirname, '..', '..', 'src', 'data', 'careers.generated.json')
@@ -25,7 +27,10 @@ const MIN_CLUBS = 5
 
 // Well-known players known for well-travelled careers (enwiki titles). Filtered
 // to those with >= MIN_CLUBS dated senior clubs, so weak entries drop out.
-const TARGETS = [
+// Seed list of well-travelled players, merged with the full famousPlayers pool
+// so the set scales toward a few hundred. Only players with >= MIN_CLUBS dated
+// senior clubs survive, so one-club players drop out naturally.
+const HARDCODED = [
   'Zlatan Ibrahimović', 'Nicolas Anelka', 'Christian Vieri', 'Hernán Crespo', 'Robinho', 'Carlos Tevez',
   'Romelu Lukaku', 'Edinson Cavani', 'Radamel Falcao', 'Mario Balotelli', 'Robin van Persie', 'Wesley Sneijder',
   'Gonzalo Higuaín', 'James Rodríguez', 'Hatem Ben Arfa', 'Joe Cole', 'Ashley Young', 'Danny Welbeck',
@@ -36,6 +41,7 @@ const TARGETS = [
   'Klaas-Jan Huntelaar', 'Florent Malouda', 'Loïc Rémy', 'Bafétimbi Gomis', 'Mateja Kežman', 'Salomón Rondón',
   'Islam Slimani', 'Mario Gómez', 'Stephan El Shaarawy', 'Carlos Bacca', 'Seydou Keita', 'Lassana Diarra',
 ]
+const TARGETS = [...new Set([...HARDCODED, ...famousPlayers.map(p => p.name)])]
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
@@ -99,22 +105,40 @@ async function careerOf(qid) {
 }
 
 async function main() {
-  process.stderr.write(`Resolving ${TARGETS.length} target QIDs…\n`)
-  const qids = await resolveQids(TARGETS)
-  const out = { meta: { source: 'wikidata:P54 club spells', minClubs: MIN_CLUBS, fetchedAt: new Date().toISOString().slice(0, 10) }, players: [] }
+  // Incremental + resumable (see import-teammates for rationale).
+  const prev = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : null
+  const out = prev || { meta: {}, players: [], tried: [] }
+  out.meta = { source: 'wikidata:P54 club spells', minClubs: MIN_CLUBS, fetchedAt: new Date().toISOString().slice(0, 10) }
+  if (!out.tried) out.tried = []
+  const done = new Set([...out.players.map(p => p.name), ...out.tried])
+  const todo = TARGETS.filter(t => !done.has(t))
 
-  for (const title of TARGETS) {
+  const fixAndWrite = async () => {
+    const fix = await resolveQidNames(out.players.flatMap(p => p.clubs.map(c => c.name)).filter(isQid))
+    for (const p of out.players) for (const c of p.clubs) if (fix[c.name]) c.name = fix[c.name]
+    writeFileSync(OUT, JSON.stringify(out, null, 1))
+  }
+
+  process.stderr.write(`${todo.length} new targets (${out.players.length} already playable). Resolving QIDs…\n`)
+  const qids = await resolveQids(todo)
+
+  for (const title of todo) {
+    out.tried.push(title)
     const qid = qids[title]
-    if (!qid) { process.stderr.write(`  ! no QID for ${title}\n`); continue }
+    if (!qid) { process.stderr.write(`  ! no QID for ${title}\n`); writeFileSync(OUT, JSON.stringify(out, null, 1)); continue }
     let clubs = []
     try { clubs = await careerOf(qid) } catch (e) { process.stderr.write(`  ! query failed for ${title}: ${e.message}\n`) }
-    if (clubs.length < MIN_CLUBS) { process.stderr.write(`  – ${title}: only ${clubs.length} clubs, skipped\n`); await sleep(600); continue }
-    out.players.push({ name: title.replace(/\s*\([^)]*\)$/, ''), clubs })
-    process.stderr.write(`  ✓ ${title}: ${clubs.length} clubs\n`)
+    if (clubs.length >= MIN_CLUBS) {
+      out.players.push({ name: title.replace(/\s*\([^)]*\)$/, ''), clubs })
+      process.stderr.write(`  ✓ ${title}: ${clubs.length} clubs\n`)
+    } else {
+      process.stderr.write(`  – ${title}: only ${clubs.length} clubs, skipped\n`)
+    }
+    writeFileSync(OUT, JSON.stringify(out, null, 1))
     await sleep(600)
   }
 
-  writeFileSync(OUT, JSON.stringify(out, null, 1))
+  await fixAndWrite()
   process.stderr.write(`\nWrote ${OUT}\n  ${out.players.length} playable targets\n`)
 }
 

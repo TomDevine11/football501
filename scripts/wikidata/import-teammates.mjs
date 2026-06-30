@@ -13,10 +13,11 @@
 // Run:    node scripts/wikidata/import-teammates.mjs   (needs network)
 // ─────────────────────────────────────────────────────────────────────────
 
-import { writeFileSync } from 'fs'
+import { writeFileSync, readFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import { resolveQidNames, isQid } from './fix-qid-names.mjs'
+import { famousPlayers } from '../../src/data/famousPlayers.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT = path.join(__dirname, '..', '..', 'src', 'data', 'teammates.generated.json')
@@ -24,10 +25,25 @@ const OUT = path.join(__dirname, '..', '..', 'src', 'data', 'teammates.generated
 const UA = 'Football501Game/1.0 (educational; tom.devine.tpd02@gmail.com)'
 const MATE_FAME_MIN = 40   // teammates must be recognisable
 const MIN_MATES = 6        // targets need at least this many to be playable
+const PER_TEAM_CAP = 5     // keep at most this many (most famous) mates per team
+
+// Keep the most famous few teammates per club so the bundled file stays lean
+// at scale, while preserving cross-team variety for the clue spreading.
+function capMates(mates) {
+  const byTeam = new Map()
+  for (const m of [...mates].sort((a, b) => b.fame - a.fame)) {
+    const arr = byTeam.get(m.team) || []
+    if (arr.length < PER_TEAM_CAP) { arr.push(m); byTeam.set(m.team, arr) }
+  }
+  return [...byTeam.values()].flat()
+}
 
 // Well-known target players (enwiki titles). Filtered to those with enough
 // overlapping teammates, so a few weak ones dropping out is fine.
-const TARGETS = [
+// Seed list of well-known names, merged with the full famousPlayers pool so the
+// generated set scales toward a few hundred playable targets. Only players with
+// >= MIN_MATES recognisable teammates survive.
+const HARDCODED = [
   'Lionel Messi', 'Cristiano Ronaldo', 'Neymar', 'Kylian Mbappé', 'Luis Suárez', 'Andrés Iniesta',
   'Xavi', 'Sergio Busquets', 'Gerard Piqué', 'Carles Puyol', 'Sergio Ramos', 'Iker Casillas',
   'Karim Benzema', 'Luka Modrić', 'Toni Kroos', 'Gareth Bale', 'Ronaldinho', 'Kaká',
@@ -39,6 +55,7 @@ const TARGETS = [
   'Zlatan Ibrahimović', 'Andrea Pirlo', 'Gianluigi Buffon', 'Francesco Totti', 'Samuel Eto\'o', 'David Villa',
   'Cesc Fàbregas', 'Eden Hazard', 'Edinson Cavani', 'Ángel Di María', 'Carlos Tevez', 'Wesley Sneijder',
 ]
+const TARGETS = [...new Set([...HARDCODED, ...famousPlayers.map(p => p.name)])]
 
 async function api(base, params) {
   const url = new URL(base)
@@ -92,26 +109,43 @@ async function teammatesOf(qid) {
 }
 
 async function main() {
-  process.stderr.write(`Resolving ${TARGETS.length} target QIDs…\n`)
-  const qids = await resolveQids(TARGETS)
-  const out = { meta: { source: 'wikidata:P54 overlapping spells', mateFameMin: MATE_FAME_MIN, fetchedAt: new Date().toISOString().slice(0, 10) }, players: [] }
+  // Incremental + resumable: keep already-processed players, skip targets already
+  // attempted (hit or skip), and write after every one — so a long, flaky run can
+  // just be re-run to continue.
+  const prev = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : null
+  const out = prev || { meta: {}, players: [], tried: [] }
+  out.meta = { source: 'wikidata:P54 overlapping spells', mateFameMin: MATE_FAME_MIN, fetchedAt: new Date().toISOString().slice(0, 10) }
+  if (!out.tried) out.tried = []
+  const done = new Set([...out.players.map(p => p.name), ...out.tried])
+  const todo = TARGETS.filter(t => !done.has(t))
 
-  for (const title of TARGETS) {
+  const fixAndWrite = async () => {
+    const fix = await resolveQidNames(out.players.flatMap(p => p.teammates.map(m => m.name)).filter(isQid))
+    for (const p of out.players) for (const m of p.teammates) if (fix[m.name]) m.name = fix[m.name]
+    writeFileSync(OUT, JSON.stringify(out, null, 1))
+  }
+
+  process.stderr.write(`${todo.length} new targets (${out.players.length} already playable). Resolving QIDs…\n`)
+  const qids = await resolveQids(todo)
+
+  for (const title of todo) {
+    out.tried.push(title)
     const qid = qids[title]
-    if (!qid) { process.stderr.write(`  ! no QID for ${title}\n`); continue }
+    if (!qid) { process.stderr.write(`  ! no QID for ${title}\n`); writeFileSync(OUT, JSON.stringify(out, null, 1)); continue }
     let mates = []
     try { mates = await teammatesOf(qid) } catch (e) { process.stderr.write(`  ! query failed for ${title}: ${e.message}\n`) }
-    if (mates.length < MIN_MATES) { process.stderr.write(`  – ${title}: only ${mates.length} mates, skipped\n`); await sleep(700); continue }
-    out.players.push({ name: title.replace(/\s*\([^)]*\)$/, ''), teammates: mates })
-    process.stderr.write(`  ✓ ${title}: ${mates.length} teammates\n`)
+    if (mates.length >= MIN_MATES) {
+      const capped = capMates(mates)
+      out.players.push({ name: title.replace(/\s*\([^)]*\)$/, ''), teammates: capped })
+      process.stderr.write(`  ✓ ${title}: ${mates.length} teammates (kept ${capped.length})\n`)
+    } else {
+      process.stderr.write(`  – ${title}: only ${mates.length} mates, skipped\n`)
+    }
+    writeFileSync(OUT, JSON.stringify(out, null, 1))
     await sleep(700)
   }
 
-  // Resolve any bare-QID teammate names (entities with no English label).
-  const fix = await resolveQidNames(out.players.flatMap(p => p.teammates.map(m => m.name)).filter(isQid))
-  for (const p of out.players) for (const m of p.teammates) if (fix[m.name]) m.name = fix[m.name]
-
-  writeFileSync(OUT, JSON.stringify(out, null, 1))
+  await fixAndWrite()
   process.stderr.write(`\nWrote ${OUT}\n  ${out.players.length} playable targets\n`)
 }
 
