@@ -8,7 +8,35 @@ import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
+
+// Maps each question to the club crest / league logo / flag / trophy icon that
+// represents its subject (shown on the question card). Questions with no natural
+// icon (transfers, all-international) keep their emoji.
+const QUESTION_ICON = {
+  'wc-top-scorers': { type: 'trophy', value: 'FIFA World Cup' },
+  'pl-top-scorers': { type: 'league', value: 'Premier League' },
+  'ucl-top-scorers': { type: 'trophy', value: 'UEFA Champions League' },
+  'ballon-dor-most-wins': { type: 'trophy', value: "Ballon d'Or" },
+  'england-top-scorers': { type: 'nationality', value: 'England' },
+  'ecl-most-titles': { type: 'trophy', value: 'UEFA Champions League' },
+  'laliga-top-scorers': { type: 'league', value: 'La Liga' },
+  'pl-most-appearances': { type: 'league', value: 'Premier League' },
+  'pl-most-hattricks': { type: 'league', value: 'Premier League' },
+  'brazil-top-scorers': { type: 'nationality', value: 'Brazil' },
+  'real-madrid-top-scorers': { type: 'club', value: 'Real Madrid' },
+  'pl-titles-clubs': { type: 'league', value: 'Premier League' },
+  'pl-assists': { type: 'league', value: 'Premier League' },
+  'pl-clean-sheets': { type: 'league', value: 'Premier League' },
+  'bundesliga-top-scorers': { type: 'league', value: 'Bundesliga' },
+  'pl-red-cards': { type: 'league', value: 'Premier League' },
+  'france-top-scorers': { type: 'nationality', value: 'France' },
+  'liverpool-top-scorers': { type: 'club', value: 'Liverpool' },
+  'barcelona-top-scorers': { type: 'club', value: 'FC Barcelona' },
+  'man-utd-top-scorers': { type: 'club', value: 'Manchester United' },
+  'serie-a-top-scorers': { type: 'league', value: 'Serie A' },
+}
 
 const MAX_LIVES = 3
 
@@ -296,7 +324,9 @@ export default function FootballTenable() {
       <div className="w-full max-w-lg mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4">
           <div className="flex items-start gap-3">
-            <span className="text-2xl shrink-0">{question.emoji}</span>
+            {QUESTION_ICON[question.id]
+              ? <CategoryIcon category={QUESTION_ICON[question.id]} size={30} className="shrink-0 mt-0.5" />
+              : <span className="text-2xl shrink-0">{question.emoji}</span>}
             <div className="min-w-0 flex-1">
               <div className="text-white font-bold text-sm">{question.title}</div>
               <div className="text-gray-500 text-xs mt-0.5">{question.description}</div>
@@ -328,6 +358,7 @@ export default function FootballTenable() {
                 >
                   {displayAnswer ? (
                     <>
+                      {question.type === 'club' && <CategoryIcon category={{ type: 'club', value: displayAnswer.text }} size={16} className="mb-0.5" />}
                       <div className={`text-[10px] sm:text-xs font-bold leading-tight line-clamp-2 ${wasFound ? 'text-white' : 'text-gray-400'}`}>{displayAnswer.text}</div>
                       <div className={`text-[9px] sm:text-[10px] mt-0.5 ${wasFound ? 'text-green-400' : 'text-red-500'}`}>{displayAnswer.detail}</div>
                     </>
@@ -455,6 +486,7 @@ export default function FootballTenable() {
                 <div key={a.rank} className="flex items-center justify-between px-4 py-2.5">
                   <div className="flex items-center gap-3">
                     <span className="text-gray-500 text-sm font-mono w-5">{a.rank}</span>
+                    {question.type === 'club' && <CategoryIcon category={{ type: 'club', value: a.text }} size={20} />}
                     <span className={`text-sm font-medium ${revealed[a.rank] ? 'text-green-400' : 'text-white'}`}>{a.text}</span>
                   </div>
                   <span className="text-gray-500 text-xs">{a.detail}</span>

@@ -31,6 +31,8 @@ const CLUBS = [
   'Everton', 'Newcastle United', 'Real Madrid', 'FC Barcelona', 'Atlético Madrid', 'Valencia',
   'Sevilla', 'Juventus', 'AC Milan', 'Inter Milan', 'A.S. Roma', 'S.S.C. Napoli', 'FC Bayern Munich',
   'Borussia Dortmund', 'Bayer 04 Leverkusen', 'Paris Saint-Germain', 'Olympique de Marseille', 'AS Monaco',
+  // Extra clubs referenced by Tenable questions (not TicTacToe categories).
+  'Benfica', 'Nottingham Forest', 'Sheffield Wednesday',
 ]
 const CLUB_SEARCH = {
   'A.S. Roma': 'AS Roma', 'S.S.C. Napoli': 'Napoli', 'FC Bayern Munich': 'Bayern Munich',

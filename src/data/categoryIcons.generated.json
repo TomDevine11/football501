@@ -1,7 +1,7 @@
 {
  "meta": {
   "source": "thesportsdb",
-  "fetchedAt": "2026-06-29"
+  "fetchedAt": "2026-06-30"
  },
  "clubs": {
   "Manchester United": "https://r2.thesportsdb.com/images/media/team/badge/xzqdr11517660252.png",
@@ -27,7 +27,9 @@
   "Olympique de Marseille": "https://r2.thesportsdb.com/images/media/team/badge/c6bazh1779212287.png",
   "FC Barcelona": "https://r2.thesportsdb.com/images/media/team/badge/wq9sir1639406443.png",
   "Paris Saint-Germain": "https://r2.thesportsdb.com/images/media/team/badge/rwqrrq1473504808.png",
-  "AS Monaco": "https://r2.thesportsdb.com/images/media/team/badge/exjf5l1678808044.png"
+  "AS Monaco": "https://r2.thesportsdb.com/images/media/team/badge/exjf5l1678808044.png",
+  "Benfica": "https://r2.thesportsdb.com/images/media/team/badge/hj4kyc1781152436.png",
+  "Sheffield Wednesday": "https://r2.thesportsdb.com/images/media/team/badge/m3km7p1781284189.png"
  },
  "leagues": {
   "Premier League": "https://r2.thesportsdb.com/images/media/league/badge/gasy9d1737743125.png",
