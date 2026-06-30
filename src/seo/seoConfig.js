@@ -223,8 +223,8 @@ export const ROUTES = [
     path: '/tenable',
     name: 'Football Tenable',
     title: 'Football Tenable — Name the Top 10 | Football Trivia Games',
-    description: 'Play Football Tenable: a new football trivia question every day. Name as many of the top 10 answers as you can — three wrong guesses and it is game over.',
-    keywords: ['football tenable', 'name the top 10 football', 'football top 10 quiz', 'football list trivia', 'football trivia daily'],
+    description: 'Play Football Tenable — the daily footy top-10 quiz (a.k.a. Tenaball). Name as many of the 10 answers as you can; three wrong guesses and it is game over.',
+    keywords: ['football tenable', 'footy tenable', 'tenable football', 'tenaball', 'footy tenaball', 'football tenaball', 'name the top 10 football', 'football top 10 quiz'],
     h1: 'Football Tenable',
     tagline: 'Name as many of the top 10 as you can before three wrong guesses end it.',
     ogImage: '/og/tenable.png',
@@ -251,6 +251,7 @@ export const ROUTES = [
     ],
     faq: [
       { q: 'What is Football Tenable?', a: 'Football Tenable is a daily football trivia game where you try to name all ten answers to a top-10 question — such as a competition’s all-time top scorers — before making three mistakes.' },
+      { q: 'Is this the football version of Tenable?', a: "Yes — Football Tenable (also searched as 'Tenaball', 'footy tenaball' or 'footy Tenable') is a daily top-10 football quiz inspired by the ITV game show Tenable. Name as many of the top 10 as you can before three wrong guesses." },
       { q: 'How many lives do I have?', a: 'You can make up to three wrong guesses before the game ends.' },
       { q: 'Is there a new question each day?', a: 'Yes — a new top-10 question appears every day.' },
       { q: 'Is there a Daily and an Unlimited mode?', a: 'Yes. Daily is one shared question a day that tracks your win streak; Unlimited serves random questions for endless practice without affecting your stats.' },
