@@ -171,8 +171,8 @@ export default function FootballWordle() {
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="flex flex-col gap-1.5 mb-6">
+      {/* Grid — responsive: tiles shrink to fit long surnames on any screen */}
+      <div className="w-full flex flex-col items-center gap-1.5 mb-6 mx-auto" style={{ maxWidth: `${Math.min(answer.length * 3.5, 30)}rem` }}>
         {Array.from({ length: MAX_GUESSES }).map((_, rowIdx) => {
           const guess = guesses[rowIdx]
           const isCurrent = rowIdx === guesses.length && phase === 'playing'
@@ -181,7 +181,7 @@ export default function FootballWordle() {
           const isBouncing = bounceRow === rowIdx
 
           return (
-            <div key={rowIdx} className={`flex gap-1.5 ${isCurrent && shake ? 'shake' : ''}`}>
+            <div key={rowIdx} className={`grid gap-1.5 w-full ${isCurrent && shake ? 'shake' : ''}`} style={{ gridTemplateColumns: `repeat(${answer.length}, minmax(0, 1fr))` }}>
               {Array.from({ length: answer.length }).map((_, colIdx) => {
                 let letter = ''
                 let status = null
@@ -201,12 +201,13 @@ export default function FootballWordle() {
                 }
                 if (isFlipping) style.animationDelay = `${colIdx * 100}ms`
                 else if (isBouncing) style.animationDelay = `${colIdx * 60}ms`
+                style.fontSize = `clamp(0.8rem, ${(50 / answer.length).toFixed(1)}vw, 1.5rem)`
 
                 return (
                   <div
                     key={colIdx}
                     style={style}
-                    className={`w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-md flex items-center justify-center text-xl sm:text-2xl font-bold uppercase text-white select-none
+                    className={`w-full aspect-square border-2 rounded-md flex items-center justify-center font-bold uppercase text-white select-none
                       ${!colors ? (letter ? 'border-gray-500' : 'border-gray-800') : ''}
                       ${isFlipping ? 'tile-flip' : ''}
                       ${isBouncing ? 'tile-bounce' : ''}
