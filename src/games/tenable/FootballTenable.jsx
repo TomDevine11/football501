@@ -88,7 +88,11 @@ export default function FootballTenable() {
     setPendingRank(null); setPendingAnswer(null); setPulseRow(null); setShowResult(false)
   }
   const [showResult, setShowResult] = useState(false)
-  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
+  useEffect(() => {
+    if (phase === 'playing') return
+    const t = setTimeout(() => setShowResult(true), 2500) // let the revealed answers show first
+    return () => clearTimeout(t)
+  }, [phase])
   const [pulseRow, setPulseRow] = useState(null)
   const [pendingRank, setPendingRank] = useState(null)
   const [pendingAnswer, setPendingAnswer] = useState(null) // what to reveal at pendingRank (for tie-pool fills)

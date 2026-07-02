@@ -68,7 +68,11 @@ export default function HigherLower() {
     else { setMode(null); setPhase('playing'); setStreak(0); setLastCorrect(null); setDailyStats(null); setShowResult(false) }
   }
   const [showResult, setShowResult] = useState(false)
-  useEffect(() => { if (phase === 'over') setShowResult(true) }, [phase])
+  useEffect(() => {
+    if (phase !== 'over') return
+    const t = setTimeout(() => setShowResult(true), 2500)
+    return () => clearTimeout(t)
+  }, [phase])
 
   const guess = (direction) => {
     if (phase !== 'playing') return

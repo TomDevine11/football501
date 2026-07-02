@@ -60,7 +60,11 @@ export default function FootballWordle() {
     if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('wordle', phase === 'won'))
   }, [phase, mode])
   const [showResult, setShowResult] = useState(false)
-  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
+  useEffect(() => {
+    if (phase === 'playing') return
+    const t = setTimeout(() => setShowResult(true), 2500) // let the board settle first
+    return () => clearTimeout(t)
+  }, [phase])
 
   const newGame = (m) => {
     setMode(m)

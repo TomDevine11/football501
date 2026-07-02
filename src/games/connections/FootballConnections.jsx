@@ -50,7 +50,11 @@ export default function FootballConnections() {
     setPastGuesses(new Set()); setGuessRows([]); setDailyStats(null); setShowResult(false)
   }
   const [showResult, setShowResult] = useState(false)
-  useEffect(() => { if (over) setShowResult(true) }, [over])
+  useEffect(() => {
+    if (!over) return
+    const t = setTimeout(() => setShowResult(true), 2500) // let the solved groups show first
+    return () => clearTimeout(t)
+  }, [over])
 
   const toggle = (name) => {
     if (over) return

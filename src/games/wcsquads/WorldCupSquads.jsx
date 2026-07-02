@@ -76,7 +76,11 @@ export default function WorldCupSquads() {
 
   const reset = (s) => { setSquad(s); setNamed(new Set()); setRevealed(false); setInput(''); setFlash(''); setDailyStats(null); setShowResult(false) }
   const [showResult, setShowResult] = useState(false)
-  useEffect(() => { if (over) setShowResult(true) }, [over])
+  useEffect(() => {
+    if (!over) return
+    const t = setTimeout(() => setShowResult(true), 2500)
+    return () => clearTimeout(t)
+  }, [over])
   const pick = (s) => reset(s)                  // unlimited: chosen squad
   const back = () => reset(null)                // unlimited: back to picker
   const switchMode = (m) => {                   // toggle daily ⇄ unlimited

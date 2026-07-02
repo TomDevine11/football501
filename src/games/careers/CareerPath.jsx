@@ -85,7 +85,11 @@ export default function CareerPath() {
   }
 
   const [showResult, setShowResult] = useState(false)
-  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
+  useEffect(() => {
+    if (phase === 'playing') return
+    const t = setTimeout(() => setShowResult(true), 2500)
+    return () => clearTimeout(t)
+  }, [phase])
 
   const newGame = (m) => {
     setMode(m)

@@ -44,7 +44,11 @@ export default function FootballTicTacToe({ onBackToModes }) {
     setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false); setAnswersCell(null); setShowResult(false)
   }
   const [showResult, setShowResult] = useState(false)
-  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
+  useEffect(() => {
+    if (phase === 'playing') return
+    const t = setTimeout(() => setShowResult(true), 2500) // let the revealed grid show first
+    return () => clearTimeout(t)
+  }, [phase])
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
