@@ -477,9 +477,7 @@ export default function FootballTenable() {
         )}
         {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
         <ShareCard text={shareText} />
-        {mode === 'unlimited' && (
-          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New question →</button>
-        )}
+        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New question →'}</button>
         <MoreGames current="/tenable" />
         {phase === 'lost' && (
           <div className="w-full bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mt-6">

@@ -206,9 +206,8 @@ export default function GuessByTeammates() {
               : `🕵️ Teammates — it stumped me. Can you name the mystery footballer?`,
             SITE_URL,
           ].join('\n\n')} />
-          {mode === 'unlimited'
-            ? <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New player →</button>
-            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new mystery player — or switch to Unlimited above.</p>}
+          <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New player →'}</button>
+          {mode === 'daily' && <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new daily.</p>}
         </div>
         <MoreGames current="/teammates" />
       </ResultModal>

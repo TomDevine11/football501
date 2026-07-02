@@ -278,9 +278,7 @@ export default function FootballWordle() {
         )}
         {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
         <ShareCard text={shareText} />
-        {mode === 'unlimited' && (
-          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New word →</button>
-        )}
+        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New word →'}</button>
         <MoreGames current="/wordle" />
       </ResultModal>
     </div>

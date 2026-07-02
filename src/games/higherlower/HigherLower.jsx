@@ -190,7 +190,10 @@ export default function HigherLower() {
                 <button onClick={() => setMode(null)} className="border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-lg px-6 py-2.5 transition-colors">Change stat</button>
               </div>
             )
-            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new chain — or switch to Unlimited above.</p>}
+            : <>
+                <button onClick={() => switchMode('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Play Unlimited →</button>
+                <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new daily.</p>
+              </>}
         </div>
         <MoreGames current="/higher-or-lower" />
       </ResultModal>

@@ -187,9 +187,7 @@ export default function FootballConnections() {
           </p>
           {mode === 'daily' && <DailyStats game="connections" stats={dailyStats} />}
           <ShareCard text={shareText} />
-          {mode === 'unlimited' && (
-            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New puzzle →</button>
-          )}
+          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New puzzle →'}</button>
         </div>
         <MoreGames current="/connections" />
       </ResultModal>

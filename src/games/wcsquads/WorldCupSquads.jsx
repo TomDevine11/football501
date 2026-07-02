@@ -201,7 +201,10 @@ export default function WorldCupSquads() {
           <ShareCard text={squadShareText} />
           {mode === 'unlimited'
             ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
-            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new squad — or switch to Unlimited above.</p>}
+            : <>
+                <button onClick={() => switchMode('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Play Unlimited →</button>
+                <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new daily.</p>
+              </>}
         </div>
         <MoreGames current="/world-cup" />
       </ResultModal>
