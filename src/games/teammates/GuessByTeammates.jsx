@@ -5,6 +5,7 @@ import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import MoreGames from '../../components/MoreGames'
 import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
@@ -217,6 +218,7 @@ export default function GuessByTeammates() {
           </div>
         </div>
       )}
+      {phase !== 'playing' && <MoreGames current="/teammates" />}
     </div>
   )
 }

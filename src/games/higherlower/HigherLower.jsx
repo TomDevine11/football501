@@ -4,6 +4,7 @@ import { STAT_MODES, poolFor, randomFrom, isCorrect, getDailyRun } from '../../d
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import MoreGames from '../../components/MoreGames'
 import { recordResult, todayIndex } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
@@ -185,6 +186,7 @@ export default function HigherLower() {
             : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new chain — or switch to Unlimited above.</p>}
         </div>
       )}
+      {phase === 'over' && <MoreGames current="/higher-or-lower" />}
     </div>
   )
 }

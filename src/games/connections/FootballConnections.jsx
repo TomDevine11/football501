@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getDailyConnections, getRandomConnections, shuffleNames } from '../../data/connections'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import MoreGames from '../../components/MoreGames'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 import { ShareCard } from '../../components/ShareCard'
@@ -184,6 +185,7 @@ export default function FootballConnections() {
           )}
         </div>
       )}
+      {over && <MoreGames current="/connections" />}
     </div>
   )
 }

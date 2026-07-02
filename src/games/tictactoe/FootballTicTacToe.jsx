@@ -7,6 +7,7 @@ import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import MoreGames from '../../components/MoreGames'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 
@@ -504,6 +505,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
           </div>
         </div>
       )}
+      {phase !== 'playing' && <MoreGames current="/tictactoe" />}
     </div>
   )
 }

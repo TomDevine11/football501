@@ -5,6 +5,7 @@ import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import MoreGames from '../../components/MoreGames'
 import { recordResult } from '../../data/dailyStats'
 
 const MAX_GUESSES = 6
@@ -284,6 +285,7 @@ export default function FootballWordle() {
           )}
         </div>
       )}
+      {phase !== 'playing' && <MoreGames current="/wordle" />}
     </div>
   )
 }

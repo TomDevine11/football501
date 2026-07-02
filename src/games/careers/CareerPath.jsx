@@ -6,6 +6,7 @@ import { ShareCard } from '../../components/ShareCard'
 import Crest from '../../components/Crest'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
+import MoreGames from '../../components/MoreGames'
 import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
@@ -213,6 +214,7 @@ export default function CareerPath() {
           </div>
         </div>
       )}
+      {phase !== 'playing' && <MoreGames current="/career-path" />}
     </div>
   )
 }
