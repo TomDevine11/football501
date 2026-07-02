@@ -6,6 +6,7 @@ import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
+import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
@@ -73,7 +74,9 @@ export default function WorldCupSquads() {
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedIndex(i => Math.max(i - 1, -1)) }
   }
 
-  const reset = (s) => { setSquad(s); setNamed(new Set()); setRevealed(false); setInput(''); setFlash(''); setDailyStats(null) }
+  const reset = (s) => { setSquad(s); setNamed(new Set()); setRevealed(false); setInput(''); setFlash(''); setDailyStats(null); setShowResult(false) }
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => { if (over) setShowResult(true) }, [over])
   const pick = (s) => reset(s)                  // unlimited: chosen squad
   const back = () => reset(null)                // unlimited: back to picker
   const switchMode = (m) => {                   // toggle daily ⇄ unlimited
@@ -174,32 +177,34 @@ export default function WorldCupSquads() {
       </div>
 
       {/* Controls / result */}
-      {complete ? (
-        <div className="w-full max-w-lg text-center mt-5">
-          <div className="text-4xl mb-1">🏆</div>
-          <h2 className="score-number text-2xl text-green-400 mb-1">FULL SQUAD!</h2>
-          <p className="text-gray-400 text-sm mb-3">You named all {squad.players.length}.</p>
-          {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
-          <ShareCard text={squadShareText} />
-          {mode === 'unlimited'
-            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
-            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new squad — or switch to Unlimited above.</p>}
-        </div>
-      ) : revealed ? (
-        <div className="w-full max-w-lg text-center mt-5">
-          <p className="text-gray-300 text-sm mb-3">You named <span className="text-white font-bold">{named.size}</span> of {squad.players.length}.</p>
-          {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
-          <ShareCard text={squadShareText} />
-          {mode === 'unlimited'
-            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
-            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new squad — or switch to Unlimited above.</p>}
-        </div>
-      ) : (
+      {!over && (
         <button onClick={() => setRevealed(true)} className="mt-5 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
           Give up &amp; reveal squad
         </button>
       )}
-      {over && <MoreGames current="/world-cup" />}
+      {over && !showResult && (
+        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+      )}
+
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        <div className="w-full text-center">
+          {complete ? (
+            <>
+              <div className="text-4xl mb-1">🏆</div>
+              <h2 className="score-number text-2xl text-green-400 mb-1">FULL SQUAD!</h2>
+              <p className="text-gray-400 text-sm mb-3">You named all {squad.players.length}.</p>
+            </>
+          ) : (
+            <p className="text-gray-300 text-sm mb-3">You named <span className="text-white font-bold">{named.size}</span> of {squad.players.length}.</p>
+          )}
+          {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
+          <ShareCard text={squadShareText} />
+          {mode === 'unlimited'
+            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+            : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new squad — or switch to Unlimited above.</p>}
+        </div>
+        <MoreGames current="/world-cup" />
+      </ResultModal>
     </div>
   )
 }

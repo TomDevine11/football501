@@ -5,6 +5,7 @@ import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
+import ResultModal from '../../components/ResultModal'
 import { recordResult, todayIndex } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
@@ -49,7 +50,7 @@ export default function HigherLower() {
     const r = getDailyRun(todayIndex())
     setRun(r); setSeqIdx(1); setMode(r.mode)
     setCurrent(r.sequence[0]); setChallenger(r.sequence[1])
-    setStreak(0); setPhase('playing'); setLastCorrect(null); setDailyStats(null)
+    setStreak(0); setPhase('playing'); setLastCorrect(null); setDailyStats(null); setShowResult(false)
   }
 
   const startMode = (m) => {
@@ -58,14 +59,16 @@ export default function HigherLower() {
     setMode(m)
     setCurrent(a)
     setChallenger(randomFrom(pool, new Set([a.name])))
-    setStreak(0); setPhase('playing'); setLastCorrect(null); setDailyStats(null)
+    setStreak(0); setPhase('playing'); setLastCorrect(null); setDailyStats(null); setShowResult(false)
   }
 
   const switchMode = (dm) => {
     setDailyMode(dm)
     if (dm === 'daily') startDaily()
-    else { setMode(null); setPhase('playing'); setStreak(0); setLastCorrect(null); setDailyStats(null) }
+    else { setMode(null); setPhase('playing'); setStreak(0); setLastCorrect(null); setDailyStats(null); setShowResult(false) }
   }
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => { if (phase === 'over') setShowResult(true) }, [phase])
 
   const guess = (direction) => {
     if (phase !== 'playing') return
@@ -160,8 +163,12 @@ export default function HigherLower() {
         </div>
       )}
 
-      {phase === 'over' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mt-1">
+      {phase === 'over' && !showResult && (
+        <button onClick={() => setShowResult(true)} className="mt-1 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+      )}
+
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        <div className="w-full flex flex-col items-center text-center">
           <div className="text-5xl mb-2">{dailyCleared ? '🏆' : '💔'}</div>
           <h2 className={`score-number text-3xl mb-1 ${dailyCleared ? 'text-green-400' : 'text-red-400'}`}>{dailyCleared ? 'CHAIN CLEARED!' : 'GAME OVER'}</h2>
           <p className="text-gray-400 mb-1">
@@ -185,8 +192,8 @@ export default function HigherLower() {
             )
             : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new chain — or switch to Unlimited above.</p>}
         </div>
-      )}
-      {phase === 'over' && <MoreGames current="/higher-or-lower" />}
+        <MoreGames current="/higher-or-lower" />
+      </ResultModal>
     </div>
   )
 }

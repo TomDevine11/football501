@@ -6,6 +6,7 @@ import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
+import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
 
 const MAX_GUESSES = 6
@@ -58,11 +59,13 @@ export default function FootballWordle() {
     // Only Daily mode records stats/streaks.
     if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('wordle', phase === 'won'))
   }, [phase, mode])
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
 
   const newGame = (m) => {
     setMode(m)
     setQuestion(m === 'daily' ? getDailyWordlePlayer() : getRandomWordlePlayer())
-    setGuesses([]); setCurrent(''); setPhase('playing'); setDailyStats(null)
+    setGuesses([]); setCurrent(''); setPhase('playing'); setDailyStats(null); setShowResult(false)
   }
   const [shake, setShake] = useState(false)
   const [flippingRow, setFlippingRow] = useState(null)
@@ -253,39 +256,33 @@ export default function FootballWordle() {
         ))}
       </div>
 
-      {phase === 'won' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mb-6">
-          <div className="text-6xl mb-3">🎉</div>
-          <h2 className="score-number text-4xl text-green-400 mb-2">CORRECT!</h2>
-          <p className="text-gray-400 mb-1">
-            It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}
-          </p>
-          <p className="text-gray-500 text-sm">
-            Solved in <span className="text-white font-bold">{guesses.length}</span>/{MAX_GUESSES}
-          </p>
-          {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
-          <ShareCard text={shareText} />
-          {mode === 'unlimited' && (
-            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New word →</button>
-          )}
-        </div>
+      {phase !== 'playing' && !showResult && (
+        <button onClick={() => setShowResult(true)} className="mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
       )}
 
-      {phase === 'lost' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mb-6">
-          <div className="text-6xl mb-3">💔</div>
-          <h2 className="score-number text-4xl text-red-400 mb-2">GAME OVER</h2>
-          <p className="text-gray-400 mb-2">
-            It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}
-          </p>
-          {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
-          <ShareCard text={shareText} />
-          {mode === 'unlimited' && (
-            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New word →</button>
-          )}
-        </div>
-      )}
-      {phase !== 'playing' && <MoreGames current="/wordle" />}
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        {phase === 'won' && (
+          <div className="w-full flex flex-col items-center text-center">
+            <div className="text-6xl mb-3">🎉</div>
+            <h2 className="score-number text-4xl text-green-400 mb-2">CORRECT!</h2>
+            <p className="text-gray-400 mb-1">It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
+            <p className="text-gray-500 text-sm">Solved in <span className="text-white font-bold">{guesses.length}</span>/{MAX_GUESSES}</p>
+          </div>
+        )}
+        {phase === 'lost' && (
+          <div className="w-full flex flex-col items-center text-center">
+            <div className="text-6xl mb-3">💔</div>
+            <h2 className="score-number text-4xl text-red-400 mb-2">GAME OVER</h2>
+            <p className="text-gray-400 mb-2">It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
+          </div>
+        )}
+        {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
+        <ShareCard text={shareText} />
+        {mode === 'unlimited' && (
+          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New word →</button>
+        )}
+        <MoreGames current="/wordle" />
+      </ResultModal>
     </div>
   )
 }

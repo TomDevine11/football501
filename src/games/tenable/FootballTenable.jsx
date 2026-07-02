@@ -9,6 +9,7 @@ import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
+import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 
@@ -84,8 +85,10 @@ export default function FootballTenable() {
     setQuestion(m === 'daily' ? getDailyTenableQuestion() : getRandomTenableQuestion())
     setRevealed({}); setLives(MAX_LIVES); setInput(''); setHistory([])
     setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false)
-    setPendingRank(null); setPendingAnswer(null); setPulseRow(null)
+    setPendingRank(null); setPendingAnswer(null); setPulseRow(null); setShowResult(false)
   }
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
   const [pulseRow, setPulseRow] = useState(null)
   const [pendingRank, setPendingRank] = useState(null)
   const [pendingAnswer, setPendingAnswer] = useState(null) // what to reveal at pendingRank (for tie-pool fills)
@@ -453,33 +456,31 @@ export default function FootballTenable() {
         </div>
       )}
 
-      {phase === 'won' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mt-2 mb-6">
-          <div className="text-6xl mb-3">🏆</div>
-          <h2 className="score-number text-4xl text-green-400 mb-2">PYRAMID COMPLETE!</h2>
-          <p className="text-gray-400 mb-2">
-            You found all 10 with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.
-          </p>
-          {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
-          <ShareCard text={shareText} />
-          {mode === 'unlimited' && (
-            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New question →</button>
-          )}
-        </div>
+      {phase !== 'playing' && !showResult && (
+        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
       )}
 
-      {phase === 'lost' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mt-2 mb-6">
-          <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
-          <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? 'GAVE UP' : 'GAME OVER'}</h2>
-          <p className="text-gray-400 mb-2">
-            You found <span className="text-white font-bold">{correctCount}/10</span> before {gaveUp ? 'giving up' : 'running out of lives'}.
-          </p>
-          {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
-          <ShareCard text={shareText} />
-          {mode === 'unlimited' && (
-            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New question →</button>
-          )}
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        {phase === 'won' && (
+          <div className="w-full flex flex-col items-center text-center">
+            <div className="text-6xl mb-3">🏆</div>
+            <h2 className="score-number text-4xl text-green-400 mb-2">PYRAMID COMPLETE!</h2>
+            <p className="text-gray-400 mb-2">You found all 10 with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.</p>
+          </div>
+        )}
+        {phase === 'lost' && (
+          <div className="w-full flex flex-col items-center text-center">
+            <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
+            <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? 'GAVE UP' : 'GAME OVER'}</h2>
+            <p className="text-gray-400 mb-2">You found <span className="text-white font-bold">{correctCount}/10</span> before {gaveUp ? 'giving up' : 'running out of lives'}.</p>
+          </div>
+        )}
+        {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
+        <ShareCard text={shareText} />
+        {mode === 'unlimited' && (
+          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New question →</button>
+        )}
+        {phase === 'lost' && (
           <div className="w-full bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mt-6">
             <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Full answer list</div>
             <div className="divide-y divide-gray-800/50">
@@ -495,8 +496,9 @@ export default function FootballTenable() {
               ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
+        <MoreGames current="/tenable" />
+      </ResultModal>
 
       {/* Guess history */}
       {history.length > 0 && (
@@ -520,7 +522,6 @@ export default function FootballTenable() {
           </div>
         </div>
       )}
-      {phase !== 'playing' && <MoreGames current="/tenable" />}
     </div>
   )
 }

@@ -8,6 +8,7 @@ import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
+import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 
@@ -40,8 +41,10 @@ export default function FootballTicTacToe({ onBackToModes }) {
     setMode(m)
     setGrid(m === 'daily' ? getDailyGrid() : getRandomGrid())
     setFilled({}); setLives(MAX_LIVES); setSelectedCell(null); setInput(''); setHistory([])
-    setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false); setAnswersCell(null)
+    setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false); setAnswersCell(null); setShowResult(false)
   }
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
   const inputRef = useRef(null)
   const dropdownRef = useRef(null)
 
@@ -455,35 +458,32 @@ export default function FootballTicTacToe({ onBackToModes }) {
         </div>
       )}
 
-      {phase === 'won' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mt-2 mb-6">
-          <div className="text-6xl mb-3">🏆</div>
-          <h2 className="score-number text-4xl text-green-400 mb-2">GRID COMPLETE!</h2>
-          <p className="text-gray-400 mb-2">
-            You filled all 9 squares with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.
-          </p>
-          {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
-          <ShareCard text={shareText} />
-          {mode === 'unlimited' && (
-            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New grid →</button>
-          )}
-        </div>
+      {phase !== 'playing' && !showResult && (
+        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
       )}
 
-      {phase === 'lost' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mt-2 mb-6">
-          <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
-          <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? 'GAVE UP' : 'GAME OVER'}</h2>
-          <p className="text-gray-400 mb-2">
-            You filled <span className="text-white font-bold">{filledCount}/9</span> squares before {gaveUp ? 'giving up' : 'running out of lives'}.
-          </p>
-          {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
-          <ShareCard text={shareText} />
-          {mode === 'unlimited' && (
-            <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New grid →</button>
-          )}
-        </div>
-      )}
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        {phase === 'won' && (
+          <div className="w-full flex flex-col items-center text-center">
+            <div className="text-6xl mb-3">🏆</div>
+            <h2 className="score-number text-4xl text-green-400 mb-2">GRID COMPLETE!</h2>
+            <p className="text-gray-400 mb-2">You filled all 9 squares with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.</p>
+          </div>
+        )}
+        {phase === 'lost' && (
+          <div className="w-full flex flex-col items-center text-center">
+            <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
+            <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? 'GAVE UP' : 'GAME OVER'}</h2>
+            <p className="text-gray-400 mb-2">You filled <span className="text-white font-bold">{filledCount}/9</span> squares before {gaveUp ? 'giving up' : 'running out of lives'}.</p>
+          </div>
+        )}
+        {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
+        <ShareCard text={shareText} />
+        {mode === 'unlimited' && (
+          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New grid →</button>
+        )}
+        <MoreGames current="/tictactoe" />
+      </ResultModal>
 
       {/* Guess history */}
       {history.length > 0 && (
@@ -505,7 +505,6 @@ export default function FootballTicTacToe({ onBackToModes }) {
           </div>
         </div>
       )}
-      {phase !== 'playing' && <MoreGames current="/tictactoe" />}
     </div>
   )
 }

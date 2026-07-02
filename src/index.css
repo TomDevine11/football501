@@ -101,6 +101,14 @@ body {
 .tile-flip { animation: tile-flip 0.5s ease-in-out forwards; }
 .tile-bounce { animation: tile-bounce 0.6s ease-in-out; }
 
+@keyframes result-modal-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes result-card-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.result-modal-in { animation: result-modal-in 0.18s ease-out; }
+.result-modal-in > div { animation: result-card-in 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: #0d0d0d; }
 ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }

@@ -6,6 +6,7 @@ import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
+import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
@@ -82,10 +83,13 @@ export default function GuessByTeammates() {
     setTimeout(() => inputRef.current?.focus(), 0)
   }
 
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => { if (phase !== 'playing') setShowResult(true) }, [phase])
+
   const newGame = (m) => {
     setMode(m)
     setTarget(m === 'daily' ? getDailyTarget() : getRandomTarget())
-    setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1); setDailyStats(null)
+    setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1); setDailyStats(null); setShowResult(false)
   }
 
   const cluesToShow = phase === 'playing' ? revealed : MAX_CLUES
@@ -181,8 +185,12 @@ export default function GuessByTeammates() {
       )}
 
       {/* Result */}
-      {phase !== 'playing' && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mt-1 mb-4">
+      {phase !== 'playing' && !showResult && (
+        <button onClick={() => setShowResult(true)} className="mt-1 mb-4 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+      )}
+
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        <div className="w-full flex flex-col items-center text-center">
           <div className="text-5xl mb-2">{phase === 'won' ? '🎉' : '💔'}</div>
           <h2 className={`score-number text-3xl mb-1 ${phase === 'won' ? 'text-green-400' : 'text-red-400'}`}>
             {phase === 'won' ? 'CORRECT!' : 'OUT OF GUESSES'}
@@ -202,7 +210,8 @@ export default function GuessByTeammates() {
             ? <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New player →</button>
             : <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new mystery player — or switch to Unlimited above.</p>}
         </div>
-      )}
+        <MoreGames current="/teammates" />
+      </ResultModal>
 
       {/* Guess history */}
       {guesses.length > 0 && (
@@ -218,7 +227,6 @@ export default function GuessByTeammates() {
           </div>
         </div>
       )}
-      {phase !== 'playing' && <MoreGames current="/teammates" />}
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { getDailyConnections, getRandomConnections, shuffleNames } from '../../d
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
+import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 import { ShareCard } from '../../components/ShareCard'
@@ -46,8 +47,10 @@ export default function FootballConnections() {
     const p = m === 'daily' ? getDailyConnections() : getRandomConnections()
     setPuzzle(p); setOrder(p.tiles)
     setSolved([]); setSelected([]); setLives(MAX_LIVES); setMessage('')
-    setPastGuesses(new Set()); setGuessRows([]); setDailyStats(null)
+    setPastGuesses(new Set()); setGuessRows([]); setDailyStats(null); setShowResult(false)
   }
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => { if (over) setShowResult(true) }, [over])
 
   const toggle = (name) => {
     if (over) return
@@ -167,8 +170,12 @@ export default function FootballConnections() {
         </div>
       )}
 
-      {over && (
-        <div className="w-full max-w-lg flex flex-col items-center text-center mt-5">
+      {over && !showResult && (
+        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+      )}
+
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        <div className="w-full flex flex-col items-center text-center">
           <div className="text-5xl mb-2">{won ? '🎉' : '💔'}</div>
           <h2 className={`score-number text-3xl mb-1 ${won ? 'text-green-400' : 'text-red-400'}`}>
             {won ? 'SOLVED!' : 'OUT OF GUESSES'}
@@ -184,8 +191,8 @@ export default function FootballConnections() {
             <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New puzzle →</button>
           )}
         </div>
-      )}
-      {over && <MoreGames current="/connections" />}
+        <MoreGames current="/connections" />
+      </ResultModal>
     </div>
   )
 }
