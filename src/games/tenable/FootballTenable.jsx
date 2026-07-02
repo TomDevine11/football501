@@ -480,6 +480,7 @@ export default function FootballTenable() {
         {mode === 'unlimited' && (
           <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">New question →</button>
         )}
+        <MoreGames current="/tenable" />
         {phase === 'lost' && (
           <div className="w-full bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mt-6">
             <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Full answer list</div>
@@ -497,7 +498,6 @@ export default function FootballTenable() {
             </div>
           </div>
         )}
-        <MoreGames current="/tenable" />
       </ResultModal>
 
       {/* Guess history */}
