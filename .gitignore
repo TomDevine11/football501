@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Raw Kaggle Transfermarkt CSVs — INPUT ONLY, never committed (large; the
+# committed src/data/football501/*.generated.json is built from these).
+data/transfermarkt/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
