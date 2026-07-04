@@ -105,13 +105,19 @@ export function evaluateSpec(spec) {
   return { answers, maxPlayers, solvable, title: titleOf(spec) }
 }
 
-// Deterministic question of the day (solo) — the catalog is pre-scattered, so
+// The daily draws from a friendlier subset — questions with plenty of possible
+// answers — so it feels approachable for everyone. Multiplayer still uses the
+// full catalog. (Tunable; raise/lower DAILY_MIN_ANSWERS to taste.)
+const DAILY_MIN_ANSWERS = 100
+const DAILY_POOL = CATALOG.filter(c => c.answers >= DAILY_MIN_ANSWERS)
+
+// Deterministic question of the day (solo) — the pool is pre-scattered, so
 // consecutive days feel unrelated.
 export function getDailyEntry() {
   const now = new Date()
   const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
-  const n = CATALOG.length
-  return CATALOG[((day % n) + n) % n]
+  const pool = DAILY_POOL.length ? DAILY_POOL : CATALOG
+  return pool[((day % pool.length) + pool.length) % pool.length]
 }
 export const getDailyChallenge = () => makeChallenge(getDailyEntry())
 
