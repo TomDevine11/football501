@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { getRandomTarget, matchesTarget, MAX_CLUES, TARGET_COUNT } from '../src/data/teammates.js'
+import { isSeniorTeam } from '../src/data/teamFilter.js'
 
 describe('teammate-guessing data', () => {
   it('has a pool of playable targets', () => {
@@ -18,12 +19,10 @@ describe('teammate-guessing data', () => {
     }
   })
 
-  it('no clue comes from a youth / Olympic / reserve side', () => {
+  it('every clue comes from a senior side (no youth / Olympic / reserve teams)', () => {
     for (let i = 0; i < 40; i++) {
       const t = getRandomTarget()
-      for (const c of t.clues) {
-        expect(/\bunder-?\d|\bu-?\d{2}\b|olympic football team|national.*\bb\b.*team|\breserves?\b|\bamateure?\b|^jong | ii+$| b$/i.test(c.team)).toBe(false)
-      }
+      for (const c of t.clues) expect(isSeniorTeam(c.team), c.team).toBe(true)
     }
   })
 

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { getRandomTarget, matchesTarget, MAX_CLUES, TARGET_COUNT } from '../src/data/careers.js'
+import { isSeniorTeam } from '../src/data/teamFilter.js'
 
 describe('career-path data', () => {
   it('has a pool of well-travelled targets', () => {
@@ -18,12 +19,12 @@ describe('career-path data', () => {
     }
   })
 
-  it('no clue is a national team or a reserve / B / youth side', () => {
+  it('every clue club is a senior side (no reserve / B / youth teams)', () => {
     for (let i = 0; i < 40; i++) {
       const t = getRandomTarget()
       for (const c of t.clues) {
         expect(/national.*team/i.test(c.club)).toBe(false)
-        expect(/\bunder-?\d|\bu-?\d{2}\b|\breserves?\b|\bamateure?\b|^jong | ii+$| b$/i.test(c.club)).toBe(false)
+        expect(isSeniorTeam(c.club), c.club).toBe(true)
       }
     }
   })

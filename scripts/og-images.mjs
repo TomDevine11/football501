@@ -30,6 +30,7 @@ const CARDS = {
   connections: { title: 'Football Connections', subtitle: 'Find the four groups of four', accent: '#14b8a6' },
   'higher-or-lower': { title: 'Higher or Lower', subtitle: 'Pick the more famous player and build a streak', accent: '#f97316' },
   tenable:   { title: 'Football Tenable', subtitle: 'Name as many of the top 10 as you can', accent: '#eab308' },
+  '501':     { title: 'Football 501', subtitle: 'Count down from 501 and land the checkout', accent: '#ef4444' },
 }
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')

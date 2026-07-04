@@ -120,4 +120,18 @@ export const ES = {
       { q: '¿El juego termina alguna vez?', a: 'Solo cuando fallas — siguen apareciendo jugadores, así que el único límite es tu racha.' },
     ],
   },
+  '/501': {
+    title: 'Fútbol 501 — El Juego de Trivia de Fútbol Estilo Dardos | Football Trivia',
+    description: 'Juega a Fútbol 501, el juego de trivia de fútbol inspirado en los dardos. Cuenta atrás desde 501 nombrando futbolistas — se restan los goles de su carrera. Cierra entre 0 y −10. Solo o multijugador local.',
+    keywords: ['futbol 501', 'juego de dardos futbol', 'trivia dardos futbol', '501 futbol', 'nombrar futbolistas juego'],
+    h1: 'Fútbol 501',
+    tagline: 'Cuenta atrás desde 501 nombrando futbolistas y logra el cierre perfecto.',
+    about: 'Fútbol 501 es un juego de trivia de fútbol inspirado en los dardos. Empiezas en 501 y cuentas atrás nombrando futbolistas de una tabla histórica de máximos goleadores — los goles de la carrera de cada jugador en esa competición se restan de tu marcador. Como en los dardos, tienes que cerrar entre 0 y −10, así que la clave está en controlar la cuenta atrás nombrando a los goleadores más bajos.',
+    faq: [
+      { q: '¿Qué es Fútbol 501?', a: 'Fútbol 501 es un juego de trivia de fútbol estilo dardos. Cuentas atrás desde 501 nombrando futbolistas, y los goles de la carrera de cada jugador en la competición elegida se restan de tu marcador.' },
+      { q: '¿Cómo se gana?', a: 'Cierras dejando tu marcador entre 0 y −10, igual que un cierre de dardos. Bajar de −10 es pasarse, y un jugador que valga más de 180 hace saltar la tirada, así que controlar la cuenta atrás es la clave.' },
+      { q: '¿De dónde salen las estadísticas?', a: 'Cada reto se basa en una tabla histórica de máximos goleadores extraída de artículos de Wikipedia, así que los goles exactos de cada jugador están documentados.' },
+      { q: '¿Puedo jugar con amigos?', a: 'Sí — además del modo en solitario, Fútbol 501 tiene un modo multijugador local para 2–5 jugadores que se turnan en el mismo dispositivo.' },
+    ],
+  },
 }

@@ -40,10 +40,13 @@ describe('SEO route config integrity', () => {
     for (const r of ROUTES) expect(r.title.includes(BRAND), r.path).toBe(true)
   })
 
-  it('501 is noindex and excluded from the indexable set', () => {
-    expect(routeByPath('/501').noindex).toBe(true)
-    expect(indexableRoutes().some(r => r.path === '/501')).toBe(false)
-    expect(indexableRoutes().length).toBe(ROUTES.length - 1)
+  it('501 is live and indexable', () => {
+    expect(routeByPath('/501').noindex).toBeFalsy()
+    expect(indexableRoutes().some(r => r.path === '/501')).toBe(true)
+  })
+
+  it('every route is indexable (nothing left noindex)', () => {
+    expect(indexableRoutes().length).toBe(ROUTES.length)
   })
 })
 

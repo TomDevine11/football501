@@ -397,15 +397,43 @@ export const ROUTES = [
   {
     path: '/501',
     name: 'Football 501',
-    title: 'Football 501 — Coming Soon | Football Trivia Games',
-    description: 'Football 501, the darts-style football trivia game, is coming soon to Football Trivia Games.',
-    keywords: ['football 501', 'football darts game'],
+    title: 'Football 501 — Darts Trivia Game | Football Trivia Games',
+    description: 'Football 501 is the darts-style football trivia game: count down from 501 by naming footballers, each player’s career goals deducted. Land 0 to −10 to check out.',
+    keywords: ['football 501', 'football darts game', 'footdarts', 'football darts trivia', '501 football game', 'name footballers game', 'football checkout game'],
     h1: 'Football 501',
-    tagline: 'The football darts trivia game — coming soon.',
-    howTo: [],
-    faq: [],
-    schema: null,
-    noindex: true, // disabled / coming soon — keep out of the index and sitemap
+    tagline: 'Count down from 501 by naming footballers — land the perfect checkout.',
+    ogImage: '/og/501.png',
+    about: 'Football 501 is a darts-inspired football trivia game. You start on 501 and count down by naming footballers from an all-time top-scorer leaderboard — each player’s career goals in that competition are deducted from your score. Just like darts, you need to check out by landing between 0 and −10, so naming lower scorers to control your countdown is the real skill.',
+    howTo: [
+      'Pick a competition — Premier League, La Liga, Bundesliga, Champions League or international.',
+      'Name a footballer on that leaderboard; their career goals are deducted from 501.',
+      'Keep your countdown under control — a single player worth over 180 busts your visit.',
+      'Check out by landing between 0 and −10. Drop below −10 and you bust.',
+    ],
+    sections: [
+      {
+        h2: 'Tips for Football 501',
+        body: [
+          'The skill is in the countdown, not the big names. Deduct the heavy hitters early to bring 501 down quickly, then save the lower scorers for your checkout so you can land cleanly between 0 and −10 without busting.',
+        ],
+      },
+      {
+        h2: 'Why “501”?',
+        body: [
+          'It borrows the classic darts format: players start on 501 and count down to a checkout. Here every "dart" is a footballer, and their real career goals in the chosen competition are the score you subtract.',
+        ],
+      },
+    ],
+    faq: [
+      { q: 'What is Football 501?', a: 'Football 501 is a darts-style football trivia game. You count down from 501 by naming footballers, and each player’s career goals in the chosen competition are deducted from your score.' },
+      { q: 'How do you win?', a: 'You check out by landing your score between 0 and −10, exactly like a darts finish. Going below −10 busts, and a single player worth more than 180 busts the visit — so controlling your countdown is the key skill.' },
+      { q: 'Where do the stats come from?', a: 'Each challenge is backed by an authoritative all-time top-scorer leaderboard parsed from Wikipedia list articles, so every player’s exact career goals are sourced rather than guessed.' },
+      { q: 'Can I play with friends?', a: 'Yes — as well as solo play, Football 501 has a local multiplayer mode for 2–5 players who take turns on the same device; closest to a clean checkout wins.' },
+      { q: 'Is there a new challenge each day?', a: 'Yes — each competition serves a daily challenge, and you can also play the other leaderboards any time.' },
+    ],
+    schema: 'VideoGame',
+    priority: '0.8',
+    changefreq: 'weekly',
   },
 ]
 

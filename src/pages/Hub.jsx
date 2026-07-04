@@ -17,7 +17,7 @@ const GAMES = [
   { to: '/world-cup', title: 'World Cup Squads', color: 'hover:border-amber-500 hover:ring-amber-500/30', accent: 'text-amber-400' },
   { to: '/connections', title: 'Football Connections', color: 'hover:border-teal-500 hover:ring-teal-500/30', accent: 'text-teal-400' },
   { to: '/higher-or-lower', title: 'Higher or Lower', color: 'hover:border-orange-500 hover:ring-orange-500/30', accent: 'text-orange-400' },
-  { to: '/501', title: 'Football 501', disabled: true },
+  { to: '/501', title: 'Football 501', color: 'hover:border-red-500 hover:ring-red-500/30', accent: 'text-red-400' },
 ]
 
 export default function Hub() {

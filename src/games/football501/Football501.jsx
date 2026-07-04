@@ -5,6 +5,7 @@ import { MODES } from '../../data/modes'
 import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
+import MoreGames from '../../components/MoreGames'
 import { validateGuess as validate501, isSourced as isSourced501 } from '../../data/five01'
 
 const MAX_SCORE    = 501
@@ -361,6 +362,8 @@ function WinScreen({ history, players, mode, challenge, onPlayAgain, onModeSelec
             Change mode
           </button>
         </div>
+
+        <MoreGames current="/501" />
       </div>
     )
   }
@@ -412,6 +415,8 @@ function WinScreen({ history, players, mode, challenge, onPlayAgain, onModeSelec
           Change mode
         </button>
       </div>
+
+      <MoreGames current="/501" />
     </div>
   )
 }
