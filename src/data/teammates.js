@@ -6,6 +6,7 @@
 
 import data from './teammates.generated.json'
 import { getFlagFromNationality } from '../utils/flags.js'
+import { isSeniorTeam } from './teamFilter.js'
 
 export { matchesTarget } from './guessMatch.js'
 
@@ -27,8 +28,14 @@ function cleanTeam(label) {
 // turn — so a well-travelled player's clues cover their career rather than
 // clustering at one club. Then reveal least-famous first so it gets easier.
 function buildClues(teammates) {
+  // Drop youth national sides, Olympic selections and reserve teams — they make
+  // for poor, confusing clues. Fall back to the raw list only if filtering would
+  // leave nothing to work with.
+  const seniorOnly = teammates.filter(t => isSeniorTeam(t.team))
+  const pool = seniorOnly.length ? seniorOnly : teammates
+
   const byTeam = new Map() // team -> teammates, most famous first
-  for (const t of [...teammates].sort((a, b) => b.fame - a.fame)) {
+  for (const t of [...pool].sort((a, b) => b.fame - a.fame)) {
     if (!byTeam.has(t.team)) byTeam.set(t.team, [])
     byTeam.get(t.team).push(t)
   }

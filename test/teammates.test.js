@@ -6,12 +6,24 @@ describe('teammate-guessing data', () => {
     expect(TARGET_COUNT).toBeGreaterThan(10)
   })
 
-  it('a random target has a name and at least MAX_CLUES clues', () => {
+  it('a random target has a name and up to MAX_CLUES clues', () => {
+    // Youth national sides, Olympic selections and reserve teams are filtered
+    // out, so a target may have fewer than MAX_CLUES clues — but always ≥1.
     for (let i = 0; i < 30; i++) {
       const t = getRandomTarget()
       expect(t.name).toBeTruthy()
-      expect(t.clues.length).toBe(MAX_CLUES)
+      expect(t.clues.length).toBeGreaterThan(0)
+      expect(t.clues.length).toBeLessThanOrEqual(MAX_CLUES)
       for (const c of t.clues) expect(c.name).toBeTruthy()
+    }
+  })
+
+  it('no clue comes from a youth / Olympic / reserve side', () => {
+    for (let i = 0; i < 40; i++) {
+      const t = getRandomTarget()
+      for (const c of t.clues) {
+        expect(/\bunder-?\d|\bu-?\d{2}\b|olympic football team|national.*\bb\b.*team|\breserves?\b|\bamateure?\b|^jong | ii+$| b$/i.test(c.team)).toBe(false)
+      }
     }
   })
 

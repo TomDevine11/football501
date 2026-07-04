@@ -5,6 +5,7 @@
 // reveals one club at a time; the player guesses who played for them all.
 
 import data from './careers.generated.json'
+import { isSeniorTeam } from './teamFilter.js'
 
 export { matchesTarget } from './guessMatch.js'
 
@@ -18,8 +19,13 @@ function years(c) {
 }
 
 function toRound(p) {
-  const clues = p.clubs.slice(0, MAX_CLUES).map(c => ({ club: c.name, years: years(c) }))
-  return { name: p.name, clues }
+  // Drop reserve / 'B' / youth sides so the path shows only real senior clubs.
+  // Fall back to the full list if filtering would leave nothing.
+  const seniorClubs = p.clubs.filter(c => isSeniorTeam(c.name))
+  const clubs = (seniorClubs.length ? seniorClubs : p.clubs)
+    .slice(0, MAX_CLUES)
+    .map(c => ({ club: c.name, years: years(c) }))
+  return { name: p.name, clues: clubs }
 }
 
 export function getRandomTarget() {

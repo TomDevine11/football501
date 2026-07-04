@@ -6,19 +6,25 @@ describe('career-path data', () => {
     expect(TARGET_COUNT).toBeGreaterThan(10)
   })
 
-  it('a random target has a name and exactly MAX_CLUES club clues', () => {
+  it('a random target has a name and up to MAX_CLUES club clues', () => {
+    // Reserve/'B'/youth sides are filtered out, so a player may have fewer than
+    // MAX_CLUES senior clubs — but always at least one, and never more than MAX.
     for (let i = 0; i < 30; i++) {
       const t = getRandomTarget()
       expect(t.name).toBeTruthy()
-      expect(t.clues.length).toBe(MAX_CLUES)
+      expect(t.clues.length).toBeGreaterThan(0)
+      expect(t.clues.length).toBeLessThanOrEqual(MAX_CLUES)
       for (const c of t.clues) expect(c.club).toBeTruthy()
     }
   })
 
-  it('no clue is a national team', () => {
+  it('no clue is a national team or a reserve / B / youth side', () => {
     for (let i = 0; i < 40; i++) {
       const t = getRandomTarget()
-      for (const c of t.clues) expect(/national.*team/i.test(c.club)).toBe(false)
+      for (const c of t.clues) {
+        expect(/national.*team/i.test(c.club)).toBe(false)
+        expect(/\bunder-?\d|\bu-?\d{2}\b|\breserves?\b|\bamateure?\b|^jong | ii+$| b$/i.test(c.club)).toBe(false)
+      }
     }
   })
 })
