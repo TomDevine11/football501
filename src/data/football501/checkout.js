@@ -3,12 +3,12 @@
 //
 // A 501 question is valid only if you can actually check out — land the running
 // total in [−10, 0], i.e. a subset of distinct answer values summing to
-// 501–511. Only throwable values (1–179) can be part of a finish; a ≥180 answer
-// busts and can never complete a leg.
+// 501–511. Only throwable values (1–180, a darts visit max) can be part of a
+// finish; a value over 180 busts and can never complete a leg.
 // ─────────────────────────────────────────────────────────────────────────
 
 const LO = 501, HI = 511
-const throwable = (values) => values.filter(v => v >= 1 && v <= 179)
+const throwable = (values) => values.filter(v => v >= 1 && v <= 180)
 
 // "Comfortably solvable" floor — how many distinct checkout subsets a solo
 // question needs before we consider it fair.

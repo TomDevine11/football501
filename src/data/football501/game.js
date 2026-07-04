@@ -84,7 +84,7 @@ function makeChallenge(spec) {
         const r = roster[id]
         if (used.has(r.name)) continue
         const v = r.value
-        if (v > 179) continue // ≥180 busts — not a usable deduction
+        if (v > 180) continue // over 180 busts — not a usable deduction (180 is valid)
         if (v > highest) highest = v
         if (v >= currentScore && v <= currentScore + 10) checkouts++
         if (v === currentScore) perfect++

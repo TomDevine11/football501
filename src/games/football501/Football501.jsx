@@ -263,7 +263,7 @@ function EntryScreen({ onDaily, onUnlimited }) {
           <div className="text-gray-600 text-xs mt-3 leading-relaxed">Pick any challenge, 2–5 players take turns — closest to 0 on checkout wins.</div>
         </button>
       </div>
-      <div className="mt-8 text-gray-700 text-xs text-center max-w-sm leading-relaxed">Valid darts scores: 1–179 · Checkout 0 to −10 · Below −10 = bust</div>
+      <div className="mt-8 text-gray-700 text-xs text-center max-w-sm leading-relaxed">Valid darts scores: 1–180 · Checkout 0 to −10 · Below −10 = bust</div>
     </div>
   )
 }
@@ -619,7 +619,7 @@ export default function Football501() {
       </div>
 
       <div className="w-full max-w-lg mt-3 flex justify-between text-xs text-gray-700 px-1">
-        <span>Valid: 1–179</span><span>Checkout: 0 to −10</span><span>Below −10 = bust</span>
+        <span>Valid: 1–180</span><span>Checkout: 0 to −10</span><span>Below −10 = bust</span>
       </div>
 
       {/* Live strategy boxes */}
