@@ -221,6 +221,8 @@ function GuessHistory({ history, showPlayer }) {
                     <span className="text-red-400">−{g.scoreDeducted}</span>
                     <span className={`font-bold tabular-nums w-8 text-right ${g.isCheckout ? 'text-green-400' : 'text-gray-300'}`}>{g.newScore}</span>
                   </>
+                ) : g.statScore != null ? (
+                  <span className="text-orange-400 text-xs font-semibold tabular-nums">{g.statScore} · bust</span>
                 ) : <span className="text-red-500 text-xs font-semibold">✗</span>}
               </div>
             </div>
@@ -411,15 +413,20 @@ export default function Football501() {
     }
 
     const statScore = result.value
+    // Recognised answer, but over a darts visit (>180) → bust, shown with value.
+    if (statScore > DARTS_MAX) {
+      recordAndAdvance({ player, valid: false, statScore, reason: `${statScore} — over 180, bust`, scoreAtTime })
+      return
+    }
     if (!isValidDartsScore(statScore)) {
-      recordAndAdvance({ player, valid: false, statScore, reason: `${statScore} — not a valid darts score`, scoreAtTime })
+      recordAndAdvance({ player, valid: false, statScore, reason: `${statScore} — can't be deducted`, scoreAtTime })
       return
     }
 
     const newScore = scoreAtTime - statScore
     const isCheckout = newScore >= CHECKOUT_MIN && newScore <= 0
     if (newScore < CHECKOUT_MIN) {
-      recordAndAdvance({ player, valid: false, statScore, reason: `Bust! ${scoreAtTime} − ${statScore} = ${newScore} (below −10)`, scoreAtTime })
+      recordAndAdvance({ player, valid: false, statScore, reason: `${statScore} — busts (${scoreAtTime} − ${statScore} = ${newScore}, below −10)`, scoreAtTime })
       return
     }
 

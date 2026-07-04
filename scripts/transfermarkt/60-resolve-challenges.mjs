@@ -9,7 +9,7 @@
 // value is in [ELIGIBLE_MIN, ELIGIBLE_MAX) — a legal single deduction (1..179).
 
 import { readFileSync, writeFileSync } from 'node:fs'
-import { OUT, ELIGIBLE_MIN, ELIGIBLE_MAX, MIN_ELIGIBLE_WARN } from './config.mjs'
+import { OUT, ELIGIBLE_MIN, DARTS_MAX, MIN_ELIGIBLE_WARN } from './config.mjs'
 import { CHALLENGES } from '../../src/data/football501/challenges.js'
 import { log } from './lib/log.mjs'
 
@@ -50,13 +50,15 @@ export function resolveChallenge(ch, factPlayers) {
     const rec = recordFor(p, ch)
     if (!rec) continue
     const value = evalStat(rec, ch.stat)
-    if (value < ELIGIBLE_MIN || value >= ELIGIBLE_MAX) continue // 1..179 only
+    if (value < ELIGIBLE_MIN) continue // recognise any positive value; ≥180 busts in-game
     players[p.id] = { name: p.name, value, breakdown: breakdownOf(rec, ch.stat) }
     values.push(value)
   }
   values.sort((a, b) => a - b)
   const stats = {
     eligible: values.length,
+    throwable: values.filter(v => v <= DARTS_MAX).length, // deductible without busting (1..180)
+    busts: values.filter(v => v > DARTS_MAX).length,       // recognised but over a darts visit
     min: values[0] ?? null,
     max: values[values.length - 1] ?? null,
     median: values.length ? values[values.length >> 1] : null,
@@ -80,7 +82,7 @@ export function resolveChallenges(factPlayers, challenges = CHALLENGES) {
       stat: ch.stat, statLabel: statLabel(ch.stat), title: ch.title, hint: ch.hint ?? '',
       stats, players,
     }
-    log.info(`${ch.id.padEnd(28)} ${String(stats.eligible).padStart(4)} answers · ${statLabel(ch.stat)} · range ${stats.min}–${stats.max} · ≤40: ${stats.checkoutBand}`)
+    log.info(`${ch.id.padEnd(28)} ${String(stats.eligible).padStart(4)} answers (${stats.throwable} throwable / ${stats.busts} bust) · ${statLabel(ch.stat)} · range ${stats.min}–${stats.max}`)
   }
   log.ok(`${challenges.length} challenges resolved`)
   return out

@@ -167,12 +167,21 @@ describe('501 data engine — answers the <Stat> <Op> <Stat> from <filter> in <c
 })
 
 describe('501 challenge resolver (Stage 60)', () => {
-  it('single stat over a whole competition, eligibility 1..179', () => {
+  it('single stat over a whole competition, recognises any positive value', () => {
     const { players, stats } = resolveChallenge({ competition: 'GB1', filter: null, stat: 'goals' }, built.players)
     // Silva 2, Saka 2, Mover 3 eligible; Journeyman (0 PL goals) excluded
     expect(Object.values(players).map(p => p.name).sort()).toEqual(['Bukayo Saka', 'David Silva', 'Fixture Mover'])
     expect(stats.eligible).toBe(3)
-    expect(players['99999']).toBeUndefined() // value 0 → not a valid answer
+    expect(players['99999']).toBeUndefined() // value 0 → can't be deducted
+  })
+
+  it('recognises category members over 180 (kept in roster as busts)', () => {
+    // Synthetic fact player with a huge apps−goals value (a high-appearance defender).
+    const fact = [{ id: 'X1', name: 'Big Defender', natKey: 'spain', comps: { GB1: { apps: 300, goals: 2, assists: 0, yellow: 0, red: 0, minutes: 0, clubs: {} } } }]
+    const { players, stats } = resolveChallenge({ competition: 'GB1', filter: { nationality: 'spain' }, stat: { a: 'apps', op: '-', b: 'goals' } }, fact)
+    expect(players['X1'].value).toBe(298)  // recognised, not dropped
+    expect(stats.busts).toBe(1)            // flagged as a bust (>180)
+    expect(stats.throwable).toBe(0)
   })
 
   it('club filter reads the per-club sub-record', () => {

@@ -64,14 +64,16 @@ export const MIN_APPEARANCES = 1
 // Nationality source field (citizenship, per the agreed design).
 export const NATIONALITY_FIELD = 'country_of_citizenship'
 
-// Challenge-roster eligibility (Stage 60). A player is a valid answer for a
-// challenge iff their computed stat value is a legal single deduction:
-//   ELIGIBLE_MIN ≤ value < ELIGIBLE_MAX   (i.e. 1..179).
-// Values of 0 (or negative, for subtractions) don't score; values ≥ 180 exceed
-// a darts visit and are not offered. Runtime checkout/bust (0 to −10) is the
-// game's per-turn concern, not roster membership.
+// Challenge-roster eligibility (Stage 60). A player is a RECOGNISED answer for
+// a challenge iff their computed value is positive (≥ ELIGIBLE_MIN). We keep
+// high scorers in the roster even though they bust: a value > DARTS_MAX exceeds
+// a darts visit and busts the board in-game (shown with its real value), rather
+// than being silently rejected as "not a valid answer" — a legit category
+// member (e.g. a Spanish PL player) should always be recognised.
+// Values ≤ 0 (possible for subtractions) can't be deducted, so they're excluded.
+// Runtime checkout/bust (land 0 to −10) is the game's per-turn concern.
 export const ELIGIBLE_MIN = 1
-export const ELIGIBLE_MAX = 180
+export const DARTS_MAX = 180
 
 // Stage 60 warns when a challenge has fewer than this many eligible answers
 // (likely unplayable); it fails the build only if a challenge resolves to zero.

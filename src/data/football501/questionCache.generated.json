@@ -13,9 +13,11 @@
    "title": "Premier League Goals (since 2012)",
    "hint": "Agüero (161) and Vardy (145) drop you fast — save Son (127) or a lower scorer to finish between 0 and −10.",
    "stats": {
-    "eligible": 1354,
+    "eligible": 1356,
+    "throwable": 1354,
+    "busts": 2,
     "min": 1,
-    "max": 161,
+    "max": 213,
     "median": 4,
     "checkoutBand": 1281
    },
@@ -4472,6 +4474,13 @@
       "goals": 12
      }
     },
+    "132098": {
+     "name": "Harry Kane",
+     "value": 213,
+     "breakdown": {
+      "goals": 213
+     }
+    },
     "133179": {
      "name": "Marten de Roon",
      "value": 4,
@@ -4708,6 +4717,13 @@
      "value": 22,
      "breakdown": {
       "goals": 22
+     }
+    },
+    "148455": {
+     "name": "Mohamed Salah",
+     "value": 193,
+     "breakdown": {
+      "goals": 193
      }
     },
     "149237": {
@@ -9509,9 +9525,11 @@
    "title": "La Liga Goals (since 2012)",
    "hint": "Suárez (176), Benzema (171) and Aspas (169) descend quick — Gerard Moreno (124) and Oyarzabal (100) keep you in control.",
    "stats": {
-    "eligible": 1422,
+    "eligible": 1424,
+    "throwable": 1422,
+    "busts": 2,
     "min": 1,
-    "max": 176,
+    "max": 305,
     "median": 4,
     "checkoutBand": 1360
    },
@@ -9850,6 +9868,13 @@
      "value": 1,
      "breakdown": {
       "goals": 1
+     }
+    },
+    "8198": {
+     "name": "Cristiano Ronaldo",
+     "value": 199,
+     "breakdown": {
+      "goals": 199
      }
     },
     "8538": {
@@ -10389,6 +10414,13 @@
      "value": 25,
      "breakdown": {
       "goals": 25
+     }
+    },
+    "28003": {
+     "name": "Lionel Messi",
+     "value": 305,
+     "breakdown": {
+      "goals": 305
      }
     },
     "28005": {
@@ -19481,9 +19513,11 @@
    "title": "Serie A Goals (since 2012)",
    "hint": "Lautaro (132), Dybala (131) and Berardi (130) bring you down — line up a smaller scorer for the checkout.",
    "stats": {
-    "eligible": 1459,
+    "eligible": 1460,
+    "throwable": 1459,
+    "busts": 1,
     "min": 1,
-    "max": 132,
+    "max": 201,
     "median": 4,
     "checkoutBand": 1393
    },
@@ -23273,6 +23307,13 @@
      "value": 4,
      "breakdown": {
       "goals": 4
+     }
+    },
+    "105521": {
+     "name": "Ciro Immobile",
+     "value": 201,
+     "breakdown": {
+      "goals": 201
      }
     },
     "105892": {
@@ -29712,9 +29753,11 @@
    "title": "Bundesliga Goals (since 2012)",
    "hint": "Kramarić (140) and Reus (120) descend fast — Müller (105) or Werner (102) then a finisher.",
    "stats": {
-    "eligible": 1276,
+    "eligible": 1277,
+    "throwable": 1276,
+    "busts": 1,
     "min": 1,
-    "max": 140,
+    "max": 282,
     "median": 4,
     "checkoutBand": 1219
    },
@@ -31089,6 +31132,13 @@
      "value": 1,
      "breakdown": {
       "goals": 1
+     }
+    },
+    "38253": {
+     "name": "Robert Lewandowski",
+     "value": 282,
+     "breakdown": {
+      "goals": 282
      }
     },
     "38383": {
@@ -38662,9 +38712,11 @@
    "title": "Ligue 1 Goals (since 2012)",
    "hint": "Ben Yedder (160) and Lacazette (155) drop you quick — Cavani (138), Ibrahimović (113) to close in.",
    "stats": {
-    "eligible": 1567,
+    "eligible": 1568,
+    "throwable": 1567,
+    "busts": 1,
     "min": 1,
-    "max": 160,
+    "max": 191,
     "median": 3,
     "checkoutBand": 1519
    },
@@ -45599,6 +45651,13 @@
       "goals": 23
      }
     },
+    "342229": {
+     "name": "Kylian Mbappé",
+     "value": 191,
+     "breakdown": {
+      "goals": 191
+     }
+    },
     "342364": {
      "name": "Babacar Gueye",
      "value": 1,
@@ -49650,6 +49709,8 @@
    "hint": "Lewandowski (108) and Ronaldo (102) are the big drops — Messi (78), Mbappé (70) then a low scorer to finish.",
    "stats": {
     "eligible": 1352,
+    "throwable": 1352,
+    "busts": 0,
     "min": 1,
     "max": 108,
     "median": 2,
@@ -59132,6 +59193,8 @@
    "hint": "De Bruyne (122) and Salah (98) descend fast — Sterling (86), Eriksen (83) keep you in range.",
    "stats": {
     "eligible": 1441,
+    "throwable": 1441,
+    "busts": 0,
     "min": 1,
     "max": 122,
     "median": 4,
@@ -69237,6 +69300,8 @@
    "hint": "Even the worst offenders stay modest — Tarkowski (72), Shaw (71), Xhaka (63) — so this is a patient countdown.",
    "stats": {
     "eligible": 1785,
+    "throwable": 1785,
+    "busts": 0,
     "min": 1,
     "max": 72,
     "median": 6,
@@ -81753,9 +81818,11 @@
    "title": "Premier League Goals + Assists (since 2012)",
    "hint": "Lukaku (163) and Mané (158) drop you fast — Mahrez (147), Hazard (146) then a low contributor to finish.",
    "stats": {
-    "eligible": 1640,
+    "eligible": 1647,
+    "throwable": 1640,
+    "busts": 7,
     "min": 1,
-    "max": 163,
+    "max": 291,
     "median": 6,
     "checkoutBand": 1480
    },
@@ -83358,6 +83425,14 @@
      "breakdown": {
       "goals": 20,
       "assists": 22
+     }
+    },
+    "26399": {
+     "name": "Sergio Agüero",
+     "value": 206,
+     "breakdown": {
+      "goals": 161,
+      "assists": 45
      }
     },
     "26443": {
@@ -86760,6 +86835,14 @@
       "assists": 4
      }
     },
+    "88755": {
+     "name": "Kevin De Bruyne",
+     "value": 194,
+     "breakdown": {
+      "goals": 72,
+      "assists": 122
+     }
+    },
     "89231": {
      "name": "Jóhann Berg Gudmundsson",
      "value": 31,
@@ -86838,6 +86921,14 @@
      "breakdown": {
       "goals": 12,
       "assists": 32
+     }
+    },
+    "91845": {
+     "name": "Heung-min Son",
+     "value": 205,
+     "breakdown": {
+      "goals": 127,
+      "assists": 78
      }
     },
     "91970": {
@@ -87952,6 +88043,14 @@
       "assists": 8
      }
     },
+    "132098": {
+     "name": "Harry Kane",
+     "value": 263,
+     "breakdown": {
+      "goals": 213,
+      "assists": 50
+     }
+    },
     "133179": {
      "name": "Marten de Roon",
      "value": 4,
@@ -87982,6 +88081,14 @@
      "breakdown": {
       "goals": 1,
       "assists": 0
+     }
+    },
+    "134425": {
+     "name": "Raheem Sterling",
+     "value": 209,
+     "breakdown": {
+      "goals": 123,
+      "assists": 86
      }
     },
     "134936": {
@@ -88262,6 +88369,14 @@
      "breakdown": {
       "goals": 22,
       "assists": 11
+     }
+    },
+    "148455": {
+     "name": "Mohamed Salah",
+     "value": 291,
+     "breakdown": {
+      "goals": 193,
+      "assists": 98
      }
     },
     "149237": {
@@ -89118,6 +89233,14 @@
      "breakdown": {
       "goals": 0,
       "assists": 1
+     }
+    },
+    "197838": {
+     "name": "Jamie Vardy",
+     "value": 198,
+     "breakdown": {
+      "goals": 145,
+      "assists": 53
      }
     },
     "198516": {
@@ -94898,6 +95021,8 @@
    "hint": "Saka (114) and Giroud (100) are the big drops — Xhaka (41), Rice (38), Havertz (37) close it out.",
    "stats": {
     "eligible": 83,
+    "throwable": 83,
+    "busts": 0,
     "min": 1,
     "max": 114,
     "median": 9,
@@ -95585,10 +95710,12 @@
    "title": "Appearances − Goals · Spanish players · Premier League",
    "hint": "Defenders and keepers rack up huge values — Ayoze (178), Bellerín (175) — while forwards like Soldado (45) keep you in checkout range.",
    "stats": {
-    "eligible": 130,
+    "eligible": 136,
+    "throwable": 130,
+    "busts": 6,
     "min": 1,
-    "max": 178,
-    "median": 30,
+    "max": 386,
+    "median": 31,
     "checkoutBand": 80
    },
    "players": {
@@ -95728,6 +95855,14 @@
       "goals": 7
      }
     },
+    "35518": {
+     "name": "David Silva",
+     "value": 188,
+     "breakdown": {
+      "apps": 238,
+      "goals": 50
+     }
+    },
     "35564": {
      "name": "Fernando Llorente",
      "value": 52,
@@ -95800,6 +95935,14 @@
       "goals": 1
      }
     },
+    "44068": {
+     "name": "Juan Mata",
+     "value": 198,
+     "breakdown": {
+      "apps": 244,
+      "goals": 46
+     }
+    },
     "44675": {
      "name": "Bojan Krkic",
      "value": 39,
@@ -95856,11 +95999,27 @@
       "goals": 3
      }
     },
+    "57500": {
+     "name": "César Azpilicueta",
+     "value": 339,
+     "breakdown": {
+      "apps": 349,
+      "goals": 10
+     }
+    },
     "59340": {
      "name": "Iago Falque",
      "value": 1,
      "breakdown": {
       "apps": 1,
+      "goals": 0
+     }
+    },
+    "59377": {
+     "name": "David de Gea",
+     "value": 386,
+     "breakdown": {
+      "apps": 386,
       "goals": 0
      }
     },
@@ -95902,6 +96061,14 @@
      "breakdown": {
       "apps": 27,
       "goals": 3
+     }
+    },
+    "66100": {
+     "name": "Oriol Romeu",
+     "value": 216,
+     "breakdown": {
+      "apps": 223,
+      "goals": 7
      }
     },
     "66550": {
@@ -96246,6 +96413,14 @@
      "breakdown": {
       "apps": 11,
       "goals": 0
+     }
+    },
+    "204103": {
+     "name": "Adama Traoré",
+     "value": 257,
+     "breakdown": {
+      "apps": 271,
+      "goals": 14
      }
     },
     "207302": {
@@ -96650,6 +96825,8 @@
    "hint": "Danilo (80), Juan Jesus (76) and Allan (73) descend quick — Bremer (44), Hernanes (42) to finish.",
    "stats": {
     "eligible": 125,
+    "throwable": 125,
+    "busts": 0,
     "min": 1,
     "max": 80,
     "median": 8,
