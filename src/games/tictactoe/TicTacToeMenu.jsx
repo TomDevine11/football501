@@ -17,13 +17,13 @@ export default function TicTacToeMenu() {
       <div className="w-full max-w-lg">
         <div className="flex items-center justify-between mb-8">
           <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
-          <div className="score-number text-xl text-gray-500 tracking-wider">TICTACTOE</div>
+          <div className="score-number text-xl text-gray-500 tracking-wider">{t('tictactoe.wordmark')}</div>
           <div className="w-16" />
         </div>
 
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-3"><Mark mark="X" size={40} /><Mark mark="O" size={40} /></div>
-          <h1 className="score-number text-3xl text-white mb-2">Football TicTacToe</h1>
+          <h1 className="score-number text-3xl text-white mb-2">{t('games.tictactoe.title')}</h1>
           <p className="text-gray-500 text-sm">{t('tictactoe.menuSubtitle')}</p>
         </div>
 

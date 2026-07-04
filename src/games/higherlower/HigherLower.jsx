@@ -106,7 +106,7 @@ export default function HigherLower() {
       <div className="min-h-screen flex flex-col items-center px-4 py-8">
         <div className="w-full max-w-lg flex items-center justify-between mb-6">
           <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
-          <div className="score-number text-xl text-gray-500 tracking-wider">HIGHER / LOWER</div>
+          <div className="score-number text-xl text-gray-500 tracking-wider">{t('higherlower.wordmark')}</div>
           <div className="text-sm tabular-nums text-gray-500">{t('higherlower.best', { n: best })}</div>
         </div>
         <ModeToggle mode={dailyMode} onChange={switchMode} className="mb-6" />
@@ -134,7 +134,7 @@ export default function HigherLower() {
         {dailyMode === 'unlimited'
           ? <button onClick={() => setMode(null)} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('higherlower.changeStat')}</button>
           : <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>}
-        <div className="score-number text-xl text-gray-500 tracking-wider">HIGHER / LOWER</div>
+        <div className="score-number text-xl text-gray-500 tracking-wider">{t('higherlower.wordmark')}</div>
         <div className="text-sm tabular-nums text-gray-500">{t('higherlower.best', { n: best })}</div>
       </div>
 

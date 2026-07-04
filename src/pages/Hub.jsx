@@ -37,6 +37,7 @@ export default function Hub() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {GAMES.map(game => {
             const id = game.to.slice(1)
+            const title = t(`games.${id}.title`)
             const tagline = t(`games.${id}.tagline`)
             const description = t(`games.${id}.description`)
             return game.disabled ? (
@@ -46,7 +47,7 @@ export default function Hub() {
                 className="relative bg-gray-900/50 border border-gray-800/50 rounded-xl p-6 text-left opacity-60 cursor-not-allowed select-none"
               >
                 <div className="mb-4 text-gray-600"><GameIcon id={id} className="w-10 h-10" /></div>
-                <div className="text-gray-400 font-bold text-xl leading-tight">{game.title}</div>
+                <div className="text-gray-400 font-bold text-xl leading-tight">{title}</div>
                 <div className="text-gray-600 text-sm mt-1 font-medium">{tagline}</div>
                 <div className="mt-3 text-gray-700 text-xs leading-relaxed">{description}</div>
                 <div className="absolute top-4 right-4">
@@ -62,7 +63,7 @@ export default function Hub() {
                 className={`group relative bg-gray-900 border border-gray-800 ${game.color} rounded-xl p-6 text-left transition-all duration-200 cursor-pointer ring-1 ring-transparent`}
               >
                 <div className={`mb-4 ${game.accent}`}><GameIcon id={id} className="w-10 h-10" /></div>
-                <div className="text-white font-bold text-xl leading-tight">{game.title}</div>
+                <div className="text-white font-bold text-xl leading-tight">{title}</div>
                 <div className={`${game.accent} text-sm mt-1 font-medium`}>{tagline}</div>
                 <div className="mt-3 text-gray-600 text-xs leading-relaxed">{description}</div>
                 <div className="absolute top-4 right-4 text-gray-700 group-hover:text-gray-400 transition-colors text-xl">→</div>

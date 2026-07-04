@@ -96,7 +96,7 @@ export default function WorldCupSquads() {
       <div className="min-h-screen flex flex-col items-center px-4 py-8">
         <div className="w-full max-w-lg flex items-center justify-between mb-6">
           <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
-          <div className="score-number text-xl text-gray-500 tracking-wider">WORLD CUP SQUADS</div>
+          <div className="score-number text-xl text-gray-500 tracking-wider">{t('wcsquads.wordmark')}</div>
           <div className="w-16" />
         </div>
         <ModeToggle mode={mode} onChange={switchMode} className="mb-6" />
@@ -128,7 +128,7 @@ export default function WorldCupSquads() {
         {mode === 'unlimited'
           ? <button onClick={back} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('wcsquads.changeSquad')}</button>
           : <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>}
-        <div className="score-number text-xl text-gray-500 tracking-wider">WORLD CUP SQUADS</div>
+        <div className="score-number text-xl text-gray-500 tracking-wider">{t('wcsquads.wordmark')}</div>
         <div className="text-sm tabular-nums text-gray-400">{named.size}/{squad.players.length}</div>
       </div>
 

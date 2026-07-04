@@ -106,7 +106,7 @@ export default function GuessByTeammates() {
       {/* Header */}
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
         <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
-        <div className="score-number text-xl text-gray-500 tracking-wider">TEAMMATES</div>
+        <div className="score-number text-xl text-gray-500 tracking-wider">{t('teammates.wordmark')}</div>
         <div className="text-sm tabular-nums text-gray-500">{phase === 'playing' ? t('teammates.left', { n: guessesLeft }) : ''}</div>
       </div>
 

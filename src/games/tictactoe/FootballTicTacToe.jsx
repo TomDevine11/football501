@@ -242,7 +242,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
             {t('common.allGames')}
           </Link>
         )}
-        <div className="score-number text-xl text-gray-500 tracking-wider">TICTACTOE</div>
+        <div className="score-number text-xl text-gray-500 tracking-wider">{t('tictactoe.wordmark')}</div>
         <div className="flex items-center gap-1 text-sm tabular-nums">
           {Array.from({ length: MAX_LIVES }, (_, i) => (
             <span key={i} className={i < lives ? 'text-red-500' : 'text-gray-700'}>♥</span>
