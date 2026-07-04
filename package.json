@@ -8,6 +8,7 @@
     "server": "node server/index.js",
     "build": "vite build && node scripts/prerender.mjs",
     "indexnow": "node scripts/indexnow.mjs",
+    "build:501-data": "node scripts/transfermarkt/build.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
