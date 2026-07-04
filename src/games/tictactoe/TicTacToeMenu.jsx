@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 import FootballTicTacToe from './FootballTicTacToe'
 import TicTacToeVersus from './TicTacToeVersus'
 import Mark from './Mark'
+import { useI18n } from '../../i18n'
 
 export default function TicTacToeMenu() {
+  const { t, lp } = useI18n()
   const [mode, setMode] = useState(null) // null | 'solo' | 'versus'
 
   if (mode === 'solo') return <FootballTicTacToe onBackToModes={() => setMode(null)} />
@@ -14,7 +16,7 @@ export default function TicTacToeMenu() {
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         <div className="flex items-center justify-between mb-8">
-          <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>
+          <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
           <div className="score-number text-xl text-gray-500 tracking-wider">TICTACTOE</div>
           <div className="w-16" />
         </div>
@@ -22,7 +24,7 @@ export default function TicTacToeMenu() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-3"><Mark mark="X" size={40} /><Mark mark="O" size={40} /></div>
           <h1 className="score-number text-3xl text-white mb-2">Football TicTacToe</h1>
-          <p className="text-gray-500 text-sm">Every row and column is a football category. Choose how you want to play.</p>
+          <p className="text-gray-500 text-sm">{t('tictactoe.menuSubtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -31,9 +33,9 @@ export default function TicTacToeMenu() {
             className="group bg-gray-900 border border-gray-800 hover:border-green-600 hover:ring-1 hover:ring-green-600/30 rounded-xl p-6 text-left transition-all"
           >
             <div className="text-3xl mb-3">🎯</div>
-            <div className="text-white font-bold text-lg">Daily Challenge</div>
-            <div className="text-green-400 text-sm mt-1 font-medium">Solo</div>
-            <div className="text-gray-600 text-xs mt-3 leading-relaxed">Fill all 9 squares before you run out of lives. A new grid every day.</div>
+            <div className="text-white font-bold text-lg">{t('tictactoe.dailyTitle')}</div>
+            <div className="text-green-400 text-sm mt-1 font-medium">{t('tictactoe.solo')}</div>
+            <div className="text-gray-600 text-xs mt-3 leading-relaxed">{t('tictactoe.dailyDesc')}</div>
           </button>
 
           <button
@@ -41,9 +43,9 @@ export default function TicTacToeMenu() {
             className="group bg-gray-900 border border-gray-800 hover:border-purple-500 hover:ring-1 hover:ring-purple-500/30 rounded-xl p-6 text-left transition-all"
           >
             <div className="text-3xl mb-3">⚔️</div>
-            <div className="text-white font-bold text-lg">Local 1v1</div>
-            <div className="text-purple-400 text-sm mt-1 font-medium">Two players, one device</div>
-            <div className="text-gray-600 text-xs mt-3 leading-relaxed">Take turns claiming squares with X and O. First to three in a row wins.</div>
+            <div className="text-white font-bold text-lg">{t('tictactoe.versusTitle')}</div>
+            <div className="text-purple-400 text-sm mt-1 font-medium">{t('tictactoe.versusSub')}</div>
+            <div className="text-gray-600 text-xs mt-3 leading-relaxed">{t('tictactoe.versusDesc')}</div>
           </button>
         </div>
       </div>

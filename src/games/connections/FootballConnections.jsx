@@ -9,6 +9,7 @@ import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 import { ShareCard } from '../../components/ShareCard'
 import { SITE_URL } from '../../utils/site'
+import { useI18n } from '../../i18n'
 
 const MAX_LIVES = 4
 const SHARE_EMOJI = ['🟨', '🟩', '🟦', '🟪'] // per group index
@@ -21,6 +22,7 @@ const GROUP_COLORS = [
 const keyOf = names => [...names].sort().join('|')
 
 export default function FootballConnections() {
+  const { t, lp } = useI18n()
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [puzzle, setPuzzle] = useState(() => getDailyConnections())
   const [solved, setSolved] = useState([])        // [{ groupIndex, label, players }]
@@ -65,7 +67,7 @@ export default function FootballConnections() {
   const submit = () => {
     if (selected.length !== 4 || over) return
     const key = keyOf(selected)
-    if (pastGuesses.has(key)) { setMessage('Already guessed'); return }
+    if (pastGuesses.has(key)) { setMessage(t('connections.alreadyGuessed')); return }
 
     // record this guess as a colour row (the group each selected tile belongs to)
     setGuessRows(rows => [...rows, selected.map(n => puzzle.groups.findIndex(g => g.players.includes(n)))])
@@ -82,7 +84,7 @@ export default function FootballConnections() {
     setPastGuesses(p => new Set(p).add(key))
     const oneAway = puzzle.groups.some(g => g.players.filter(p => selected.includes(p)).length === 3)
     setLives(l => l - 1)
-    setMessage(oneAway ? 'So close — one away!' : 'Not a group')
+    setMessage(oneAway ? t('connections.oneAway') : t('connections.notGroup'))
     setShake(true); setTimeout(() => setShake(false), 400)
     setSelected([])
   }
@@ -112,7 +114,7 @@ export default function FootballConnections() {
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
-        <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>
+        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
         <div className="score-number text-xl text-gray-500 tracking-wider">CONNECTIONS</div>
         <div className="flex items-center gap-1">
           {Array.from({ length: MAX_LIVES }, (_, i) => (
@@ -125,8 +127,8 @@ export default function FootballConnections() {
 
       <div className="w-full max-w-lg mb-4">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">Find the four groups of four</div>
-          <div className="text-gray-500 text-xs mt-0.5">Every player belongs to exactly one group. Select four and submit — four wrong guesses ends it.</div>
+          <div className="text-white font-bold text-sm">{t('connections.intro')}</div>
+          <div className="text-gray-500 text-xs mt-0.5">{t('connections.introSub')}</div>
         </div>
       </div>
 
@@ -168,30 +170,30 @@ export default function FootballConnections() {
 
       {!over && (
         <div className="w-full max-w-lg mt-4 flex gap-3">
-          <button onClick={shuffleTiles} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-xl py-3 transition-colors">Shuffle</button>
-          <button onClick={() => setSelected([])} disabled={!selected.length} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 disabled:opacity-40 text-sm font-medium rounded-xl py-3 transition-colors">Deselect</button>
-          <button onClick={submit} disabled={selected.length !== 4} className="flex-1 bg-green-700 hover:bg-green-600 disabled:opacity-40 text-white text-sm font-semibold rounded-xl py-3 transition-colors">Submit</button>
+          <button onClick={shuffleTiles} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-xl py-3 transition-colors">{t('connections.shuffle')}</button>
+          <button onClick={() => setSelected([])} disabled={!selected.length} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 disabled:opacity-40 text-sm font-medium rounded-xl py-3 transition-colors">{t('connections.deselect')}</button>
+          <button onClick={submit} disabled={selected.length !== 4} className="flex-1 bg-green-700 hover:bg-green-600 disabled:opacity-40 text-white text-sm font-semibold rounded-xl py-3 transition-colors">{t('connections.submit')}</button>
         </div>
       )}
 
       {over && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <div className="text-5xl mb-2">{won ? '🎉' : '💔'}</div>
           <h2 className={`score-number text-3xl mb-1 ${won ? 'text-green-400' : 'text-red-400'}`}>
-            {won ? 'SOLVED!' : 'OUT OF GUESSES'}
+            {won ? t('connections.solved') : t('connections.outOf')}
           </h2>
           <p className="text-gray-400">
             {won
-              ? <>You found all four groups with <span className="text-white font-bold">{MAX_LIVES - lives}</span> mistake{MAX_LIVES - lives === 1 ? '' : 's'}.</>
-              : mode === 'daily' ? 'Come back tomorrow for a new puzzle.' : 'Better luck on the next one.'}
+              ? t('connections.foundAll', { n: MAX_LIVES - lives })
+              : mode === 'daily' ? t('common.comeBackTomorrow') : t('connections.betterLuck')}
           </p>
           {mode === 'daily' && <DailyStats game="connections" stats={dailyStats} />}
           <ShareCard text={shareText} />
-          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New puzzle →'}</button>
+          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('connections.newPuzzle')}</button>
         </div>
         <MoreGames current="/connections" />
       </ResultModal>

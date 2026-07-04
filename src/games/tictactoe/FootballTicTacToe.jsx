@@ -11,6 +11,7 @@ import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
+import { useI18n } from '../../i18n'
 
 const MAX_LIVES = 3
 
@@ -18,6 +19,7 @@ const TSDB = 'https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p='
 const EXCLUDE_SPORTS = new Set(['basketball','american football','baseball','ice hockey','tennis','golf','cricket','rugby','swimming','athletics','motorsport','cycling','boxing','mma'])
 
 export default function FootballTicTacToe({ onBackToModes }) {
+  const { t, lp } = useI18n()
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [grid, setGrid] = useState(() => getDailyGrid())
   const [filled, setFilled] = useState({}) // cellIndex -> player name
@@ -233,11 +235,11 @@ export default function FootballTicTacToe({ onBackToModes }) {
       <div className="w-full max-w-lg flex items-center justify-between mb-6">
         {onBackToModes ? (
           <button onClick={onBackToModes} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
-            ← Modes
+            {t('tictactoe.modes')}
           </button>
         ) : (
-          <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
-            ← All games
+          <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+            {t('common.allGames')}
           </Link>
         )}
         <div className="score-number text-xl text-gray-500 tracking-wider">TICTACTOE</div>
@@ -253,8 +255,8 @@ export default function FootballTicTacToe({ onBackToModes }) {
       {/* Intro card */}
       <div className="w-full max-w-lg mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">Fill every square</div>
-          <div className="text-gray-500 text-xs mt-0.5">Name a player who satisfies BOTH the row and column category. No player can be used twice.</div>
+          <div className="text-white font-bold text-sm">{t('tictactoe.fillEvery')}</div>
+          <div className="text-gray-500 text-xs mt-0.5">{t('tictactoe.fillEverySub')}</div>
         </div>
       </div>
 
@@ -270,7 +272,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
           {grid.colCategories.map((cat, i) => (
             <div key={`col-${i}`} className="flex flex-col items-center justify-center text-center px-1 py-2 gap-1 text-[10px] sm:text-xs font-bold text-blue-400 leading-tight">
               <CategoryIcon category={cat} size={24} />
-              <span>{categoryLabel(cat)}</span>
+              <span>{categoryLabel(cat, t)}</span>
             </div>
           ))}
 
@@ -279,7 +281,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
             <Fragment key={r}>
               <div className="flex flex-col items-center justify-center text-center px-1 gap-1 text-[10px] sm:text-xs font-bold text-yellow-400 leading-tight">
                 <CategoryIcon category={grid.rowCategories[r]} size={24} />
-                <span>{categoryLabel(grid.rowCategories[r])}</span>
+                <span>{categoryLabel(grid.rowCategories[r], t)}</span>
               </div>
               {[0, 1, 2].map(c => {
                 const idx = r * 3 + c
@@ -328,16 +330,16 @@ export default function FootballTicTacToe({ onBackToModes }) {
 
       {phase !== 'playing' && (
         <div className="w-full max-w-lg -mt-3 mb-4 text-center text-xs text-gray-500">
-          🔍 Tap any square to see every player who fits it.
+          {t('tictactoe.tapSquare')}
         </div>
       )}
 
       {phase === 'playing' && selectedCell != null && (
         <>
           <div className="w-full max-w-lg mb-2 text-center text-xs text-gray-500">
-            <span className="text-yellow-400 font-medium">{categoryLabel(grid.rowCategories[Math.floor(selectedCell / 3)])}</span>
+            <span className="text-yellow-400 font-medium">{categoryLabel(grid.rowCategories[Math.floor(selectedCell / 3)], t)}</span>
             {' '}+{' '}
-            <span className="text-blue-400 font-medium">{categoryLabel(grid.colCategories[selectedCell % 3])}</span>
+            <span className="text-blue-400 font-medium">{categoryLabel(grid.colCategories[selectedCell % 3], t)}</span>
           </div>
           <form onSubmit={handleSubmit} className={`relative w-full max-w-lg ${shake ? 'shake' : ''}`}>
             <input
@@ -346,7 +348,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type a player's name..."
+              placeholder={t('tictactoe.placeholder')}
               autoFocus
               className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
               autoComplete="off" autoCorrect="off" spellCheck="false"
@@ -380,7 +382,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
             onClick={() => setSelectedCell(null)}
             className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
         </>
       )}
@@ -388,8 +390,8 @@ export default function FootballTicTacToe({ onBackToModes }) {
       {phase === 'playing' && (
         <>
           <div className="w-full max-w-lg mt-3 flex justify-between items-center text-xs text-gray-700 px-1">
-            <span>{filledCount}/9 squares</span>
-            <span>{lives} {lives === 1 ? 'life' : 'lives'} left</span>
+            <span>{t('tictactoe.squares', { n: filledCount })}</span>
+            <span>{lives === 1 ? t('tictactoe.lifeLeft', { n: lives }) : t('tictactoe.livesLeft', { n: lives })}</span>
           </div>
 
           <button
@@ -397,7 +399,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
             onClick={() => setShowGiveUpConfirm(true)}
             className="mt-4 w-full max-w-lg border border-red-900/60 text-red-400 hover:bg-red-900/20 hover:border-red-700 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
           >
-            Give up
+            {t('tictactoe.giveUp')}
           </button>
         </>
       )}
@@ -405,22 +407,22 @@ export default function FootballTicTacToe({ onBackToModes }) {
       {showGiveUpConfirm && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-20 px-4">
           <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-5 text-center">
-            <p className="text-white font-medium mb-1">Give up?</p>
-            <p className="text-gray-500 text-sm mb-5">This will reveal example answers for every remaining square and end the game.</p>
+            <p className="text-white font-medium mb-1">{t('tictactoe.giveUpTitle')}</p>
+            <p className="text-gray-500 text-sm mb-5">{t('tictactoe.giveUpBody')}</p>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setShowGiveUpConfirm(false)}
                 className="flex-1 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 type="button"
                 onClick={confirmGiveUp}
                 className="flex-1 bg-red-900/60 hover:bg-red-900 text-red-200 text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
               >
-                Yes, give up
+                {t('tictactoe.giveUpConfirm')}
               </button>
             </div>
           </div>
@@ -432,11 +434,11 @@ export default function FootballTicTacToe({ onBackToModes }) {
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-30 px-4" onClick={() => setAnswersCell(null)}>
           <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-5 max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="text-center mb-1 leading-tight">
-              <span className="text-yellow-400 text-xs font-medium">{categoryLabel(grid.rowCategories[Math.floor(answersCell / 3)])}</span>
+              <span className="text-yellow-400 text-xs font-medium">{categoryLabel(grid.rowCategories[Math.floor(answersCell / 3)], t)}</span>
               <span className="text-gray-600 text-xs"> + </span>
-              <span className="text-blue-400 text-xs font-medium">{categoryLabel(grid.colCategories[answersCell % 3])}</span>
+              <span className="text-blue-400 text-xs font-medium">{categoryLabel(grid.colCategories[answersCell % 3], t)}</span>
             </div>
-            <div className="text-gray-500 text-xs text-center mb-3">{grid.candidates[answersCell].length} possible answers</div>
+            <div className="text-gray-500 text-xs text-center mb-3">{t('tictactoe.possibleAnswers', { n: grid.candidates[answersCell].length })}</div>
             <div className="overflow-y-auto -mx-1 px-1">
               <div className="grid grid-cols-2 gap-1.5">
                 {grid.candidates[answersCell].map(name => (
@@ -456,34 +458,34 @@ export default function FootballTicTacToe({ onBackToModes }) {
               onClick={() => setAnswersCell(null)}
               className="mt-4 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
             >
-              Close
+              {t('tictactoe.close')}
             </button>
           </div>
         </div>
       )}
 
       {phase !== 'playing' && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         {phase === 'won' && (
           <div className="w-full flex flex-col items-center text-center">
             <div className="text-6xl mb-3">🏆</div>
-            <h2 className="score-number text-4xl text-green-400 mb-2">GRID COMPLETE!</h2>
-            <p className="text-gray-400 mb-2">You filled all 9 squares with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.</p>
+            <h2 className="score-number text-4xl text-green-400 mb-2">{t('tictactoe.gridComplete')}</h2>
+            <p className="text-gray-400 mb-2">{lives === 1 ? t('tictactoe.filledAllLife', { n: lives }) : t('tictactoe.filledAllLives', { n: lives })}</p>
           </div>
         )}
         {phase === 'lost' && (
           <div className="w-full flex flex-col items-center text-center">
             <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
-            <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? 'GAVE UP' : 'GAME OVER'}</h2>
-            <p className="text-gray-400 mb-2">You filled <span className="text-white font-bold">{filledCount}/9</span> squares before {gaveUp ? 'giving up' : 'running out of lives'}.</p>
+            <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? t('tictactoe.gaveUp') : t('tictactoe.gameOver')}</h2>
+            <p className="text-gray-400 mb-2">{gaveUp ? t('tictactoe.filledBeforeGaveUp', { n: filledCount }) : t('tictactoe.filledBeforeLost', { n: filledCount })}</p>
           </div>
         )}
         {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
         <ShareCard text={shareText} />
-        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New grid →'}</button>
+        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tictactoe.newGrid')}</button>
         <MoreGames current="/tictactoe" />
       </ResultModal>
 
@@ -491,7 +493,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
       {history.length > 0 && (
         <div className="w-full max-w-lg mt-2">
           <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">
-            Guesses ({history.length})
+            {t('tictactoe.guesses', { n: history.length })}
           </div>
           <div className="rounded-xl border border-gray-800 overflow-hidden">
             <div className="divide-y divide-gray-800/40 max-h-56 overflow-y-auto">
@@ -499,7 +501,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
                 <div key={i} className={`flex items-center justify-between px-4 py-2.5 ${g.correct === true ? 'flash-valid' : 'flash-invalid'}`}>
                   <span className="text-sm text-white truncate">{g.text}</span>
                   {g.correct === true
-                    ? <span className="text-green-400 text-xs font-semibold shrink-0">✓ square {g.cell + 1}</span>
+                    ? <span className="text-green-400 text-xs font-semibold shrink-0">{t('tictactoe.square', { n: g.cell + 1 })}</span>
                     : <span className="text-red-500 text-xs font-semibold shrink-0">✗</span>}
                 </div>
               ))}

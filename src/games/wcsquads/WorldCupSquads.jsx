@@ -9,8 +9,10 @@ import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
+import { useI18n } from '../../i18n'
 
 export default function WorldCupSquads() {
+  const { t, lp } = useI18n()
   const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
   const [squad, setSquad] = useState(() => getDailySquad())
   const [named, setNamed] = useState(() => new Set())
@@ -52,9 +54,9 @@ export default function WorldCupSquads() {
     setInput('')
     const m = matchPlayer(matcher, text)
     if (!m) {
-      setFlash('Not in this squad'); setShake(true); setTimeout(() => setShake(false), 400)
+      setFlash(t('wcsquads.notInSquad')); setShake(true); setTimeout(() => setShake(false), 400)
     } else if (named.has(m)) {
-      setFlash(`${m} — already named`)
+      setFlash(t('wcsquads.alreadyNamed', { name: m }))
     } else {
       setNamed(prev => new Set(prev).add(m)); setFlash('')
     }
@@ -93,14 +95,14 @@ export default function WorldCupSquads() {
     return (
       <div className="min-h-screen flex flex-col items-center px-4 py-8">
         <div className="w-full max-w-lg flex items-center justify-between mb-6">
-          <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>
+          <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
           <div className="score-number text-xl text-gray-500 tracking-wider">WORLD CUP SQUADS</div>
           <div className="w-16" />
         </div>
         <ModeToggle mode={mode} onChange={switchMode} className="mb-6" />
         <div className="w-full max-w-lg text-center mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Name the Winning Squad</h1>
-          <p className="text-gray-500 text-sm">Pick a World Cup-winning team and recall as many of the squad as you can.</p>
+          <h1 className="text-2xl font-bold text-white mb-1">{t('wcsquads.title')}</h1>
+          <p className="text-gray-500 text-sm">{t('wcsquads.pick')}</p>
         </div>
         <div className="w-full max-w-lg grid grid-cols-2 sm:grid-cols-3 gap-3">
           {SQUADS.map(s => (
@@ -124,8 +126,8 @@ export default function WorldCupSquads() {
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
         {mode === 'unlimited'
-          ? <button onClick={back} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Change squad</button>
-          : <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>}
+          ? <button onClick={back} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('wcsquads.changeSquad')}</button>
+          : <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>}
         <div className="score-number text-xl text-gray-500 tracking-wider">WORLD CUP SQUADS</div>
         <div className="text-sm tabular-nums text-gray-400">{named.size}/{squad.players.length}</div>
       </div>
@@ -134,14 +136,14 @@ export default function WorldCupSquads() {
 
       <div className="w-full max-w-lg mb-4 text-center">
         <h1 className="text-xl font-bold text-white">{squad.nation} {squad.year}</h1>
-        <p className="text-gray-500 text-xs">{mode === 'daily' ? "Today's squad — name the winners" : 'World Cup winners — name the squad'}</p>
+        <p className="text-gray-500 text-xs">{mode === 'daily' ? t('wcsquads.subtitleDaily') : t('wcsquads.subtitleUnlimited')}</p>
       </div>
 
       {active && (
         <form onSubmit={handleSubmit} className={`relative w-full max-w-lg mb-2 ${shake ? 'shake' : ''}`}>
           <input
             ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-            placeholder="Name a player from the squad..." autoFocus
+            placeholder={t('wcsquads.placeholder')} autoFocus
             className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
             autoComplete="off" autoCorrect="off" spellCheck="false"
           />
@@ -183,11 +185,11 @@ export default function WorldCupSquads() {
       {/* Controls / result */}
       {!over && (
         <button onClick={() => setRevealed(true)} className="mt-5 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
-          Give up &amp; reveal squad
+          {t('wcsquads.giveUp')}
         </button>
       )}
       {over && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
@@ -195,19 +197,19 @@ export default function WorldCupSquads() {
           {complete ? (
             <>
               <div className="text-4xl mb-1">🏆</div>
-              <h2 className="score-number text-2xl text-green-400 mb-1">FULL SQUAD!</h2>
-              <p className="text-gray-400 text-sm mb-3">You named all {squad.players.length}.</p>
+              <h2 className="score-number text-2xl text-green-400 mb-1">{t('wcsquads.fullSquad')}</h2>
+              <p className="text-gray-400 text-sm mb-3">{t('wcsquads.namedAll', { n: squad.players.length })}</p>
             </>
           ) : (
-            <p className="text-gray-300 text-sm mb-3">You named <span className="text-white font-bold">{named.size}</span> of {squad.players.length}.</p>
+            <p className="text-gray-300 text-sm mb-3">{t('wcsquads.namedOf', { n: named.size, total: squad.players.length })}</p>
           )}
           {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
           <ShareCard text={squadShareText} />
           {mode === 'unlimited'
-            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Another squad</button>
+            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('wcsquads.anotherSquad')}</button>
             : <>
-                <button onClick={() => switchMode('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Play Unlimited →</button>
-                <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new daily.</p>
+                <button onClick={() => switchMode('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
+                <p className="text-gray-600 text-xs mt-3">{t('common.comeBackTomorrow')}</p>
               </>}
         </div>
         <MoreGames current="/world-cup" />

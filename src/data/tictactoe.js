@@ -29,13 +29,19 @@ function buildCategories() {
 
 export const CATEGORIES = buildCategories()
 
-export function categoryLabel(category) {
-  switch (category.type) {
-    case 'club': return `Played for ${category.value}`
-    case 'league': return `Played in the ${category.value}`
-    case 'nationality': return `${category.value} international`
-    case 'manager': return `Played under ${category.value}`
-    case 'trophy': return `Won the ${category.value}`
+// `t` is an optional translator (from useI18n). When provided, the label is
+// localized via the tictactoe.cat.* templates; without it, falls back to English.
+export function categoryLabel(category, t) {
+  const { type, value } = category
+  if (t && ['club', 'league', 'nationality', 'manager', 'trophy'].includes(type)) {
+    return t(`tictactoe.cat.${type}`, { value })
+  }
+  switch (type) {
+    case 'club': return `Played for ${value}`
+    case 'league': return `Played in the ${value}`
+    case 'nationality': return `${value} international`
+    case 'manager': return `Played under ${value}`
+    case 'trophy': return `Won the ${value}`
     default: return ''
   }
 }

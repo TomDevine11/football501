@@ -12,6 +12,7 @@ import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
+import { useI18n } from '../../i18n'
 
 // Maps each question to the club crest / league logo / flag / trophy icon that
 // represents its subject (shown on the question card). Questions with no natural
@@ -67,6 +68,7 @@ function answerMatches(guessNorm, answer) {
 }
 
 export default function FootballTenable() {
+  const { t, lp } = useI18n()
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [question, setQuestion] = useState(() => getDailyTenableQuestion())
   const [revealed, setRevealed] = useState({}) // rank -> answer
@@ -315,8 +317,8 @@ export default function FootballTenable() {
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       {/* Header */}
       <div className="w-full max-w-lg flex items-center justify-between mb-6">
-        <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
-          ← All games
+        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+          {t('common.allGames')}
         </Link>
         <div className="score-number text-xl text-gray-500 tracking-wider">TENABLE</div>
         <div className="flex items-center gap-1 text-sm tabular-nums">
@@ -390,7 +392,7 @@ export default function FootballTenable() {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type your answer..."
+              placeholder={t('tenable.placeholder')}
               autoFocus
               className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
               autoComplete="off" autoCorrect="off" spellCheck="false"
@@ -421,8 +423,8 @@ export default function FootballTenable() {
           </form>
 
           <div className="w-full max-w-lg mt-3 flex justify-between items-center text-xs text-gray-700 px-1">
-            <span>{correctCount}/10 found</span>
-            <span>{lives} {lives === 1 ? 'life' : 'lives'} left</span>
+            <span>{t('tenable.found', { n: correctCount })}</span>
+            <span>{lives === 1 ? t('tenable.lifeLeft', { n: lives }) : t('tenable.livesLeft', { n: lives })}</span>
           </div>
 
           <button
@@ -430,7 +432,7 @@ export default function FootballTenable() {
             onClick={() => setShowGiveUpConfirm(true)}
             className="mt-4 w-full max-w-lg border border-red-900/60 text-red-400 hover:bg-red-900/20 hover:border-red-700 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
           >
-            Give up
+            {t('tenable.giveUp')}
           </button>
         </>
       )}
@@ -438,22 +440,22 @@ export default function FootballTenable() {
       {showGiveUpConfirm && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-20 px-4">
           <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-5 text-center">
-            <p className="text-white font-medium mb-1">Give up?</p>
-            <p className="text-gray-500 text-sm mb-5">This will reveal the full answer list and end the game.</p>
+            <p className="text-white font-medium mb-1">{t('tenable.giveUpTitle')}</p>
+            <p className="text-gray-500 text-sm mb-5">{t('tenable.giveUpBody')}</p>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setShowGiveUpConfirm(false)}
                 className="flex-1 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 type="button"
                 onClick={confirmGiveUp}
                 className="flex-1 bg-red-900/60 hover:bg-red-900 text-red-200 text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
               >
-                Yes, give up
+                {t('tenable.giveUpConfirm')}
               </button>
             </div>
           </div>
@@ -461,31 +463,31 @@ export default function FootballTenable() {
       )}
 
       {phase !== 'playing' && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         {phase === 'won' && (
           <div className="w-full flex flex-col items-center text-center">
             <div className="text-6xl mb-3">🏆</div>
-            <h2 className="score-number text-4xl text-green-400 mb-2">PYRAMID COMPLETE!</h2>
-            <p className="text-gray-400 mb-2">You found all 10 with <span className="text-white font-bold">{lives}</span> {lives === 1 ? 'life' : 'lives'} to spare.</p>
+            <h2 className="score-number text-4xl text-green-400 mb-2">{t('tenable.pyramidComplete')}</h2>
+            <p className="text-gray-400 mb-2">{lives === 1 ? t('tenable.foundAllLife', { n: lives }) : t('tenable.foundAllLives', { n: lives })}</p>
           </div>
         )}
         {phase === 'lost' && (
           <div className="w-full flex flex-col items-center text-center">
             <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
-            <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? 'GAVE UP' : 'GAME OVER'}</h2>
-            <p className="text-gray-400 mb-2">You found <span className="text-white font-bold">{correctCount}/10</span> before {gaveUp ? 'giving up' : 'running out of lives'}.</p>
+            <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? t('tenable.gaveUp') : t('tenable.gameOver')}</h2>
+            <p className="text-gray-400 mb-2">{gaveUp ? t('tenable.foundBeforeGaveUp', { n: correctCount }) : t('tenable.foundBeforeLost', { n: correctCount })}</p>
           </div>
         )}
         {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
         <ShareCard text={shareText} />
-        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New question →'}</button>
+        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tenable.newQuestion')}</button>
         <MoreGames current="/tenable" />
         {phase === 'lost' && (
           <div className="w-full bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mt-6">
-            <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Full answer list</div>
+            <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('tenable.fullAnswerList')}</div>
             <div className="divide-y divide-gray-800/50">
               {question.answers.map(a => (
                 <div key={a.rank} className="flex items-center justify-between px-4 py-2.5">
@@ -506,7 +508,7 @@ export default function FootballTenable() {
       {history.length > 0 && (
         <div className="w-full max-w-lg mt-2">
           <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">
-            Guesses ({history.length})
+            {t('tenable.guesses', { n: history.length })}
           </div>
           <div className="rounded-xl border border-gray-800 overflow-hidden">
             <div className="divide-y divide-gray-800/40 max-h-56 overflow-y-auto">
@@ -516,7 +518,7 @@ export default function FootballTenable() {
                   {g.correct === true
                     ? <span className="text-green-400 text-xs font-semibold shrink-0">#{g.rank} ✓</span>
                     : g.correct === 'duplicate'
-                      ? <span className="text-yellow-500 text-xs font-semibold shrink-0">already found</span>
+                      ? <span className="text-yellow-500 text-xs font-semibold shrink-0">{t('tenable.alreadyFound')}</span>
                       : <span className="text-red-500 text-xs font-semibold shrink-0">✗</span>}
                 </div>
               ))}

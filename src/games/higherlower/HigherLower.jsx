@@ -8,6 +8,7 @@ import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import { recordResult, todayIndex } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
+import { useI18n } from '../../i18n'
 
 const BEST_KEY = 'ftg-higherlower-best'
 
@@ -26,6 +27,7 @@ function PlayerCard({ player, statLabel, showValue }) {
 }
 
 export default function HigherLower() {
+  const { t, lp } = useI18n()
   const [dailyMode, setDailyMode] = useState('daily')  // 'daily' | 'unlimited'
   const [run, setRun] = useState(() => getDailyRun(todayIndex())) // daily chain
   const [seqIdx, setSeqIdx] = useState(1)              // position in the daily chain
@@ -103,21 +105,21 @@ export default function HigherLower() {
     return (
       <div className="min-h-screen flex flex-col items-center px-4 py-8">
         <div className="w-full max-w-lg flex items-center justify-between mb-6">
-          <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>
+          <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
           <div className="score-number text-xl text-gray-500 tracking-wider">HIGHER / LOWER</div>
-          <div className="text-sm tabular-nums text-gray-500">Best {best}</div>
+          <div className="text-sm tabular-nums text-gray-500">{t('higherlower.best', { n: best })}</div>
         </div>
         <ModeToggle mode={dailyMode} onChange={switchMode} className="mb-6" />
         <div className="w-full max-w-lg text-center mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Higher or Lower</h1>
-          <p className="text-gray-500 text-sm">Pick a stat. Then decide whether each new player scored more or fewer — build the longest streak you can.</p>
+          <h1 className="text-2xl font-bold text-white mb-1">{t('higherlower.title')}</h1>
+          <p className="text-gray-500 text-sm">{t('higherlower.pickStat')}</p>
         </div>
         <div className="w-full max-w-lg grid grid-cols-1 gap-3">
           {STAT_MODES.map(m => (
             <button key={m.id} onClick={() => startMode(m)}
               className="bg-gray-900 border border-gray-800 hover:border-amber-500 hover:ring-1 hover:ring-amber-500/30 rounded-xl px-5 py-4 text-left transition-all">
               <div className="text-white font-semibold capitalize">{m.label}</div>
-              <div className="text-gray-500 text-xs mt-0.5">All-time {m.competition} top scorers</div>
+              <div className="text-gray-500 text-xs mt-0.5">{t('higherlower.allTime', { competition: m.competition })}</div>
             </button>
           ))}
         </div>
@@ -130,21 +132,21 @@ export default function HigherLower() {
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
         {dailyMode === 'unlimited'
-          ? <button onClick={() => setMode(null)} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Change stat</button>
-          : <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>}
+          ? <button onClick={() => setMode(null)} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('higherlower.changeStat')}</button>
+          : <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>}
         <div className="score-number text-xl text-gray-500 tracking-wider">HIGHER / LOWER</div>
-        <div className="text-sm tabular-nums text-gray-500">Best {best}</div>
+        <div className="text-sm tabular-nums text-gray-500">{t('higherlower.best', { n: best })}</div>
       </div>
 
       <ModeToggle mode={dailyMode} onChange={switchMode} className="mb-4" />
 
       <div className="w-full max-w-lg mb-4 text-center">
         <div className="text-white font-semibold text-sm capitalize">{mode.label}</div>
-        <div className="text-gray-500 text-xs">{dailyMode === 'daily' ? "Today's chain — how far can you get?" : 'Did the second player score more or fewer?'}</div>
+        <div className="text-gray-500 text-xs">{dailyMode === 'daily' ? t('higherlower.todayChain') : t('higherlower.moreOrFewer')}</div>
       </div>
 
       <div className="w-full max-w-lg mb-4 text-center">
-        <span className="text-gray-500 text-sm">Streak: </span>
+        <span className="text-gray-500 text-sm">{t('higherlower.streak')} </span>
         <span className="score-number text-2xl text-green-400 tabular-nums">{streak}</span>
       </div>
 
@@ -156,30 +158,30 @@ export default function HigherLower() {
 
       {phase === 'playing' && (
         <div className="w-full max-w-lg grid grid-cols-2 gap-3">
-          <button onClick={() => guess('higher')} className="bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl py-3.5 transition-colors">▲ More</button>
-          <button onClick={() => guess('lower')} className="bg-blue-700 hover:bg-blue-600 text-white font-semibold rounded-xl py-3.5 transition-colors">▼ Fewer</button>
+          <button onClick={() => guess('higher')} className="bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl py-3.5 transition-colors">{t('higherlower.more')}</button>
+          <button onClick={() => guess('lower')} className="bg-blue-700 hover:bg-blue-600 text-white font-semibold rounded-xl py-3.5 transition-colors">{t('higherlower.fewer')}</button>
         </div>
       )}
 
       {phase === 'reveal' && (
         <div className={`w-full max-w-lg text-center font-bold ${lastCorrect ? 'text-green-400' : 'text-red-400'}`}>
-          {lastCorrect ? '✓ Correct!' : '✗ Wrong'}
+          {lastCorrect ? t('higherlower.correct') : t('higherlower.wrong')}
         </div>
       )}
 
       {phase === 'over' && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-1 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+        <button onClick={() => setShowResult(true)} className="mt-1 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <div className="text-5xl mb-2">{dailyCleared ? '🏆' : '💔'}</div>
-          <h2 className={`score-number text-3xl mb-1 ${dailyCleared ? 'text-green-400' : 'text-red-400'}`}>{dailyCleared ? 'CHAIN CLEARED!' : 'GAME OVER'}</h2>
+          <h2 className={`score-number text-3xl mb-1 ${dailyCleared ? 'text-green-400' : 'text-red-400'}`}>{dailyCleared ? t('higherlower.chainCleared') : t('higherlower.gameOver')}</h2>
           <p className="text-gray-400 mb-1">
-            Streak: <span className="text-white font-bold">{streak}</span>
-            {dailyMode === 'unlimited' && streak >= best && streak > 0 && <span className="text-amber-400"> — new best!</span>}
+            {t('higherlower.streak')} <span className="text-white font-bold">{streak}</span>
+            {dailyMode === 'unlimited' && streak >= best && streak > 0 && <span className="text-amber-400">{t('higherlower.newBest')}</span>}
           </p>
-          <p className="text-gray-600 text-xs mb-3">{challenger.name} scored {challenger.value} {mode.label}.</p>
+          <p className="text-gray-600 text-xs mb-3">{t('higherlower.scoredLine', { name: challenger.name, value: challenger.value, label: mode.label })}</p>
           {dailyMode === 'daily' && <DailyStats game="higherlower" stats={dailyStats} variant="score" />}
           <ShareCard text={[
             dailyMode === 'daily'
@@ -190,13 +192,13 @@ export default function HigherLower() {
           {dailyMode === 'unlimited'
             ? (
               <div className="flex gap-3 mt-2">
-                <button onClick={() => startMode(mode)} className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Play again</button>
-                <button onClick={() => setMode(null)} className="border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-lg px-6 py-2.5 transition-colors">Change stat</button>
+                <button onClick={() => startMode(mode)} className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('higherlower.playAgain')}</button>
+                <button onClick={() => setMode(null)} className="border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-lg px-6 py-2.5 transition-colors">{t('higherlower.changeStat').replace('← ', '')}</button>
               </div>
             )
             : <>
-                <button onClick={() => switchMode('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">Play Unlimited →</button>
-                <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new daily.</p>
+                <button onClick={() => switchMode('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
+                <p className="text-gray-600 text-xs mt-3">{t('common.comeBackTomorrow')}</p>
               </>}
         </div>
         <MoreGames current="/higher-or-lower" />

@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { CATEGORIES, categoryLabel, buildGrid } from '../../data/tictactoe'
+import { useI18n } from '../../i18n'
 
 const TYPES = [
-  ['club', 'Clubs'],
-  ['league', 'Leagues'],
-  ['nationality', 'Nationalities'],
-  ['trophy', 'Trophies'],
+  ['club', 'typeClubs'],
+  ['league', 'typeLeagues'],
+  ['nationality', 'typeNationalities'],
+  ['trophy', 'typeTrophies'],
 ]
 const sameCat = (a, b) => a.type === b.type && a.value === b.value
 
@@ -13,6 +14,7 @@ const sameCat = (a, b) => a.type === b.type && a.value === b.value
 // preview shows each square's number of valid players so empty pairings can be
 // avoided before starting.
 export default function GridBuilder({ onBuild, onCancel }) {
+  const { t } = useI18n()
   const [rows, setRows] = useState([])
   const [cols, setCols] = useState([])
 
@@ -41,33 +43,33 @@ export default function GridBuilder({ onBuild, onCancel }) {
         cat ? 'border border-green-700 bg-green-900/30 text-green-200 hover:bg-red-900/30 hover:border-red-700' : 'border border-dashed border-gray-700 text-gray-600'
       }`}
     >
-      {cat ? categoryLabel(cat) : placeholder}
+      {cat ? categoryLabel(cat, t) : placeholder}
     </button>
   )
 
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
-        <button onClick={onCancel} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Back</button>
+        <button onClick={onCancel} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('tictactoe.back')}</button>
         <div className="score-number text-xl text-gray-500 tracking-wider">BUILD GRID</div>
         <div className="w-12" />
       </div>
 
       <p className="w-full max-w-lg text-center text-gray-500 text-sm mb-5">
-        Tap categories below to fill the three <span className="text-yellow-400">rows</span>, then the three <span className="text-blue-400">columns</span>. Tap a chosen one to remove it.
+        {t('tictactoe.builderIntro')}
       </p>
 
       <div className="w-full max-w-lg space-y-3 mb-5">
         <div>
-          <div className="text-yellow-400 text-xs font-bold uppercase tracking-wide mb-1.5">Rows ({rows.length}/3)</div>
+          <div className="text-yellow-400 text-xs font-bold uppercase tracking-wide mb-1.5">{t('tictactoe.rowsCount', { n: rows.length })}</div>
           <div className="grid grid-cols-3 gap-2">
-            {[0, 1, 2].map(i => <Slot key={i} cat={rows[i]} onRemove={() => removeRow(i)} placeholder="empty" />)}
+            {[0, 1, 2].map(i => <Slot key={i} cat={rows[i]} onRemove={() => removeRow(i)} placeholder={t('tictactoe.empty')} />)}
           </div>
         </div>
         <div>
-          <div className="text-blue-400 text-xs font-bold uppercase tracking-wide mb-1.5">Columns ({cols.length}/3)</div>
+          <div className="text-blue-400 text-xs font-bold uppercase tracking-wide mb-1.5">{t('tictactoe.colsCount', { n: cols.length })}</div>
           <div className="grid grid-cols-3 gap-2">
-            {[0, 1, 2].map(i => <Slot key={i} cat={cols[i]} onRemove={() => removeCol(i)} placeholder="empty" />)}
+            {[0, 1, 2].map(i => <Slot key={i} cat={cols[i]} onRemove={() => removeCol(i)} placeholder={t('tictactoe.empty')} />)}
           </div>
         </div>
       </div>
@@ -75,17 +77,17 @@ export default function GridBuilder({ onBuild, onCancel }) {
       {/* Live validity preview */}
       {ready && (
         <div className="w-full max-w-lg mb-5">
-          <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">Preview — players per square</div>
+          <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">{t('tictactoe.previewLabel')}</div>
           <div className="grid gap-1.5" style={{ gridTemplateColumns: 'minmax(60px,1fr) repeat(3, 1fr)' }}>
             <div />
-            {cols.map((c, i) => <div key={i} className="text-[9px] text-blue-400 text-center leading-tight px-0.5">{categoryLabel(c)}</div>)}
+            {cols.map((c, i) => <div key={i} className="text-[9px] text-blue-400 text-center leading-tight px-0.5">{categoryLabel(c, t)}</div>)}
             {[0, 1, 2].map(r => (
-              <Fragmentish key={r} row={r} rows={rows} counts={counts} />
+              <Fragmentish key={r} row={r} rows={rows} counts={counts} t={t} />
             ))}
           </div>
           {!allValid && (
             <p className="text-red-400 text-xs text-center mt-2">
-              {emptyCount} square{emptyCount === 1 ? '' : 's'} have no valid players — swap a category to fix.
+              {emptyCount === 1 ? t('tictactoe.emptyWarnOne', { n: emptyCount }) : t('tictactoe.emptyWarn', { n: emptyCount })}
             </p>
           )}
         </div>
@@ -93,9 +95,9 @@ export default function GridBuilder({ onBuild, onCancel }) {
 
       {/* Category palette */}
       <div className="w-full max-w-lg space-y-4 mb-6">
-        {TYPES.map(([type, label]) => (
+        {TYPES.map(([type, labelKey]) => (
           <div key={type}>
-            <div className="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1.5">{label}</div>
+            <div className="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1.5">{t(`tictactoe.${labelKey}`)}</div>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.filter(c => c.type === type).map(c => {
                 const isUsed = used(c)
@@ -124,17 +126,19 @@ export default function GridBuilder({ onBuild, onCancel }) {
         disabled={!allValid}
         className="w-full max-w-lg bg-green-700 hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3.5 transition-colors"
       >
-        {ready ? (allValid ? 'Start game' : 'Fix empty squares to start') : `Pick ${6 - chosen.length} more categor${6 - chosen.length === 1 ? 'y' : 'ies'}`}
+        {ready
+          ? (allValid ? t('tictactoe.startGame') : t('tictactoe.fixEmpty'))
+          : (6 - chosen.length === 1 ? t('tictactoe.pickMoreOne', { n: 6 - chosen.length }) : t('tictactoe.pickMore', { n: 6 - chosen.length }))}
       </button>
     </div>
   )
 }
 
 // A preview row: row-header + 3 count cells.
-function Fragmentish({ row, rows, counts }) {
+function Fragmentish({ row, rows, counts, t }) {
   return (
     <>
-      <div className="text-[9px] text-yellow-400 flex items-center leading-tight px-0.5">{categoryLabel(rows[row])}</div>
+      <div className="text-[9px] text-yellow-400 flex items-center leading-tight px-0.5">{categoryLabel(rows[row], t)}</div>
       {[0, 1, 2].map(c => {
         const n = counts[row * 3 + c]
         return (
