@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
-import { routeByPath, metaTagsFor, jsonLdFor, absolute } from './seoConfig'
+import { routeByPath, metaTagsFor, jsonLdFor, absoluteFor, alternatesFor } from './seoConfig'
+import { useI18n } from '../i18n'
 
-// Manages the document <head> for the current route on the client, so that
-// SPA navigation updates the title, meta, canonical and JSON-LD (the prerender
-// bakes the same tags into the initial HTML for crawlers). All managed nodes
-// are tagged data-seo so they can be replaced cleanly on each navigation.
+// Manages the document <head> for the current route + locale on the client, so
+// that SPA navigation updates the title, meta, canonical, hreflang and JSON-LD
+// (the prerender bakes the same tags into the initial HTML for crawlers). All
+// managed nodes are tagged data-seo so they can be replaced cleanly.
 function clearManaged() {
   document.querySelectorAll('head [data-seo]').forEach(el => el.remove())
 }
@@ -18,10 +19,11 @@ function addMeta({ name, property, content }) {
   document.head.appendChild(el)
 }
 
-function addCanonical(href) {
+function addLink(rel, href, extra = {}) {
   const el = document.createElement('link')
-  el.setAttribute('rel', 'canonical')
+  el.setAttribute('rel', rel)
   el.setAttribute('href', href)
+  for (const [k, v] of Object.entries(extra)) el.setAttribute(k, v)
   el.setAttribute('data-seo', '')
   document.head.appendChild(el)
 }
@@ -37,13 +39,18 @@ function addJsonLd(blocks) {
 }
 
 export default function Seo({ path }) {
+  const { locale } = useI18n()
   useEffect(() => {
-    const route = routeByPath(path)
+    const route = routeByPath(path, locale)
     document.title = route.title
+    document.documentElement.lang = locale
     clearManaged()
-    addCanonical(absolute(route.path))
-    metaTagsFor(route).forEach(addMeta)
-    addJsonLd(jsonLdFor(route))
-  }, [path])
+    addLink('canonical', absoluteFor(path, locale))
+    if (!route.noindex) {
+      for (const alt of alternatesFor(path)) addLink('alternate', alt.href, { hreflang: alt.hreflang })
+    }
+    metaTagsFor(route, locale).forEach(addMeta)
+    addJsonLd(jsonLdFor(route, locale))
+  }, [path, locale])
   return null
 }

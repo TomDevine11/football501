@@ -1,0 +1,123 @@
+// Spanish (es) SEO content per route, merged over the English route by
+// routeByPath(path, 'es'). Only the fields that differ are translated; anything
+// omitted falls back to the English value. This is what ranks in Spanish search.
+export const ES = {
+  '/': {
+    title: 'Juegos de Trivia de Fútbol — Juegos Diarios Gratis',
+    description: 'Juegos diarios de trivia de fútbol gratis: Wordle de futbolistas, tres en raya de fútbol, nombra el top 10 y adivina al jugador por sus compañeros. Juega solo o 1v1.',
+    keywords: ['juegos de trivia de futbol', 'trivia de futbol', 'juegos de futbol', 'adivina el futbolista', 'quiz de futbol diario'],
+    h1: 'Juegos de Trivia de Fútbol',
+    tagline: 'Una colección creciente de juegos diarios de trivia de fútbol, gratis. Sin registro, solo jugar.',
+    about: 'Football Trivia Games reúne los mejores juegos diarios de trivia de fútbol en un solo sitio. Pon a prueba tus conocimientos con el Wordle de futbolistas, rellena una cuadrícula de tres en raya de fútbol, nombra el top 10 en Tenable o adivina al jugador misterioso por sus compañeros de equipo, todo jugable al instante en tu navegador, en móvil o escritorio.',
+    faq: [
+      { q: '¿Qué es Football Trivia Games?', a: 'Football Trivia Games es una colección gratuita de juegos diarios de trivia de fútbol — incluyendo el Wordle de futbolistas, tres en raya de fútbol, Tenable y adivina al jugador — jugables en tu navegador sin registro.' },
+      { q: '¿Los juegos son gratis?', a: 'Sí. Todos los juegos son completamente gratis, funcionan en tu navegador y no necesitan cuenta ni descarga.' },
+      { q: '¿Hay retos nuevos cada día?', a: 'Sí. Los juegos diarios se renuevan a medianoche (hora local), y los modos ilimitados se pueden jugar tantas veces como quieras.' },
+      { q: '¿Puedo jugar en el móvil?', a: 'Sí. Todos los juegos funcionan en cualquier navegador de móvil o escritorio, sin necesidad de instalar nada.' },
+    ],
+  },
+  '/wordle': {
+    title: 'Wordle de Fútbol — Adivina al Futbolista | Football Trivia',
+    description: 'Juega al Wordle de fútbol (Footdle): adivina el apellido del futbolista misterioso en seis intentos. Un jugador nuevo cada día con pistas de letras verdes y amarillas.',
+    keywords: ['wordle de futbol', 'futbol wordle', 'footdle', 'adivina el futbolista', 'wordle futbolistas'],
+    h1: 'Wordle de Fútbol',
+    tagline: 'Adivina el apellido del futbolista misterioso en seis intentos.',
+    about: 'El Wordle de Fútbol es un juego de palabras diario al estilo Wordle (también conocido como Footdle). Cada día se elige a un futbolista famoso y tienes seis intentos para adivinar su apellido, usando las pistas de letras verdes y amarillas para acotarlo.',
+    faq: [
+      { q: '¿Qué es el Wordle de Fútbol?', a: 'El Wordle de Fútbol es un juego diario en el que adivinas el apellido de un futbolista famoso en seis intentos, con pistas de color verde y amarillo, igual que en Wordle.' },
+      { q: '¿Cuántos intentos tengo?', a: 'Tienes seis intentos para acertar el apellido del futbolista.' },
+      { q: '¿Es lo mismo que Footdle?', a: 'Sí — el Wordle de Fútbol es un Wordle de futbolistas, a veces buscado como Footdle: adivina el apellido del jugador misterioso en seis intentos.' },
+    ],
+  },
+  '/tictactoe': {
+    title: 'Tres en Raya de Fútbol (Tiki-Taka-Toe) | Football Trivia',
+    description: 'Juega al tres en raya de fútbol: una cuadrícula 3x3 donde cada fila y columna es una categoría. Nombra a un jugador que cumpla ambas para reclamar una casilla. Solo o 1v1.',
+    keywords: ['tres en raya futbol', 'tiki taka toe', 'cuadricula de futbol', 'futbol tic tac toe', 'immaculate grid futbol'],
+    h1: 'Tres en Raya de Fútbol',
+    tagline: 'Dos categorías de fútbol en cada casilla — nombra a un jugador que cumpla ambas.',
+    about: 'El Tres en Raya de Fútbol (también llamado Tiki-Taka-Toe o cuadrícula de fútbol) pone a prueba tu conocimiento de clubes, ligas, nacionalidades y trofeos. Reclama una casilla nombrando a un futbolista que cumpla su categoría de fila y de columna, y juega la cuadrícula diaria en solitario o 1 contra 1 con un amigo.',
+    faq: [
+      { q: '¿Cómo funciona el tres en raya de fútbol?', a: 'Cada fila y columna de la cuadrícula 3x3 es una categoría de fútbol. Para reclamar una casilla nombras a un jugador que cumpla la fila y la columna — por ejemplo, alguien que jugó en un club Y ganó un trofeo concretos.' },
+      { q: '¿Puedo jugar con un amigo?', a: 'Sí. El modo 1v1 permite que dos jugadores compartan un dispositivo por turnos. El primero en hacer tres en raya gana, e incluso puedes crear tu propia cuadrícula.' },
+      { q: '¿Es lo mismo que Tiki-Taka-Toe o una cuadrícula de fútbol?', a: 'Sí — el Tres en Raya de Fútbol es la misma idea que el Tiki-Taka-Toe y otras cuadrículas de fútbol, y una versión futbolera de la Immaculate Grid.' },
+    ],
+  },
+  '/teammates': {
+    title: 'Compañeros — Adivina al Futbolista | Football Trivia',
+    description: 'Adivina al futbolista misterioso por sus compañeros de equipo reales, revelados de uno en uno. Descubre quién es en cinco intentos en este adictivo juego de fútbol.',
+    keywords: ['adivina el futbolista', 'adivina al jugador', 'juego de adivinar futbolistas', 'who are ya', 'juego de futbol adivinar'],
+    h1: 'Compañeros',
+    tagline: 'Identifica al futbolista misterioso por los jugadores con los que jugó.',
+    about: 'Compañeros es un juego de adivinar en el que identificas a un futbolista misterioso por los jugadores reales con los que compartió equipo. Tras cada fallo se revela un nuevo compañero, así que cuanto más fútbol sepas, antes lo resolverás.',
+    faq: [
+      { q: '¿Cómo se juega a Compañeros?', a: 'Se muestra un compañero real del futbolista misterioso. Adivina quién es; cada fallo revela otro compañero, hasta cinco pistas.' },
+      { q: '¿Cuántos intentos tengo?', a: 'Tienes cinco intentos, con un nuevo compañero revelado tras cada fallo.' },
+      { q: '¿Es un juego estilo "Who Are Ya?"', a: 'Sí — es un juego de adivinar al futbolista al estilo "Who Are Ya?": descubre al jugador misterioso por los compañeros reales con los que jugó.' },
+    ],
+  },
+  '/career-path': {
+    title: 'Trayectoria — Adivina al Futbolista | Football Trivia',
+    description: 'Adivina al futbolista por su trayectoria. Los clubes se revelan de uno en uno: nombra al jugador que jugó en todos en cinco intentos.',
+    keywords: ['trayectoria futbolista', 'adivina el futbolista por sus clubes', 'juego de fichajes futbol', 'carrera futbolista quiz'],
+    h1: 'Trayectoria',
+    tagline: 'Nombra al jugador que jugó en todos los clubes mostrados.',
+    about: 'Trayectoria es un juego de adivinar basado en la carrera de los jugadores. Se muestra un club de la trayectoria de un futbolista misterioso, y cada fallo revela el siguiente club. Averigua quién pasó por todos ellos en cinco intentos.',
+    faq: [
+      { q: '¿Cómo se juega a Trayectoria?', a: 'Se muestra un club de la carrera de un futbolista misterioso. Adivina quién es; cada fallo revela otro club en el que jugó, hasta cinco clubes.' },
+      { q: '¿Cuántos intentos tengo?', a: 'Tienes cinco intentos, con un nuevo club revelado tras cada fallo.' },
+      { q: '¿Son reales las trayectorias?', a: 'Sí — los clubes provienen de la carrera real de cada jugador, en el orden en que jugó en ellos.' },
+    ],
+  },
+  '/tenable': {
+    title: 'Tenable de Fútbol — Nombra el Top 10 | Football Trivia',
+    description: 'Juega al Tenable de fútbol: una nueva pregunta cada día. Nombra tantas de las 10 respuestas como puedas — tres fallos y se acabó el juego.',
+    keywords: ['tenable futbol', 'futbol tenable', 'tenaball', 'nombra el top 10 futbol', 'quiz top 10 futbol'],
+    h1: 'Tenable de Fútbol',
+    tagline: 'Nombra tantas del top 10 como puedas antes de tres fallos.',
+    about: 'El Tenable de Fútbol es un quiz diario de listas inspirado en el formato de televisión. Cada pregunta tiene diez respuestas correctas — como los máximos goleadores históricos de una competición — y tu misión es nombrar tantas como puedas antes de tres errores.',
+    faq: [
+      { q: '¿Qué es el Tenable de Fútbol?', a: 'El Tenable de Fútbol es un juego diario en el que intentas nombrar las diez respuestas de una pregunta del top 10 — como los máximos goleadores de una competición — antes de tres errores.' },
+      { q: '¿Cuántas vidas tengo?', a: 'Puedes fallar hasta tres veces antes de que termine el juego.' },
+      { q: '¿Hay una pregunta nueva cada día?', a: 'Sí — cada día aparece una nueva pregunta del top 10.' },
+    ],
+  },
+  '/world-cup': {
+    title: 'Nombra la Plantilla Campeona del Mundial | Football Trivia',
+    description: 'Nombra la plantilla campeona: elige una selección campeona del Mundial — Brasil 2002, Francia 98, Argentina 2022 — y recuerda a tantos jugadores como puedas.',
+    keywords: ['plantillas mundial', 'nombra la plantilla del mundial', 'quiz selecciones campeonas', 'plantilla mundial 2022'],
+    h1: 'Nombra la Plantilla Campeona',
+    tagline: '¿A cuántos de una plantilla campeona del Mundial puedes nombrar?',
+    about: 'Nombra la Plantilla Campeona es un juego de memoria sobre la Copa del Mundo. Elige una de las grandes selecciones campeonas — desde Inglaterra 1966 hasta Argentina 2022 — y escribe a tantos de su plantilla como recuerdes, incluidos los suplentes.',
+    faq: [
+      { q: '¿Cómo se juega?', a: 'Elige una selección campeona del Mundial y escribe los jugadores de su plantilla. Cada acierto se revela y se cuenta; intenta nombrar a toda la plantilla.' },
+      { q: '¿Qué equipos puedo jugar?', a: 'Todas las plantillas campeonas del Mundial, desde Inglaterra 1966 hasta Argentina 2022.' },
+      { q: '¿De dónde salen las plantillas?', a: 'Las plantillas provienen del registro oficial de jugadores campeones del Mundial de Wikipedia.' },
+    ],
+  },
+  '/connections': {
+    title: 'Connections de Fútbol — Puzle Diario | Football Trivia',
+    description: 'Connections de fútbol: un puzle diario de 16 futbolistas que esconden cuatro grupos de cuatro — clubes, nacionalidades y trofeos. Encuentra los cuatro grupos en cuatro fallos.',
+    keywords: ['connections futbol', 'conexiones futbol', 'puzle de futbol diario', 'juego de grupos futbol'],
+    h1: 'Connections de Fútbol',
+    tagline: 'Ordena 16 jugadores en cuatro grupos ocultos de cuatro.',
+    about: 'Connections de Fútbol es un puzle diario inspirado en el juego de agrupar. Dieciséis futbolistas esconden cuatro grupos secretos de cuatro — por club, nacionalidad o trofeo. Averigua qué jugadores van juntos y resuelve los cuatro grupos antes de cometer cuatro errores.',
+    faq: [
+      { q: '¿Cómo se juega?', a: 'Dieciséis futbolistas esconden cuatro grupos de cuatro — por club, nacionalidad o trofeo. Elige cuatro que van juntos y envía; encuentra los cuatro grupos en cuatro errores.' },
+      { q: '¿Hay un puzle nuevo cada día?', a: 'Sí — cada día se genera un nuevo puzle de Connections de Fútbol.' },
+      { q: '¿Cada puzle tiene una única solución?', a: 'Sí. Cada uno de los 16 jugadores pertenece exactamente a un grupo, así que siempre hay una forma correcta de resolverlo.' },
+    ],
+  },
+  '/higher-or-lower': {
+    title: 'Fútbol Mayor o Menor | Football Trivia',
+    description: 'Fútbol Mayor o Menor: elige qué futbolista marcó más — goles en la Premier, LaLiga, Champions o con su selección — y consigue la racha más larga.',
+    keywords: ['futbol mayor o menor', 'mayor o menor futbol', 'juego de rachas futbol', 'quiz goles futbol'],
+    h1: 'Fútbol Mayor o Menor',
+    tagline: 'Elige qué jugador marcó más y haz tu racha.',
+    about: 'Fútbol Mayor o Menor es un juego de rachas infinito. Elige una estadística — máximos goleadores de la Premier, LaLiga, Bundesliga, la Champions o con su selección — y decide si cada nuevo jugador marcó más o menos que el anterior. Un fallo termina la racha.',
+    faq: [
+      { q: '¿Cómo funciona?', a: 'Eliges una estadística de goles y comparas a dos futbolistas eligiendo quién marcó más. Los aciertos hacen racha; un fallo la termina.' },
+      { q: '¿Qué estadísticas puedo jugar?', a: 'Máximos goleadores históricos de la Premier, LaLiga, Bundesliga, la Champions y goles con su selección.' },
+      { q: '¿El juego termina alguna vez?', a: 'Solo cuando fallas — siguen apareciendo jugadores, así que el único límite es tu racha.' },
+    ],
+  },
+}

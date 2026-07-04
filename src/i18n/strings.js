@@ -1,0 +1,63 @@
+// UI string dictionary. Stage 1 covers the homepage + shared labels; game-screen
+// strings are added in Stage 2. Keys are dot-namespaced; missing es keys fall
+// back to en (see translate() in ./index).
+export const strings = {
+  en: {
+    common: {
+      allGames: '← All games',
+      comingSoon: 'Coming soon',
+      moreGames: 'More football trivia games',
+      tryAnother: 'Try another game',
+      howToPlay: 'How to play {name}',
+      faq: 'Frequently asked questions',
+      daily: 'Daily',
+      unlimited: 'Unlimited',
+    },
+    home: {
+      welcome: 'Welcome to',
+      subtitle: 'Free daily football trivia games — pick a gamemode and play. No sign-up, no download.',
+      aboutHeading: 'About Football Trivia Games',
+      faqHeading: 'Frequently asked questions',
+    },
+    games: {
+      tenable: { tagline: 'Name the top 10, before you run out of lives', description: "A new football trivia question every day. Name as many of the top 10 answers as you can — get 3 wrong and it's game over." },
+      wordle: { tagline: "Guess the player's surname", description: 'A new footballer every day. Guess their surname in 6 tries — green means right spot, yellow means right letter wrong spot.' },
+      tictactoe: { tagline: 'Two categories, one player', description: 'A daily 3x3 grid where every row and column is a football category. Fill a square by naming a player who fits both — or play a friend 1v1.' },
+      teammates: { tagline: 'Name the mystery player', description: 'A teammate is revealed one at a time. Work out who the mystery player is in 5 guesses — each wrong answer reveals another teammate.' },
+      'career-path': { tagline: 'Guess the player from their clubs', description: "A mystery player's clubs are revealed one at a time. Name the player who played for every club shown — in 5 guesses or fewer." },
+      'world-cup': { tagline: 'Name the winning squad', description: 'Pick a World Cup-winning team — Brazil 2002, France 98, Argentina 2022 — and recall as many of the squad as you can. How well do you know the legends?' },
+      connections: { tagline: 'Find the four groups of four', description: 'A daily puzzle: 16 players hide four groups of four — by club, nationality or trophy. Find them all before four mistakes.' },
+      'higher-or-lower': { tagline: 'Who scored more?', description: 'Pick a stat — PL, La Liga, Champions League or international goals — then guess which player scored more. Build a streak; one wrong guess ends it.' },
+      '501': { tagline: 'The football darts trivia game', description: "Count down from 501 by naming footballers. Each player's career stat is deducted from your score — land between 0 and −10 to checkout." },
+    },
+  },
+  es: {
+    common: {
+      allGames: '← Todos los juegos',
+      comingSoon: 'Próximamente',
+      moreGames: 'Más juegos de trivia de fútbol',
+      tryAnother: 'Prueba otro juego',
+      howToPlay: 'Cómo jugar a {name}',
+      faq: 'Preguntas frecuentes',
+      daily: 'Diario',
+      unlimited: 'Ilimitado',
+    },
+    home: {
+      welcome: 'Bienvenido a',
+      subtitle: 'Juegos diarios de trivia de fútbol, gratis — elige un modo y juega. Sin registro, sin descargas.',
+      aboutHeading: 'Sobre Football Trivia Games',
+      faqHeading: 'Preguntas frecuentes',
+    },
+    games: {
+      tenable: { tagline: 'Nombra el top 10 antes de quedarte sin vidas', description: 'Una nueva pregunta de fútbol cada día. Nombra tantas de las 10 respuestas como puedas: con 3 fallos se acabó.' },
+      wordle: { tagline: 'Adivina el apellido del jugador', description: 'Un futbolista nuevo cada día. Adivina su apellido en 6 intentos: verde es la posición correcta, amarillo es letra correcta en posición incorrecta.' },
+      tictactoe: { tagline: 'Dos categorías, un jugador', description: 'Una cuadrícula 3x3 diaria donde cada fila y columna es una categoría de fútbol. Rellena una casilla nombrando a un jugador que cumpla ambas — o juega 1 contra 1 con un amigo.' },
+      teammates: { tagline: 'Nombra al jugador misterioso', description: 'Se revela un compañero de equipo cada vez. Averigua quién es el jugador misterioso en 5 intentos: cada fallo revela otro compañero.' },
+      'career-path': { tagline: 'Adivina al jugador por sus clubes', description: 'Se revelan los clubes de un jugador misterioso de uno en uno. Nombra al jugador que jugó en todos los clubes mostrados en 5 intentos o menos.' },
+      'world-cup': { tagline: 'Nombra a la plantilla campeona', description: '¿Cuánto sabes de las leyendas? Elige una selección campeona del Mundial — Brasil 2002, Francia 98, Argentina 2022 — y recuerda a tantos de la plantilla como puedas.' },
+      connections: { tagline: 'Encuentra los cuatro grupos de cuatro', description: 'Un rompecabezas diario: 16 jugadores esconden cuatro grupos de cuatro — por club, nacionalidad o trofeo. Encuéntralos todos antes de cuatro errores.' },
+      'higher-or-lower': { tagline: '¿Quién marcó más?', description: 'Elige una estadística — goles en la Premier, LaLiga, Champions o con su selección — y adivina qué jugador marcó más. Haz una racha; un fallo la termina.' },
+      '501': { tagline: 'El juego de trivia de fútbol estilo dardos', description: 'Cuenta atrás desde 501 nombrando futbolistas. La estadística de carrera de cada jugador se resta de tu marcador: cierra entre 0 y −10.' },
+    },
+  },
+}

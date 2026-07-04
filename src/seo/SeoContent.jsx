@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
 import { routeByPath, indexableRoutes } from './seoConfig'
+import { useI18n } from '../i18n'
 
-// Visible, crawlable on-page content for a game route: the page's single <h1>,
-// a "How to play" section and an FAQ (which also powers the FAQ structured
-// data), plus internal links to the other games. Rendered live in the app
-// (Google indexes the rendered DOM) and mirrored by the prerender for crawlers.
+// Visible, crawlable on-page content for a game route (localized): the page's
+// single <h1>, a "How to play" section and an FAQ (which also powers the FAQ
+// structured data), plus internal links to the other games. Rendered live in the
+// app and mirrored by the prerender for crawlers.
 export default function SeoContent({ path }) {
-  const r = routeByPath(path)
+  const { locale, t, lp } = useI18n()
+  const r = routeByPath(path, locale)
   const others = indexableRoutes().filter(o => o.path !== path && o.path !== '/')
 
   return (
@@ -26,7 +28,7 @@ export default function SeoContent({ path }) {
 
       {r.howTo?.length > 0 && (
         <>
-          <h2 className="text-white font-semibold text-base mb-2">How to play {r.name}</h2>
+          <h2 className="text-white font-semibold text-base mb-2">{t('common.howToPlay', { name: r.name })}</h2>
           <ol className="list-decimal list-inside space-y-1 text-gray-400 text-sm mb-6">
             {r.howTo.map((step, i) => <li key={i}>{step}</li>)}
           </ol>
@@ -35,7 +37,7 @@ export default function SeoContent({ path }) {
 
       {r.faq?.length > 0 && (
         <>
-          <h2 className="text-white font-semibold text-base mb-2">Frequently asked questions</h2>
+          <h2 className="text-white font-semibold text-base mb-2">{t('common.faq')}</h2>
           <dl className="space-y-3 mb-6">
             {r.faq.map((f, i) => (
               <div key={i}>
@@ -47,12 +49,12 @@ export default function SeoContent({ path }) {
         </>
       )}
 
-      <nav aria-label="More football trivia games">
-        <h2 className="text-white font-semibold text-base mb-2">More football trivia games</h2>
+      <nav aria-label={t('common.moreGames')}>
+        <h2 className="text-white font-semibold text-base mb-2">{t('common.moreGames')}</h2>
         <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
           {others.map(o => (
             <li key={o.path}>
-              <Link to={o.path} className="text-green-400 hover:text-green-300 transition-colors">{o.name}</Link>
+              <Link to={lp(o.path)} className="text-green-400 hover:text-green-300 transition-colors">{o.name}</Link>
             </li>
           ))}
         </ul>

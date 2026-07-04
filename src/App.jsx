@@ -18,22 +18,33 @@ const FootballConnections = lazy(() => import('./games/connections/FootballConne
 
 const Loading = () => <div className="min-h-screen bg-gray-950" aria-busy="true" />
 
+// Each game route is mounted twice: at the root (English) and under /es
+// (Spanish). GamePage always gets the locale-free path; Seo/SeoContent derive
+// the locale from the URL.
+const GAME_ROUTES = [
+  { path: '/501', el: <GamePage path="/501"><Football501 /></GamePage> },
+  { path: '/tenable', el: <GamePage path="/tenable"><FootballTenable /></GamePage> },
+  { path: '/wordle', el: <GamePage path="/wordle"><FootballWordle /></GamePage> },
+  { path: '/tictactoe', el: <GamePage path="/tictactoe"><TicTacToeMenu /></GamePage> },
+  { path: '/teammates', el: <GamePage path="/teammates"><GuessByTeammates /></GamePage> },
+  { path: '/career-path', el: <GamePage path="/career-path"><CareerPath /></GamePage> },
+  { path: '/world-cup', el: <GamePage path="/world-cup"><WorldCupSquads /></GamePage> },
+  { path: '/connections', el: <GamePage path="/connections"><FootballConnections /></GamePage> },
+  { path: '/higher-or-lower', el: <GamePage path="/higher-or-lower"><HigherLower /></GamePage> },
+]
+
 export default function App() {
   return (
     <>
       <ScrollToTop />
       <Suspense fallback={<Loading />}>
         <Routes>
-        <Route path="/" element={<Hub />} />
-        <Route path="/501" element={<GamePage path="/501"><Football501 /></GamePage>} />
-        <Route path="/tenable" element={<GamePage path="/tenable"><FootballTenable /></GamePage>} />
-        <Route path="/wordle" element={<GamePage path="/wordle"><FootballWordle /></GamePage>} />
-        <Route path="/tictactoe" element={<GamePage path="/tictactoe"><TicTacToeMenu /></GamePage>} />
-        <Route path="/teammates" element={<GamePage path="/teammates"><GuessByTeammates /></GamePage>} />
-        <Route path="/career-path" element={<GamePage path="/career-path"><CareerPath /></GamePage>} />
-        <Route path="/world-cup" element={<GamePage path="/world-cup"><WorldCupSquads /></GamePage>} />
-        <Route path="/connections" element={<GamePage path="/connections"><FootballConnections /></GamePage>} />
-        <Route path="/higher-or-lower" element={<GamePage path="/higher-or-lower"><HigherLower /></GamePage>} />
+          <Route path="/" element={<Hub />} />
+          <Route path="/es" element={<Hub />} />
+          {GAME_ROUTES.flatMap(({ path, el }) => [
+            <Route key={path} path={path} element={el} />,
+            <Route key={`es${path}`} path={`/es${path}`} element={el} />,
+          ])}
         </Routes>
       </Suspense>
     </>
