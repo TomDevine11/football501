@@ -47,6 +47,7 @@ function build() {
 
   const players = new Map() // id → { id, name, nat, natKey, comps }
   const clubIds = new Set()
+  const posCounts = new Map() // id → { GK: n, DEF: n, ... } from scrape-captured position
   let seasons = new Set()
 
   for (const f of files) {
@@ -58,6 +59,7 @@ function build() {
       if (!p) { p = { id: r.id, name: r.name, natRaw: r.nat, comps: { [COMPETITION.id]: { apps: 0, goals: 0, clubs: {} } } }; players.set(r.id, p) }
       if (r.name && r.name.length > (p.name || '').length) p.name = r.name // prefer fuller name
       if (!p.natRaw && r.nat) p.natRaw = r.nat
+      if (r.pos) { const e = posCounts.get(r.id) || {}; e[r.pos] = (e[r.pos] || 0) + 1; posCounts.set(r.id, e) }
       const comp = p.comps[COMPETITION.id]
       comp.apps += r.apps; comp.goals += r.goals
       const club = (comp.clubs[clubId] ||= { apps: 0, goals: 0 })
@@ -66,9 +68,16 @@ function build() {
     }
   }
 
+  // Modal position from the scrape; fall back to positions.json (GB1 scaffold).
+  const primaryPos = (id) => {
+    const e = posCounts.get(id)
+    if (e) return Object.entries(e).sort((a, b) => b[1] - a[1])[0][0]
+    return positions[id] || ''
+  }
+
   const out = [...players.values()].map(p => {
     const c = normalizeCountry(p.natRaw || '')
-    return { id: p.id, name: p.name, nat: c.display, natKey: c.key, pos: positions[p.id] || '', comps: p.comps }
+    return { id: p.id, name: p.name, nat: c.display, natKey: c.key, pos: primaryPos(p.id), comps: p.comps }
   }).sort((a, b) => String(a.id).localeCompare(String(b.id), undefined, { numeric: true }))
 
   const clubsIndex = {}
@@ -90,12 +99,13 @@ function build() {
   console.error('  top goals:', topG.map(p => `${p.name} ${p.comps[cid].goals}`).join(', '))
   console.error('  top apps: ', topA.map(p => `${p.name} ${p.comps[cid].apps}`).join(', '))
 
-  // Resolve this competition's challenges against the fact table → the game's
-  // questionCache (same shape the game already consumes).
-  const challenges = CHALLENGES.filter(c => c.competition === cid)
-  const resolved = resolveChallenges(out, challenges)
-  writeFileSync(OUT.questionCache, JSON.stringify({ meta: { builtFrom: path.basename(OUT_FACTS), builtAt: meta.builtAt, competition: COMPETITION }, challenges: resolved }, null, 1) + '\n')
-  console.error(`✓ wrote ${Object.keys(resolved).length} challenge rosters → ${path.relative(process.cwd(), OUT.questionCache)}`)
+  // (Legacy) resolve the hand-authored GB1 challenges → questionCache. The live
+  // game uses the procedural catalog now; only kept for GB1 backward-compat.
+  if (cid === 'GB1') {
+    const challenges = CHALLENGES.filter(c => c.competition === cid)
+    const resolved = resolveChallenges(out, challenges)
+    writeFileSync(OUT.questionCache, JSON.stringify({ meta: { builtFrom: path.basename(OUT_FACTS), builtAt: meta.builtAt, competition: COMPETITION }, challenges: resolved }, null, 1) + '\n')
+  }
 }
 
 build()

@@ -16,13 +16,15 @@ export function fetchHtml(url) {
 }
 
 // Enumerate the clubs in a competition-season → [{ id, slug }].
+// Works for a league table (startseite) AND the CL participants page
+// (/teilnehmer/), which lists clubs the same way.
 export function parseCompetitionClubs(html) {
   const $ = cheerio.load(html)
   const clubs = new Map()
-  $('#yw1 table.items td.hauptlink a, #yw1 table.items td.zentriert a').each((i, a) => {
+  $('a[href*="/startseite/verein/"], a[href*="/kader/verein/"], a[href*="/spielplan/verein/"]').each((i, a) => {
     const href = $(a).attr('href') || ''
     const m = href.match(/\/([^/]+)\/(?:startseite|spielplan|kader)\/verein\/(\d+)/)
-    if (m) clubs.set(m[2], { id: m[2], slug: m[1] })
+    if (m && !clubs.has(m[2])) clubs.set(m[2], { id: m[2], slug: m[1] })
   })
   return [...clubs.values()]
 }
@@ -32,6 +34,8 @@ export function clubSeasonUrl({ slug, id }, season) {
   return `${BASE}/${slug}/leistungsdaten/verein/${id}/reldata/${COMPETITION.id}%26${season}/plus/1`
 }
 export function competitionUrl(season) {
+  if (COMPETITION.enumerate === 'teilnehmer') // cups: participants page lists the clubs
+    return `${BASE}/${COMPETITION.slug}/teilnehmer/pokalwettbewerb/${COMPETITION.id}/saison_id/${season}`
   return `${BASE}/${COMPETITION.slug}/startseite/wettbewerb/${COMPETITION.id}/saison_id/${season}`
 }
 
@@ -74,9 +78,10 @@ export function parseClubSeason(html) {
     if (!idm) return
     const name = a.text().trim()
     const nat = $(tds[3]).find('img.flaggenrahmen').first().attr('title') || ''
+    const pos = bucketPosition($tr.find('.inline-table tr').last().find('td').text().trim())
     const apps = toInt($(tds[5]).text())
     const goals = toInt($(tds[6]).text())
-    out.push({ id: idm[1], name, nat, apps, goals })
+    out.push({ id: idm[1], name, nat, pos, apps, goals })
   })
   return out
 }
