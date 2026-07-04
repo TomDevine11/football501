@@ -273,6 +273,13 @@ const Pill = ({ active, onClick, children }) => (
   <button onClick={onClick} className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${active ? 'border-green-500 bg-green-900/30 text-white' : 'border-gray-800 bg-gray-900 text-gray-400 hover:border-gray-600'}`}>{children}</button>
 )
 
+const InfoBox = ({ label, value, tone }) => (
+  <div className="bg-gray-900 border border-gray-800 rounded-lg px-2 py-2.5 text-center">
+    <div className={`score-number text-2xl tabular-nums ${tone === 'green' ? 'text-green-400' : tone === 'amber' ? 'text-amber-400' : 'text-white'}`}>{value}</div>
+    <div className="text-[10px] text-gray-500 uppercase tracking-wide mt-0.5 leading-tight">{label}</div>
+  </div>
+)
+
 function CountPicker({ title, sub, onPick, onBack }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
@@ -419,6 +426,13 @@ export default function Football501() {
   const score = players[currentPlayerIndex]?.score ?? MAX_SCORE
   const usedNames = new Set(history.map(g => g.player.name))
 
+  // Live strategy boxes: highest available deduction, checkout & perfect counts.
+  const insights = useMemo(() => {
+    if (phase !== 'playing' || !challenge) return null
+    const used = new Set(history.filter(g => g.valid).map(g => g.resolvedName))
+    return challenge.insights(score, used)
+  }, [challenge, score, history, phase])
+
   // ── Player search (TheSportsDB + local pool) ──────────────────
   useEffect(() => {
     if (phase !== 'playing') return
@@ -519,7 +533,7 @@ export default function Football501() {
       return
     }
 
-    recordAndAdvance({ player, valid: true, scoreDeducted: statScore, scoreAtTime, newScore, isCheckout, breakdown: result.breakdown }, newScore, isCheckout)
+    recordAndAdvance({ player, valid: true, resolvedName: result.name, scoreDeducted: statScore, scoreAtTime, newScore, isCheckout, breakdown: result.breakdown }, newScore, isCheckout)
   }, [players, currentPlayerIndex, challenge])
 
   const handleKeyDown = (e) => {
@@ -607,6 +621,15 @@ export default function Football501() {
       <div className="w-full max-w-lg mt-3 flex justify-between text-xs text-gray-700 px-1">
         <span>Valid: 1–179</span><span>Checkout: 0 to −10</span><span>Below −10 = bust</span>
       </div>
+
+      {/* Live strategy boxes */}
+      {insights && (
+        <div className="w-full max-w-lg mt-4 grid grid-cols-3 gap-2">
+          <InfoBox label="Highest left" value={insights.highest || '—'} />
+          <InfoBox label="Checkouts" value={score <= 180 ? insights.checkouts : '—'} tone="green" />
+          <InfoBox label="Perfect finish" value={score <= 180 ? insights.perfect : '—'} tone="amber" />
+        </div>
+      )}
 
       <GuessHistory history={history} showPlayer={numPlayers > 1} />
     </div>

@@ -48,6 +48,15 @@ describe('501 custom builder', () => {
     expect(c.title).toBe('Goals · French players')
     expect(c.validate('Thierry Henry')).toMatchObject({ status: 'valid', value: 175 })
   })
+
+  it('live insight boxes: highest / checkouts / perfect, updating with used', () => {
+    const c = makeCustomChallenge({ stat: 'goals', filter: { nationality: 'france' } }) // Henry 175, Anelka 125…
+    expect(c.insights(500, new Set()).highest).toBe(175)            // Henry, top French scorer < 180
+    const on175 = c.insights(175, new Set())
+    expect(on175.perfect).toBe(1)                                    // Henry lands exactly on 0
+    expect(on175.checkouts).toBeGreaterThanOrEqual(1)
+    expect(c.insights(500, new Set(['Thierry Henry'])).highest).toBe(125) // Henry used → next highest
+  })
 })
 
 describe('501 spec resolver (shared by build + game)', () => {

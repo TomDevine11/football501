@@ -73,6 +73,24 @@ function makeChallenge(spec) {
       const r = roster[[...hit][0]]
       return { status: 'valid', name: r.name, value: r.value, breakdown: r.breakdown }
     },
+    // Live strategy hints for the current player, given their score and the
+    // names already used. `used` is a Set of resolved (canonical) answer names.
+    //   highest   — biggest still-available throwable deduction (< 180)
+    //   checkouts — answers that would check you out this throw (land 0..−10)
+    //   perfect   — answers that land you exactly on 0
+    insights(currentScore, used) {
+      let highest = 0, checkouts = 0, perfect = 0
+      for (const id in roster) {
+        const r = roster[id]
+        if (used.has(r.name)) continue
+        const v = r.value
+        if (v > 179) continue // ≥180 busts — not a usable deduction
+        if (v > highest) highest = v
+        if (v >= currentScore && v <= currentScore + 10) checkouts++
+        if (v === currentScore) perfect++
+      }
+      return { highest, checkouts, perfect }
+    },
   }
 }
 export const makeCustomChallenge = (spec) => makeChallenge(spec)
