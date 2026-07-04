@@ -37,6 +37,28 @@ export function competitionUrl(season) {
 
 const toInt = (t) => { const n = parseInt(String(t).replace(/[.,]/g, '').replace(/[^0-9]/g, ''), 10); return Number.isFinite(n) ? n : 0 }
 
+// Transfermarkt position string → GK / DEF / MID / FWD (the buckets shown as
+// dropdown badges). Wingers/second strikers bucket as FWD, per Transfermarkt.
+export function bucketPosition(p = '') {
+  const s = String(p).toLowerCase()
+  if (s.includes('keeper')) return 'GK'
+  if (s.includes('back') || s.includes('defender') || s.includes('centre-back') || s.includes('sweeper')) return 'DEF'
+  if (s.includes('midfield')) return 'MID'
+  if (s.includes('winger') || s.includes('forward') || s.includes('striker') || s.includes('attack')) return 'FWD'
+  return null
+}
+
+// Extract a player's primary position from their Transfermarkt profile page.
+export function parseProfilePosition(html) {
+  const $ = cheerio.load(html)
+  let pos = ''
+  $('.info-table__content').each((i, s) => {
+    const label = $(s).prev().text().trim()
+    if (/^position/i.test(label) && !pos) pos = $(s).text().trim()
+  })
+  return bucketPosition(pos)
+}
+
 // Parse a club-season performance page → per-player { id, name, nat, apps, goals }.
 // Column map (validated): [0]# [1]player [2]age [3]nat [4]in-squad [5]apps [6]goals …
 export function parseClubSeason(html) {

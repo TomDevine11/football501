@@ -5,7 +5,7 @@ import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/fl
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import MoreGames from '../../components/MoreGames'
-import { CHALLENGES, getDailyChallenge, getRandomChallenge, validateGuess } from '../../data/football501/game'
+import { getDailyChallenge, getDailyEntry, getRandomChallenge, badgeFor } from '../../data/football501/game'
 
 const MAX_SCORE    = 501
 const CHECKOUT_MIN = -10
@@ -15,21 +15,22 @@ const DARTS_MAX    = 180
 const TSDB = 'https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p='
 const EXCLUDE_SPORTS = new Set(['basketball','american football','baseball','ice hockey','tennis','golf','cricket','rugby','swimming','athletics','motorsport','cycling','boxing','mma'])
 
-const POS_ABBR = { goalkeeper: 'GK', defender: 'DEF', midfielder: 'MID', forward: 'FWD' }
-const POS_COLORS = {
-  goalkeeper: 'text-yellow-400 bg-yellow-900/40 border-yellow-800/50',
-  defender:   'text-blue-400   bg-blue-900/40   border-blue-800/50',
-  midfielder: 'text-green-400  bg-green-900/40  border-green-800/50',
-  forward:    'text-red-400    bg-red-900/40    border-red-800/50',
+// Position badges use the same GK/DEF/MID/FWD codes as the challenge filter, so
+// what a player shows in the dropdown is exactly what the filter tests against.
+const POS_META = {
+  GK:  { abbr: 'GK',  cls: 'text-yellow-400 bg-yellow-900/40 border-yellow-800/50' },
+  DEF: { abbr: 'DEF', cls: 'text-blue-400   bg-blue-900/40   border-blue-800/50' },
+  MID: { abbr: 'MID', cls: 'text-green-400  bg-green-900/40  border-green-800/50' },
+  FWD: { abbr: 'FWD', cls: 'text-red-400    bg-red-900/40    border-red-800/50' },
 }
 
 function broadenPosition(raw) {
   if (!raw) return null
   const lc = raw.toLowerCase()
-  if (lc.includes('goalkeeper') || lc.includes('keeper')) return 'goalkeeper'
-  if (lc.includes('defender') || lc.includes('back') || lc.includes('sweeper') || lc.includes('libero')) return 'defender'
-  if (lc.includes('midfield')) return 'midfielder'
-  if (lc.includes('forward') || lc.includes('striker') || lc.includes('wing') || lc.includes('attacker')) return 'forward'
+  if (lc.includes('goalkeeper') || lc.includes('keeper')) return 'GK'
+  if (lc.includes('defender') || lc.includes('back') || lc.includes('sweeper') || lc.includes('libero')) return 'DEF'
+  if (lc.includes('midfield')) return 'MID'
+  if (lc.includes('forward') || lc.includes('striker') || lc.includes('wing') || lc.includes('attacker')) return 'FWD'
   return null
 }
 
@@ -210,7 +211,7 @@ function GuessHistory({ history, showPlayer }) {
                   <div className="flex items-center gap-1.5">
                     {showPlayer && <span className="text-xs text-gray-500 shrink-0">{g.playerName}:</span>}
                     <span className="text-sm font-medium text-white truncate">{g.player.name}</span>
-                    {g.player.position && <span className={`shrink-0 text-xs font-bold px-1 py-0 rounded border ${POS_COLORS[g.player.position]}`}>{POS_ABBR[g.player.position]}</span>}
+                    {g.player.position && POS_META[g.player.position] && <span className={`shrink-0 text-xs font-bold px-1 py-0 rounded border ${POS_META[g.player.position].cls}`}>{POS_META[g.player.position].abbr}</span>}
                   </div>
                   {!g.valid && <div className="text-xs text-red-400 mt-0.5 truncate">{g.reason}</div>}
                 </div>
@@ -235,7 +236,7 @@ function GuessHistory({ history, showPlayer }) {
 
 // ── Entry: Daily (solo) vs Unlimited (multiplayer) ────────────────
 function EntryScreen({ onDaily, onUnlimited }) {
-  const daily = getDailyChallenge()
+  const daily = getDailyEntry()
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl mb-6">
@@ -269,42 +270,17 @@ function EntryScreen({ onDaily, onUnlimited }) {
 
 // ── Unlimited setup: pick a challenge, then player count ───────────
 function UnlimitedSetup({ onStart, onBack }) {
-  const [challenge, setChallenge] = useState(null)
-  const groups = [...new Set(CHALLENGES.map(c => c.group))]
-
-  if (!challenge) return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-10">
-      <div className="w-full max-w-lg mb-6"><button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Back</button></div>
-      <h2 className="text-white font-black text-2xl mb-6">Choose a challenge</h2>
-      <div className="w-full max-w-lg space-y-5">
-        {groups.map(group => (
-          <div key={group}>
-            <div className="text-xs text-gray-600 uppercase tracking-widest font-medium mb-2 px-1">{group}</div>
-            <div className="grid grid-cols-1 gap-2">
-              {CHALLENGES.filter(c => c.group === group).map(c => (
-                <button key={c.id} onClick={() => setChallenge(c)} className="bg-gray-900 border border-gray-800 hover:border-green-600 rounded-lg px-4 py-3 text-left transition-colors">
-                  <div className="text-white text-sm font-semibold">{c.title}</div>
-                  <div className="text-gray-500 text-xs mt-0.5">{c.count} possible answers</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <button onClick={() => setChallenge(null)} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">← Back to challenges</button>
+        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">← Back</button>
         <div className="mb-8 text-center">
-          <h2 className="text-white font-black text-2xl leading-tight">{challenge.title}</h2>
-          <div className="text-gray-500 text-sm mt-1">How many players?</div>
+          <h2 className="text-white font-black text-2xl">Local Multiplayer</h2>
+          <div className="text-gray-500 text-sm mt-1">Everyone gets the same generated question — closest to 0 on checkout wins. Skip any you don't fancy. How many players?</div>
         </div>
         <div className="grid grid-cols-4 gap-3">
           {[2, 3, 4, 5].map(n => (
-            <button key={n} onClick={() => onStart(challenge, n)} className="bg-gray-900 border border-gray-800 hover:border-green-600 rounded-xl py-6 text-center text-2xl font-black text-white transition-colors">{n}</button>
+            <button key={n} onClick={() => onStart(n)} className="bg-gray-900 border border-gray-800 hover:border-green-600 rounded-xl py-6 text-center text-2xl font-black text-white transition-colors">{n}</button>
           ))}
         </div>
       </div>
@@ -345,7 +321,9 @@ export default function Football501() {
     const merge = (apiPlayers) => {
       const apiNorms = new Set(apiPlayers.map(p => normalizeName(p.name)))
       const extra = localMatches.filter(p => !apiNorms.has(normalizeName(p.name)))
+      // Prefer OUR position (same source as the filter) so the badge never lies.
       return rankSuggestions([...apiPlayers, ...extra], input, knownNames).slice(0, 10)
+        .map(p => ({ ...p, position: badgeFor(p.name) || p.position || null }))
     }
 
     const timer = setTimeout(async () => {
@@ -380,7 +358,8 @@ export default function Football501() {
     setTimeout(() => inputRef.current?.focus(), 100)
   }
   const playDaily = () => startGame(getDailyChallenge(), 1, true)
-  const playAgain = () => startGame(isDaily ? challenge : (numPlayers === 1 ? getRandomChallenge() : challenge), numPlayers, isDaily)
+  const playAgain = () => startGame(isDaily ? challenge : getRandomChallenge(numPlayers), numPlayers, isDaily)
+  const skipQuestion = () => startGame(getRandomChallenge(numPlayers), numPlayers, false) // endless: new question
 
   // ── Submit a guess ────────────────────────────────────────────
   const submitGuess = useCallback((player) => {
@@ -403,7 +382,7 @@ export default function Football501() {
       setCurrentPlayerIndex(idx)
     }
 
-    const result = validateGuess(challenge.id, player.name)
+    const result = challenge.validate(player.name)
     if (result.status !== 'valid') {
       const reason = result.status === 'ambiguous'
         ? `Ambiguous — did you mean ${result.options.join(' or ')}?`
@@ -455,7 +434,7 @@ export default function Football501() {
 
   // ── Render ────────────────────────────────────────────────────
   if (phase === 'entry') return <EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />
-  if (phase === 'unlimited') return <UnlimitedSetup onStart={(ch, n) => startGame(ch, n, false)} onBack={() => setPhase('entry')} />
+  if (phase === 'unlimited') return <UnlimitedSetup onStart={(n) => startGame(getRandomChallenge(n), n, false)} onBack={() => setPhase('entry')} />
   if (phase === 'won') return <WinScreen history={history} players={players} challenge={challenge} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />
 
   const validCount = history.filter(g => g.valid).length
@@ -471,10 +450,14 @@ export default function Football501() {
 
       {/* Challenge card */}
       <div className="w-full max-w-lg mb-6">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4">
-          <div className="text-white font-bold text-sm">{challenge.title}</div>
-          <div className="text-gray-500 text-xs mt-0.5">Deducting: <span className="text-gray-400">{challenge.statLabel}</span></div>
-          {challenge.hint && <div className="text-gray-600 text-xs mt-2 leading-relaxed">{challenge.hint}</div>}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-white font-bold text-sm">{challenge.title}</div>
+            <div className="text-gray-500 text-xs mt-0.5">{challenge.answers} possible answers</div>
+          </div>
+          {!isDaily && (
+            <button onClick={skipQuestion} className="shrink-0 text-xs text-gray-500 hover:text-gray-300 border border-gray-700 hover:border-gray-500 rounded-lg px-2.5 py-1 transition-colors">↻ Skip</button>
+          )}
         </div>
       </div>
 
@@ -503,7 +486,7 @@ export default function Football501() {
                     <div className="text-white text-sm font-medium truncate">{player.name}</div>
                     <div className="text-gray-500 text-xs">{player.nationality}{player.dob ? ` · ${player.dob}` : ''}</div>
                   </div>
-                  {player.position && <span className={`shrink-0 text-xs font-bold px-1.5 py-0.5 rounded border ${POS_COLORS[player.position]}`}>{POS_ABBR[player.position]}</span>}
+                  {player.position && POS_META[player.position] && <span className={`shrink-0 text-xs font-bold px-1.5 py-0.5 rounded border ${POS_META[player.position].cls}`}>{POS_META[player.position].abbr}</span>}
                 </div>
               </button>
             ))}

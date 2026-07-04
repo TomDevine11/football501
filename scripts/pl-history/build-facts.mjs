@@ -34,8 +34,14 @@ function loadClubNames() {
   return names
 }
 
+function loadPositions() {
+  const f = path.join(DIR.root, 'positions.json')
+  return existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : {}
+}
+
 function build() {
   const clubNames = loadClubNames()
+  const positions = loadPositions()
   const files = readdirSync(DIR.cache).filter(f => f.endsWith('.json'))
   if (!files.length) { console.error('No cache found — run `npm run scrape:pl-history` first.'); process.exit(1) }
 
@@ -62,7 +68,7 @@ function build() {
 
   const out = [...players.values()].map(p => {
     const c = normalizeCountry(p.natRaw || '')
-    return { id: p.id, name: p.name, nat: c.display, natKey: c.key, pos: '', comps: p.comps }
+    return { id: p.id, name: p.name, nat: c.display, natKey: c.key, pos: positions[p.id] || '', comps: p.comps }
   }).sort((a, b) => String(a.id).localeCompare(String(b.id), undefined, { numeric: true }))
 
   const clubsIndex = {}

@@ -1,37 +1,53 @@
 import { describe, it, expect } from 'vitest'
-import { CHALLENGES, getDailyChallenge, getChallengeById, validateGuess } from '../src/data/football501/game.js'
+import { getDailyEntry, getDailyChallenge, getRandomChallenge, badgeFor, CATALOG_SIZE } from '../src/data/football501/game.js'
+import { resolveRoster, titleFor } from '../src/data/football501/spec.js'
 
-describe('football 501 runtime data', () => {
-  it('loads the resolved challenges', () => {
-    expect(CHALLENGES.length).toBeGreaterThanOrEqual(10)
-    for (const c of CHALLENGES) {
-      expect(c.id && c.title && c.statLabel && c.competition).toBeTruthy()
-      expect(c.count).toBeGreaterThan(0)
-    }
+describe('501 catalog + generator', () => {
+  it('has a catalog of completable questions', () => {
+    expect(CATALOG_SIZE).toBeGreaterThan(500)
   })
 
-  it('daily challenge is deterministic and real', () => {
-    const a = getDailyChallenge()
-    expect(getChallengeById(a.id)).toBeTruthy()
-    expect(getDailyChallenge().id).toBe(a.id) // stable within the same day
+  it('daily question is deterministic', () => {
+    expect(getDailyEntry().id).toBe(getDailyEntry().id)
   })
 
-  it('validates a real answer against a roster (name + surname)', () => {
-    const full = validateGuess('pl-goals', 'Alan Shearer') // all-time PL top scorer
-    expect(full.status).toBe('valid')
-    expect(full.value).toBe(260)
-    expect(validateGuess('pl-goals', 'Shearer').status).toBe('valid') // surname resolves
+  it('daily challenge resolves with a working validator', () => {
+    const c = getDailyChallenge()
+    expect(c.title).toBeTruthy()
+    expect(typeof c.validate).toBe('function')
+    expect(c.maxPlayers).toBeGreaterThanOrEqual(1)
+    expect(c.validate('zzznotaplayer').status).toBe('not-eligible')
   })
 
-  it('rejects a non-answer', () => {
-    expect(validateGuess('pl-goals', 'zzzznotaplayer').status).toBe('not-eligible')
+  it('random multiplayer question supports the requested player count', () => {
+    for (let i = 0; i < 10; i++) expect(getRandomChallenge(3).maxPlayers).toBeGreaterThanOrEqual(3)
   })
 
-  it('every eligible value is a legal dart (1..179)', () => {
-    for (const c of CHALLENGES.slice(0, 4)) {
-      // sample the roster via validateGuess on its own known names is overkill;
-      // instead assert the metadata range implied by the pipeline holds.
-      expect(c.count).toBeGreaterThan(0)
-    }
+  it('position badge is stable and comes from our data', () => {
+    expect(badgeFor('Alan Shearer')).toBe('FWD')
+    expect(badgeFor('Petr Cech')).toBe('GK')
+    expect(badgeFor('zzznobody')).toBe(null)
+  })
+})
+
+describe('501 spec resolver (shared by build + game)', () => {
+  const fact = [
+    { id: '1', name: 'A Keeper',  natKey: 'england', pos: 'GK',  comps: { GB1: { apps: 400, goals: 0,  clubs: { 11: { apps: 400, goals: 0 } } } } },
+    { id: '2', name: 'A Striker', natKey: 'france',  pos: 'FWD', comps: { GB1: { apps: 100, goals: 80, clubs: { 11: { apps: 100, goals: 80 } } } } },
+  ]
+
+  it('applies stat + player-property filters', () => {
+    const { players } = resolveRoster({ stat: { a: 'apps', op: '-', b: 'goals' }, filter: { position: 'FWD' } }, fact)
+    expect(Object.values(players)).toEqual([{ name: 'A Striker', value: 20, breakdown: { apps: 100, goals: 80 } }])
+  })
+
+  it('club filter scopes the value to that club', () => {
+    const { players } = resolveRoster({ stat: 'goals', filter: { club: '11' } }, fact)
+    expect(players['2'].value).toBe(80)
+    expect(players['1']).toBeUndefined() // keeper: 0 goals → not eligible
+  })
+
+  it('auto-titles read naturally', () => {
+    expect(titleFor({ stat: { a: 'apps', op: '-', b: 'goals' }, filter: { nationality: 'france', position: 'FWD' } }, {})).toBe('Appearances − Goals · French forwards')
   })
 })
