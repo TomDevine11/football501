@@ -17,10 +17,10 @@ describe('football 501 runtime data', () => {
   })
 
   it('validates a real answer against a roster (name + surname)', () => {
-    const full = validateGuess('pl-goals', 'Jamie Vardy')
+    const full = validateGuess('pl-goals', 'Alan Shearer') // all-time PL top scorer
     expect(full.status).toBe('valid')
-    expect(full.value).toBe(145)
-    expect(validateGuess('pl-goals', 'Vardy').status).toBe('valid') // surname resolves
+    expect(full.value).toBe(260)
+    expect(validateGuess('pl-goals', 'Shearer').status).toBe('valid') // surname resolves
   })
 
   it('rejects a non-answer', () => {

@@ -15,6 +15,9 @@ import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import path from 'node:path'
 import { DIR, OUT_FACTS, COMPETITION } from './config.mjs'
 import { normalize, normalizeCountry } from '../transfermarkt/lib/normalize.mjs'
+import { resolveChallenges } from '../transfermarkt/60-resolve-challenges.mjs'
+import { OUT } from '../transfermarkt/config.mjs'
+import { CHALLENGES } from '../../src/data/football501/challenges.js'
 
 // clubId → display name, from the scaffold clubs.csv (covers all PL clubs 1992+).
 function loadClubNames() {
@@ -80,6 +83,13 @@ function build() {
   const topA = [...out].sort((a, b) => b.comps[cid].apps - a.comps[cid].apps).slice(0, 5)
   console.error('  top goals:', topG.map(p => `${p.name} ${p.comps[cid].goals}`).join(', '))
   console.error('  top apps: ', topA.map(p => `${p.name} ${p.comps[cid].apps}`).join(', '))
+
+  // Resolve this competition's challenges against the fact table → the game's
+  // questionCache (same shape the game already consumes).
+  const challenges = CHALLENGES.filter(c => c.competition === cid)
+  const resolved = resolveChallenges(out, challenges)
+  writeFileSync(OUT.questionCache, JSON.stringify({ meta: { builtFrom: path.basename(OUT_FACTS), builtAt: meta.builtAt, competition: COMPETITION }, challenges: resolved }, null, 1) + '\n')
+  console.error(`✓ wrote ${Object.keys(resolved).length} challenge rosters → ${path.relative(process.cwd(), OUT.questionCache)}`)
 }
 
 build()
