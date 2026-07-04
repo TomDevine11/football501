@@ -17,6 +17,9 @@ import { loadDimensions } from './10-load-dimensions.mjs'
 import { aggregateAppearances } from './20-aggregate-appearances.mjs'
 import { enrichNormalize } from './30-enrich-normalize.mjs'
 import { emit } from './40-emit.mjs'
+import { resolveChallenges } from './60-resolve-challenges.mjs'
+import { writeFileSync } from 'node:fs'
+import { OUT } from './config.mjs'
 import { log } from './lib/log.mjs'
 
 export async function build() {
@@ -25,7 +28,13 @@ export async function build() {
   const { agg, names, stats } = await aggregateAppearances()
   const built = enrichNormalize({ agg, names, dims })
   const meta = emit(built, stats)
-  log.done(`Football 501 data engine complete — ${meta.counts.players.toLocaleString()} players across ${meta.counts.competitions} competitions.`)
+
+  // Stage 60 — resolve challenges from the just-built fact table (in-process).
+  const challenges = resolveChallenges(built.players)
+  writeFileSync(OUT.questionCache, JSON.stringify({ meta: { builtFrom: 'football501.generated.json', builtAt: meta.builtAt }, challenges }, null, 1) + '\n')
+  log.ok(`wrote ${Object.keys(challenges).length} challenge rosters → questionCache.generated.json`)
+
+  log.done(`Football 501 data engine complete — ${meta.counts.players.toLocaleString()} players, ${Object.keys(challenges).length} challenges.`)
   return meta
 }
 

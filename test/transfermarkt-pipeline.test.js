@@ -8,6 +8,7 @@ import { loadDimensions } from '../scripts/transfermarkt/10-load-dimensions.mjs'
 import { aggregateAppearances } from '../scripts/transfermarkt/20-aggregate-appearances.mjs'
 import { enrichNormalize } from '../scripts/transfermarkt/30-enrich-normalize.mjs'
 import { emit } from '../scripts/transfermarkt/40-emit.mjs'
+import { resolveChallenge } from '../scripts/transfermarkt/60-resolve-challenges.mjs'
 
 // ── Synthetic Kaggle-shaped fixtures ─────────────────────────────────
 const toCsv = (header, rows) =>
@@ -162,6 +163,33 @@ describe('501 data engine — answers the <Stat> <Op> <Stat> from <filter> in <c
       .filter(p => p.natKey === 'brazil' && p.comps.IT1)
       .map(p => ({ name: p.name, value: p.comps.IT1.yellow + p.comps.IT1.assists }))
     expect(rows).toEqual([{ name: 'Alex Sandro', value: 3 }]) // 2 yellow + 1 assist
+  })
+})
+
+describe('501 challenge resolver (Stage 60)', () => {
+  it('single stat over a whole competition, eligibility 1..179', () => {
+    const { players, stats } = resolveChallenge({ competition: 'GB1', filter: null, stat: 'goals' }, built.players)
+    // Silva 2, Saka 2, Mover 3 eligible; Journeyman (0 PL goals) excluded
+    expect(Object.values(players).map(p => p.name).sort()).toEqual(['Bukayo Saka', 'David Silva', 'Fixture Mover'])
+    expect(stats.eligible).toBe(3)
+    expect(players['99999']).toBeUndefined() // value 0 → not a valid answer
+  })
+
+  it('club filter reads the per-club sub-record', () => {
+    const { players } = resolveChallenge({ competition: 'GB1', filter: { club: '11' }, stat: { a: 'goals', op: '+', b: 'assists' } }, built.players)
+    expect(players['433177'].value).toBe(3) // Saka @ Arsenal: 2 + 1
+    expect(players['74228'].value).toBe(3)  // Fixture Mover @ Arsenal: 2 + 1
+    expect(players['99999']).toBeUndefined() // Journeyman @ Arsenal: 0
+  })
+
+  it('nationality filter + subtraction (with breakdown)', () => {
+    const { players } = resolveChallenge({ competition: 'GB1', filter: { nationality: 'spain' }, stat: { a: 'apps', op: '-', b: 'goals' } }, built.players)
+    expect(Object.values(players)).toEqual([{ name: 'David Silva', value: 1, breakdown: { apps: 3, goals: 2 } }])
+  })
+
+  it('nationality filter + addition (Serie A)', () => {
+    const { players } = resolveChallenge({ competition: 'IT1', filter: { nationality: 'brazil' }, stat: { a: 'yellow', op: '+', b: 'assists' } }, built.players)
+    expect(players['221097'].value).toBe(3) // Alex Sandro: 2 yellow + 1 assist
   })
 })
 
