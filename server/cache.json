@@ -1758,5 +1758,13 @@
   "attrs:andrew cole": {
     "nationality": null,
     "position": "forward"
+  },
+  "attrs:graeme souness": {
+    "nationality": "Scotland",
+    "position": "midfielder"
+  },
+  "attrs:kasper schmeichel": {
+    "nationality": "Denmark",
+    "position": "goalkeeper"
   }
 }

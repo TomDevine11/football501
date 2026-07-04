@@ -12,40 +12,14 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import { allPlayers } from './facts.js'
+// normalize/surnameKeys live in a pure, registry-free module so build scripts can
+// reuse them; re-exported here so existing `from './resolve.js'` imports work.
+import { normalize, surnameKeys } from './normalize.js'
+export { normalize } from './normalize.js'
 
 export const OK = 'ok'
 export const AMBIGUOUS = 'ambiguous'
 export const UNKNOWN = 'unknown'
-
-// NFD strip diacritics, drop punctuation, lowercase, collapse whitespace.
-export function normalize(str) {
-  return (str || '')
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/['’ʼ.]/g, '')
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-// Nobiliary/compound-surname particles — so "van Persie", "de Jong",
-// "van der Sar", "van Dijk" resolve the way a user actually types them.
-const PARTICLES = new Set(['van', 'von', 'de', 'der', 'den', 'da', 'dos', 'das', 'di', 'del', 'della', 'la', 'le', 'el', 'al', 'bin', 'ten', 'ter'])
-
-// Returns candidate surname keys for a name: the last token, plus a
-// particle-aware tail (e.g. "robin van persie" → ["persie", "van persie"]).
-function surnameKeys(displayName) {
-  const parts = normalize(displayName).split(' ')
-  const keys = [parts[parts.length - 1]]
-  let i = parts.length - 2
-  let tail = parts[parts.length - 1]
-  while (i >= 0 && PARTICLES.has(parts[i])) {
-    tail = parts[i] + ' ' + tail
-    keys.push(tail)
-    i--
-  }
-  return keys
-}
 
 // Bare tokens that genuinely refer to more than one real person — must prompt,
 // never auto-resolve. Curated, small, explicit.
