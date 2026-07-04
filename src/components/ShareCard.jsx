@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SITE_URL } from '../utils/site'
+import { useI18n } from '../i18n'
 
 export const ICON_BTN = 'w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 text-white transition-colors'
 
@@ -45,6 +46,7 @@ export function ShareIcon() {
 }
 
 export function ShareCard({ text }) {
+  const { t } = useI18n()
   const [copied, setCopied] = useState(false)
   const [toast, setToast] = useState('')
   const canNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function'
@@ -67,7 +69,7 @@ export function ShareCard({ text }) {
 
   const handleInstagram = () => {
     navigator.clipboard.writeText(text).then(() => {
-      flashToast('Result copied — paste it into your Instagram story or DM')
+      flashToast(t('share.instagram'))
       window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
     })
   }
@@ -79,11 +81,11 @@ export function ShareCard({ text }) {
     <div className="w-full max-w-md flex flex-col items-center gap-3 mb-2">
       <div className="flex flex-wrap items-center justify-center gap-3">
         <button onClick={handleCopy} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">
-          {copied ? 'Copied!' : 'Copy result'}
+          {copied ? t('share.copied') : t('share.copy')}
         </button>
         {canNativeShare && (
           <button onClick={handleNativeShare} className="flex items-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">
-            <ShareIcon /> Share
+            <ShareIcon /> {t('share.share')}
           </button>
         )}
       </div>

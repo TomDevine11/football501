@@ -1,12 +1,11 @@
 // Daily ⇄ Unlimited switch shown at the top of every game.
 //   • Daily     — one deterministic puzzle per day; records stats & streaks.
 //   • Unlimited — random, replayable practice; never touches stats.
-const MODES = [
-  ['daily', 'Daily'],
-  ['unlimited', 'Unlimited'],
-]
+import { useI18n } from '../i18n'
 
 export default function ModeToggle({ mode, onChange, className = '' }) {
+  const { t } = useI18n()
+  const MODES = [['daily', t('common.daily')], ['unlimited', t('common.unlimited')]]
   return (
     <div className={`inline-flex rounded-lg border border-gray-800 bg-gray-900 p-0.5 ${className}`}>
       {MODES.map(([id, label]) => (
