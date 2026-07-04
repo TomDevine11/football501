@@ -8,10 +8,12 @@ import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
+import { useI18n } from '../../i18n'
 import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 
 export default function CareerPath() {
+  const { t, lp } = useI18n()
   const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
   const [target, setTarget] = useState(() => getDailyTarget())
   const [revealed, setRevealed] = useState(1)
@@ -103,23 +105,23 @@ export default function CareerPath() {
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
-        <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>
+        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
         <div className="score-number text-xl text-gray-500 tracking-wider">CAREER PATH</div>
-        <div className="text-sm tabular-nums text-gray-500">{phase === 'playing' ? `${guessesLeft} left` : ''}</div>
+        <div className="text-sm tabular-nums text-gray-500">{phase === 'playing' ? t('teammates.left', { n: guessesLeft }) : ''}</div>
       </div>
 
       <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
 
       <div className="w-full max-w-lg mb-5">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">Whose career path is this?</div>
-          <div className="text-gray-500 text-xs mt-0.5">Guess the player who played for every club shown. Each wrong guess reveals another club — you have {MAX_CLUES} tries.</div>
+          <div className="text-white font-bold text-sm">{t('careers.intro')}</div>
+          <div className="text-gray-500 text-xs mt-0.5">{t('careers.introSub', { max: MAX_CLUES })}</div>
         </div>
       </div>
 
       {/* Career path */}
       <div className="w-full max-w-lg mb-5">
-        <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">Has played for</div>
+        <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">{t('careers.playedFor')}</div>
         <div className="space-y-2">
           {target.clues.slice(0, cluesToShow).map((clue, i) => (
             <div key={i} className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 clue-reveal">
@@ -132,7 +134,7 @@ export default function CareerPath() {
             </div>
           ))}
           {phase === 'playing' && revealed < MAX_CLUES && (
-            <div className="text-center text-gray-700 text-xs py-1">+{MAX_CLUES - revealed} more club{MAX_CLUES - revealed === 1 ? '' : 's'} hidden</div>
+            <div className="text-center text-gray-700 text-xs py-1">{t('careers.moreClubs', { n: MAX_CLUES - revealed })}</div>
           )}
         </div>
       </div>
@@ -145,7 +147,7 @@ export default function CareerPath() {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Who is it? Type a player's name..."
+            placeholder={t('careers.placeholder')}
             autoFocus
             className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
             autoComplete="off" autoCorrect="off" spellCheck="false"
@@ -182,23 +184,23 @@ export default function CareerPath() {
           onClick={skip}
           className="mt-3 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
         >
-          Skip this clue →
+          {t('careers.skip')}
         </button>
       )}
 
       {phase !== 'playing' && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-1 mb-4 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+        <button onClick={() => setShowResult(true)} className="mt-1 mb-4 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <div className="text-5xl mb-2">{phase === 'won' ? '🎉' : '💔'}</div>
           <h2 className={`score-number text-3xl mb-1 ${phase === 'won' ? 'text-green-400' : 'text-red-400'}`}>
-            {phase === 'won' ? 'CORRECT!' : 'OUT OF GUESSES'}
+            {phase === 'won' ? t('teammates.correct') : t('teammates.outOf')}
           </h2>
           <p className="text-gray-400 mb-3">
-            The mystery player was <span className="text-white font-bold">{target.name}</span>
-            {phase === 'won' && guesses.length > 0 && <> — in {guesses.length} {guesses.length === 1 ? 'guess' : 'guesses'}</>}.
+            {t('teammates.mysteryWas')} <span className="text-white font-bold">{target.name}</span>
+            {phase === 'won' && guesses.length > 0 && <> — {t('teammates.inN', { n: guesses.length })}</>}.
           </p>
           {mode === 'daily' && <DailyStats game="careers" stats={dailyStats} />}
           <ShareCard text={[
@@ -207,15 +209,15 @@ export default function CareerPath() {
               : `🧭 Career Path — it stumped me. Can you guess the player from their career?`,
             SITE_URL,
           ].join('\n\n')} />
-          <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New player →'}</button>
-          {mode === 'daily' && <p className="text-gray-600 text-xs mt-3">Come back tomorrow for a new daily.</p>}
+          <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('careers.newPlayer')}</button>
+          {mode === 'daily' && <p className="text-gray-600 text-xs mt-3">{t('common.comeBackTomorrow')}</p>}
         </div>
         <MoreGames current="/career-path" />
       </ResultModal>
 
       {guesses.length > 0 && (
         <div className="w-full max-w-lg mt-4">
-          <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">Your guesses</div>
+          <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">{t('teammates.yourGuesses')}</div>
           <div className="rounded-xl border border-gray-800 overflow-hidden divide-y divide-gray-800/40">
             {guesses.map((g, i) => (
               <div key={i} className={`flex items-center justify-between px-4 py-2.5 ${g.correct ? 'flash-valid' : g.skipped ? '' : 'flash-invalid'}`}>

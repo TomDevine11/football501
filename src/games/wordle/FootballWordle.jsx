@@ -8,6 +8,7 @@ import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
+import { useI18n } from '../../i18n'
 
 const MAX_GUESSES = 6
 
@@ -47,6 +48,7 @@ function evaluateGuess(guess, answer) {
 }
 
 export default function FootballWordle() {
+  const { t, lp } = useI18n()
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [question, setQuestion] = useState(() => getDailyWordlePlayer())
   const answer = question.surname
@@ -162,8 +164,8 @@ export default function FootballWordle() {
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       {/* Header */}
       <div className="w-full max-w-lg flex items-center justify-between mb-6">
-        <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
-          ← All games
+        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+          {t('common.allGames')}
         </Link>
         <div className="score-number text-xl text-gray-500 tracking-wider">WORDLE</div>
         <div className="text-sm text-gray-700 tabular-nums">{guesses.length}/{MAX_GUESSES}</div>
@@ -174,8 +176,8 @@ export default function FootballWordle() {
       {/* Hint card */}
       <div className="w-full max-w-lg mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">{mode === 'daily' ? "Guess today's footballer" : 'Guess the footballer'}</div>
-          <div className="text-gray-500 text-xs mt-0.5">{answer.length}-letter surname · {MAX_GUESSES} guesses</div>
+          <div className="text-white font-bold text-sm">{mode === 'daily' ? t('wordle.guessToday') : t('wordle.guessAny')}</div>
+          <div className="text-gray-500 text-xs mt-0.5">{t('wordle.hint', { n: answer.length, max: MAX_GUESSES })}</div>
         </div>
       </div>
 
@@ -261,28 +263,28 @@ export default function FootballWordle() {
       </div>
 
       {phase !== 'playing' && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">↑ See result &amp; more games</button>
+        <button onClick={() => setShowResult(true)} className="mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         {phase === 'won' && (
           <div className="w-full flex flex-col items-center text-center">
             <div className="text-6xl mb-3">🎉</div>
-            <h2 className="score-number text-4xl text-green-400 mb-2">CORRECT!</h2>
-            <p className="text-gray-400 mb-1">It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
-            <p className="text-gray-500 text-sm">Solved in <span className="text-white font-bold">{guesses.length}</span>/{MAX_GUESSES}</p>
+            <h2 className="score-number text-4xl text-green-400 mb-2">{t('wordle.correct')}</h2>
+            <p className="text-gray-400 mb-1">{t('wordle.itWas')} <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
+            <p className="text-gray-500 text-sm">{t('wordle.solvedIn')} <span className="text-white font-bold">{guesses.length}</span>/{MAX_GUESSES}</p>
           </div>
         )}
         {phase === 'lost' && (
           <div className="w-full flex flex-col items-center text-center">
             <div className="text-6xl mb-3">💔</div>
-            <h2 className="score-number text-4xl text-red-400 mb-2">GAME OVER</h2>
-            <p className="text-gray-400 mb-2">It was <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
+            <h2 className="score-number text-4xl text-red-400 mb-2">{t('wordle.gameOver')}</h2>
+            <p className="text-gray-400 mb-2">{t('wordle.itWas')} <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
           </div>
         )}
         {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
         <ShareCard text={shareText} />
-        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? 'Play Unlimited →' : 'New word →'}</button>
+        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('wordle.newWord')}</button>
         <MoreGames current="/wordle" />
       </ResultModal>
     </div>
