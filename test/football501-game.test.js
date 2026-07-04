@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getDailyEntry, getDailyChallenge, getRandomChallenge, badgeFor, CATALOG_SIZE } from '../src/data/football501/game.js'
+import { getDailyEntry, getDailyChallenge, getRandomChallenge, badgeFor, CATALOG_SIZE, evaluateSpec, makeCustomChallenge, CLUBS, NATIONS, POSITIONS, STAT_OPTIONS } from '../src/data/football501/game.js'
 import { resolveRoster, titleFor } from '../src/data/football501/spec.js'
 
 describe('501 catalog + generator', () => {
@@ -27,6 +27,26 @@ describe('501 catalog + generator', () => {
     expect(badgeFor('Alan Shearer')).toBe('FWD')
     expect(badgeFor('Petr Cech')).toBe('GK')
     expect(badgeFor('zzznobody')).toBe(null)
+  })
+})
+
+describe('501 custom builder', () => {
+  it('exposes populated option lists', () => {
+    expect(CLUBS.length).toBeGreaterThan(40)
+    expect(NATIONS.length).toBeGreaterThan(20)
+    expect(POSITIONS.length).toBe(4)
+    expect(STAT_OPTIONS.length).toBe(4)
+  })
+
+  it('evaluates completability live (broad = ok, resolves a real answer)', () => {
+    const broad = evaluateSpec({ stat: 'goals', filter: {} })
+    expect(broad.answers).toBeGreaterThan(1000)
+    expect(broad.maxPlayers).toBe(5)
+    expect(broad.solvable).toBe(true)
+
+    const c = makeCustomChallenge({ stat: 'goals', filter: { nationality: 'france' } })
+    expect(c.title).toBe('Goals · French players')
+    expect(c.validate('Thierry Henry')).toMatchObject({ status: 'valid', value: 175 })
   })
 })
 

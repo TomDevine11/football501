@@ -14,7 +14,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { resolveRoster, titleFor } from '../../src/data/football501/spec.js'
-import { checkoutCombos, maxDisjoint } from './checkout.mjs'
+import { checkoutCombos, maxDisjoint, SOLO_MIN_COMBOS } from '../../src/data/football501/checkout.js'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..')
 const FACT = path.join(ROOT, 'src', 'data', 'football501', 'history.GB1.generated.json')
@@ -22,7 +22,6 @@ const OUT = path.join(ROOT, 'src', 'data', 'football501', 'catalog.generated.jso
 
 // Tunable playability floors (see design discussion).
 const MIN_ANSWERS = 8          // sanity floor on eligible answers
-const SOLO_MIN_COMBOS = 25     // "comfortably solvable" — many distinct checkouts
 const MIN_NAT_PLAYERS = 15     // ignore nationalities too sparse to ever qualify
 
 const STATS = ['goals', 'apps', { a: 'apps', op: '+', b: 'goals' }, { a: 'apps', op: '-', b: 'goals' }]
