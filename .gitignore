@@ -26,3 +26,6 @@ data/transfermarkt/
 *.njsproj
 *.sln
 *.sw?
+
+# Raw historical squad scaffold (input only)
+data/pl-history/

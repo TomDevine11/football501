@@ -10,6 +10,8 @@
     "indexnow": "node scripts/indexnow.mjs",
     "build:501-data": "node scripts/transfermarkt/build.mjs",
     "build:501-challenges": "node scripts/transfermarkt/60-resolve-challenges.mjs",
+    "scrape:pl-history": "node scripts/pl-history/scrape.mjs",
+    "build:pl-history": "node scripts/pl-history/build-facts.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
