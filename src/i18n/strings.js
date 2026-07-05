@@ -53,6 +53,8 @@ export const strings = {
       moreClubs: '+{n} more clubs hidden',
       placeholder: "Who is it? Type a player's name...",
       skip: 'Skip this clue →',
+      skipLast: 'Skip — last guess, ends the game →',
+      guessesLeft: '{n} guesses left',
       newPlayer: 'New player →',
     },
     higherlower: {
@@ -224,6 +226,8 @@ export const strings = {
       moreClubs: '+{n} clubes más ocultos',
       placeholder: '¿Quién es? Escribe el nombre de un jugador...',
       skip: 'Saltar esta pista →',
+      skipLast: 'Saltar — último intento, termina el juego →',
+      guessesLeft: '{n} intentos restantes',
       newPlayer: 'Nuevo jugador →',
     },
     higherlower: {

@@ -104,13 +104,16 @@ export default function CareerPath() {
 
   const cluesToShow = phase === 'playing' ? revealed : maxClues
   const guessesLeft = maxClues - guesses.length
+  const lastGuess = active && guessesLeft <= 1        // next wrong guess / skip ends it
+  const twoCol = maxClues > 6                          // long careers wrap into two columns
+  const leftClass = guessesLeft <= 1 ? 'text-red-500' : guessesLeft <= 2 ? 'text-amber-500' : 'text-gray-500'
 
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
         <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
         <div className="score-number text-xl text-gray-500 tracking-wider">{t('careers.wordmark')}</div>
-        <div className="text-sm tabular-nums text-gray-500">{phase === 'playing' ? t('teammates.left', { n: guessesLeft }) : ''}</div>
+        <div className={`text-sm tabular-nums font-semibold ${leftClass}`}>{phase === 'playing' ? t('teammates.left', { n: guessesLeft }) : ''}</div>
       </div>
 
       <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
@@ -125,7 +128,7 @@ export default function CareerPath() {
       {/* Career path */}
       <div className="w-full max-w-lg mb-5">
         <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">{t('careers.playedFor')}</div>
-        <div className="space-y-2">
+        <div className={`grid gap-2 ${twoCol ? 'sm:grid-cols-2' : 'grid-cols-1'}`}>
           {target.clues.slice(0, cluesToShow).map((clue, i) => (
             <div key={i} className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 clue-reveal">
               <span className="text-gray-600 text-xs font-bold w-5 tabular-nums">{i + 1}</span>
@@ -136,10 +139,10 @@ export default function CareerPath() {
               </div>
             </div>
           ))}
-          {phase === 'playing' && revealed < maxClues && (
-            <div className="text-center text-gray-700 text-xs py-1">{t('careers.moreClubs', { n: maxClues - revealed })}</div>
-          )}
         </div>
+        {phase === 'playing' && revealed < maxClues && (
+          <div className="text-center text-gray-700 text-xs pt-2">{t('careers.moreClubs', { n: maxClues - revealed })}</div>
+        )}
       </div>
 
       {active && (
@@ -182,13 +185,22 @@ export default function CareerPath() {
       )}
 
       {active && (
-        <button
-          type="button"
-          onClick={skip}
-          className="mt-3 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
-        >
-          {t('careers.skip')}
-        </button>
+        <>
+          <div className={`w-full max-w-lg mt-3 text-center text-xs font-semibold ${leftClass}`}>
+            {t('careers.guessesLeft', { n: guessesLeft })}
+          </div>
+          <button
+            type="button"
+            onClick={skip}
+            className={`mt-2 w-full max-w-lg border text-sm font-medium rounded-xl px-4 py-2.5 transition-colors ${
+              lastGuess
+                ? 'border-red-900/60 text-red-400 hover:bg-red-900/20 hover:border-red-700'
+                : 'border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+            }`}
+          >
+            {lastGuess ? t('careers.skipLast') : t('careers.skip')}
+          </button>
+        </>
       )}
 
       {phase !== 'playing' && !showResult && (
