@@ -19,7 +19,22 @@ export const strings = {
       back: '← Back',
     },
     stats: { played: 'Played', winPct: 'Win %', best: 'Best', streak: 'Streak', dayStreak: 'Day streak', max: 'Max' },
-    share: { copy: 'Copy result', copied: 'Copied!', share: 'Share', instagram: 'Result copied — paste it into your Instagram story or DM' },
+    share: {
+      copy: 'Copy result', copied: 'Copied!', share: 'Share', instagram: 'Result copied — paste it into your Instagram story or DM',
+      dayStreak: '🔥 {n}-day streak',
+      wordleTitle: '⚽ Football Wordle', wordleWon: 'Guessed in {n}/{max}', wordleLost: 'X/{max}',
+      tenableTitle: '🔺 Football Tenable — {title}', tenableScore: '{n}/10 correct · {lost}/{max} lives lost',
+      tttTitle: 'Football TicTacToe', tttScore: '{n}/9 squares · {lost}/{max} lives lost',
+      connTitle: 'Football Connections', connWonNo: 'Solved with no mistakes!',
+      connWonOne: 'Solved with {n} mistake', connWonMany: 'Solved with {n} mistakes', connLost: 'Missed it',
+      careersWon: '🧭 Career Path — I guessed the player in {n}/{max} clubs!',
+      careersLost: '🧭 Career Path — it stumped me. Can you guess the player from their career?',
+      teammatesWon: '🕵️ Teammates — I guessed the mystery footballer in {n}/{max} clues!',
+      teammatesLost: '🕵️ Teammates — it stumped me. Can you name the mystery footballer?',
+      wcsquadsNamed: '🏆 World Cup Squads — I named {n}/{total} of the {nation} {year} winning squad!',
+      hlDaily: '⬆️ Higher or Lower — Daily ({label}): streak of {streak}!',
+      hlUnlimited: '⬆️ Higher or Lower ({label}) — streak of {streak}! Best: {best}.',
+    },
     five01: {
       wordmark: 'FOOTBALL 501',
       menu: '← Menu', loading: 'Loading…',
@@ -117,6 +132,7 @@ export const strings = {
       scoredLine: '{name} scored {value} {label}.', playAgain: 'Play again',
     },
     connections: {
+      wordmark: 'CONNECTIONS',
       intro: 'Find the four groups of four',
       introSub: 'Every player belongs to exactly one group. Select four and submit — four wrong guesses ends it.',
       alreadyGuessed: 'Already guessed', oneAway: 'So close — one away!', notGroup: 'Not a group',
@@ -155,6 +171,7 @@ export const strings = {
     },
     tictactoe: {
       wordmark: 'TICTACTOE',
+      buildGrid: 'BUILD GRID',
       cat: {
         club: 'Played for {value}', league: 'Played in the {value}',
         nationality: '{value} international', manager: 'Played under {value}', trophy: 'Won the {value}',
@@ -240,7 +257,22 @@ export const strings = {
       back: '← Atrás',
     },
     stats: { played: 'Jugadas', winPct: '% Victorias', best: 'Mejor', streak: 'Racha', dayStreak: 'Racha diaria', max: 'Máx' },
-    share: { copy: 'Copiar resultado', copied: '¡Copiado!', share: 'Compartir', instagram: 'Resultado copiado: pégalo en tu historia o mensaje de Instagram' },
+    share: {
+      copy: 'Copiar resultado', copied: '¡Copiado!', share: 'Compartir', instagram: 'Resultado copiado: pégalo en tu historia o mensaje de Instagram',
+      dayStreak: '🔥 racha de {n} días',
+      wordleTitle: '⚽ Wordle de Fútbol', wordleWon: 'Adivinado en {n}/{max}', wordleLost: 'X/{max}',
+      tenableTitle: '🔺 Tenable de Fútbol — {title}', tenableScore: '{n}/10 correctas · {lost}/{max} vidas perdidas',
+      tttTitle: 'TicTacToe de Fútbol', tttScore: '{n}/9 casillas · {lost}/{max} vidas perdidas',
+      connTitle: 'Conexiones de Fútbol', connWonNo: '¡Resuelto sin errores!',
+      connWonOne: 'Resuelto con {n} error', connWonMany: 'Resuelto con {n} errores', connLost: 'No acerté',
+      careersWon: '🧭 Trayectoria — ¡adiviné al jugador en {n}/{max} clubes!',
+      careersLost: '🧭 Trayectoria — me dejó sin palabras. ¿Puedes adivinar al jugador por su trayectoria?',
+      teammatesWon: '🕵️ Compañeros — ¡adiviné al futbolista misterioso en {n}/{max} pistas!',
+      teammatesLost: '🕵️ Compañeros — me dejó sin palabras. ¿Puedes nombrar al futbolista misterioso?',
+      wcsquadsNamed: '🏆 Plantillas del Mundial — ¡nombré a {n}/{total} de la plantilla campeona de {nation} {year}!',
+      hlDaily: '⬆️ Mayor o Menor — Diario ({label}): ¡racha de {streak}!',
+      hlUnlimited: '⬆️ Mayor o Menor ({label}) — ¡racha de {streak}! Mejor: {best}.',
+    },
     five01: {
       wordmark: '501 DE FÚTBOL',
       menu: '← Menú', loading: 'Cargando…',
@@ -338,6 +370,7 @@ export const strings = {
       scoredLine: '{name} marcó {value} {label}.', playAgain: 'Jugar de nuevo',
     },
     connections: {
+      wordmark: 'CONEXIONES',
       intro: 'Encuentra los cuatro grupos de cuatro',
       introSub: 'Cada jugador pertenece exactamente a un grupo. Elige cuatro y envía — cuatro fallos terminan el juego.',
       alreadyGuessed: 'Ya lo intentaste', oneAway: '¡Casi! Te falta uno', notGroup: 'No es un grupo',
@@ -376,6 +409,7 @@ export const strings = {
     },
     tictactoe: {
       wordmark: 'TRES EN RAYA',
+      buildGrid: 'CREAR CUADRÍCULA',
       cat: {
         club: 'Jugó en el {value}', league: 'Jugó en la {value}',
         nationality: 'Internacional de {value}', manager: 'Dirigido por {value}', trophy: 'Ganó la {value}',

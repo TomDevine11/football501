@@ -119,7 +119,7 @@ export default function WorldCupSquads() {
 
   // ── Game ──────────────────────────────────────────────────────────
   const squadShareText = [
-    `🏆 World Cup Squads — I named ${named.size}/${squad.players.length} of the ${squad.nation} ${squad.year} winning squad!`,
+    t('share.wcsquadsNamed', { n: named.size, total: squad.players.length, nation: squad.nation, year: squad.year }),
     SITE_URL,
   ].join('\n\n')
   return (

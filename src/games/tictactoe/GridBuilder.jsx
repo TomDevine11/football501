@@ -51,7 +51,7 @@ export default function GridBuilder({ onBuild, onCancel }) {
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
         <button onClick={onCancel} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('tictactoe.back')}</button>
-        <div className="score-number text-xl text-gray-500 tracking-wider">BUILD GRID</div>
+        <div className="score-number text-xl text-gray-500 tracking-wider">{t('tictactoe.buildGrid')}</div>
         <div className="w-12" />
       </div>
 

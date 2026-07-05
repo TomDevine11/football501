@@ -208,8 +208,8 @@ export default function GuessByTeammates() {
           {mode === 'daily' && <DailyStats game="teammates" stats={dailyStats} />}
           <ShareCard text={[
             phase === 'won'
-              ? `🕵️ Teammates — I guessed the mystery footballer in ${guesses.length}/${MAX_CLUES} clues!`
-              : `🕵️ Teammates — it stumped me. Can you name the mystery footballer?`,
+              ? t('share.teammatesWon', { n: guesses.length, max: MAX_CLUES })
+              : t('share.teammatesLost'),
             SITE_URL,
           ].join('\n\n')} />
           <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('teammates.newPlayer')}</button>

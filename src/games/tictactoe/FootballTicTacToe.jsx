@@ -220,9 +220,9 @@ export default function FootballTicTacToe({ onBackToModes }) {
   const shareRows = [shareGrid.slice(0, 3), shareGrid.slice(3, 6), shareGrid.slice(6, 9)].map(r => r.join(''))
 
   const shareText = [
-    `Football TicTacToe`,
-    `${filledCount}/9 squares · ${MAX_LIVES - lives}/${MAX_LIVES} lives lost`,
-    ...(phase === 'won' && dailyStats?.currentStreak ? [`🔥 ${dailyStats.currentStreak}-day streak`] : []),
+    t('share.tttTitle'),
+    t('share.tttScore', { n: filledCount, lost: MAX_LIVES - lives, max: MAX_LIVES }),
+    ...(phase === 'won' && dailyStats?.currentStreak ? [t('share.dayStreak', { n: dailyStats.currentStreak })] : []),
     '',
     ...shareRows,
     '',

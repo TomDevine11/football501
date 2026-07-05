@@ -185,8 +185,8 @@ export default function HigherLower() {
           {dailyMode === 'daily' && <DailyStats game="higherlower" stats={dailyStats} variant="score" />}
           <ShareCard text={[
             dailyMode === 'daily'
-              ? `⬆️ Higher or Lower — Daily (${mode.label}): streak of ${streak}!`
-              : `⬆️ Higher or Lower (${mode.label}) — streak of ${streak}! Best: ${best}.`,
+              ? t('share.hlDaily', { label: mode.label, streak })
+              : t('share.hlUnlimited', { label: mode.label, streak, best }),
             SITE_URL,
           ].join('\n\n')} />
           {dailyMode === 'unlimited'

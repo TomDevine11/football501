@@ -220,8 +220,8 @@ export default function CareerPath() {
           {mode === 'daily' && <DailyStats game="careers" stats={dailyStats} />}
           <ShareCard text={[
             phase === 'won'
-              ? `🧭 Career Path — I guessed the player in ${guesses.length}/${maxClues} clubs!`
-              : `🧭 Career Path — it stumped me. Can you guess the player from their career?`,
+              ? t('share.careersWon', { n: guesses.length, max: maxClues })
+              : t('share.careersLost'),
             SITE_URL,
           ].join('\n\n')} />
           <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('careers.newPlayer')}</button>

@@ -102,9 +102,9 @@ export default function FootballConnections() {
 
   const mistakes = MAX_LIVES - lives
   const shareText = [
-    'Football Connections',
-    won ? (mistakes ? `Solved with ${mistakes} mistake${mistakes === 1 ? '' : 's'}` : 'Solved with no mistakes!') : 'Missed it',
-    ...(won && dailyStats?.currentStreak ? [`🔥 ${dailyStats.currentStreak}-day streak`] : []),
+    t('share.connTitle'),
+    won ? (mistakes ? (mistakes === 1 ? t('share.connWonOne', { n: mistakes }) : t('share.connWonMany', { n: mistakes })) : t('share.connWonNo')) : t('share.connLost'),
+    ...(won && dailyStats?.currentStreak ? [t('share.dayStreak', { n: dailyStats.currentStreak })] : []),
     '',
     ...guessRows.map(r => r.map(g => SHARE_EMOJI[g]).join('')),
     '',
@@ -115,7 +115,7 @@ export default function FootballConnections() {
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-5">
         <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
-        <div className="score-number text-xl text-gray-500 tracking-wider">CONNECTIONS</div>
+        <div className="score-number text-xl text-gray-500 tracking-wider">{t('connections.wordmark')}</div>
         <div className="flex items-center gap-1">
           {Array.from({ length: MAX_LIVES }, (_, i) => (
             <span key={i} className={`w-2.5 h-2.5 rounded-full ${i < lives ? 'bg-gray-300' : 'bg-gray-800'}`} />

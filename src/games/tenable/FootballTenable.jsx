@@ -304,9 +304,9 @@ export default function FootballTenable() {
   })()
 
   const shareText = [
-    `🔺 Football Tenable — ${question.title}`,
-    `${correctCount}/10 correct · ${MAX_LIVES - lives}/${MAX_LIVES} lives lost`,
-    ...(phase === 'won' && dailyStats?.currentStreak ? [`🔥 ${dailyStats.currentStreak}-day streak`] : []),
+    t('share.tenableTitle', { title: question.title }),
+    t('share.tenableScore', { n: correctCount, lost: MAX_LIVES - lives, max: MAX_LIVES }),
+    ...(phase === 'won' && dailyStats?.currentStreak ? [t('share.dayStreak', { n: dailyStats.currentStreak })] : []),
     '',
     grid,
     '',
