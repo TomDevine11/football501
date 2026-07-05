@@ -18,12 +18,16 @@ export const ROOT = path.resolve(__dirname, '..', '..')
 
 // Transfermarkt competition ids/slugs + coverage start + how to enumerate the
 // clubs each season ('league' table, or 'teilnehmer' participants page for cups).
+// `first` = the competition's founding season on Transfermarkt (verified to have
+// real performance data — e.g. Bundesliga 1963 = Gerd Müller, La Liga 1929).
+// GB1 and CL are genuinely 1992-onward (the PL's founding, and the "CL" id only
+// covers the post-1992 rebrand — the pre-1992 European Cup is a separate comp).
 export const COMPETITIONS = {
   GB1: { id: 'GB1', slug: 'premier-league',        name: 'Premier League',    first: 1992, enumerate: 'league' },
-  ES1: { id: 'ES1', slug: 'laliga',                name: 'La Liga',           first: 1990, enumerate: 'league' },
-  L1:  { id: 'L1',  slug: 'bundesliga',            name: 'Bundesliga',        first: 1990, enumerate: 'league' },
-  IT1: { id: 'IT1', slug: 'serie-a',               name: 'Serie A',           first: 1990, enumerate: 'league' },
-  FR1: { id: 'FR1', slug: 'ligue-1',               name: 'Ligue 1',           first: 1990, enumerate: 'league' },
+  ES1: { id: 'ES1', slug: 'laliga',                name: 'La Liga',           first: 1929, enumerate: 'league' },
+  IT1: { id: 'IT1', slug: 'serie-a',               name: 'Serie A',           first: 1929, enumerate: 'league' },
+  FR1: { id: 'FR1', slug: 'ligue-1',               name: 'Ligue 1',           first: 1932, enumerate: 'league' },
+  L1:  { id: 'L1',  slug: 'bundesliga',            name: 'Bundesliga',        first: 1963, enumerate: 'league' },
   CL:  { id: 'CL',  slug: 'uefa-champions-league', name: 'Champions League',  first: 1992, enumerate: 'teilnehmer' },
 }
 export const COMPETITION = COMPETITIONS[process.env.COMP || 'GB1']
