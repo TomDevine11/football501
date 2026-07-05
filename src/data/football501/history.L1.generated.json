@@ -148715,293 +148715,293 @@
  ],
  "clubs": {
   "1": {
-   "name": "#1",
-   "norm": "",
+   "name": "1. FC Saarbrucken",
+   "norm": "1 fc saarbrucken",
    "competitionId": "L1"
   },
   "2": {
-   "name": "#2",
-   "norm": "",
+   "name": "1. FC Kaiserslautern",
+   "norm": "1 fc kaiserslautern",
    "competitionId": "L1"
   },
   "3": {
-   "name": "#3",
-   "norm": "",
+   "name": "1. FC Koln",
+   "norm": "1 fc koln",
    "competitionId": "L1"
   },
   "4": {
-   "name": "#4",
-   "norm": "",
+   "name": "1. FC Nurnberg",
+   "norm": "1 fc nurnberg",
    "competitionId": "L1"
   },
   "8": {
-   "name": "#8",
-   "norm": "",
+   "name": "Alemannia Aachen",
+   "norm": "alemannia aachen",
    "competitionId": "L1"
   },
   "10": {
-   "name": "#10",
-   "norm": "",
+   "name": "Arminia Bielefeld",
+   "norm": "arminia bielefeld",
    "competitionId": "L1"
   },
   "15": {
-   "name": "#15",
-   "norm": "",
+   "name": "Bayer 04. Leverkusen",
+   "norm": "bayer 04 leverkusen",
    "competitionId": "L1"
   },
   "16": {
-   "name": "#16",
-   "norm": "",
+   "name": "Borussia Dortmund",
+   "norm": "borussia dortmund",
    "competitionId": "L1"
   },
   "18": {
-   "name": "#18",
-   "norm": "",
+   "name": "Borussia Monchengladbach",
+   "norm": "borussia monchengladbach",
    "competitionId": "L1"
   },
   "23": {
-   "name": "#23",
-   "norm": "",
+   "name": "Eintracht Braunschweig",
+   "norm": "eintracht braunschweig",
    "competitionId": "L1"
   },
   "24": {
-   "name": "#24",
-   "norm": "",
+   "name": "Eintracht Frankfurt",
+   "norm": "eintracht frankfurt",
    "competitionId": "L1"
   },
   "25": {
-   "name": "#25",
-   "norm": "",
+   "name": "FC Energie Cottbus",
+   "norm": "fc energie cottbus",
    "competitionId": "L1"
   },
   "27": {
-   "name": "#27",
-   "norm": "",
+   "name": "Bayern Munich",
+   "norm": "bayern munich",
    "competitionId": "L1"
   },
   "30": {
-   "name": "#30",
-   "norm": "",
+   "name": "FC Hansa Rostock",
+   "norm": "fc hansa rostock",
    "competitionId": "L1"
   },
   "33": {
-   "name": "#33",
-   "norm": "",
+   "name": "FC Schalke 04.",
+   "norm": "fc schalke 04",
    "competitionId": "L1"
   },
   "35": {
-   "name": "#35",
-   "norm": "",
+   "name": "FC St Pauli",
+   "norm": "fc st pauli",
    "competitionId": "L1"
   },
   "38": {
-   "name": "#38",
-   "norm": "",
+   "name": "Fortuna Dusseldorf",
+   "norm": "fortuna dusseldorf",
    "competitionId": "L1"
   },
   "39": {
-   "name": "#39",
-   "norm": "",
+   "name": "1. Fsv Mainz 05.",
+   "norm": "1 fsv mainz 05",
    "competitionId": "L1"
   },
   "41": {
-   "name": "#41",
-   "norm": "",
+   "name": "Hamburger SV",
+   "norm": "hamburger sv",
    "competitionId": "L1"
   },
   "42": {
-   "name": "#42",
-   "norm": "",
+   "name": "Hannover 96.",
+   "norm": "hannover 96",
    "competitionId": "L1"
   },
   "44": {
-   "name": "#44",
-   "norm": "",
+   "name": "Hertha BSC",
+   "norm": "hertha bsc",
    "competitionId": "L1"
   },
   "48": {
-   "name": "#48",
-   "norm": "",
+   "name": "Karlsruher SC",
+   "norm": "karlsruher sc",
    "competitionId": "L1"
   },
   "52": {
-   "name": "#52",
-   "norm": "",
+   "name": "Msv Duisburg",
+   "norm": "msv duisburg",
    "competitionId": "L1"
   },
   "56": {
-   "name": "#56",
-   "norm": "",
+   "name": "Rot Weiss Essen",
+   "norm": "rot weiss essen",
    "competitionId": "L1"
   },
   "57": {
-   "name": "#57",
-   "norm": "",
+   "name": "Rot Weiss Oberhausen",
+   "norm": "rot weiss oberhausen",
    "competitionId": "L1"
   },
   "60": {
-   "name": "#60",
-   "norm": "",
+   "name": "SC Freiburg",
+   "norm": "sc freiburg",
    "competitionId": "L1"
   },
   "65": {
-   "name": "#65",
-   "norm": "",
+   "name": "Spvgg Greuther Furth",
+   "norm": "spvgg greuther furth",
    "competitionId": "L1"
   },
   "66": {
-   "name": "#66",
-   "norm": "",
+   "name": "Spvgg Unterhaching",
+   "norm": "spvgg unterhaching",
    "competitionId": "L1"
   },
   "69": {
-   "name": "#69",
-   "norm": "",
+   "name": "Ssv Ulm 1846.",
+   "norm": "ssv ulm 1846",
    "competitionId": "L1"
   },
   "71": {
-   "name": "#71",
-   "norm": "",
+   "name": "Stuttgarter Kickers",
+   "norm": "stuttgarter kickers",
    "competitionId": "L1"
   },
   "72": {
-   "name": "#72",
-   "norm": "",
+   "name": "Tsv 1860. Munchen",
+   "norm": "tsv 1860 munchen",
    "competitionId": "L1"
   },
   "79": {
-   "name": "#79",
-   "norm": "",
+   "name": "VFB Stuttgart",
+   "norm": "vfb stuttgart",
    "competitionId": "L1"
   },
   "80": {
-   "name": "#80",
-   "norm": "",
+   "name": "VFL Bochum",
+   "norm": "vfl bochum",
    "competitionId": "L1"
   },
   "82": {
-   "name": "#82",
-   "norm": "",
+   "name": "VFL Wolfsburg",
+   "norm": "vfl wolfsburg",
    "competitionId": "L1"
   },
   "85": {
-   "name": "#85",
-   "norm": "",
+   "name": "SV Waldhof Mannheim",
+   "norm": "sv waldhof mannheim",
    "competitionId": "L1"
   },
   "86": {
-   "name": "#86",
-   "norm": "",
+   "name": "SV Werder Bremen",
+   "norm": "sv werder bremen",
    "competitionId": "L1"
   },
   "89": {
-   "name": "#89",
-   "norm": "",
+   "name": "1. FC Union Berlin",
+   "norm": "1 fc union berlin",
    "competitionId": "L1"
   },
   "91": {
-   "name": "#91",
-   "norm": "",
+   "name": "Preussen Munster",
+   "norm": "preussen munster",
    "competitionId": "L1"
   },
   "92": {
-   "name": "#92",
-   "norm": "",
+   "name": "SC Fortuna Koln",
+   "norm": "sc fortuna koln",
    "competitionId": "L1"
   },
   "95": {
-   "name": "#95",
-   "norm": "",
+   "name": "Kfc Uerdingen 05.",
+   "norm": "kfc uerdingen 05",
    "competitionId": "L1"
   },
   "97": {
-   "name": "#97",
-   "norm": "",
+   "name": "Sg Wattenscheid 09.",
+   "norm": "sg wattenscheid 09",
    "competitionId": "L1"
   },
   "101": {
-   "name": "#101",
-   "norm": "",
+   "name": "Tennis Borussia Berlin",
+   "norm": "tennis borussia berlin",
    "competitionId": "L1"
   },
   "105": {
-   "name": "#105",
-   "norm": "",
+   "name": "SV Darmstadt 98.",
+   "norm": "sv darmstadt 98",
    "competitionId": "L1"
   },
   "107": {
-   "name": "#107",
-   "norm": "",
+   "name": "Kickers Offenbach",
+   "norm": "kickers offenbach",
    "competitionId": "L1"
   },
   "127": {
-   "name": "#127",
-   "norm": "",
+   "name": "SC Paderborn 07.",
+   "norm": "sc paderborn 07",
    "competitionId": "L1"
   },
   "129": {
-   "name": "#129",
-   "norm": "",
+   "name": "Sg Dynamo Dresden",
+   "norm": "sg dynamo dresden",
    "competitionId": "L1"
   },
   "167": {
-   "name": "#167",
-   "norm": "",
+   "name": "FC Augsburg",
+   "norm": "fc augsburg",
    "competitionId": "L1"
   },
   "269": {
-   "name": "#269",
-   "norm": "",
+   "name": "Holstein Kiel",
+   "norm": "holstein kiel",
    "competitionId": "L1"
   },
   "299": {
-   "name": "#299",
-   "norm": "",
+   "name": "Wuppertaler SV",
+   "norm": "wuppertaler sv",
    "competitionId": "L1"
   },
   "328": {
-   "name": "#328",
-   "norm": "",
+   "name": "Borussia Neunkirchen",
+   "norm": "borussia neunkirchen",
    "competitionId": "L1"
   },
   "459": {
-   "name": "#459",
-   "norm": "",
+   "name": "FC 08. Homburg",
+   "norm": "fc 08 homburg",
    "competitionId": "L1"
   },
   "497": {
-   "name": "#497",
-   "norm": "",
+   "name": "1. FC Lokomotive Leipzig",
+   "norm": "1 fc lokomotive leipzig",
    "competitionId": "L1"
   },
   "533": {
-   "name": "#533",
-   "norm": "",
+   "name": "TSG 1899. Hoffenheim",
+   "norm": "tsg 1899 hoffenheim",
    "competitionId": "L1"
   },
   "2036": {
-   "name": "#2036",
-   "norm": "",
+   "name": "1. FC Heidenheim 1846.",
+   "norm": "1 fc heidenheim 1846",
    "competitionId": "L1"
   },
   "2149": {
-   "name": "#2149",
-   "norm": "",
+   "name": "Blau Weiss 90. Berlin",
+   "norm": "blau weiss 90 berlin",
    "competitionId": "L1"
   },
   "4795": {
-   "name": "#4795",
-   "norm": "",
+   "name": "FC Ingolstadt 04.",
+   "norm": "fc ingolstadt 04",
    "competitionId": "L1"
   },
   "23826": {
-   "name": "#23826",
-   "norm": "",
+   "name": "Rasenballsport Leipzig",
+   "norm": "rasenballsport leipzig",
    "competitionId": "L1"
   },
   "44396": {
-   "name": "#44396",
-   "norm": "",
+   "name": "SC Tasmania 1900. Berlin",
+   "norm": "sc tasmania 1900 berlin",
    "competitionId": "L1"
   }
  }

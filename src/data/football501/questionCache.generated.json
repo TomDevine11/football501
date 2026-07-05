@@ -1,11 +1,13 @@
 {
  "meta": {
   "builtFrom": "history.GB1.generated.json",
-  "builtAt": "2026-07-04",
+  "builtAt": "2026-07-05",
   "competition": {
    "id": "GB1",
    "slug": "premier-league",
-   "name": "Premier League"
+   "name": "Premier League",
+   "first": 1992,
+   "enumerate": "league"
   }
  },
  "challenges": {

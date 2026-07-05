@@ -19,6 +19,17 @@ import { resolveChallenges } from '../transfermarkt/60-resolve-challenges.mjs'
 import { OUT } from '../transfermarkt/config.mjs'
 import { CHALLENGES } from '../../src/data/football501/challenges.js'
 
+// Prettify a Transfermarkt club slug → display name ("fc-barcelona" → "FC
+// Barcelona"). Used for non-PL clubs, which aren't in the PL scaffold.
+const ABBR = new Set(['fc', 'cf', 'ac', 'sc', 'sd', 'rc', 'ud', 'cd', 'ss', 'as', 'us', 'ogc', 'rcd', 'afc', 'sl', 'sv', 'vfb', 'vfl', 'tsg', 'bsc', 'kv', 'rb'])
+function slugToName(slug = '') {
+  return slug.split('-').filter(Boolean).map(w => {
+    if (/^\d+$/.test(w)) return `${w}.`
+    if (ABBR.has(w)) return w.toUpperCase()
+    return w.charAt(0).toUpperCase() + w.slice(1)
+  }).join(' ').trim()
+}
+
 // clubId → display name, from the scaffold clubs.csv (covers all PL clubs 1992+).
 function loadClubNames() {
   const f = path.join(DIR.root, 'clubs.csv')
@@ -47,12 +58,14 @@ function build() {
 
   const players = new Map() // id → { id, name, nat, natKey, comps }
   const clubIds = new Set()
+  const clubSlug = new Map() // clubId → slug (for name fallback)
   const posCounts = new Map() // id → { GK: n, DEF: n, ... } from scrape-captured position
   let seasons = new Set()
 
   for (const f of files) {
-    const { season, clubId, players: rows } = JSON.parse(readFileSync(path.join(DIR.cache, f), 'utf8'))
+    const { season, clubId, slug, players: rows } = JSON.parse(readFileSync(path.join(DIR.cache, f), 'utf8'))
     seasons.add(season)
+    if (slug && !clubSlug.has(clubId)) clubSlug.set(clubId, slug)
     for (const r of rows) {
       if (!(r.apps > 0)) continue // only real appearances count toward the eligible set
       let p = players.get(r.id)
@@ -81,7 +94,10 @@ function build() {
   }).sort((a, b) => String(a.id).localeCompare(String(b.id), undefined, { numeric: true }))
 
   const clubsIndex = {}
-  for (const id of [...clubIds].sort()) clubsIndex[id] = { name: clubNames[id] || `#${id}`, norm: normalize(clubNames[id] || ''), competitionId: COMPETITION.id }
+  for (const id of [...clubIds].sort()) {
+    const name = clubNames[id] || slugToName(clubSlug.get(id)) || `#${id}`
+    clubsIndex[id] = { name, norm: normalize(name), competitionId: COMPETITION.id }
+  }
 
   const sorted = [...seasons].sort((a, b) => a - b)
   const meta = {

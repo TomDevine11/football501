@@ -4,12 +4,14 @@
   "competition": {
    "id": "GB1",
    "slug": "premier-league",
-   "name": "Premier League"
+   "name": "Premier League",
+   "first": 1992,
+   "enumerate": "league"
   },
   "seasons": "1992–2025",
   "clubSeasons": 686,
   "players": 5120,
-  "builtAt": "2026-07-04"
+  "builtAt": "2026-07-05"
  },
  "players": [
   {

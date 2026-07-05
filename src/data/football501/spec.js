@@ -31,23 +31,24 @@ function breakdownOf(rec, stat) {
   return { [stat.a]: num(rec[stat.a]), [stat.b]: num(rec[stat.b]) }
 }
 
-// The competition is fixed to the Premier League for now (single fact table).
-const COMP = 'GB1'
-
-// Resolve a spec against the fact-table players → { players:{id:{name,value,breakdown}}, values:[] }.
+// Resolve a spec against a competition's fact-table players →
+// { players:{id:{name,value,breakdown}}, values:[] }. `spec.comp` selects the
+// competition (each fact table is a single competition; a club filter can only
+// name that competition's clubs, so cross-competition mixups are impossible).
 // Nationality/position filter WHICH players count (a person property); club
-// scopes WHICH apps/goals count (a context property). Eligibility: value ≥ 1
-// (≥180 is a recognised bust, still included).
+// scopes WHICH apps/goals count. Eligibility: value ≥ 1 (≥180 is a recognised
+// bust, still included).
 export function resolveRoster(spec, factPlayers) {
   const f = spec.filter || {}
+  const compId = spec.comp || 'GB1'
   const players = {}
   const values = []
   for (const p of factPlayers) {
     if (f.nationality && p.natKey !== f.nationality) continue
     if (f.position && p.pos !== f.position) continue
-    const comp = p.comps?.[COMP]
-    if (!comp) continue
-    const rec = f.club ? comp.clubs?.[f.club] : comp
+    const compRec = p.comps?.[compId]
+    if (!compRec) continue
+    const rec = f.club ? compRec.clubs?.[f.club] : compRec
     if (!rec) continue
     const value = evalStat(rec, spec.stat)
     if (value < 1) continue
@@ -76,13 +77,14 @@ export function demonym(natKey, fallbackDisplay) {
   return DEMONYM[natKey] || fallbackDisplay || natKey
 }
 
-// Build "Appearances − Goals · French Brighton midfielders" from a spec.
-// ctx: { clubName, natDisplay }
+// Build "La Liga · Appearances − Goals · French midfielders" from a spec.
+// ctx: { compName, clubName, natDisplay }
 export function titleFor(spec, ctx = {}) {
   const f = spec.filter || {}
   const parts = []
   if (f.nationality) parts.push(demonym(f.nationality, ctx.natDisplay))
   if (f.club) parts.push(ctx.clubName || 'club')
   parts.push(f.position ? POS_PLURAL[f.position] : 'players')
-  return `${statLabel(spec.stat)} · ${parts.join(' ')}`
+  const base = `${statLabel(spec.stat)} · ${parts.join(' ')}`
+  return ctx.compName ? `${ctx.compName} · ${base}` : base
 }

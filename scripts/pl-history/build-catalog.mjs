@@ -1,55 +1,60 @@
 #!/usr/bin/env node
 // ─────────────────────────────────────────────────────────────────────────
-// BUILD CATALOG — the space of valid procedurally-generated questions
+// BUILD CATALOG — the space of valid procedurally-generated questions,
+// across ALL competitions.
 //
-// Enumerates {1-or-2 stats} × {1–3 filters from club/nationality/position}
-// against the all-time PL fact table, keeps only the ones that are actually
-// completable (checkout engine), and emits catalog.generated.json. The game
-// draws the daily (deterministic) and multiplayer (random) questions from this.
+// For each competition's fact table, enumerates {1-or-2 stats} × {1–3 filters
+// from club/nationality/position}, keeps only completable questions (checkout
+// engine), and writes a single combined catalog.generated.json. Every entry
+// carries its `comp`, and its club/nationality options come only from that
+// competition — so a question can never mix (no Man Utd in a La Liga question).
 //
-//   npm run build:pl-catalog   (run after build:pl-history)
+//   npm run build:pl-catalog   (after the fact tables are built)
 // ─────────────────────────────────────────────────────────────────────────
 
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { resolveRoster, titleFor } from '../../src/data/football501/spec.js'
 import { checkoutCombos, maxDisjoint, SOLO_MIN_COMBOS } from '../../src/data/football501/checkout.js'
+import { COMPETITIONS } from './config.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..')
-const FACT = path.join(ROOT, 'src', 'data', 'football501', 'history.GB1.generated.json')
+const FACT = (comp) => path.join(ROOT, 'src', 'data', 'football501', `history.${comp}.generated.json`)
 const OUT = path.join(ROOT, 'src', 'data', 'football501', 'catalog.generated.json')
 
-// Tunable playability floors (see design discussion).
-const MIN_ANSWERS = 8          // sanity floor on eligible answers
-const MIN_NAT_PLAYERS = 15     // ignore nationalities too sparse to ever qualify
+const MIN_ANSWERS = 8
+const MIN_NAT_PLAYERS = 15   // ignore nationalities too sparse to ever qualify
+const MIN_CLUB_PLAYERS = 15  // ignore tiny (qualifier) clubs — keeps CL sane
 
 const STATS = ['goals', 'apps', { a: 'apps', op: '+', b: 'goals' }, { a: 'apps', op: '-', b: 'goals' }]
 const POSITIONS = ['GK', 'DEF', 'MID', 'FWD']
 
 const statSlug = (s) => (typeof s === 'string' ? s : `apps-${s.op === '-' ? 'minus' : 'plus'}-goals`)
-const specId = (spec) => {
-  const f = spec.filter
-  const parts = [statSlug(spec.stat)]
+const specId = (comp, spec) => {
+  const f = spec.filter, parts = [comp, statSlug(spec.stat)]
   if (f.club) parts.push(`c${f.club}`)
   if (f.nationality) parts.push(`n-${f.nationality.replace(/\s+/g, '_')}`)
   if (f.position) parts.push(f.position)
   return parts.join('__')
 }
-// Stable pseudo-random order so the daily sequence is scattered, not clustered.
 const hash = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) } return h >>> 0 }
 
-function build() {
-  const fact = JSON.parse(readFileSync(FACT, 'utf8'))
+function buildCompetition(comp, catalog) {
+  if (!existsSync(FACT(comp.id))) { console.error(`  ! ${comp.id}: no fact file — skipped`); return 0 }
+  const fact = JSON.parse(readFileSync(FACT(comp.id), 'utf8'))
   const players = fact.players
   const clubs = fact.clubs
 
-  const natDisplay = {}, natCount = {}
-  for (const p of players) { if (!p.natKey) continue; natDisplay[p.natKey] ||= p.nat; natCount[p.natKey] = (natCount[p.natKey] || 0) + 1 }
-  const clubIds = Object.keys(clubs)
+  // Player counts per club/nationality (to drop sparse ones).
+  const natDisplay = {}, natCount = {}, clubCount = {}
+  for (const p of players) {
+    if (p.natKey) { natDisplay[p.natKey] ||= p.nat; natCount[p.natKey] = (natCount[p.natKey] || 0) + 1 }
+    for (const cid of Object.keys(p.comps[comp.id]?.clubs || {})) clubCount[cid] = (clubCount[cid] || 0) + 1
+  }
+  const clubIds = Object.keys(clubs).filter(id => (clubCount[id] || 0) >= MIN_CLUB_PLAYERS)
   const nats = Object.keys(natCount).filter(k => natCount[k] >= MIN_NAT_PLAYERS)
 
-  // 1–3 filter facets (one value per axis).
   const combos = []
   for (const c of clubIds) combos.push({ club: c })
   for (const n of nats) combos.push({ nationality: n })
@@ -59,33 +64,35 @@ function build() {
   for (const n of nats) for (const pos of POSITIONS) combos.push({ nationality: n, position: pos })
   for (const c of clubIds) for (const n of nats) for (const pos of POSITIONS) combos.push({ club: c, nationality: n, position: pos })
 
-  let considered = 0
-  const catalog = []
+  let added = 0
   for (const stat of STATS) {
     for (const filter of combos) {
-      considered++
-      const spec = { stat, filter }
+      const spec = { comp: comp.id, stat, filter }
       const { players: roster, values } = resolveRoster(spec, players)
-      const answers = Object.keys(roster).length
-      if (answers < MIN_ANSWERS) continue
-      if (checkoutCombos(values) < SOLO_MIN_COMBOS) continue // not comfortably solvable (solo)
-      const maxPlayers = maxDisjoint(values)                 // multiplayer capacity
+      if (Object.keys(roster).length < MIN_ANSWERS) continue
+      if (checkoutCombos(values) < SOLO_MIN_COMBOS) continue
+      const maxPlayers = maxDisjoint(values)
       if (maxPlayers < 1) continue
       catalog.push({
-        id: specId(spec), stat, filter,
-        title: titleFor(spec, { clubName: clubs[filter.club]?.name, natDisplay: natDisplay[filter.nationality] }),
-        answers, maxPlayers,
+        id: specId(comp.id, spec), comp: comp.id, stat, filter,
+        title: titleFor(spec, { compName: comp.name, clubName: clubs[filter.club]?.name, natDisplay: natDisplay[filter.nationality] }),
+        answers: Object.keys(roster).length, maxPlayers,
       })
+      added++
     }
   }
+  console.error(`  ${comp.id.padEnd(4)} ${added} valid questions`)
+  return added
+}
 
-  catalog.sort((a, b) => hash(a.id) - hash(b.id)) // scattered-but-stable order
-  writeFileSync(OUT, JSON.stringify({ meta: { competition: 'GB1', builtAt: new Date().toISOString().slice(0, 10), considered, valid: catalog.length }, catalog }))
-
-  const byN = {}; for (const c of catalog) byN[c.maxPlayers] = (byN[c.maxPlayers] || 0) + 1
-  console.error(`Catalog: ${catalog.length} valid questions from ${considered} considered`)
-  console.error(`  by max players: ${Object.entries(byN).sort().map(([n, c]) => `${n}p:${c}`).join('  ')}`)
-  console.error(`  e.g. ${catalog.slice(0, 5).map(c => '"' + c.title + '"').join(', ')}`)
+function build() {
+  const catalog = []
+  for (const comp of Object.values(COMPETITIONS)) buildCompetition(comp, catalog)
+  catalog.sort((a, b) => hash(a.id) - hash(b.id))
+  writeFileSync(OUT, JSON.stringify({ meta: { builtAt: new Date().toISOString().slice(0, 10), valid: catalog.length }, catalog }))
+  const byComp = {}; for (const c of catalog) byComp[c.comp] = (byComp[c.comp] || 0) + 1
+  console.error(`\nCatalog: ${catalog.length} valid questions · ${Object.entries(byComp).map(([k, v]) => `${k}:${v}`).join('  ')}`)
+  console.error(`  e.g. ${catalog.slice(0, 4).map(c => '"' + c.title + '"').join(', ')}`)
 }
 
 build()
