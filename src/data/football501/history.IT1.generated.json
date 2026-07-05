@@ -226346,18 +226346,18 @@
  ],
  "clubs": {
   "5": {
-   "name": "AC Mailand",
-   "norm": "ac mailand",
+   "name": "AC Milan",
+   "norm": "ac milan",
    "competitionId": "IT1"
   },
   "12": {
-   "name": "AS Rom",
-   "norm": "as rom",
+   "name": "AS Roma",
+   "norm": "as roma",
    "competitionId": "IT1"
   },
   "19": {
-   "name": "Brescia Calcio",
-   "norm": "brescia calcio",
+   "name": "FBC Brescia",
+   "norm": "fbc brescia",
    "competitionId": "IT1"
   },
   "46": {
@@ -226366,13 +226366,13 @@
    "competitionId": "IT1"
   },
   "130": {
-   "name": "Parma Calcio 1913.",
+   "name": "Parma Calcio 1913",
    "norm": "parma calcio 1913",
    "competitionId": "IT1"
   },
   "252": {
-   "name": "Genua Cfc",
-   "norm": "genua cfc",
+   "name": "Genoa CFC",
+   "norm": "genoa cfc",
    "competitionId": "IT1"
   },
   "276": {
@@ -226381,23 +226381,23 @@
    "competitionId": "IT1"
   },
   "332": {
-   "name": "Ssc Bari",
-   "norm": "ssc bari",
+   "name": "US Bari",
+   "norm": "us bari",
    "competitionId": "IT1"
   },
   "380": {
-   "name": "US Salernitana 1919.",
+   "name": "US Salernitana 1919",
    "norm": "us salernitana 1919",
    "competitionId": "IT1"
   },
   "398": {
-   "name": "Lazio Rom",
-   "norm": "lazio rom",
+   "name": "SS Lazio",
+   "norm": "ss lazio",
    "competitionId": "IT1"
   },
   "408": {
-   "name": "Ascoli Calcio",
-   "norm": "ascoli calcio",
+   "name": "Ascoli Calcio 1898",
+   "norm": "ascoli calcio 1898",
    "competitionId": "IT1"
   },
   "410": {
@@ -226406,13 +226406,13 @@
    "competitionId": "IT1"
   },
   "416": {
-   "name": "FC Turin",
-   "norm": "fc turin",
+   "name": "Torino FC",
+   "norm": "torino fc",
    "competitionId": "IT1"
   },
   "430": {
-   "name": "AC Florenz",
-   "norm": "ac florenz",
+   "name": "ACF Fiorentina",
+   "norm": "acf fiorentina",
    "competitionId": "IT1"
   },
   "458": {
@@ -226431,8 +226431,8 @@
    "competitionId": "IT1"
   },
   "704": {
-   "name": "Calcio Foggia 1920.",
-   "norm": "calcio foggia 1920",
+   "name": "US Foggia  Incedit",
+   "norm": "us foggia incedit",
    "competitionId": "IT1"
   },
   "749": {
@@ -226441,13 +226441,13 @@
    "competitionId": "IT1"
   },
   "800": {
-   "name": "Atalanta Bergamo",
-   "norm": "atalanta bergamo",
+   "name": "Atalanta BC",
+   "norm": "atalanta bc",
    "competitionId": "IT1"
   },
   "839": {
-   "name": "AC Perugia Calcio",
-   "norm": "ac perugia calcio",
+   "name": "AC Perugia",
+   "norm": "ac perugia",
    "competitionId": "IT1"
   },
   "862": {
@@ -226461,63 +226461,63 @@
    "competitionId": "IT1"
   },
   "1025": {
-   "name": "FC Bologna",
-   "norm": "fc bologna",
+   "name": "Bologna FC 1909",
+   "norm": "bologna fc 1909",
    "competitionId": "IT1"
   },
   "1038": {
-   "name": "Sampdoria Genua",
-   "norm": "sampdoria genua",
+   "name": "UC Sampdoria",
+   "norm": "uc sampdoria",
    "competitionId": "IT1"
   },
   "1047": {
-   "name": "Como 1907.",
+   "name": "Como 1907",
    "norm": "como 1907",
    "competitionId": "IT1"
   },
   "1103": {
-   "name": "Ternana Calcio",
-   "norm": "ternana calcio",
+   "name": "AC Ternana",
+   "norm": "ac ternana",
    "competitionId": "IT1"
   },
   "1104": {
-   "name": "Acr Messina",
-   "norm": "acr messina",
+   "name": "AC Riunite Messina",
+   "norm": "ac riunite messina",
    "competitionId": "IT1"
   },
   "1210": {
-   "name": "AS Livorno",
-   "norm": "as livorno",
+   "name": "US Livorno",
+   "norm": "us livorno",
    "competitionId": "IT1"
   },
   "1253": {
-   "name": "Lucchese 1905.",
-   "norm": "lucchese 1905",
+   "name": "AS Lucchese Libertas",
+   "norm": "as lucchese libertas",
    "competitionId": "IT1"
   },
   "1307": {
-   "name": "US Pistoiese 1921.",
-   "norm": "us pistoiese 1921",
+   "name": "US Pistoiese",
+   "norm": "us pistoiese",
    "competitionId": "IT1"
   },
   "1385": {
-   "name": "Modena FC 2018.",
-   "norm": "modena fc 2018",
+   "name": "Modena FC",
+   "norm": "modena fc",
    "competitionId": "IT1"
   },
   "1386": {
-   "name": "Reggina 1914.",
-   "norm": "reggina 1914",
+   "name": "Reggina Calcio",
+   "norm": "reggina calcio",
    "competitionId": "IT1"
   },
   "1387": {
-   "name": "Acn Siena 1904.",
-   "norm": "acn siena 1904",
+   "name": "AC Siena",
+   "norm": "ac siena",
    "competitionId": "IT1"
   },
   "1388": {
-   "name": "US Anconitana",
-   "norm": "us anconitana",
+   "name": "Ancona Calcio",
+   "norm": "ancona calcio",
    "competitionId": "IT1"
   },
   "1390": {
@@ -226526,18 +226526,18 @@
    "competitionId": "IT1"
   },
   "1408": {
-   "name": "Piacenza Calcio 1919.",
-   "norm": "piacenza calcio 1919",
+   "name": "Piacenza FC",
+   "norm": "piacenza fc",
    "competitionId": "IT1"
   },
   "1429": {
-   "name": "Cesena FC",
-   "norm": "cesena fc",
+   "name": "AC Cesena",
+   "norm": "ac cesena",
    "competitionId": "IT1"
   },
   "1627": {
-   "name": "Catania Calcio",
-   "norm": "catania calcio",
+   "name": "Club Calcio Catania",
+   "norm": "club calcio catania",
    "competitionId": "IT1"
   },
   "2239": {
@@ -226546,33 +226546,33 @@
    "competitionId": "IT1"
   },
   "2251": {
-   "name": "Acd Treviso",
-   "norm": "acd treviso",
+   "name": "Treviso FBC 1993",
+   "norm": "treviso fbc 1993",
    "competitionId": "IT1"
   },
   "2331": {
-   "name": "US Avellino 1912.",
-   "norm": "us avellino 1912",
+   "name": "US Avellino",
+   "norm": "us avellino",
    "competitionId": "IT1"
   },
   "2581": {
-   "name": "Mantova 1911.",
-   "norm": "mantova 1911",
+   "name": "AC Mantova",
+   "norm": "ac mantova",
    "competitionId": "IT1"
   },
   "2655": {
-   "name": "Lr Vicenza Virtus",
-   "norm": "lr vicenza virtus",
+   "name": "AC Vicenza",
+   "norm": "ac vicenza",
    "competitionId": "IT1"
   },
   "2721": {
-   "name": "US Alessandria Calcio 1912.",
-   "norm": "us alessandria calcio 1912",
+   "name": "Alessandria US",
+   "norm": "alessandria us",
    "competitionId": "IT1"
   },
   "2722": {
-   "name": "Spal",
-   "norm": "spal",
+   "name": "SP Ars et Labor",
+   "norm": "sp ars et labor",
    "competitionId": "IT1"
   },
   "2919": {
@@ -226581,13 +226581,13 @@
    "competitionId": "IT1"
   },
   "2921": {
-   "name": "Delfino Pescara 1936.",
-   "norm": "delfino pescara 1936",
+   "name": "Pescara Calcio",
+   "norm": "pescara calcio",
    "competitionId": "IT1"
   },
   "3037": {
-   "name": "Calcio Padova",
-   "norm": "calcio padova",
+   "name": "AC Padova",
+   "norm": "ac padova",
    "competitionId": "IT1"
   },
   "3522": {
@@ -226606,18 +226606,18 @@
    "competitionId": "IT1"
   },
   "4102": {
-   "name": "Carpi FC 1909.",
+   "name": "Carpi FC 1909",
    "norm": "carpi fc 1909",
    "competitionId": "IT1"
   },
   "4146": {
-   "name": "Aurora Pro Patria",
-   "norm": "aurora pro patria",
+   "name": "Pro Patria et Libertate",
+   "norm": "pro patria et libertate",
    "competitionId": "IT1"
   },
   "4147": {
-   "name": "Fbc Casale",
-   "norm": "fbc casale",
+   "name": "Casale FBC",
+   "norm": "casale fbc",
    "competitionId": "IT1"
   },
   "4171": {
@@ -226626,7 +226626,7 @@
    "competitionId": "IT1"
   },
   "4172": {
-   "name": "AC Pisa 1909.",
+   "name": "AC Pisa 1909",
    "norm": "ac pisa 1909",
    "competitionId": "IT1"
   },
@@ -226636,28 +226636,28 @@
    "competitionId": "IT1"
   },
   "4361": {
-   "name": "Varese Calcio",
-   "norm": "varese calcio",
+   "name": "Varese FC",
+   "norm": "varese fc",
    "competitionId": "IT1"
   },
   "4550": {
-   "name": "Legnano AC",
-   "norm": "legnano ac",
+   "name": "FC Legnano",
+   "norm": "fc legnano",
    "competitionId": "IT1"
   },
   "5514": {
-   "name": "Calcio Lecco 1912.",
+   "name": "Calcio Lecco 1912",
    "norm": "calcio lecco 1912",
    "competitionId": "IT1"
   },
   "5621": {
-   "name": "AC Reggiana 1919.",
-   "norm": "ac reggiana 1919",
+   "name": "AC Reggiana",
+   "norm": "ac reggiana",
    "competitionId": "IT1"
   },
   "6195": {
-   "name": "Ssc Neapel",
-   "norm": "ssc neapel",
+   "name": "SSC Napoli",
+   "norm": "ssc napoli",
    "competitionId": "IT1"
   },
   "6574": {
@@ -226666,8 +226666,8 @@
    "competitionId": "IT1"
   },
   "6692": {
-   "name": "Novara Calcio",
-   "norm": "novara calcio",
+   "name": "AC Novara",
+   "norm": "ac novara",
    "competitionId": "IT1"
   },
   "8970": {
@@ -226676,8 +226676,8 @@
    "competitionId": "IT1"
   },
   "26789": {
-   "name": "FC Pro Vercelli 1892.",
-   "norm": "fc pro vercelli 1892",
+   "name": "US Pro Vercelli",
+   "norm": "us pro vercelli",
    "competitionId": "IT1"
   },
   "42864": {
@@ -226686,7 +226686,7 @@
    "competitionId": "IT1"
   },
   "42865": {
-   "name": "Sg Sampierdarenese",
+   "name": "SG Sampierdarenese",
    "norm": "sg sampierdarenese",
    "competitionId": "IT1"
   }

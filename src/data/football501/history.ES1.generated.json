@@ -224646,8 +224646,8 @@
  ],
  "clubs": {
   "13": {
-   "name": "Atletico Madrid",
-   "norm": "atletico madrid",
+   "name": "Atlético de Madrid",
+   "norm": "atletico de madrid",
    "competitionId": "ES1"
   },
   "131": {
@@ -224656,28 +224656,28 @@
    "competitionId": "ES1"
   },
   "134": {
-   "name": "Deportivo Xerez",
-   "norm": "deportivo xerez",
+   "name": "Xerez CD",
+   "norm": "xerez cd",
    "competitionId": "ES1"
   },
   "142": {
-   "name": "Real Saragossa",
-   "norm": "real saragossa",
+   "name": "Zaragoza FC",
+   "norm": "zaragoza fc",
    "competitionId": "ES1"
   },
   "150": {
-   "name": "Real Betis Sevilla",
-   "norm": "real betis sevilla",
+   "name": "Real Betis Balompié",
+   "norm": "real betis balompie",
    "competitionId": "ES1"
   },
   "171": {
-   "name": "Real Murcia",
-   "norm": "real murcia",
+   "name": "Club Real Murcia",
+   "norm": "club real murcia",
    "competitionId": "ES1"
   },
   "236": {
-   "name": "CD Logrones Aufgel",
-   "norm": "cd logrones aufgel",
+   "name": "CD Logroñés",
+   "norm": "cd logrones",
    "competitionId": "ES1"
   },
   "237": {
@@ -224686,13 +224686,13 @@
    "competitionId": "ES1"
   },
   "331": {
-   "name": "Ca Osasuna",
+   "name": "CA Osasuna",
    "norm": "ca osasuna",
    "competitionId": "ES1"
   },
   "366": {
-   "name": "Real Valladolid",
-   "norm": "real valladolid",
+   "name": "Real Valladolid CF",
+   "norm": "real valladolid cf",
    "competitionId": "ES1"
   },
   "367": {
@@ -224701,8 +224701,8 @@
    "competitionId": "ES1"
   },
   "368": {
-   "name": "FC Sevilla",
-   "norm": "fc sevilla",
+   "name": "Sevilla FC",
+   "norm": "sevilla fc",
    "competitionId": "ES1"
   },
   "418": {
@@ -224726,82 +224726,82 @@
    "competitionId": "ES1"
   },
   "648": {
-   "name": "CD Teneriffa",
-   "norm": "cd teneriffa",
+   "name": "CD Tenerife",
+   "norm": "cd tenerife",
    "competitionId": "ES1"
   },
   "666": {
-   "name": "Real Jaen",
-   "norm": "real jaen",
+   "name": "Real Jaén CF",
+   "norm": "real jaen cf",
    "competitionId": "ES1"
   },
   "681": {
-   "name": "Real Sociedad San Sebastian",
-   "norm": "real sociedad san sebastian",
+   "name": "Real Sociedad",
+   "norm": "real sociedad",
    "competitionId": "ES1"
   },
   "714": {
-   "name": "Espanyol Barcelona",
-   "norm": "espanyol barcelona",
+   "name": "RCD Espanyol Barcelona",
+   "norm": "rcd espanyol barcelona",
    "competitionId": "ES1"
   },
   "811": {
-   "name": "CF Extremadura Aufgel",
-   "norm": "cf extremadura aufgel",
+   "name": "CF Extremadura",
+   "norm": "cf extremadura",
    "competitionId": "ES1"
   },
   "897": {
-   "name": "Deportivo La Coruna",
-   "norm": "deportivo la coruna",
+   "name": "Deportivo A Coruña",
+   "norm": "deportivo a coruna",
    "competitionId": "ES1"
   },
   "940": {
-   "name": "Celta Vigo",
-   "norm": "celta vigo",
+   "name": "Celta de Vigo",
+   "norm": "celta de vigo",
    "competitionId": "ES1"
   },
   "993": {
-   "name": "FC Cordoba",
-   "norm": "fc cordoba",
+   "name": "Córdoba CF",
+   "norm": "cordoba cf",
    "competitionId": "ES1"
   },
   "1049": {
-   "name": "FC Valencia",
-   "norm": "fc valencia",
+   "name": "Valencia CF",
+   "norm": "valencia cf",
    "competitionId": "ES1"
   },
   "1050": {
-   "name": "FC Villarreal",
-   "norm": "fc villarreal",
+   "name": "Villarreal CF",
+   "norm": "villarreal cf",
    "competitionId": "ES1"
   },
   "1084": {
-   "name": "FC Malaga",
-   "norm": "fc malaga",
+   "name": "Málaga CF",
+   "norm": "malaga cf",
    "competitionId": "ES1"
   },
   "1087": {
-   "name": "UD Salamanca Aufgel",
-   "norm": "ud salamanca aufgel",
+   "name": "UD Salamanca",
+   "norm": "ud salamanca",
    "competitionId": "ES1"
   },
   "1108": {
-   "name": "Deportivo Alaves",
+   "name": "Deportivo Alavés",
    "norm": "deportivo alaves",
    "competitionId": "ES1"
   },
   "1244": {
-   "name": "CD Leganes",
+   "name": "CD Leganés",
    "norm": "cd leganes",
    "competitionId": "ES1"
   },
   "1531": {
-   "name": "FC Elche",
-   "norm": "fc elche",
+   "name": "Elche CF",
+   "norm": "elche cf",
    "competitionId": "ES1"
   },
   "1532": {
-   "name": "Albacete Balompie",
+   "name": "Albacete Balompié",
    "norm": "albacete balompie",
    "competitionId": "ES1"
   },
@@ -224821,23 +224821,23 @@
    "competitionId": "ES1"
   },
   "2448": {
-   "name": "Sporting Gijon",
-   "norm": "sporting gijon",
+   "name": "Real Gijón",
+   "norm": "real gijon",
    "competitionId": "ES1"
   },
   "2497": {
-   "name": "Real Oviedo",
-   "norm": "real oviedo",
+   "name": "Oviedo FC",
+   "norm": "oviedo fc",
    "competitionId": "ES1"
   },
   "2502": {
-   "name": "CD Castellon",
+   "name": "CD Castellón",
    "norm": "cd castellon",
    "competitionId": "ES1"
   },
   "2687": {
-   "name": "FC Cadiz",
-   "norm": "fc cadiz",
+   "name": "Cádiz CF",
+   "norm": "cadiz cf",
    "competitionId": "ES1"
   },
   "2855": {
@@ -224851,23 +224851,23 @@
    "competitionId": "ES1"
   },
   "3239": {
-   "name": "Ue Lleida Aufgel",
-   "norm": "ue lleida aufgel",
+   "name": "UD Lérida",
+   "norm": "ud lerida",
    "competitionId": "ES1"
   },
   "3302": {
-   "name": "UD Almeria",
+   "name": "UD Almería",
    "norm": "ud almeria",
    "competitionId": "ES1"
   },
   "3368": {
-   "name": "UD Levante",
-   "norm": "ud levante",
+   "name": "Levante UD",
+   "norm": "levante ud",
    "competitionId": "ES1"
   },
   "3709": {
-   "name": "FC Getafe",
-   "norm": "fc getafe",
+   "name": "Getafe CF",
+   "norm": "getafe cf",
    "competitionId": "ES1"
   },
   "4542": {
@@ -224881,8 +224881,8 @@
    "competitionId": "ES1"
   },
   "5648": {
-   "name": "Gimnastic De Tarragona",
-   "norm": "gimnastic de tarragona",
+   "name": "Gimnástico de Tarragona",
+   "norm": "gimnastico de tarragona",
    "competitionId": "ES1"
   },
   "5650": {
@@ -224891,8 +224891,8 @@
    "competitionId": "ES1"
   },
   "7971": {
-   "name": "Hercules Alicante",
-   "norm": "hercules alicante",
+   "name": "FC Hércules",
+   "norm": "fc hercules",
    "competitionId": "ES1"
   },
   "11259": {
@@ -224901,53 +224901,53 @@
    "competitionId": "ES1"
   },
   "11422": {
-   "name": "Ce Sabadell",
-   "norm": "ce sabadell",
+   "name": "CD Sabadell CF",
+   "norm": "cd sabadell cf",
    "competitionId": "ES1"
   },
   "12321": {
-   "name": "FC Girona",
-   "norm": "fc girona",
+   "name": "Girona FC",
+   "norm": "girona fc",
    "competitionId": "ES1"
   },
   "12405": {
-   "name": "Real Union Club",
+   "name": "Real Unión Club",
    "norm": "real union club",
    "competitionId": "ES1"
   },
   "16122": {
-   "name": "Arenas Club",
-   "norm": "arenas club",
+   "name": "Arenas Club de Guecho",
+   "norm": "arenas club de guecho",
    "competitionId": "ES1"
   },
   "16795": {
-   "name": "FC Granada",
-   "norm": "fc granada",
+   "name": "Granada CF",
+   "norm": "granada cf",
    "competitionId": "ES1"
   },
   "20528": {
-   "name": "Ce Europa",
-   "norm": "ce europa",
+   "name": "CD Europa",
+   "norm": "cd europa",
    "competitionId": "ES1"
   },
   "38011": {
-   "name": "Cp Merida Aufgel",
-   "norm": "cp merida aufgel",
+   "name": "CP Mérida",
+   "norm": "cp merida",
    "competitionId": "ES1"
   },
   "42811": {
-   "name": "Ad Almeria Aufgel",
-   "norm": "ad almeria aufgel",
+   "name": "AD Almería",
+   "norm": "ad almeria",
    "competitionId": "ES1"
   },
   "42848": {
-   "name": "Atletico Tetuan Aufgel",
-   "norm": "atletico tetuan aufgel",
+   "name": "Club Atlético de Tetuán",
+   "norm": "club atletico de tetuan",
    "competitionId": "ES1"
   },
   "42849": {
-   "name": "CD Condal Aufgel",
-   "norm": "cd condal aufgel",
+   "name": "SD La España Industrial",
+   "norm": "sd la espana industrial",
    "competitionId": "ES1"
   },
   "57429": {
@@ -224956,8 +224956,8 @@
    "competitionId": "ES1"
   },
   "118067": {
-   "name": "CD Malaga 1992.",
-   "norm": "cd malaga 1992",
+   "name": "CD Málaga",
+   "norm": "cd malaga",
    "competitionId": "ES1"
   }
  }

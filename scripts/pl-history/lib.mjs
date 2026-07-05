@@ -24,7 +24,12 @@ export function parseCompetitionClubs(html) {
   $('a[href*="/startseite/verein/"], a[href*="/kader/verein/"], a[href*="/spielplan/verein/"]').each((i, a) => {
     const href = $(a).attr('href') || ''
     const m = href.match(/\/([^/]+)\/(?:startseite|spielplan|kader)\/verein\/(\d+)/)
-    if (m && !clubs.has(m[2])) clubs.set(m[2], { id: m[2], slug: m[1] })
+    if (!m) return
+    const id = m[2]
+    const name = ($(a).attr('title') || $(a).text().trim() || '').trim() // English display name
+    const existing = clubs.get(id)
+    if (!existing) clubs.set(id, { id, slug: m[1], name })
+    else if (!existing.name && name) existing.name = name
   })
   return [...clubs.values()]
 }

@@ -190367,13 +190367,13 @@
  ],
  "clubs": {
   "2": {
-   "name": "1. FC Kaiserslautern",
-   "norm": "1 fc kaiserslautern",
+   "name": "1.FC Kaiserslautern",
+   "norm": "1fc kaiserslautern",
    "competitionId": "CL"
   },
   "5": {
-   "name": "AC Mailand",
-   "norm": "ac mailand",
+   "name": "AC Milan",
+   "norm": "ac milan",
    "competitionId": "CL"
   },
   "11": {
@@ -190382,22 +190382,22 @@
    "competitionId": "CL"
   },
   "12": {
-   "name": "AS Rom",
-   "norm": "as rom",
+   "name": "AS Roma",
+   "norm": "as roma",
    "competitionId": "CL"
   },
   "13": {
-   "name": "Atletico Madrid",
-   "norm": "atletico madrid",
+   "name": "Atlético de Madrid",
+   "norm": "atletico de madrid",
    "competitionId": "CL"
   },
   "14": {
-   "name": "Fk Austria Wien",
-   "norm": "fk austria wien",
+   "name": "Austria Vienna",
+   "norm": "austria vienna",
    "competitionId": "CL"
   },
   "15": {
-   "name": "Bayer 04. Leverkusen",
+   "name": "Bayer 04 Leverkusen",
    "norm": "bayer 04 leverkusen",
    "competitionId": "CL"
   },
@@ -190407,7 +190407,7 @@
    "competitionId": "CL"
   },
   "18": {
-   "name": "Borussia Monchengladbach",
+   "name": "Borussia Mönchengladbach",
    "norm": "borussia monchengladbach",
    "competitionId": "CL"
   },
@@ -190422,13 +190422,13 @@
    "competitionId": "CL"
   },
   "26": {
-   "name": "FC Basel 1893.",
+   "name": "FC Basel 1893",
    "norm": "fc basel 1893",
    "competitionId": "CL"
   },
   "27": {
-   "name": "FC Bayern Munchen",
-   "norm": "fc bayern munchen",
+   "name": "Bayern Munich",
+   "norm": "bayern munich",
    "competitionId": "CL"
   },
   "31": {
@@ -190437,13 +190437,13 @@
    "competitionId": "CL"
   },
   "33": {
-   "name": "FC Schalke 04.",
+   "name": "FC Schalke 04",
    "norm": "fc schalke 04",
    "competitionId": "CL"
   },
   "36": {
-   "name": "Fenerbahce Istanbul",
-   "norm": "fenerbahce istanbul",
+   "name": "Fenerbahce",
+   "norm": "fenerbahce",
    "competitionId": "CL"
   },
   "40": {
@@ -190462,32 +190462,32 @@
    "competitionId": "CL"
   },
   "46": {
-   "name": "Inter Mailand",
-   "norm": "inter mailand",
+   "name": "Inter Milan",
+   "norm": "inter milan",
    "competitionId": "CL"
   },
   "58": {
-   "name": "Rsc Anderlecht",
+   "name": "RSC Anderlecht",
    "norm": "rsc anderlecht",
    "competitionId": "CL"
   },
   "62": {
-   "name": "Sk Slavia Prag",
-   "norm": "sk slavia prag",
+   "name": "SK Slavia Prague",
+   "norm": "sk slavia prague",
    "competitionId": "CL"
   },
   "79": {
-   "name": "VFB Stuttgart",
+   "name": "VfB Stuttgart",
    "norm": "vfb stuttgart",
    "competitionId": "CL"
   },
   "82": {
-   "name": "VFL Wolfsburg",
+   "name": "VfL Wolfsburg",
    "norm": "vfl wolfsburg",
    "competitionId": "CL"
   },
   "84": {
-   "name": "Debreceni Vsc",
+   "name": "Debreceni VSC",
    "norm": "debreceni vsc",
    "competitionId": "CL"
   },
@@ -190502,13 +190502,13 @@
    "competitionId": "CL"
   },
   "89": {
-   "name": "1. FC Union Berlin",
-   "norm": "1 fc union berlin",
+   "name": "1.FC Union Berlin",
+   "norm": "1fc union berlin",
    "competitionId": "CL"
   },
   "114": {
-   "name": "Besiktas Istanbul",
-   "norm": "besiktas istanbul",
+   "name": "Besiktas JK",
+   "norm": "besiktas jk",
    "competitionId": "CL"
   },
   "116": {
@@ -190522,17 +190522,17 @@
    "competitionId": "CL"
   },
   "122": {
-   "name": "Sk Sturm Graz",
+   "name": "SK Sturm Graz",
    "norm": "sk sturm graz",
    "competitionId": "CL"
   },
   "124": {
-   "name": "Glasgow Rangers",
-   "norm": "glasgow rangers",
+   "name": "Rangers FC",
+   "norm": "rangers fc",
    "competitionId": "CL"
   },
   "130": {
-   "name": "Parma Calcio 1913.",
+   "name": "Parma Calcio 1913",
    "norm": "parma calcio 1913",
    "competitionId": "CL"
   },
@@ -190542,8 +190542,8 @@
    "competitionId": "CL"
   },
   "141": {
-   "name": "Galatasaray Istanbul",
-   "norm": "galatasaray istanbul",
+   "name": "Galatasaray",
+   "norm": "galatasaray",
    "competitionId": "CL"
   },
   "148": {
@@ -190552,8 +190552,8 @@
    "competitionId": "CL"
   },
   "150": {
-   "name": "Real Betis Sevilla",
-   "norm": "real betis sevilla",
+   "name": "Real Betis Balompié",
+   "norm": "real betis balompie",
    "competitionId": "CL"
   },
   "156": {
@@ -190562,13 +190562,13 @@
    "competitionId": "CL"
   },
   "157": {
-   "name": "Kaa Gent",
+   "name": "KAA Gent",
    "norm": "kaa gent",
    "competitionId": "CL"
   },
   "159": {
-   "name": "Roter Stern Belgrad",
-   "norm": "roter stern belgrad",
+   "name": "Red Star Belgrade",
+   "norm": "red star belgrade",
    "competitionId": "CL"
   },
   "162": {
@@ -190582,43 +190582,43 @@
    "competitionId": "CL"
   },
   "170": {
-   "name": "Sk Rapid Wien",
-   "norm": "sk rapid wien",
+   "name": "Rapid Vienna",
+   "norm": "rapid vienna",
    "competitionId": "CL"
   },
   "190": {
-   "name": "FC Kopenhagen",
-   "norm": "fc kopenhagen",
+   "name": "FC Copenhagen",
+   "norm": "fc copenhagen",
    "competitionId": "CL"
   },
   "195": {
-   "name": "Rosenborg Bk",
+   "name": "Rosenborg BK",
    "norm": "rosenborg bk",
    "competitionId": "CL"
   },
   "197": {
-   "name": "AC Sparta Prag",
-   "norm": "ac sparta prag",
+   "name": "AC Sparta Prague",
+   "norm": "ac sparta prague",
    "competitionId": "CL"
   },
   "204": {
-   "name": "Lierse Sk",
-   "norm": "lierse sk",
+   "name": "Lierse SK (-2018)",
+   "norm": "lierse sk 2018",
    "competitionId": "CL"
   },
   "206": {
-   "name": "Brondby If",
+   "name": "Bröndby IF",
    "norm": "brondby if",
    "competitionId": "CL"
   },
   "208": {
-   "name": "Zska Sofia",
-   "norm": "zska sofia",
+   "name": "CSKA Sofia",
+   "norm": "cska sofia",
    "competitionId": "CL"
   },
   "232": {
-   "name": "Spartak Moskau",
-   "norm": "spartak moskau",
+   "name": "Spartak Moscow",
+   "norm": "spartak moscow",
    "competitionId": "CL"
   },
   "234": {
@@ -190632,13 +190632,13 @@
    "competitionId": "CL"
   },
   "238": {
-   "name": "Lech Posen",
-   "norm": "lech posen",
+   "name": "Lech Poznan",
+   "norm": "lech poznan",
    "competitionId": "CL"
   },
   "239": {
-   "name": "Viking Stavanger",
-   "norm": "viking stavanger",
+   "name": "Viking FK",
+   "norm": "viking fk",
    "competitionId": "CL"
   },
   "244": {
@@ -190647,33 +190647,33 @@
    "competitionId": "CL"
   },
   "255": {
-   "name": "Legia Warschau",
-   "norm": "legia warschau",
+   "name": "Legia Warszawa",
+   "norm": "legia warszawa",
    "competitionId": "CL"
   },
   "260": {
-   "name": "FC Zurich",
+   "name": "FC Zürich",
    "norm": "fc zurich",
    "competitionId": "CL"
   },
   "265": {
-   "name": "Panathinaikos Athen",
-   "norm": "panathinaikos athen",
+   "name": "Panathinaikos",
+   "norm": "panathinaikos",
    "competitionId": "CL"
   },
   "272": {
-   "name": "Aik Solna",
-   "norm": "aik solna",
+   "name": "AIK",
+   "norm": "aik",
    "competitionId": "CL"
   },
   "273": {
-   "name": "FC Stade Rennes",
-   "norm": "fc stade rennes",
+   "name": "Stade Rennais FC",
+   "norm": "stade rennais fc",
    "competitionId": "CL"
   },
   "279": {
-   "name": "Ferencvaros Budapest",
-   "norm": "ferencvaros budapest",
+   "name": "Ferencvárosi TC",
+   "norm": "ferencvarosi tc",
    "competitionId": "CL"
   },
   "281": {
@@ -190682,17 +190682,17 @@
    "competitionId": "CL"
   },
   "290": {
-   "name": "Aj Auxerre",
+   "name": "AJ Auxerre",
    "norm": "aj auxerre",
    "competitionId": "CL"
   },
   "294": {
-   "name": "Benfica Lissabon",
-   "norm": "benfica lissabon",
+   "name": "SL Benfica",
+   "norm": "sl benfica",
    "competitionId": "CL"
   },
   "301": {
-   "name": "Fcsb",
+   "name": "FCSB",
    "norm": "fcsb",
    "competitionId": "CL"
   },
@@ -190702,8 +190702,8 @@
    "competitionId": "CL"
   },
   "312": {
-   "name": "FC Dinamo",
-   "norm": "fc dinamo",
+   "name": "FC Dinamo 1948",
+   "norm": "fc dinamo 1948",
    "competitionId": "CL"
   },
   "317": {
@@ -190717,38 +190717,38 @@
    "competitionId": "CL"
   },
   "336": {
-   "name": "Sporting Lissabon",
-   "norm": "sporting lissabon",
+   "name": "Sporting CP",
+   "norm": "sporting cp",
    "competitionId": "CL"
   },
   "338": {
-   "name": "Dynamo Kiew",
-   "norm": "dynamo kiew",
+   "name": "Dynamo Kyiv",
+   "norm": "dynamo kyiv",
    "competitionId": "CL"
   },
   "368": {
-   "name": "FC Sevilla",
-   "norm": "fc sevilla",
+   "name": "Sevilla FC",
+   "norm": "sevilla fc",
    "competitionId": "CL"
   },
   "369": {
-   "name": "Lyngby Bk",
-   "norm": "lyngby bk",
+   "name": "Lyngby Boldklub",
+   "norm": "lyngby boldklub",
    "competitionId": "CL"
   },
   "371": {
-   "name": "Celtic Glasgow",
-   "norm": "celtic glasgow",
+   "name": "Celtic FC",
+   "norm": "celtic fc",
    "competitionId": "CL"
   },
   "383": {
-   "name": "Psv Eindhoven",
+   "name": "PSV Eindhoven",
    "norm": "psv eindhoven",
    "competitionId": "CL"
   },
   "398": {
-   "name": "Lazio Rom",
-   "norm": "lazio rom",
+   "name": "SS Lazio",
+   "norm": "ss lazio",
    "competitionId": "CL"
   },
   "399": {
@@ -190757,7 +190757,7 @@
    "competitionId": "CL"
   },
   "403": {
-   "name": "Willem Ii Tilburg",
+   "name": "Willem II Tilburg",
    "norm": "willem ii tilburg",
    "competitionId": "CL"
   },
@@ -190782,17 +190782,17 @@
    "competitionId": "CL"
   },
   "419": {
-   "name": "Gnk Dinamo Zagreb",
+   "name": "GNK Dinamo Zagreb",
    "norm": "gnk dinamo zagreb",
    "competitionId": "CL"
   },
   "430": {
-   "name": "AC Florenz",
-   "norm": "ac florenz",
+   "name": "ACF Fiorentina",
+   "norm": "acf fiorentina",
    "competitionId": "CL"
   },
   "447": {
-   "name": "Hnk Hajduk Split",
+   "name": "HNK Hajduk Split",
    "norm": "hnk hajduk split",
    "competitionId": "CL"
   },
@@ -190807,13 +190807,13 @@
    "competitionId": "CL"
   },
   "496": {
-   "name": "Malmo Ff",
+   "name": "Malmö FF",
    "norm": "malmo ff",
    "competitionId": "CL"
   },
   "501": {
-   "name": "Fk Bodo Glimt",
-   "norm": "fk bodo glimt",
+   "name": "FK Bodø/Glimt",
+   "norm": "fk bod glimt",
    "competitionId": "CL"
   },
   "504": {
@@ -190822,12 +190822,12 @@
    "competitionId": "CL"
   },
   "506": {
-   "name": "Juventus Turin",
-   "norm": "juventus turin",
+   "name": "Juventus FC",
+   "norm": "juventus fc",
    "competitionId": "CL"
   },
   "533": {
-   "name": "TSG 1899. Hoffenheim",
+   "name": "TSG 1899 Hoffenheim",
    "norm": "tsg 1899 hoffenheim",
    "competitionId": "CL"
   },
@@ -190837,13 +190837,13 @@
    "competitionId": "CL"
   },
   "583": {
-   "name": "FC Paris Saint Germain",
-   "norm": "fc paris saint germain",
+   "name": "Paris Saint-Germain",
+   "norm": "paris saint germain",
    "competitionId": "CL"
   },
   "602": {
-   "name": "Zalgiris Vilnius",
-   "norm": "zalgiris vilnius",
+   "name": "FK Zalgiris Vilnius",
+   "norm": "fk zalgiris vilnius",
    "competitionId": "CL"
   },
   "610": {
@@ -190867,37 +190867,37 @@
    "competitionId": "CL"
   },
   "669": {
-   "name": "Fk Partizan Belgrad",
-   "norm": "fk partizan belgrad",
+   "name": "FK Partizan Belgrade",
+   "norm": "fk partizan belgrade",
    "competitionId": "CL"
   },
   "681": {
-   "name": "Real Sociedad San Sebastian",
-   "norm": "real sociedad san sebastian",
+   "name": "Real Sociedad",
+   "norm": "real sociedad",
    "competitionId": "CL"
   },
   "683": {
-   "name": "Olympiakos Piraus",
-   "norm": "olympiakos piraus",
+   "name": "Olympiacos Piraeus",
+   "norm": "olympiacos piraeus",
    "competitionId": "CL"
   },
   "687": {
-   "name": "Molde Fk",
+   "name": "Molde FK",
    "norm": "molde fk",
    "competitionId": "CL"
   },
   "699": {
-   "name": "Helsingborgs If",
+   "name": "Helsingborgs IF",
    "norm": "helsingborgs if",
    "competitionId": "CL"
   },
   "709": {
-   "name": "Budapest Honved FC",
-   "norm": "budapest honved fc",
+   "name": "Kispest–Honvéd FC",
+   "norm": "kispest honved fc",
    "competitionId": "CL"
   },
   "713": {
-   "name": "Bate Borisov",
+   "name": "BATE Borisov",
    "norm": "bate borisov",
    "competitionId": "CL"
   },
@@ -190912,17 +190912,17 @@
    "competitionId": "CL"
   },
   "790": {
-   "name": "Nk Maribor",
+   "name": "NK Maribor",
    "norm": "nk maribor",
    "competitionId": "CL"
   },
   "800": {
-   "name": "Atalanta Bergamo",
-   "norm": "atalanta bergamo",
+   "name": "Atalanta BC",
+   "norm": "atalanta bc",
    "competitionId": "CL"
   },
   "801": {
-   "name": "Ifk Goteborg",
+   "name": "IFK Göteborg",
    "norm": "ifk goteborg",
    "competitionId": "CL"
   },
@@ -190937,13 +190937,13 @@
    "competitionId": "CL"
   },
   "897": {
-   "name": "Deportivo La Coruna",
-   "norm": "deportivo la coruna",
+   "name": "Deportivo A Coruña",
+   "norm": "deportivo a coruna",
    "competitionId": "CL"
   },
   "932": {
-   "name": "Lokomotiv Moskau",
-   "norm": "lokomotiv moskau",
+   "name": "Lokomotiv Moscow",
+   "norm": "lokomotiv moscow",
    "competitionId": "CL"
   },
   "938": {
@@ -190952,22 +190952,22 @@
    "competitionId": "CL"
   },
   "940": {
-   "name": "Celta Vigo",
-   "norm": "celta vigo",
+   "name": "Celta de Vigo",
+   "norm": "celta de vigo",
    "competitionId": "CL"
   },
   "941": {
-   "name": "FC Viktoria Pilsen",
-   "norm": "fc viktoria pilsen",
+   "name": "FC Viktoria Plzen",
+   "norm": "fc viktoria plzen",
    "competitionId": "CL"
   },
   "964": {
-   "name": "Zenit St Petersburg",
+   "name": "Zenit St. Petersburg",
    "norm": "zenit st petersburg",
    "competitionId": "CL"
   },
   "969": {
-   "name": "Montpellier Hsc",
+   "name": "Montpellier HSC",
    "norm": "montpellier hsc",
    "competitionId": "CL"
   },
@@ -190987,7 +190987,7 @@
    "competitionId": "CL"
   },
   "1008": {
-   "name": "Hjk Helsinki",
+   "name": "HJK Helsinki",
    "norm": "hjk helsinki",
    "competitionId": "CL"
   },
@@ -190997,8 +190997,8 @@
    "competitionId": "CL"
   },
   "1025": {
-   "name": "FC Bologna",
-   "norm": "fc bologna",
+   "name": "Bologna FC 1909",
+   "norm": "bologna fc 1909",
    "competitionId": "CL"
   },
   "1041": {
@@ -191007,22 +191007,22 @@
    "competitionId": "CL"
   },
   "1043": {
-   "name": "Skonto Riga",
-   "norm": "skonto riga",
+   "name": "Skonto Riga (- 2016)",
+   "norm": "skonto riga 2016",
    "competitionId": "CL"
   },
   "1049": {
-   "name": "FC Valencia",
-   "norm": "fc valencia",
+   "name": "Valencia CF",
+   "norm": "valencia cf",
    "competitionId": "CL"
   },
   "1050": {
-   "name": "FC Villarreal",
-   "norm": "fc villarreal",
+   "name": "Villarreal CF",
+   "norm": "villarreal cf",
    "competitionId": "CL"
   },
   "1053": {
-   "name": "Aalborg Bk",
+   "name": "Aalborg BK",
    "norm": "aalborg bk",
    "competitionId": "CL"
   },
@@ -191037,28 +191037,28 @@
    "competitionId": "CL"
   },
   "1082": {
-   "name": "Losc Lille",
+   "name": "LOSC Lille",
    "norm": "losc lille",
    "competitionId": "CL"
   },
   "1083": {
-   "name": "Fk Rostov",
-   "norm": "fk rostov",
+   "name": "FC Rostov",
+   "norm": "fc rostov",
    "competitionId": "CL"
   },
   "1084": {
-   "name": "FC Malaga",
-   "norm": "fc malaga",
+   "name": "Málaga CF",
+   "norm": "malaga cf",
    "competitionId": "CL"
   },
   "1090": {
-   "name": "Az Alkmaar",
+   "name": "AZ Alkmaar",
    "norm": "az alkmaar",
    "competitionId": "CL"
   },
   "1096": {
-   "name": "Royal Antwerpen FC",
-   "norm": "royal antwerpen fc",
+   "name": "Royal Antwerp FC",
+   "norm": "royal antwerp fc",
    "competitionId": "CL"
   },
   "1180": {
@@ -191067,38 +191067,38 @@
    "competitionId": "CL"
   },
   "1184": {
-   "name": "Krc Genk",
+   "name": "KRC Genk",
    "norm": "krc genk",
    "competitionId": "CL"
   },
   "1231": {
-   "name": "Ia Akranes",
+   "name": "ÍA Akranes",
    "norm": "ia akranes",
    "competitionId": "CL"
   },
   "1443": {
-   "name": "Msk Zilina",
+   "name": "MSK Zilina",
    "norm": "msk zilina",
    "competitionId": "CL"
   },
   "2227": {
-   "name": "Sk Tavriya Simferopol",
-   "norm": "sk tavriya simferopol",
+   "name": "SC Tavriya Simferopol (-2022)",
+   "norm": "sc tavriya simferopol 2022",
    "competitionId": "CL"
   },
   "2282": {
-   "name": "FC Brugge",
-   "norm": "fc brugge",
+   "name": "Club Brugge KV",
+   "norm": "club brugge kv",
    "competitionId": "CL"
   },
   "2410": {
-   "name": "Zska Moskau",
-   "norm": "zska moskau",
+   "name": "CSKA Moscow",
+   "norm": "cska moscow",
    "competitionId": "CL"
   },
   "2441": {
-   "name": "Aek Athen",
-   "norm": "aek athen",
+   "name": "AEK Athens",
+   "norm": "aek athens",
    "competitionId": "CL"
   },
   "2481": {
@@ -191107,8 +191107,8 @@
    "competitionId": "CL"
   },
   "2503": {
-   "name": "Boavista Porto FC",
-   "norm": "boavista porto fc",
+   "name": "Boavista FC",
+   "norm": "boavista fc",
    "competitionId": "CL"
   },
   "2698": {
@@ -191127,13 +191127,13 @@
    "competitionId": "CL"
   },
   "2784": {
-   "name": "Apoel Nikosia",
-   "norm": "apoel nikosia",
+   "name": "APOEL Nicosia",
+   "norm": "apoel nicosia",
    "competitionId": "CL"
   },
   "3057": {
-   "name": "Standard Luttich",
-   "norm": "standard luttich",
+   "name": "Standard Liège",
+   "norm": "standard liege",
    "competitionId": "CL"
   },
   "3471": {
@@ -191152,17 +191152,17 @@
    "competitionId": "CL"
   },
   "3911": {
-   "name": "Stade Brest 29.",
-   "norm": "stade brest 29",
+   "name": "Stade Brestois 29",
+   "norm": "stade brestois 29",
    "competitionId": "CL"
   },
   "3948": {
-   "name": "Royale Union Saint Gilloise",
-   "norm": "royale union saint gilloise",
+   "name": "Union Saint-Gilloise",
+   "norm": "union saint gilloise",
    "competitionId": "CL"
   },
   "4772": {
-   "name": "Nk Olimpija Ljubljana",
+   "name": "NK Olimpija Ljubljana",
    "norm": "nk olimpija ljubljana",
    "competitionId": "CL"
   },
@@ -191172,22 +191172,22 @@
    "competitionId": "CL"
   },
   "5849": {
-   "name": "Vikingur Reykjavik",
+   "name": "Víkingur Reykjavík",
    "norm": "vikingur reykjavik",
    "competitionId": "CL"
   },
   "6195": {
-   "name": "Ssc Neapel",
-   "norm": "ssc neapel",
+   "name": "SSC Napoli",
+   "norm": "ssc napoli",
    "competitionId": "CL"
   },
   "6890": {
-   "name": "Istanbul Basaksehir Fk",
-   "norm": "istanbul basaksehir fk",
+   "name": "Basaksehir FK",
+   "norm": "basaksehir fk",
    "competitionId": "CL"
   },
   "7769": {
-   "name": "Cfr Cluj",
+   "name": "CFR Cluj",
    "norm": "cfr cluj",
    "competitionId": "CL"
   },
@@ -191197,8 +191197,8 @@
    "competitionId": "CL"
   },
   "10442": {
-   "name": "Unirea Urziceni",
-   "norm": "unirea urziceni",
+   "name": "Unirea Urziceni ( - 2011)",
+   "norm": "unirea urziceni 2011",
    "competitionId": "CL"
   },
   "10482": {
@@ -191217,28 +191217,28 @@
    "competitionId": "CL"
   },
   "10625": {
-   "name": "Qarabag Fk",
+   "name": "Qarabağ FK",
    "norm": "qarabag fk",
    "competitionId": "CL"
   },
   "12321": {
-   "name": "FC Girona",
-   "norm": "fc girona",
+   "name": "Girona FC",
+   "norm": "girona fc",
    "competitionId": "CL"
   },
   "16704": {
-   "name": "Fk Krasnodar",
-   "norm": "fk krasnodar",
+   "name": "FC Krasnodar",
+   "norm": "fc krasnodar",
    "competitionId": "CL"
   },
   "17629": {
-   "name": "1. FC Kosice",
-   "norm": "1 fc kosice",
+   "name": "1.FC Kosice (1951 - 2004)",
+   "norm": "1fc kosice 1951 2004",
    "competitionId": "CL"
   },
   "21955": {
-   "name": "Union Luxemburg",
-   "norm": "union luxemburg",
+   "name": "Union Luxembourg (- 2005)",
+   "norm": "union luxembourg 2005",
    "competitionId": "CL"
   },
   "22220": {
@@ -191247,8 +191247,8 @@
    "competitionId": "CL"
   },
   "23826": {
-   "name": "Rasenballsport Leipzig",
-   "norm": "rasenballsport leipzig",
+   "name": "RB Leipzig",
+   "norm": "rb leipzig",
    "competitionId": "CL"
   },
   "27774": {
@@ -191257,8 +191257,8 @@
    "competitionId": "CL"
   },
   "31614": {
-   "name": "Pfk Ludogorets Razgrad",
-   "norm": "pfk ludogorets razgrad",
+   "name": "Ludogorets Razgrad",
+   "norm": "ludogorets razgrad",
    "competitionId": "CL"
   },
   "45457": {

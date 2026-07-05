@@ -30,6 +30,12 @@ function slugToName(slug = '') {
   }).join(' ').trim()
 }
 
+// clubId → English display name, scraped from competition pages (all comps).
+function loadTmClubNames() {
+  const f = path.join(DIR.root, `clubnames.${COMPETITION.id}.json`)
+  return existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : {}
+}
+
 // clubId → display name, from the scaffold clubs.csv (covers all PL clubs 1992+).
 function loadClubNames() {
   const f = path.join(DIR.root, 'clubs.csv')
@@ -52,6 +58,7 @@ function loadPositions() {
 
 function build() {
   const clubNames = loadClubNames()
+  const tmClubNames = loadTmClubNames()
   const positions = loadPositions()
   const files = readdirSync(DIR.cache).filter(f => f.endsWith('.json'))
   if (!files.length) { console.error('No cache found — run `npm run scrape:pl-history` first.'); process.exit(1) }
@@ -95,7 +102,7 @@ function build() {
 
   const clubsIndex = {}
   for (const id of [...clubIds].sort()) {
-    const name = clubNames[id] || slugToName(clubSlug.get(id)) || `#${id}`
+    const name = tmClubNames[id] || clubNames[id] || slugToName(clubSlug.get(id)) || `#${id}`
     clubsIndex[id] = { name, norm: normalize(name), competitionId: COMPETITION.id }
   }
 

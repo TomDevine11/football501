@@ -227538,12 +227538,12 @@
    "competitionId": "FR1"
   },
   "273": {
-   "name": "FC Stade Rennes",
-   "norm": "fc stade rennes",
+   "name": "Stade Rennais FC",
+   "norm": "stade rennais fc",
    "competitionId": "FR1"
   },
   "290": {
-   "name": "Aj Auxerre",
+   "name": "AJ Auxerre",
    "norm": "aj auxerre",
    "competitionId": "FR1"
   },
@@ -227558,42 +227558,42 @@
    "competitionId": "FR1"
   },
   "417": {
-   "name": "OGC Nizza",
-   "norm": "ogc nizza",
+   "name": "OGC Nice",
+   "norm": "ogc nice",
    "competitionId": "FR1"
   },
   "494": {
-   "name": "Sporting Club De Toulon",
+   "name": "Sporting Club de Toulon",
    "norm": "sporting club de toulon",
    "competitionId": "FR1"
   },
   "583": {
-   "name": "Paris Saint Germain",
+   "name": "Paris Saint-Germain",
    "norm": "paris saint germain",
    "competitionId": "FR1"
   },
   "595": {
-   "name": "SC Bastia",
-   "norm": "sc bastia",
+   "name": "Sporting Étoile Club Bastia",
+   "norm": "sporting etoile club bastia",
    "competitionId": "FR1"
   },
   "618": {
-   "name": "AS Saint Etienne",
+   "name": "AS Saint-Étienne",
    "norm": "as saint etienne",
    "competitionId": "FR1"
   },
   "667": {
-   "name": "RC Strassburg Alsace",
-   "norm": "rc strassburg alsace",
+   "name": "RC Strasbourg Alsace",
+   "norm": "rc strasbourg alsace",
    "competitionId": "FR1"
   },
   "738": {
-   "name": "AC Le Havre",
-   "norm": "ac le havre",
+   "name": "Le Havre AC",
+   "norm": "le havre ac",
    "competitionId": "FR1"
   },
   "750": {
-   "name": "FC Sochaux Montbeliard",
+   "name": "FC Sochaux-Montbéliard",
    "norm": "fc sochaux montbeliard",
    "competitionId": "FR1"
   },
@@ -227603,7 +227603,7 @@
    "competitionId": "FR1"
   },
   "855": {
-   "name": "Ea Guingamp",
+   "name": "EA Guingamp",
    "norm": "ea guingamp",
    "competitionId": "FR1"
   },
@@ -227613,7 +227613,7 @@
    "competitionId": "FR1"
   },
   "969": {
-   "name": "Montpellier Hsc",
+   "name": "Montpellier HSC",
    "norm": "montpellier hsc",
    "competitionId": "FR1"
   },
@@ -227628,23 +227628,23 @@
    "competitionId": "FR1"
   },
   "1080": {
-   "name": "Stade Laval",
-   "norm": "stade laval",
+   "name": "Stade Lavallois",
+   "norm": "stade lavallois",
    "competitionId": "FR1"
   },
   "1081": {
-   "name": "Cs Sedan Ardennes",
+   "name": "CS Sedan-Ardennes",
    "norm": "cs sedan ardennes",
    "competitionId": "FR1"
   },
   "1082": {
-   "name": "Losc Lille",
+   "name": "LOSC Lille",
    "norm": "losc lille",
    "competitionId": "FR1"
   },
   "1095": {
-   "name": "Es Troyes AC",
-   "norm": "es troyes ac",
+   "name": "ESTAC Troyes",
+   "norm": "estac troyes",
    "competitionId": "FR1"
   },
   "1147": {
@@ -227653,8 +227653,8 @@
    "competitionId": "FR1"
   },
   "1154": {
-   "name": "Red Star FC",
-   "norm": "red star fc",
+   "name": "Red Star Olympique",
+   "norm": "red star olympique",
    "competitionId": "FR1"
   },
   "1158": {
@@ -227663,12 +227663,12 @@
    "competitionId": "FR1"
   },
   "1159": {
-   "name": "AS Nancy Lorraine",
+   "name": "AS Nancy-Lorraine",
    "norm": "as nancy lorraine",
    "competitionId": "FR1"
   },
   "1160": {
-   "name": "Nimes Olympique",
+   "name": "Nîmes Olympique",
    "norm": "nimes olympique",
    "competitionId": "FR1"
   },
@@ -227678,7 +227678,7 @@
    "competitionId": "FR1"
   },
   "1162": {
-   "name": "Sm Caen",
+   "name": "SM Caen",
    "norm": "sm caen",
    "competitionId": "FR1"
   },
@@ -227693,13 +227693,13 @@
    "competitionId": "FR1"
   },
   "1175": {
-   "name": "Lb Chateauroux",
+   "name": "LB Châteauroux",
    "norm": "lb chateauroux",
    "competitionId": "FR1"
   },
   "1290": {
-   "name": "Grenoble Foot 38.",
-   "norm": "grenoble foot 38",
+   "name": "Football Club de Grenoble 1892",
+   "norm": "football club de grenoble 1892",
    "competitionId": "FR1"
   },
   "1397": {
@@ -227713,8 +227713,8 @@
    "competitionId": "FR1"
   },
   "1420": {
-   "name": "Sco Angers",
-   "norm": "sco angers",
+   "name": "Angers SCO",
+   "norm": "angers sco",
    "competitionId": "FR1"
   },
   "1421": {
@@ -227723,32 +227723,32 @@
    "competitionId": "FR1"
   },
   "1423": {
-   "name": "FC Valenciennes",
-   "norm": "fc valenciennes",
+   "name": "US Valenciennes-Anzin",
+   "norm": "us valenciennes anzin",
    "competitionId": "FR1"
   },
   "1564": {
-   "name": "FC Rouen 1899.",
-   "norm": "fc rouen 1899",
+   "name": "FC Rouen",
+   "norm": "fc rouen",
    "competitionId": "FR1"
   },
   "1774": {
-   "name": "FC Mulhouse",
-   "norm": "fc mulhouse",
+   "name": "FC Mulhouse 1893",
+   "norm": "fc mulhouse 1893",
    "competitionId": "FR1"
   },
   "2580": {
-   "name": "Istres Football Club",
-   "norm": "istres football club",
+   "name": "FC Istres Ville Nouvelle",
+   "norm": "fc istres ville nouvelle",
    "competitionId": "FR1"
   },
   "2618": {
-   "name": "Olympique Ales",
-   "norm": "olympique ales",
+   "name": "Olympique d'Alès en Cévennes",
+   "norm": "olympique dales en cevennes",
    "competitionId": "FR1"
   },
   "2969": {
-   "name": "Dijon Fco",
+   "name": "Dijon FCO",
    "norm": "dijon fco",
    "competitionId": "FR1"
   },
@@ -227758,48 +227758,48 @@
    "competitionId": "FR1"
   },
   "3318": {
-   "name": "Racing Club De France Football",
-   "norm": "racing club de france football",
+   "name": "Racing Club Paris",
+   "norm": "racing club paris",
    "competitionId": "FR1"
   },
   "3520": {
-   "name": "FC Sete 34.",
+   "name": "FC Sète 34",
    "norm": "fc sete 34",
    "competitionId": "FR1"
   },
   "3524": {
-   "name": "Clermont Foot 63.",
+   "name": "Clermont Foot 63",
    "norm": "clermont foot 63",
    "competitionId": "FR1"
   },
   "3528": {
-   "name": "Pays Daix FC",
-   "norm": "pays daix fc",
+   "name": "Association sportive aixoise",
+   "norm": "association sportive aixoise",
    "competitionId": "FR1"
   },
   "3558": {
-   "name": "Gfc Ajaccio",
+   "name": "GFC Ajaccio",
    "norm": "gfc ajaccio",
    "competitionId": "FR1"
   },
   "3911": {
-   "name": "Stade Brest 29.",
-   "norm": "stade brest 29",
+   "name": "Stade Brestois 29",
+   "norm": "stade brestois 29",
    "competitionId": "FR1"
   },
   "3915": {
-   "name": "Angouleme Charente FC",
-   "norm": "angouleme charente fc",
+   "name": "AS Angoulême",
+   "norm": "as angouleme",
    "competitionId": "FR1"
   },
   "5407": {
-   "name": "Sr Colmar",
-   "norm": "sr colmar",
+   "name": "Sports Réunis Colmar",
+   "norm": "sports reunis colmar",
    "competitionId": "FR1"
   },
   "7042": {
-   "name": "US Boulogne",
-   "norm": "us boulogne",
+   "name": "Union sportive boulonnaise",
+   "norm": "union sportive boulonnaise",
    "competitionId": "FR1"
   },
   "7723": {
@@ -227808,7 +227808,7 @@
    "competitionId": "FR1"
   },
   "9523": {
-   "name": "Racing Club De Roubaix",
+   "name": "Racing Club de Roubaix",
    "norm": "racing club de roubaix",
    "competitionId": "FR1"
   },
@@ -227818,32 +227818,32 @@
    "competitionId": "FR1"
   },
   "11300": {
-   "name": "Athletic Club Arlesien",
-   "norm": "athletic club arlesien",
+   "name": "AC Arles-Avignon",
+   "norm": "ac arles avignon",
    "competitionId": "FR1"
   },
   "14171": {
-   "name": "Thonon Evian Grand Geneve FC",
-   "norm": "thonon evian grand geneve fc",
+   "name": "FC Évian Thonon Gaillard",
+   "norm": "fc evian thonon gaillard",
    "competitionId": "FR1"
   },
   "21816": {
-   "name": "Stade Francais",
+   "name": "Stade Français",
    "norm": "stade francais",
    "competitionId": "FR1"
   },
   "23341": {
-   "name": "Avenir Club Avignonnais",
-   "norm": "avenir club avignonnais",
+   "name": "Olympique avignonnais",
+   "norm": "olympique avignonnais",
    "competitionId": "FR1"
   },
   "25639": {
-   "name": "Hyeres FC",
+   "name": "Hyères FC",
    "norm": "hyeres fc",
    "competitionId": "FR1"
   },
   "30633": {
-   "name": "Ca Paris Charenton",
+   "name": "CA Paris-Charenton",
    "norm": "ca paris charenton",
    "competitionId": "FR1"
   },
@@ -227853,12 +227853,12 @@
    "competitionId": "FR1"
   },
   "37393": {
-   "name": "FC Antibes Juan Les Pins",
-   "norm": "fc antibes juan les pins",
+   "name": "Olympique d'Antibes",
+   "norm": "olympique dantibes",
    "competitionId": "FR1"
   },
   "57854": {
-   "name": "Sporting Club Fivois",
+   "name": "Sporting Club fivois",
    "norm": "sporting club fivois",
    "competitionId": "FR1"
   },
@@ -227868,22 +227868,22 @@
    "competitionId": "FR1"
   },
   "58556": {
-   "name": "AS Beziers",
-   "norm": "as beziers",
+   "name": "AS Béziers (- 1990)",
+   "norm": "as beziers 1990",
    "competitionId": "FR1"
   },
   "60836": {
-   "name": "Olympique Lillois",
+   "name": "Olympique lillois",
    "norm": "olympique lillois",
    "competitionId": "FR1"
   },
   "63668": {
-   "name": "SC Nimes",
+   "name": "SC Nîmes",
    "norm": "sc nimes",
    "competitionId": "FR1"
   },
   "100990": {
-   "name": "Club Olympique De Roubaix Tourcoing",
+   "name": "Club Olympique de Roubaix-Tourcoing",
    "norm": "club olympique de roubaix tourcoing",
    "competitionId": "FR1"
   },
