@@ -113,36 +113,71 @@ function buildMultiplayerShareText(challenge, ranked, winners) {
 }
 
 // ── Win screen ────────────────────────────────────────────────────
-function WinScreen({ history, players, challenge, onPlayAgain, onExit }) {
+function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit }) {
   const isSolo = players.length === 1
 
   if (isSolo) {
     const score = players[0].finalScore
     const valid = history.filter(g => g.valid)
+    const usedNames = new Set(valid.map(g => g.resolvedName))
+    const answers = challenge.answersList()
+    const lastValid = valid[valid.length - 1]
+    // The score you were finishing from (give up = your remaining score;
+    // checkout = the score before your final dart).
+    const finishingScore = gaveUp ? score : (lastValid ? lastValid.scoreAtTime : MAX_SCORE)
+    const perfect = answers.filter(a => a.value === finishingScore)
+
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
         <div className="text-center mb-8">
-          <div className="text-6xl mb-4">🎯</div>
-          <h2 className="score-number text-6xl text-green-400 mb-2">CHECKOUT!</h2>
+          <div className="text-6xl mb-4">{gaveUp ? '🏳️' : '🎯'}</div>
+          <h2 className={`score-number text-6xl mb-2 ${gaveUp ? 'text-gray-300' : 'text-green-400'}`}>{gaveUp ? 'GAVE UP' : 'CHECKOUT!'}</h2>
           <p className="text-gray-400">
             {challenge.title} (<span className="text-gray-300">{challenge.statLabel}</span>)<br />
-            Finished on <span className="text-white font-bold">{score}</span> in <span className="text-white font-bold">{valid.length}</span> darts
+            {gaveUp
+              ? <>Gave up on <span className="text-white font-bold">{score}</span> after <span className="text-white font-bold">{valid.length}</span> darts</>
+              : <>Finished on <span className="text-white font-bold">{score}</span> in <span className="text-white font-bold">{valid.length}</span> darts</>}
           </p>
         </div>
 
+        {valid.length > 0 && (
+          <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
+            <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Your route</div>
+            <div className="divide-y divide-gray-800/50 max-h-56 overflow-y-auto">
+              {valid.map((g, i) => (
+                <div key={i} className="flex items-center justify-between px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">{g.player.flag}</span>
+                    <span className="text-white text-sm font-medium">{g.player.name}</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm font-mono">
+                    <span className="text-red-400 font-medium">−{g.scoreDeducted}</span>
+                    <span className={`font-bold tabular-nums w-10 text-right ${g.isCheckout ? 'text-green-400' : 'text-gray-300'}`}>{g.newScore}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Perfect-finish reveal */}
+        <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
+          <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Perfect finish from {finishingScore}</div>
+          <div className="px-4 py-3 text-sm">
+            {perfect.length
+              ? <span className="text-green-300">{perfect.map(p => p.name).join(', ')}</span>
+              : <span className="text-gray-500">No single answer lands exactly on 0 from {finishingScore}.</span>}
+          </div>
+        </div>
+
+        {/* Full answer reveal */}
         <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6">
-          <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Route to checkout</div>
-          <div className="divide-y divide-gray-800/50 max-h-80 overflow-y-auto">
-            {valid.map((g, i) => (
-              <div key={i} className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-base">{g.player.flag}</span>
-                  <span className="text-white text-sm font-medium">{g.player.name}</span>
-                </div>
-                <div className="flex items-center gap-4 text-sm font-mono">
-                  <span className="text-red-400 font-medium">−{g.scoreDeducted}</span>
-                  <span className={`font-bold tabular-nums w-10 text-right ${g.isCheckout ? 'text-green-400' : 'text-gray-300'}`}>{g.newScore}</span>
-                </div>
+          <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">All {answers.length} possible answers</div>
+          <div className="divide-y divide-gray-800/40 max-h-80 overflow-y-auto">
+            {answers.map((a, i) => (
+              <div key={i} className="flex items-center justify-between px-4 py-2">
+                <span className={`text-sm ${usedNames.has(a.name) ? 'text-green-400 font-medium' : 'text-gray-300'}`}>{usedNames.has(a.name) ? '✓ ' : ''}{a.name}</span>
+                <span className="text-gray-500 text-xs font-mono tabular-nums">{a.value}</span>
               </div>
             ))}
           </div>
@@ -410,6 +445,7 @@ export default function Football501() {
   const [phase, setPhase] = useState('entry')   // entry | unlimited | playing | won
   const [challenge, setChallenge] = useState(null)
   const [isDaily, setIsDaily] = useState(false)
+  const [gaveUp, setGaveUp] = useState(false)
   const [knownNames, setKnownNames] = useState(new Set())
   const [players, setPlayers] = useState([])
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
@@ -473,6 +509,7 @@ export default function Football501() {
   const startGame = (ch, count, daily) => {
     setChallenge(ch)
     setIsDaily(!!daily)
+    setGaveUp(false)
     setNumPlayers(count)
     setKnownNames(new Set(localPlayers.map(p => p.name)))
     setPlayers(Array.from({ length: count }, (_, i) => ({ name: count === 1 ? 'You' : `Player ${i + 1}`, score: MAX_SCORE, finished: false, finalScore: null })))
@@ -484,6 +521,11 @@ export default function Football501() {
   const playDaily = () => startGame(getDailyChallenge(), 1, true)
   const playAgain = () => startGame(isDaily ? challenge : getRandomChallenge(numPlayers), numPlayers, isDaily)
   const skipQuestion = () => startGame(getRandomChallenge(numPlayers), numPlayers, false) // endless: new question
+  const giveUp = () => {
+    setPlayers(ps => ps.map((p, i) => i === currentPlayerIndex ? { ...p, finished: true, finalScore: p.score } : p))
+    setGaveUp(true)
+    setPhase('won')
+  }
 
   // ── Submit a guess ────────────────────────────────────────────
   const submitGuess = useCallback((player) => {
@@ -559,7 +601,7 @@ export default function Football501() {
   // ── Render ────────────────────────────────────────────────────
   if (phase === 'entry') return <EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />
   if (phase === 'unlimited') return <UnlimitedSetup onStart={(ch, n) => startGame(ch, n, false)} onBack={() => setPhase('entry')} />
-  if (phase === 'won') return <WinScreen history={history} players={players} challenge={challenge} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />
+  if (phase === 'won') return <WinScreen history={history} players={players} challenge={challenge} gaveUp={gaveUp} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />
 
   const validCount = history.filter(g => g.valid).length
   const currentPlayer = players[currentPlayerIndex]
@@ -629,6 +671,14 @@ export default function Football501() {
           <InfoBox label="Checkouts" value={score <= 180 ? insights.checkouts : '—'} tone="green" />
           <InfoBox label="Perfect finish" value={score <= 180 ? insights.perfect : '—'} tone="amber" />
         </div>
+      )}
+
+      {/* Give up (solo) — end the round from here and reveal the answers */}
+      {numPlayers === 1 && (
+        <button type="button" onClick={giveUp}
+          className="mt-4 w-full max-w-lg border border-red-900/60 text-red-400 hover:bg-red-900/20 hover:border-red-700 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
+          Give up &amp; reveal answers
+        </button>
       )}
 
       <GuessHistory history={history} showPlayer={numPlayers > 1} />

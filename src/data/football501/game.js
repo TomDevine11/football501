@@ -73,6 +73,11 @@ function makeChallenge(spec) {
       const r = roster[[...hit][0]]
       return { status: 'valid', name: r.name, value: r.value, breakdown: r.breakdown }
     },
+    // The full eligible answer set (name + value), highest first — for the
+    // end-of-game reveal.
+    answersList() {
+      return Object.values(roster).map(r => ({ name: r.name, value: r.value })).sort((a, b) => b.value - a.value)
+    },
     // Live strategy hints for the current player, given their score and the
     // names already used. `used` is a Set of resolved (canonical) answer names.
     //   highest   — biggest still-available throwable deduction (< 180)

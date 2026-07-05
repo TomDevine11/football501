@@ -49,6 +49,14 @@ describe('501 custom builder', () => {
     expect(c.validate('Thierry Henry')).toMatchObject({ status: 'valid', value: 175 })
   })
 
+  it('answersList reveals the full roster, highest first', () => {
+    const c = makeCustomChallenge({ stat: 'goals', filter: { nationality: 'france' } })
+    const list = c.answersList()
+    expect(list[0]).toMatchObject({ name: 'Thierry Henry', value: 175 })
+    expect(list.length).toBeGreaterThan(50) // whole roster, not top-N
+    expect(list.every((a, i) => i === 0 || list[i - 1].value >= a.value)).toBe(true) // sorted desc
+  })
+
   it('live insight boxes: highest / checkouts / perfect, updating with used', () => {
     const c = makeCustomChallenge({ stat: 'goals', filter: { nationality: 'france' } }) // Henry 175, Anelka 125…
     expect(c.insights(500, new Set()).highest).toBe(175)            // Henry, top French scorer < 180
