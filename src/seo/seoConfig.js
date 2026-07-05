@@ -397,43 +397,50 @@ export const ROUTES = [
   {
     path: '/501',
     name: 'Football 501',
-    title: 'Football 501 — Darts Trivia Game | Football Trivia Games',
-    description: 'Football 501 is the darts-style football trivia game: count down from 501 by naming footballers, each player’s career goals deducted. Land 0 to −10 to check out.',
-    keywords: ['football 501', 'football darts game', 'footdarts', 'football darts trivia', '501 football game', 'name footballers game', 'football checkout game'],
+    title: 'Football 501 — Football Darts Game | Football Trivia Games',
+    description: 'Football 501 is the darts-style football stats game — count down from 501 by naming footballers by appearances or goals, all-time across Europe’s top leagues.',
+    keywords: ['football 501', 'football darts game', 'footy darts', 'football darts trivia', 'football stats game', 'name the footballer game', 'premier league darts game', 'all-time top scorers game', 'guess the footballer by stats', 'football checkout game'],
     h1: 'Football 501',
     tagline: 'Count down from 501 by naming footballers — land the perfect checkout.',
     ogImage: '/og/501.png',
-    about: 'Football 501 is a darts-inspired football trivia game. You start on 501 and count down by naming footballers from an all-time top-scorer leaderboard — each player’s career goals in that competition are deducted from your score. Just like darts, you need to check out by landing between 0 and −10, so naming lower scorers to control your countdown is the real skill.',
+    about: 'Football 501 is a darts-inspired football stats game. You start on 501 and count down by naming footballers — each player’s real career appearances or goals are deducted from your score. Like darts, you check out by landing between 0 and −10, so controlling your countdown is the real skill. It spans the all-time records of the Premier League, La Liga, Serie A, Bundesliga, Ligue 1 and the Champions League — from Alan Shearer and Gerd Müller to Lionel Messi.',
     howTo: [
-      'Pick a competition — Premier League, La Liga, Bundesliga, Champions League or international.',
-      'Name a footballer on that leaderboard; their career goals are deducted from 501.',
-      'Keep your countdown under control — a single player worth over 180 busts your visit.',
+      'Each day brings a new challenge — a stat (appearances or goals), a competition, and a filter like club, nationality or position.',
+      'Name footballers who fit; their real career total is deducted from 501.',
+      'Keep your countdown under control — a player worth over 180 busts your visit.',
       'Check out by landing between 0 and −10. Drop below −10 and you bust.',
     ],
     sections: [
       {
-        h2: 'Tips for Football 501',
+        h2: 'Every competition, all-time',
         body: [
-          'The skill is in the countdown, not the big names. Deduct the heavy hitters early to bring 501 down quickly, then save the lower scorers for your checkout so you can land cleanly between 0 and −10 without busting.',
+          'Football 501 covers six competitions back to their founding: the Premier League (Alan Shearer’s 260 goals), La Liga (Lionel Messi’s 474), Serie A (Silvio Piola), the Bundesliga (Gerd Müller’s 365), Ligue 1 and the Champions League. Questions can be top scorers, most appearances, or clever combinations, filtered by club, nationality or position — a fresh one every day.',
         ],
       },
       {
-        h2: 'Why “501”?',
+        h2: 'Tips for Football 501',
         body: [
-          'It borrows the classic darts format: players start on 501 and count down to a checkout. Here every "dart" is a footballer, and their real career goals in the chosen competition are the score you subtract.',
+          'The skill is in the countdown, not the big names. Deduct the heavy hitters early to bring 501 down quickly, then save the lower-value players for your checkout so you can land cleanly between 0 and −10 without busting. Watch the live boxes for the biggest safe answer and how many checkouts remain.',
+        ],
+      },
+      {
+        h2: 'Play solo or with friends',
+        body: [
+          'Play the daily on your own, or start a local multiplayer game for 2–5 players who take turns on one device — closest to a clean checkout wins. Build-your-own lets you pick the exact competition, stat and filters for the question.',
         ],
       },
     ],
     faq: [
-      { q: 'What is Football 501?', a: 'Football 501 is a darts-style football trivia game. You count down from 501 by naming footballers, and each player’s career goals in the chosen competition are deducted from your score.' },
+      { q: 'What is Football 501?', a: 'Football 501 is a darts-style football stats game. You count down from 501 by naming footballers, and each player’s real career appearances or goals in the chosen competition are deducted from your score — land between 0 and −10 to check out.' },
+      { q: 'Which competitions can I play?', a: 'Six, all-time back to their founding: the Premier League, La Liga, Serie A, Bundesliga, Ligue 1 and the Champions League. The daily rotates across all of them.' },
       { q: 'How do you win?', a: 'You check out by landing your score between 0 and −10, exactly like a darts finish. Going below −10 busts, and a single player worth more than 180 busts the visit — so controlling your countdown is the key skill.' },
-      { q: 'Where do the stats come from?', a: 'Each challenge is backed by an authoritative all-time top-scorer leaderboard parsed from Wikipedia list articles, so every player’s exact career goals are sourced rather than guessed.' },
-      { q: 'Can I play with friends?', a: 'Yes — as well as solo play, Football 501 has a local multiplayer mode for 2–5 players who take turns on the same device; closest to a clean checkout wins.' },
-      { q: 'Is there a new challenge each day?', a: 'Yes — each competition serves a daily challenge, and you can also play the other leaderboards any time.' },
+      { q: 'Is there a new challenge each day?', a: 'Yes — a new daily challenge every day, drawn from any competition, with a different stat and filter each time.' },
+      { q: 'Can I play with friends?', a: 'Yes — local multiplayer for 2–5 players on one device, plus a build-your-own mode where you set the competition, stat and filters yourself.' },
+      { q: 'Where do the stats come from?', a: 'Every player’s appearances and goals are sourced from Transfermarkt’s competition records, all the way back to each league’s founding season.' },
     ],
     schema: 'VideoGame',
-    priority: '0.8',
-    changefreq: 'weekly',
+    priority: '0.9',
+    changefreq: 'daily',
   },
 ]
 
