@@ -5,7 +5,7 @@ import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/fl
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import MoreGames from '../../components/MoreGames'
-import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, badgeFor, CLUBS, NATIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
+import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, loadCompetition, COMPETITIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
 
 const MAX_SCORE    = 501
 const CHECKOUT_MIN = -10
@@ -335,24 +335,34 @@ function CountPicker({ title, sub, onPick, onBack }) {
   )
 }
 
-// Build-your-own question from the same parameters the generator uses, with
-// live completability feedback so you can't build an unplayable question.
+// Build-your-own question — competition first, then the same parameters the
+// generator uses, with live completability feedback. Emits (spec, count).
 function CustomBuilder({ onStart, onBack }) {
+  const [comp, setComp] = useState('GB1')
   const [statId, setStatId] = useState('goals')
   const [club, setClub] = useState('')
   const [nat, setNat] = useState('')
   const [pos, setPos] = useState('')
   const [count, setCount] = useState(2)
+  const [data, setData] = useState(null) // { fact, clubs, nations } for the selected competition
+
+  // Load the chosen competition's data; reset comp-specific filters.
+  useEffect(() => {
+    let cancelled = false
+    setData(null); setClub(''); setNat('')
+    loadCompetition(comp).then(d => { if (!cancelled) setData(d) })
+    return () => { cancelled = true }
+  }, [comp])
 
   const spec = useMemo(() => {
     const filter = {}
     if (club) filter.club = club
     if (nat) filter.nationality = nat
     if (pos) filter.position = pos
-    return { stat: STAT_OPTIONS.find(s => s.id === statId).stat, filter }
-  }, [statId, club, nat, pos])
-  const ev = useMemo(() => evaluateSpec(spec), [spec])
-  const ok = ev.answers > 0 && ev.solvable && ev.maxPlayers >= count
+    return { comp, stat: STAT_OPTIONS.find(s => s.id === statId).stat, filter }
+  }, [comp, statId, club, nat, pos])
+  const ev = useMemo(() => (data ? evaluateSpec(spec, data.fact) : null), [spec, data])
+  const ok = ev && ev.answers > 0 && ev.solvable && ev.maxPlayers >= count
 
   const selectCls = 'w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2.5 text-white text-sm outline-none focus:border-green-600'
   return (
@@ -362,22 +372,28 @@ function CustomBuilder({ onStart, onBack }) {
         <h2 className="text-white font-black text-2xl mb-6">Build a question</h2>
         <div className="space-y-5">
           <div>
+            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Competition</div>
+            <select value={comp} onChange={e => setComp(e.target.value)} className={selectCls}>
+              {COMPETITIONS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </div>
+          <div>
             <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Stat</div>
             <div className="flex flex-wrap gap-2">{STAT_OPTIONS.map(s => <Pill key={s.id} active={statId === s.id} onClick={() => setStatId(s.id)}>{s.label}</Pill>)}</div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Nationality</div>
-              <select value={nat} onChange={e => setNat(e.target.value)} className={selectCls}>
+              <select value={nat} onChange={e => setNat(e.target.value)} disabled={!data} className={selectCls}>
                 <option value="">Any nationality</option>
-                {NATIONS.map(n => <option key={n.key} value={n.key}>{n.display}</option>)}
+                {(data?.nations || []).map(n => <option key={n.key} value={n.key}>{n.display}</option>)}
               </select>
             </div>
             <div>
               <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Club</div>
-              <select value={club} onChange={e => setClub(e.target.value)} className={selectCls}>
+              <select value={club} onChange={e => setClub(e.target.value)} disabled={!data} className={selectCls}>
                 <option value="">Any club</option>
-                {CLUBS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {(data?.clubs || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
           </div>
@@ -392,16 +408,20 @@ function CustomBuilder({ onStart, onBack }) {
             <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Players</div>
             <div className="flex gap-2">{[2, 3, 4, 5].map(n => <Pill key={n} active={count === n} onClick={() => setCount(n)}>{n}</Pill>)}</div>
           </div>
-          <div className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3">
-            <div className="text-white text-sm font-semibold">{ev.title}</div>
-            <div className={`text-xs mt-1 ${ok ? 'text-gray-500' : 'text-amber-400'}`}>
-              {ev.answers === 0 ? 'No players match — broaden the filters.'
-                : !ev.solvable ? `Only ${ev.answers} answers — not enough to reliably check out. Broaden it.`
-                  : ev.maxPlayers < count ? `Completable for up to ${ev.maxPlayers} player${ev.maxPlayers === 1 ? '' : 's'}, not ${count}. Broaden it or reduce players.`
-                    : `${ev.answers} possible answers · completable for ${count} players`}
-            </div>
+          <div className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 min-h-[3.5rem]">
+            {!ev ? <div className="text-gray-600 text-xs">Loading {COMPETITIONS.find(c => c.id === comp)?.name}…</div> : (
+              <>
+                <div className="text-white text-sm font-semibold">{ev.title}</div>
+                <div className={`text-xs mt-1 ${ok ? 'text-gray-500' : 'text-amber-400'}`}>
+                  {ev.answers === 0 ? 'No players match — broaden the filters.'
+                    : !ev.solvable ? `Only ${ev.answers} answers — not enough to reliably check out. Broaden it.`
+                      : ev.maxPlayers < count ? `Completable for up to ${ev.maxPlayers} player${ev.maxPlayers === 1 ? '' : 's'}, not ${count}. Broaden it or reduce players.`
+                        : `${ev.answers} possible answers · completable for ${count} players`}
+                </div>
+              </>
+            )}
           </div>
-          <button disabled={!ok} onClick={() => onStart(makeCustomChallenge(spec), count)}
+          <button disabled={!ok} onClick={() => onStart(spec, count)}
             className="w-full bg-green-700 hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3.5 transition-colors">
             Start game
           </button>
@@ -414,7 +434,7 @@ function CustomBuilder({ onStart, onBack }) {
 function UnlimitedSetup({ onStart, onBack }) {
   const [step, setStep] = useState('mode')
   if (step === 'random') return <CountPicker title="Random question" sub="A new completable question each time — skip any you don't fancy." onBack={() => setStep('mode')} onPick={(n) => onStart(getRandomChallenge(n), n)} />
-  if (step === 'custom') return <CustomBuilder onBack={() => setStep('mode')} onStart={onStart} />
+  if (step === 'custom') return <CustomBuilder onBack={() => setStep('mode')} onStart={(spec, count) => onStart(makeCustomChallenge(spec), count)} />
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
@@ -446,6 +466,7 @@ export default function Football501() {
   const [challenge, setChallenge] = useState(null)
   const [isDaily, setIsDaily] = useState(false)
   const [gaveUp, setGaveUp] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [knownNames, setKnownNames] = useState(new Set())
   const [players, setPlayers] = useState([])
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
@@ -483,7 +504,7 @@ export default function Football501() {
       const extra = localMatches.filter(p => !apiNorms.has(normalizeName(p.name)))
       // Prefer OUR position (same source as the filter) so the badge never lies.
       return rankSuggestions([...apiPlayers, ...extra], input, knownNames).slice(0, 10)
-        .map(p => ({ ...p, position: badgeFor(p.name) || p.position || null }))
+        .map(p => ({ ...p, position: (challenge && challenge.badgeFor(p.name)) || p.position || null }))
     }
 
     const timer = setTimeout(async () => {
@@ -518,9 +539,15 @@ export default function Football501() {
     setPhase('playing')
     setTimeout(() => inputRef.current?.focus(), 100)
   }
-  const playDaily = () => startGame(getDailyChallenge(), 1, true)
-  const playAgain = () => startGame(isDaily ? challenge : getRandomChallenge(numPlayers), numPlayers, isDaily)
-  const skipQuestion = () => startGame(getRandomChallenge(numPlayers), numPlayers, false) // endless: new question
+  // A challenge may need its competition's fact table loaded first (async).
+  const startFrom = async (challengePromise, count, daily) => {
+    setLoading(true)
+    try { startGame(await challengePromise, count, daily) }
+    finally { setLoading(false) }
+  }
+  const playDaily = () => startFrom(getDailyChallenge(), 1, true)
+  const playAgain = () => startFrom(isDaily ? getDailyChallenge() : getRandomChallenge(numPlayers), numPlayers, isDaily)
+  const skipQuestion = () => startFrom(getRandomChallenge(numPlayers), numPlayers, false) // endless: new question
   const giveUp = () => {
     setPlayers(ps => ps.map((p, i) => i === currentPlayerIndex ? { ...p, finished: true, finalScore: p.score } : p))
     setGaveUp(true)
@@ -599,8 +626,14 @@ export default function Football501() {
   }, [])
 
   // ── Render ────────────────────────────────────────────────────
+  if (loading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center px-4">
+      <div className="w-8 h-8 border-2 border-gray-700 border-t-green-500 rounded-full animate-spin mb-4" />
+      <div className="text-gray-500 text-sm">Loading…</div>
+    </div>
+  )
   if (phase === 'entry') return <EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />
-  if (phase === 'unlimited') return <UnlimitedSetup onStart={(ch, n) => startGame(ch, n, false)} onBack={() => setPhase('entry')} />
+  if (phase === 'unlimited') return <UnlimitedSetup onStart={(challengePromise, n) => startFrom(challengePromise, n, false)} onBack={() => setPhase('entry')} />
   if (phase === 'won') return <WinScreen history={history} players={players} challenge={challenge} gaveUp={gaveUp} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />
 
   const validCount = history.filter(g => g.valid).length
