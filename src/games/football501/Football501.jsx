@@ -5,6 +5,7 @@ import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/fl
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import MoreGames from '../../components/MoreGames'
+import { useI18n } from '../../i18n'
 import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, loadCompetition, COMPETITIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
 
 const MAX_SCORE    = 501
@@ -66,16 +67,17 @@ function rankSuggestions(list, query, knownNames = new Set()) {
 
 // ── Score display ─────────────────────────────────────────────────
 function ScoreDisplay({ score }) {
+  const { t } = useI18n()
   const [animKey, setAnimKey] = useState(0)
   useEffect(() => { setAnimKey(k => k + 1) }, [score])
   return (
     <div className="flex flex-col items-center">
-      <div className="text-xs uppercase tracking-widest text-gray-500 mb-1 font-medium">Score</div>
+      <div className="text-xs uppercase tracking-widest text-gray-500 mb-1 font-medium">{t('five01.score')}</div>
       <div key={animKey} className={`score-number score-pop text-8xl md:text-9xl font-black ${getScoreColor(score)} leading-none tabular-nums`}>
         {score}
       </div>
       {score <= 40 && score > 0 && (
-        <div className="mt-2 text-green-400 text-sm font-semibold uppercase tracking-widest animate-pulse">Checkout zone</div>
+        <div className="mt-2 text-green-400 text-sm font-semibold uppercase tracking-widest animate-pulse">{t('five01.checkoutZone')}</div>
       )}
     </div>
   )
@@ -83,6 +85,7 @@ function ScoreDisplay({ score }) {
 
 // ── Scoreboard (local multiplayer) ─────────────────────────────────
 function Scoreboard({ players, currentPlayerIndex }) {
+  const { t } = useI18n()
   if (players.length <= 1) return null
   return (
     <div className="w-full max-w-lg mb-5 grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -92,8 +95,8 @@ function Scoreboard({ players, currentPlayerIndex }) {
           <div key={i} className={`rounded-lg border px-3 py-2 text-center transition-colors ${active ? 'border-green-500 bg-green-900/20' : 'border-gray-800 bg-gray-900'}`}>
             <div className="text-xs text-gray-400 truncate">{p.name}</div>
             <div className={`text-lg font-black tabular-nums ${p.finished ? 'text-green-400' : 'text-white'}`}>{p.score}</div>
-            {p.finished && <div className="text-[10px] text-green-500 uppercase tracking-wide font-medium">checked out</div>}
-            {active && <div className="text-[10px] text-green-400 uppercase tracking-wide font-medium animate-pulse">your turn</div>}
+            {p.finished && <div className="text-[10px] text-green-500 uppercase tracking-wide font-medium">{t('five01.checkedOut')}</div>}
+            {active && <div className="text-[10px] text-green-400 uppercase tracking-wide font-medium animate-pulse">{t('five01.yourTurn')}</div>}
           </div>
         )
       })}
@@ -103,33 +106,34 @@ function Scoreboard({ players, currentPlayerIndex }) {
 
 const scoreSquare = (deducted) => (deducted <= 25 ? '🟩' : deducted <= 75 ? '🟨' : '🟥')
 
-function buildSoloShareText(challenge, score, valid) {
+function buildSoloShareText(t, challenge, score, valid) {
   const grid = valid.map(g => scoreSquare(g.scoreDeducted)).join('') + (score >= CHECKOUT_MIN && score <= 0 ? '🎯' : '')
-  return [`⚽ Football 501 — ${challenge.title}`, `Checked out on ${score} in ${valid.length} darts`, '', grid, '', SITE_URL].join('\n')
+  return [t('five01.shareTitle', { title: challenge.title }), t('five01.shareCheckedOut', { score, n: valid.length }), '', grid, '', SITE_URL].join('\n')
 }
-function buildMultiplayerShareText(challenge, ranked, winners) {
-  const headline = winners.length > 1 ? "It's a tie!" : `${winners[0].name} wins!`
-  return [`⚽ Football 501 — ${challenge.title}`, headline, '', ...ranked.map((p, i) => `${i + 1}. ${p.name} — ${p.finalScore ?? 'no checkout'}`), '', SITE_URL].join('\n')
+function buildMultiplayerShareText(t, challenge, ranked, winners) {
+  const headline = winners.length > 1 ? t('five01.shareTie') : t('five01.shareWins', { name: winners[0].name })
+  return [t('five01.shareTitle', { title: challenge.title }), headline, '', ...ranked.map((p, i) => `${i + 1}. ${p.name} — ${p.finalScore ?? t('five01.noCheckout')}`), '', SITE_URL].join('\n')
 }
 
 // Shared end-of-game reveal: who was a perfect finish from `finishingScore`,
 // and every valid answer (used ones ticked). Shown for solo AND multiplayer,
 // win or not.
 function AnswerReveal({ challenge, finishingScore, usedNames }) {
+  const { t } = useI18n()
   const answers = challenge.answersList()
   const perfect = answers.filter(a => a.value === finishingScore)
   return (
     <>
       <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
-        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Perfect finish from {finishingScore}</div>
+        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.perfectFrom', { score: finishingScore })}</div>
         <div className="px-4 py-3 text-sm">
           {perfect.length
             ? <span className="text-green-300">{perfect.map(p => p.name).join(', ')}</span>
-            : <span className="text-gray-500">No single answer lands exactly on 0 from {finishingScore}.</span>}
+            : <span className="text-gray-500">{t('five01.noExact', { score: finishingScore })}</span>}
         </div>
       </div>
       <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6">
-        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">All {answers.length} possible answers</div>
+        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.allAnswers', { n: answers.length })}</div>
         <div className="divide-y divide-gray-800/40 max-h-80 overflow-y-auto">
           {answers.map((a, i) => (
             <div key={i} className="flex items-center justify-between px-4 py-2">
@@ -145,6 +149,7 @@ function AnswerReveal({ challenge, finishingScore, usedNames }) {
 
 // ── Win screen ────────────────────────────────────────────────────
 function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit }) {
+  const { t } = useI18n()
   const isSolo = players.length === 1
   const valid = history.filter(g => g.valid)
   const usedNames = new Set(valid.map(g => g.resolvedName))
@@ -159,18 +164,18 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">{gaveUp ? '🏳️' : '🎯'}</div>
-          <h2 className={`score-number text-6xl mb-2 ${gaveUp ? 'text-gray-300' : 'text-green-400'}`}>{gaveUp ? 'GAVE UP' : 'CHECKOUT!'}</h2>
+          <h2 className={`score-number text-6xl mb-2 ${gaveUp ? 'text-gray-300' : 'text-green-400'}`}>{gaveUp ? t('five01.gaveUpTitle') : t('five01.checkoutTitle')}</h2>
           <p className="text-gray-400">
             {challenge.title} (<span className="text-gray-300">{challenge.statLabel}</span>)<br />
             {gaveUp
-              ? <>Gave up on <span className="text-white font-bold">{score}</span> after <span className="text-white font-bold">{valid.length}</span> darts</>
-              : <>Finished on <span className="text-white font-bold">{score}</span> in <span className="text-white font-bold">{valid.length}</span> darts</>}
+              ? t('five01.gaveUpOn', { score, n: valid.length })
+              : t('five01.finishedOn', { score, n: valid.length })}
           </p>
         </div>
 
         {valid.length > 0 && (
           <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
-            <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Your route</div>
+            <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.yourRoute')}</div>
             <div className="divide-y divide-gray-800/50 max-h-56 overflow-y-auto">
               {valid.map((g, i) => (
                 <div key={i} className="flex items-center justify-between px-4 py-3">
@@ -190,10 +195,10 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
 
         <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
 
-        <ShareCard text={buildSoloShareText(challenge, score, valid)} />
+        <ShareCard text={buildSoloShareText(t, challenge, score, valid)} />
         <div className="flex gap-3">
-          <button onClick={onPlayAgain} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">Play again</button>
-          <button onClick={onExit} className="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">Menu</button>
+          <button onClick={onPlayAgain} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.playAgain')}</button>
+          <button onClick={onExit} className="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
         </div>
         <MoreGames current="/501" />
       </div>
@@ -212,12 +217,12 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">🏆</div>
-        <h2 className="score-number text-5xl text-green-400 mb-2">{winners.length > 1 ? "IT'S A TIE!" : `${winners[0].name} WINS!`}</h2>
-        <p className="text-gray-400">{challenge.title}<br />Closest to 0 on checkout wins</p>
+        <h2 className="score-number text-5xl text-green-400 mb-2">{winners.length > 1 ? t('five01.tie') : t('five01.wins', { name: winners[0].name })}</h2>
+        <p className="text-gray-400">{challenge.title}<br />{t('five01.closestWins')}</p>
       </div>
 
       <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6">
-        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Final scores</div>
+        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.finalScores')}</div>
         <div className="divide-y divide-gray-800/50">
           {ranked.map((p, i) => (
             <div key={p.idx} className="flex items-center justify-between px-4 py-3">
@@ -228,7 +233,7 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
               </div>
               {p.finished
                 ? <span className="font-bold tabular-nums text-green-400">{p.finalScore}</span>
-                : <span className="text-gray-500 text-xs">no checkout</span>}
+                : <span className="text-gray-500 text-xs">{t('five01.noCheckout')}</span>}
             </div>
           ))}
         </div>
@@ -236,10 +241,10 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
 
       <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
 
-      <ShareCard text={buildMultiplayerShareText(challenge, ranked, winners)} />
+      <ShareCard text={buildMultiplayerShareText(t, challenge, ranked, winners)} />
       <div className="flex gap-3">
-        <button onClick={onPlayAgain} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">Play again</button>
-        <button onClick={onExit} className="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">Menu</button>
+        <button onClick={onPlayAgain} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.playAgain')}</button>
+        <button onClick={onExit} className="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
       </div>
       <MoreGames current="/501" />
     </div>
@@ -248,10 +253,11 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
 
 // ── Guess history ─────────────────────────────────────────────────
 function GuessHistory({ history, showPlayer }) {
+  const { t } = useI18n()
   if (!history.length) return null
   return (
     <div className="w-full max-w-lg mt-5">
-      <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">History ({history.length})</div>
+      <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">{t('five01.history', { n: history.length })}</div>
       <div className="rounded-xl border border-gray-800 overflow-hidden">
         <div className="divide-y divide-gray-800/40 max-h-72 overflow-y-auto">
           {[...history].reverse().map((g, i) => (
@@ -274,7 +280,7 @@ function GuessHistory({ history, showPlayer }) {
                     <span className={`font-bold tabular-nums w-8 text-right ${g.isCheckout ? 'text-green-400' : 'text-gray-300'}`}>{g.newScore}</span>
                   </>
                 ) : g.statScore != null ? (
-                  <span className="text-orange-400 text-xs font-semibold tabular-nums">{g.statScore} · bust</span>
+                  <span className="text-orange-400 text-xs font-semibold tabular-nums">{t('five01.bustTag', { n: g.statScore })}</span>
                 ) : <span className="text-red-500 text-xs font-semibold">✗</span>}
               </div>
             </div>
@@ -287,34 +293,32 @@ function GuessHistory({ history, showPlayer }) {
 
 // ── Entry: Daily (solo) vs Unlimited (multiplayer) ────────────────
 function EntryScreen({ onDaily, onUnlimited }) {
+  const { t, lp } = useI18n()
   const daily = getDailyEntry()
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl mb-6">
-        <Link to="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← All games</Link>
+        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
       </div>
       <div className="mb-10 text-center">
-        <h1 className="score-number text-6xl md:text-7xl text-white mb-4">FOOTBALL 501</h1>
-        <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">
-          Name players to count down from <span className="text-white font-bold">501</span>. Each player's stat is deducted.
-          Land between <span className="text-green-400 font-bold">0 and −10</span> to check out.
-        </p>
+        <h1 className="score-number text-6xl md:text-7xl text-white mb-4">{t('five01.wordmark')}</h1>
+        <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">{t('five01.entryBlurb')}</p>
       </div>
       <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-4">
         <button onClick={onDaily} className="group bg-gray-900 border border-gray-800 hover:border-green-600 hover:ring-1 hover:ring-green-600/30 rounded-xl p-6 text-left transition-all">
           <div className="text-4xl mb-3">🎯</div>
-          <div className="text-white font-bold text-xl">Daily Challenge</div>
-          <div className="text-green-400 text-sm mt-1 font-medium">Solo</div>
-          <div className="text-gray-600 text-xs mt-3 leading-relaxed">Today: <span className="text-gray-400">{daily.title}</span></div>
+          <div className="text-white font-bold text-xl">{t('five01.dailyChallenge')}</div>
+          <div className="text-green-400 text-sm mt-1 font-medium">{t('five01.solo')}</div>
+          <div className="text-gray-600 text-xs mt-3 leading-relaxed">{t('five01.today', { title: daily.title })}</div>
         </button>
         <button onClick={onUnlimited} className="group bg-gray-900 border border-gray-800 hover:border-purple-500 hover:ring-1 hover:ring-purple-500/30 rounded-xl p-6 text-left transition-all">
           <div className="text-4xl mb-3">👥</div>
-          <div className="text-white font-bold text-xl">Unlimited</div>
-          <div className="text-purple-400 text-sm mt-1 font-medium">Local multiplayer</div>
-          <div className="text-gray-600 text-xs mt-3 leading-relaxed">Pick any challenge, 2–5 players take turns — closest to 0 on checkout wins.</div>
+          <div className="text-white font-bold text-xl">{t('five01.unlimited')}</div>
+          <div className="text-purple-400 text-sm mt-1 font-medium">{t('five01.localMultiplayer')}</div>
+          <div className="text-gray-600 text-xs mt-3 leading-relaxed">{t('five01.unlimitedBlurb')}</div>
         </button>
       </div>
-      <div className="mt-8 text-gray-700 text-xs text-center max-w-sm leading-relaxed">Valid darts scores: 1–180 · Checkout 0 to −10 · Below −10 = bust</div>
+      <div className="mt-8 text-gray-700 text-xs text-center max-w-sm leading-relaxed">{t('five01.rulesFooter')}</div>
     </div>
   )
 }
@@ -332,14 +336,15 @@ const InfoBox = ({ label, value, tone }) => (
 )
 
 function CountPicker({ title, sub, onPick, onBack }) {
+  const { t } = useI18n()
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">← Back</button>
+        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">{t('common.back')}</button>
         <div className="mb-8 text-center">
           <h2 className="text-white font-black text-2xl">{title}</h2>
           {sub && <div className="text-gray-500 text-sm mt-1">{sub}</div>}
-          <div className="text-gray-500 text-sm mt-1">How many players?</div>
+          <div className="text-gray-500 text-sm mt-1">{t('five01.howManyPlayers')}</div>
         </div>
         <div className="grid grid-cols-4 gap-3">
           {[2, 3, 4, 5].map(n => (
@@ -354,6 +359,7 @@ function CountPicker({ title, sub, onPick, onBack }) {
 // Build-your-own question — competition first, then the same parameters the
 // generator uses, with live completability feedback. Emits (spec, count).
 function CustomBuilder({ onStart, onBack }) {
+  const { t } = useI18n()
   const [comp, setComp] = useState('GB1')
   const [statId, setStatId] = useState('goals')
   const [club, setClub] = useState('')
@@ -384,62 +390,62 @@ function CustomBuilder({ onStart, onBack }) {
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-10">
       <div className="w-full max-w-lg">
-        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">← Back</button>
-        <h2 className="text-white font-black text-2xl mb-6">Build a question</h2>
+        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">{t('common.back')}</button>
+        <h2 className="text-white font-black text-2xl mb-6">{t('five01.buildQuestion')}</h2>
         <div className="space-y-5">
           <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Competition</div>
+            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.competition')}</div>
             <select value={comp} onChange={e => setComp(e.target.value)} className={selectCls}>
               {COMPETITIONS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
           <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Stat</div>
-            <div className="flex flex-wrap gap-2">{STAT_OPTIONS.map(s => <Pill key={s.id} active={statId === s.id} onClick={() => setStatId(s.id)}>{s.label}</Pill>)}</div>
+            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.stat')}</div>
+            <div className="flex flex-wrap gap-2">{STAT_OPTIONS.map(s => <Pill key={s.id} active={statId === s.id} onClick={() => setStatId(s.id)}>{t(`five01.statOpt.${s.id}`)}</Pill>)}</div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Nationality</div>
+              <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.nationality')}</div>
               <select value={nat} onChange={e => setNat(e.target.value)} disabled={!data} className={selectCls}>
-                <option value="">Any nationality</option>
+                <option value="">{t('five01.anyNationality')}</option>
                 {(data?.nations || []).map(n => <option key={n.key} value={n.key}>{n.display}</option>)}
               </select>
             </div>
             <div>
-              <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Club</div>
+              <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.club')}</div>
               <select value={club} onChange={e => setClub(e.target.value)} disabled={!data} className={selectCls}>
-                <option value="">Any club</option>
+                <option value="">{t('five01.anyClub')}</option>
                 {(data?.clubs || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Position</div>
+            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.position')}</div>
             <div className="flex flex-wrap gap-2">
-              <Pill active={pos === ''} onClick={() => setPos('')}>Any</Pill>
-              {POSITIONS.map(p => <Pill key={p.code} active={pos === p.code} onClick={() => setPos(p.code)}>{p.label}</Pill>)}
+              <Pill active={pos === ''} onClick={() => setPos('')}>{t('five01.any')}</Pill>
+              {POSITIONS.map(p => <Pill key={p.code} active={pos === p.code} onClick={() => setPos(p.code)}>{t(`five01.posOpt.${p.code}`)}</Pill>)}
             </div>
           </div>
           <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">Players</div>
+            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.players')}</div>
             <div className="flex gap-2">{[2, 3, 4, 5].map(n => <Pill key={n} active={count === n} onClick={() => setCount(n)}>{n}</Pill>)}</div>
           </div>
           <div className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 min-h-[3.5rem]">
-            {!ev ? <div className="text-gray-600 text-xs">Loading {COMPETITIONS.find(c => c.id === comp)?.name}…</div> : (
+            {!ev ? <div className="text-gray-600 text-xs">{t('five01.loadingComp', { name: COMPETITIONS.find(c => c.id === comp)?.name })}</div> : (
               <>
                 <div className="text-white text-sm font-semibold">{ev.title}</div>
                 <div className={`text-xs mt-1 ${ok ? 'text-gray-500' : 'text-amber-400'}`}>
-                  {ev.answers === 0 ? 'No players match — broaden the filters.'
-                    : !ev.solvable ? `Only ${ev.answers} answers — not enough to reliably check out. Broaden it.`
-                      : ev.maxPlayers < count ? `Completable for up to ${ev.maxPlayers} player${ev.maxPlayers === 1 ? '' : 's'}, not ${count}. Broaden it or reduce players.`
-                        : `${ev.answers} possible answers · completable for ${count} players`}
+                  {ev.answers === 0 ? t('five01.noMatch')
+                    : !ev.solvable ? t('five01.notEnough', { n: ev.answers })
+                      : ev.maxPlayers < count ? t('five01.notEnoughPlayers', { max: ev.maxPlayers, count })
+                        : t('five01.okInfo', { answers: ev.answers, count })}
                 </div>
               </>
             )}
           </div>
           <button disabled={!ok} onClick={() => onStart(spec, count)}
             className="w-full bg-green-700 hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3.5 transition-colors">
-            Start game
+            {t('five01.startGame')}
           </button>
         </div>
       </div>
@@ -448,27 +454,28 @@ function CustomBuilder({ onStart, onBack }) {
 }
 
 function UnlimitedSetup({ onStart, onBack }) {
+  const { t } = useI18n()
   const [step, setStep] = useState('mode')
-  if (step === 'random') return <CountPicker title="Random question" sub="A new completable question each time — skip any you don't fancy." onBack={() => setStep('mode')} onPick={(n) => onStart(getRandomChallenge(n), n)} />
+  if (step === 'random') return <CountPicker title={t('five01.randomTitle')} sub={t('five01.randomSub')} onBack={() => setStep('mode')} onPick={(n) => onStart(getRandomChallenge(n), n)} />
   if (step === 'custom') return <CustomBuilder onBack={() => setStep('mode')} onStart={(spec, count) => onStart(makeCustomChallenge(spec), count)} />
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
-        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">← Back</button>
+        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">{t('common.back')}</button>
         <div className="mb-8 text-center">
-          <h2 className="text-white font-black text-2xl">Local Multiplayer</h2>
-          <div className="text-gray-500 text-sm mt-1">Everyone plays the same question — closest to 0 on checkout wins.</div>
+          <h2 className="text-white font-black text-2xl">{t('five01.localMultiplayerTitle')}</h2>
+          <div className="text-gray-500 text-sm mt-1">{t('five01.everyoneSame')}</div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <button onClick={() => setStep('random')} className="bg-gray-900 border border-gray-800 hover:border-green-600 hover:ring-1 hover:ring-green-600/30 rounded-xl p-6 text-left transition-all">
             <div className="text-3xl mb-3">🎲</div>
-            <div className="text-white font-bold text-lg">Random question</div>
-            <div className="text-gray-600 text-xs mt-2 leading-relaxed">Pick a player count and we generate a completable question. Skip to reroll.</div>
+            <div className="text-white font-bold text-lg">{t('five01.randomQuestion')}</div>
+            <div className="text-gray-600 text-xs mt-2 leading-relaxed">{t('five01.randomQuestionBlurb')}</div>
           </button>
           <button onClick={() => setStep('custom')} className="bg-gray-900 border border-gray-800 hover:border-purple-500 hover:ring-1 hover:ring-purple-500/30 rounded-xl p-6 text-left transition-all">
             <div className="text-3xl mb-3">🛠️</div>
-            <div className="text-white font-bold text-lg">Build your own</div>
-            <div className="text-gray-600 text-xs mt-2 leading-relaxed">Choose the stat and filters (club, nationality, position) yourself.</div>
+            <div className="text-white font-bold text-lg">{t('five01.buildYourOwn')}</div>
+            <div className="text-gray-600 text-xs mt-2 leading-relaxed">{t('five01.buildYourOwnBlurb')}</div>
           </button>
         </div>
       </div>
@@ -478,6 +485,7 @@ function UnlimitedSetup({ onStart, onBack }) {
 
 // ── Main ──────────────────────────────────────────────────────────
 export default function Football501() {
+  const { t } = useI18n()
   const [phase, setPhase] = useState('entry')   // entry | unlimited | playing | won
   const [challenge, setChallenge] = useState(null)
   const [isDaily, setIsDaily] = useState(false)
@@ -549,7 +557,7 @@ export default function Football501() {
     setGaveUp(false)
     setNumPlayers(count)
     setKnownNames(new Set(localPlayers.map(p => p.name)))
-    setPlayers(Array.from({ length: count }, (_, i) => ({ name: count === 1 ? 'You' : `Player ${i + 1}`, score: MAX_SCORE, finished: false, finalScore: null })))
+    setPlayers(Array.from({ length: count }, (_, i) => ({ name: count === 1 ? t('five01.you') : t('five01.playerN', { n: i + 1 }), score: MAX_SCORE, finished: false, finalScore: null })))
     setCurrentPlayerIndex(0)
     setHistory([]); setInput(''); setSuggestions([]); setHighlightedIndex(-1)
     setPhase('playing')
@@ -600,8 +608,8 @@ export default function Football501() {
     const result = challenge.validate(player.name)
     if (result.status !== 'valid') {
       const reason = result.status === 'ambiguous'
-        ? `Ambiguous — did you mean ${result.options.join(' or ')}?`
-        : `${player.name} isn't a valid answer for this challenge`
+        ? t('five01.ambiguous', { options: result.options.join(' / ') })
+        : t('five01.notValidAnswer', { name: player.name })
       recordAndAdvance({ player, valid: false, statScore: null, reason, scoreAtTime })
       return
     }
@@ -609,23 +617,23 @@ export default function Football501() {
     const statScore = result.value
     // Recognised answer, but over a darts visit (>180) → bust, shown with value.
     if (statScore > DARTS_MAX) {
-      recordAndAdvance({ player, valid: false, statScore, reason: `${statScore} — over 180, bust`, scoreAtTime })
+      recordAndAdvance({ player, valid: false, statScore, reason: t('five01.over180', { n: statScore }), scoreAtTime })
       return
     }
     if (!isValidDartsScore(statScore)) {
-      recordAndAdvance({ player, valid: false, statScore, reason: `${statScore} — can't be deducted`, scoreAtTime })
+      recordAndAdvance({ player, valid: false, statScore, reason: t('five01.cantDeduct', { n: statScore }), scoreAtTime })
       return
     }
 
     const newScore = scoreAtTime - statScore
     const isCheckout = newScore >= CHECKOUT_MIN && newScore <= 0
     if (newScore < CHECKOUT_MIN) {
-      recordAndAdvance({ player, valid: false, statScore, reason: `${statScore} — busts (${scoreAtTime} − ${statScore} = ${newScore}, below −10)`, scoreAtTime })
+      recordAndAdvance({ player, valid: false, statScore, reason: t('five01.bustsDetail', { n: statScore, score: scoreAtTime, result: newScore }), scoreAtTime })
       return
     }
 
     recordAndAdvance({ player, valid: true, resolvedName: result.name, scoreDeducted: statScore, scoreAtTime, newScore, isCheckout, breakdown: result.breakdown }, newScore, isCheckout)
-  }, [players, currentPlayerIndex, challenge])
+  }, [players, currentPlayerIndex, challenge, t])
 
   const handleKeyDown = (e) => {
     if (!suggestions.length) return
@@ -633,8 +641,8 @@ export default function Football501() {
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedIndex(i => Math.max(i - 1, -1)) }
     else if (e.key === 'Enter') {
       e.preventDefault()
-      const t = highlightedIndex >= 0 ? suggestions[highlightedIndex] : suggestions.length === 1 ? suggestions[0] : null
-      if (t) submitGuess(t)
+      const tgt = highlightedIndex >= 0 ? suggestions[highlightedIndex] : suggestions.length === 1 ? suggestions[0] : null
+      if (tgt) submitGuess(tgt)
     } else if (e.key === 'Escape') { setSuggestions([]); setHighlightedIndex(-1) }
   }
 
@@ -651,7 +659,7 @@ export default function Football501() {
   if (loading) return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="w-8 h-8 border-2 border-gray-700 border-t-green-500 rounded-full animate-spin mb-4" />
-      <div className="text-gray-500 text-sm">Loading…</div>
+      <div className="text-gray-500 text-sm">{t('five01.loading')}</div>
     </div>
   )
   if (phase === 'entry') return <EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />
@@ -664,9 +672,9 @@ export default function Football501() {
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-lg flex items-center justify-between mb-6">
-        <button onClick={() => setPhase('entry')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">← Menu</button>
-        <div className="score-number text-xl text-gray-500 tracking-wider">FOOTBALL 501</div>
-        <div className="text-gray-600 text-sm tabular-nums">{validCount} darts</div>
+        <button onClick={() => setPhase('entry')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('five01.menu')}</button>
+        <div className="score-number text-xl text-gray-500 tracking-wider">{t('five01.wordmark')}</div>
+        <div className="text-gray-600 text-sm tabular-nums">{t('five01.dartsCount', { n: validCount })}</div>
       </div>
 
       {/* Challenge card */}
@@ -674,16 +682,16 @@ export default function Football501() {
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 flex items-start justify-between gap-3">
           <div className="min-w-0">
             <div className="text-white font-bold text-sm">{challenge.title}</div>
-            <div className="text-gray-500 text-xs mt-0.5">{challenge.answers} possible answers</div>
+            <div className="text-gray-500 text-xs mt-0.5">{t('five01.possibleAnswers', { n: challenge.answers })}</div>
           </div>
           {!isDaily && (
-            <button onClick={skipQuestion} className="shrink-0 text-xs text-gray-500 hover:text-gray-300 border border-gray-700 hover:border-gray-500 rounded-lg px-2.5 py-1 transition-colors">↻ Skip</button>
+            <button onClick={skipQuestion} className="shrink-0 text-xs text-gray-500 hover:text-gray-300 border border-gray-700 hover:border-gray-500 rounded-lg px-2.5 py-1 transition-colors">{t('five01.skip')}</button>
           )}
         </div>
       </div>
 
       <Scoreboard players={players} currentPlayerIndex={currentPlayerIndex} />
-      {numPlayers > 1 && <div className="mb-3 text-sm font-semibold text-green-400 uppercase tracking-widest animate-pulse">{currentPlayer.name}'s turn</div>}
+      {numPlayers > 1 && <div className="mb-3 text-sm font-semibold text-green-400 uppercase tracking-widest animate-pulse">{t('five01.turnOf', { name: currentPlayer.name })}</div>}
 
       <div className="mb-7"><ScoreDisplay score={score} /></div>
 
@@ -691,7 +699,7 @@ export default function Football501() {
       <div className="relative w-full max-w-lg">
         <input
           ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-          placeholder="Type any player name..." autoFocus
+          placeholder={t('five01.typePlayer')} autoFocus
           className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
           autoComplete="off" autoCorrect="off" spellCheck="false"
         />
@@ -716,15 +724,15 @@ export default function Football501() {
       </div>
 
       <div className="w-full max-w-lg mt-3 flex justify-between text-xs text-gray-700 px-1">
-        <span>Valid: 1–180</span><span>Checkout: 0 to −10</span><span>Below −10 = bust</span>
+        <span>{t('five01.ruleValid')}</span><span>{t('five01.ruleCheckout')}</span><span>{t('five01.ruleBust')}</span>
       </div>
 
       {/* Live strategy boxes */}
       {insights && (
         <div className="w-full max-w-lg mt-4 grid grid-cols-3 gap-2">
-          <InfoBox label="Highest left" value={insights.highest || '—'} />
-          <InfoBox label="Checkouts" value={score <= 180 ? insights.checkouts : '—'} tone="green" />
-          <InfoBox label="Perfect finish" value={score <= 180 ? insights.perfect : '—'} tone="amber" />
+          <InfoBox label={t('five01.highestLeft')} value={insights.highest || '—'} />
+          <InfoBox label={t('five01.checkouts')} value={score <= 180 ? insights.checkouts : '—'} tone="green" />
+          <InfoBox label={t('five01.perfectFinish')} value={score <= 180 ? insights.perfect : '—'} tone="amber" />
         </div>
       )}
 
@@ -732,7 +740,7 @@ export default function Football501() {
       {numPlayers === 1 && (
         <button type="button" onClick={giveUp}
           className="mt-4 w-full max-w-lg border border-red-900/60 text-red-400 hover:bg-red-900/20 hover:border-red-700 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
-          Give up &amp; reveal answers
+          {t('five01.giveUpReveal')}
         </button>
       )}
 
