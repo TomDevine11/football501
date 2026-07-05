@@ -109,23 +109,51 @@ function buildSoloShareText(challenge, score, valid) {
 }
 function buildMultiplayerShareText(challenge, ranked, winners) {
   const headline = winners.length > 1 ? "It's a tie!" : `${winners[0].name} wins!`
-  return [`⚽ Football 501 — ${challenge.title}`, headline, '', ...ranked.map((p, i) => `${i + 1}. ${p.name} — ${p.finalScore}`), '', SITE_URL].join('\n')
+  return [`⚽ Football 501 — ${challenge.title}`, headline, '', ...ranked.map((p, i) => `${i + 1}. ${p.name} — ${p.finalScore ?? 'no checkout'}`), '', SITE_URL].join('\n')
+}
+
+// Shared end-of-game reveal: who was a perfect finish from `finishingScore`,
+// and every valid answer (used ones ticked). Shown for solo AND multiplayer,
+// win or not.
+function AnswerReveal({ challenge, finishingScore, usedNames }) {
+  const answers = challenge.answersList()
+  const perfect = answers.filter(a => a.value === finishingScore)
+  return (
+    <>
+      <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
+        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Perfect finish from {finishingScore}</div>
+        <div className="px-4 py-3 text-sm">
+          {perfect.length
+            ? <span className="text-green-300">{perfect.map(p => p.name).join(', ')}</span>
+            : <span className="text-gray-500">No single answer lands exactly on 0 from {finishingScore}.</span>}
+        </div>
+      </div>
+      <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6">
+        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">All {answers.length} possible answers</div>
+        <div className="divide-y divide-gray-800/40 max-h-80 overflow-y-auto">
+          {answers.map((a, i) => (
+            <div key={i} className="flex items-center justify-between px-4 py-2">
+              <span className={`text-sm ${usedNames.has(a.name) ? 'text-green-400 font-medium' : 'text-gray-300'}`}>{usedNames.has(a.name) ? '✓ ' : ''}{a.name}</span>
+              <span className="text-gray-500 text-xs font-mono tabular-nums">{a.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  )
 }
 
 // ── Win screen ────────────────────────────────────────────────────
 function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit }) {
   const isSolo = players.length === 1
+  const valid = history.filter(g => g.valid)
+  const usedNames = new Set(valid.map(g => g.resolvedName))
+  const lastValid = valid[valid.length - 1]
 
   if (isSolo) {
     const score = players[0].finalScore
-    const valid = history.filter(g => g.valid)
-    const usedNames = new Set(valid.map(g => g.resolvedName))
-    const answers = challenge.answersList()
-    const lastValid = valid[valid.length - 1]
-    // The score you were finishing from (give up = your remaining score;
-    // checkout = the score before your final dart).
+    // Finishing position (give up = remaining score; checkout = score before the last dart).
     const finishingScore = gaveUp ? score : (lastValid ? lastValid.scoreAtTime : MAX_SCORE)
-    const perfect = answers.filter(a => a.value === finishingScore)
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
@@ -160,28 +188,7 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
           </div>
         )}
 
-        {/* Perfect-finish reveal */}
-        <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
-          <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">Perfect finish from {finishingScore}</div>
-          <div className="px-4 py-3 text-sm">
-            {perfect.length
-              ? <span className="text-green-300">{perfect.map(p => p.name).join(', ')}</span>
-              : <span className="text-gray-500">No single answer lands exactly on 0 from {finishingScore}.</span>}
-          </div>
-        </div>
-
-        {/* Full answer reveal */}
-        <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6">
-          <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">All {answers.length} possible answers</div>
-          <div className="divide-y divide-gray-800/40 max-h-80 overflow-y-auto">
-            {answers.map((a, i) => (
-              <div key={i} className="flex items-center justify-between px-4 py-2">
-                <span className={`text-sm ${usedNames.has(a.name) ? 'text-green-400 font-medium' : 'text-gray-300'}`}>{usedNames.has(a.name) ? '✓ ' : ''}{a.name}</span>
-                <span className="text-gray-500 text-xs font-mono tabular-nums">{a.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
 
         <ShareCard text={buildSoloShareText(challenge, score, valid)} />
         <div className="flex gap-3">
@@ -193,9 +200,14 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
     )
   }
 
-  const ranked = players.map((p, i) => ({ ...p, idx: i })).sort((a, b) => b.finalScore - a.finalScore)
-  const winnerScore = ranked[0].finalScore
-  const winners = ranked.filter(p => p.finalScore === winnerScore)
+  // Closest-to-0 checkout wins; a player who never checked out (finalScore null,
+  // e.g. beaten to it by player 2) can't win. Ties on the winning score = draw.
+  const fs = (p) => (p.finalScore ?? -Infinity)
+  const ranked = players.map((p, i) => ({ ...p, idx: i })).sort((a, b) => fs(b) - fs(a))
+  const winnerScore = fs(ranked[0])
+  const winners = ranked.filter(p => p.finished && fs(p) === winnerScore)
+  const finishingScore = lastValid ? lastValid.scoreAtTime : MAX_SCORE
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="text-center mb-8">
@@ -212,13 +224,17 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
               <div className="flex items-center gap-2">
                 <span className="text-gray-500 text-sm font-mono w-5">{i + 1}</span>
                 <span className="text-white text-sm font-medium">{p.name}</span>
-                {p.finalScore === winnerScore && <span className="text-base">🏆</span>}
+                {p.finished && fs(p) === winnerScore && <span className="text-base">🏆</span>}
               </div>
-              <span className="font-bold tabular-nums text-green-400">{p.finalScore}</span>
+              {p.finished
+                ? <span className="font-bold tabular-nums text-green-400">{p.finalScore}</span>
+                : <span className="text-gray-500 text-xs">no checkout</span>}
             </div>
           ))}
         </div>
       </div>
+
+      <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
 
       <ShareCard text={buildMultiplayerShareText(challenge, ranked, winners)} />
       <div className="flex gap-3">
@@ -569,7 +585,13 @@ export default function Football501() {
         return isCheckout ? { ...p, score: newScore, finished: true, finalScore: newScore } : { ...p, score: newScore }
       })
       setPlayers(next)
-      if (isCheckout && next.every(p => p.finished)) { setTimeout(() => setPhase('won'), 500); return }
+      // End of game. In 2-player, player 2 (index 1) has the "last word": the
+      // game ends the moment they check out — either they beat player 1 to it
+      // (win), or they're responding to player 1's finish (closest to 0 wins,
+      // both 0 = draw). Player 1 checking out never ends it; player 2 always
+      // gets their response. For 3+ players it ends when everyone's checked out.
+      const gameEnds = isCheckout && (players.length === 2 ? playerIdx === 1 : next.every(p => p.finished))
+      if (gameEnds) { setTimeout(() => setPhase('won'), 500); return }
       let idx = playerIdx
       do { idx = (idx + 1) % next.length } while (next[idx].finished)
       setCurrentPlayerIndex(idx)
