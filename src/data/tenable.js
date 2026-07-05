@@ -7,9 +7,14 @@
 // set, never query at runtime). AS_OF records when the rankings were last
 // verified; the validator test enforces the answer-set shape in CI.
 
+import generated from './tenable.generated.json'
+
 export const TENABLE_AS_OF = '2026-06-30'
 
-export const TENABLE_QUESTIONS = [
+// Hand-curated questions cover the shapes the generator can't produce from the
+// 501 fact tables — World Cup / international scorers, awards, transfers,
+// assists, cards, all-competition club totals, title counts, etc.
+const HAND_AUTHORED = [
   {
     id: 'wc-top-scorers',
     type: 'player',
@@ -471,20 +476,33 @@ export const TENABLE_QUESTIONS = [
   },
 ]
 
+// The curated classics lead (nice, recognisable early rotation), followed by
+// the auto-generated bounded lists (club- and nationality-scoped top-10s built
+// from the same Transfermarkt data as Football 501). Regenerate with
+// `npm run build:tenable` whenever the fact tables refresh — no JSON by hand.
+export const TENABLE_QUESTIONS = [...HAND_AUTHORED, ...generated.questions]
+
+// Daily rotation only serves recognisable questions: every curated classic plus
+// the generated lists that cleared the build-time recognisability gate
+// (`daily`). This keeps Daily fair — no "name the exact top 10 obscure players"
+// — while Unlimited still draws from the full catalogue below.
+export const TENABLE_DAILY_QUESTIONS = TENABLE_QUESTIONS.filter(q => q.daily !== false)
+
 export function getTenableQuestionForDay(dayIndex) {
-  const n = TENABLE_QUESTIONS.length
-  return TENABLE_QUESTIONS[((dayIndex % n) + n) % n]
+  const n = TENABLE_DAILY_QUESTIONS.length
+  return TENABLE_DAILY_QUESTIONS[((dayIndex % n) + n) % n]
 }
 
 // Deterministic "question of the day" — changes at local midnight,
-// cycles through the question list (repeats once exhausted).
+// cycles through the daily-eligible list (repeats once exhausted).
 export function getDailyTenableQuestion() {
   const now = new Date()
   const dayIndex = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
   return getTenableQuestionForDay(dayIndex)
 }
 
-// A random question for Unlimited/practice mode (never affects daily stats).
+// A random question for Unlimited/practice mode (never affects daily stats) —
+// draws from the FULL catalogue, including the tougher obscure lists.
 export function getRandomTenableQuestion() {
   return TENABLE_QUESTIONS[Math.floor(Math.random() * TENABLE_QUESTIONS.length)]
 }

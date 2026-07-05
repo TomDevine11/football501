@@ -334,8 +334,8 @@ export default function FootballTenable() {
       <div className="w-full max-w-lg mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4">
           <div className="flex items-start gap-3">
-            {QUESTION_ICON[question.id]
-              ? <CategoryIcon category={QUESTION_ICON[question.id]} size={30} className="shrink-0 mt-0.5" />
+            {question.icon || QUESTION_ICON[question.id]
+              ? <CategoryIcon category={question.icon || QUESTION_ICON[question.id]} size={30} className="shrink-0 mt-0.5" />
               : <span className="text-2xl shrink-0">{question.emoji}</span>}
             <div className="min-w-0 flex-1">
               <div className="text-white font-bold text-sm">{question.title}</div>
