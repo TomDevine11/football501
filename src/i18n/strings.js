@@ -48,7 +48,7 @@ export const strings = {
     careers: {
       wordmark: 'CAREER PATH',
       intro: 'Whose career path is this?',
-      introSub: 'Guess the player who played for every club shown. Each wrong guess reveals another club — you have {max} tries.',
+      introSub: 'Guess the player who played for every club shown. Each wrong guess reveals another club from their career.',
       playedFor: 'Has played for',
       moreClubs: '+{n} more clubs hidden',
       placeholder: "Who is it? Type a player's name...",
@@ -92,6 +92,7 @@ export const strings = {
       giveUp: 'Give up', giveUpTitle: 'Give up?',
       giveUpBody: 'This will reveal the full answer list and end the game.',
       giveUpConfirm: 'Yes, give up',
+      skip: 'Skip question →',
       pyramidComplete: 'PYRAMID COMPLETE!',
       foundAllLife: 'You found all 10 with {n} life to spare.',
       foundAllLives: 'You found all 10 with {n} lives to spare.',
@@ -218,7 +219,7 @@ export const strings = {
     careers: {
       wordmark: 'TRAYECTORIA',
       intro: '¿De quién es esta trayectoria?',
-      introSub: 'Adivina al jugador que jugó en todos los clubes mostrados. Cada fallo revela otro club — tienes {max} intentos.',
+      introSub: 'Adivina al jugador que jugó en todos los clubes mostrados. Cada fallo revela otro club de su carrera.',
       playedFor: 'Ha jugado en',
       moreClubs: '+{n} clubes más ocultos',
       placeholder: '¿Quién es? Escribe el nombre de un jugador...',
@@ -262,6 +263,7 @@ export const strings = {
       giveUp: 'Rendirse', giveUpTitle: '¿Rendirse?',
       giveUpBody: 'Esto revelará la lista completa de respuestas y terminará el juego.',
       giveUpConfirm: 'Sí, rendirse',
+      skip: 'Saltar pregunta →',
       pyramidComplete: '¡PIRÁMIDE COMPLETA!',
       foundAllLife: 'Encontraste las 10 con {n} vida de sobra.',
       foundAllLives: 'Encontraste las 10 con {n} vidas de sobra.',

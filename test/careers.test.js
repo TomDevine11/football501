@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getRandomTarget, matchesTarget, MAX_CLUES, TARGET_COUNT } from '../src/data/careers.js'
+import { getRandomTarget, matchesTarget, MIN_CLUBS, TARGET_COUNT } from '../src/data/careers.js'
 import { isSeniorTeam } from '../src/data/teamFilter.js'
 
 describe('career-path data', () => {
@@ -7,14 +7,13 @@ describe('career-path data', () => {
     expect(TARGET_COUNT).toBeGreaterThan(10)
   })
 
-  it('a random target has a name and up to MAX_CLUES club clues', () => {
-    // Reserve/'B'/youth sides are filtered out, so a player may have fewer than
-    // MAX_CLUES senior clubs — but always at least one, and never more than MAX.
+  it('a random target shows their FULL senior career, at least MIN_CLUBS clubs', () => {
+    // Every target qualifies with >= MIN_CLUBS senior clubs, and the whole
+    // career is exposed (no upper cap) — reserve/'B'/youth sides are filtered.
     for (let i = 0; i < 30; i++) {
       const t = getRandomTarget()
       expect(t.name).toBeTruthy()
-      expect(t.clues.length).toBeGreaterThan(0)
-      expect(t.clues.length).toBeLessThanOrEqual(MAX_CLUES)
+      expect(t.clues.length).toBeGreaterThanOrEqual(MIN_CLUBS)
       for (const c of t.clues) expect(c.club).toBeTruthy()
     }
   })

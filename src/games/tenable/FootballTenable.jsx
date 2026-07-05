@@ -427,6 +427,16 @@ export default function FootballTenable() {
             <span>{lives === 1 ? t('tenable.lifeLeft', { n: lives }) : t('tenable.livesLeft', { n: lives })}</span>
           </div>
 
+          {mode === 'unlimited' && (
+            <button
+              type="button"
+              onClick={() => newGame('unlimited')}
+              className="mt-4 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
+            >
+              {t('tenable.skip')}
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => setShowGiveUpConfirm(true)}

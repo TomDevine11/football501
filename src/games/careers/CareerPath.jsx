@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { getRandomTarget, getDailyTarget, matchesTarget, MAX_CLUES } from '../../data/careers'
+import { getRandomTarget, getDailyTarget, matchesTarget } from '../../data/careers'
 import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
 import Crest from '../../components/Crest'
@@ -28,6 +28,9 @@ export default function CareerPath() {
   const dropdownRef = useRef(null)
 
   const active = phase === 'playing'
+  // The whole career is in play — the number of clues (and tries) is however
+  // many clubs this player had, not a fixed cap.
+  const maxClues = target.clues.length
   // Only Daily mode records stats/streaks.
   useEffect(() => {
     if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('careers', phase === 'won'))
@@ -57,7 +60,7 @@ export default function CareerPath() {
     }
     setGuesses(g => [...g, { text, correct: false }])
     setShake(true); setTimeout(() => setShake(false), 400)
-    if (revealed < MAX_CLUES) setRevealed(r => r + 1)
+    if (revealed < maxClues) setRevealed(r => r + 1)
     else setPhase('lost')
     setTimeout(() => inputRef.current?.focus(), 0)
   }
@@ -81,7 +84,7 @@ export default function CareerPath() {
     if (!active) return
     setInput('')
     setGuesses(g => [...g, { text: 'Skipped', correct: false, skipped: true }])
-    if (revealed < MAX_CLUES) setRevealed(r => r + 1)
+    if (revealed < maxClues) setRevealed(r => r + 1)
     else setPhase('lost')
     setTimeout(() => inputRef.current?.focus(), 0)
   }
@@ -99,8 +102,8 @@ export default function CareerPath() {
     setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1); setDailyStats(null); setShowResult(false)
   }
 
-  const cluesToShow = phase === 'playing' ? revealed : MAX_CLUES
-  const guessesLeft = MAX_CLUES - guesses.length
+  const cluesToShow = phase === 'playing' ? revealed : maxClues
+  const guessesLeft = maxClues - guesses.length
 
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-8">
@@ -115,7 +118,7 @@ export default function CareerPath() {
       <div className="w-full max-w-lg mb-5">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
           <div className="text-white font-bold text-sm">{t('careers.intro')}</div>
-          <div className="text-gray-500 text-xs mt-0.5">{t('careers.introSub', { max: MAX_CLUES })}</div>
+          <div className="text-gray-500 text-xs mt-0.5">{t('careers.introSub', { max: maxClues })}</div>
         </div>
       </div>
 
@@ -133,8 +136,8 @@ export default function CareerPath() {
               </div>
             </div>
           ))}
-          {phase === 'playing' && revealed < MAX_CLUES && (
-            <div className="text-center text-gray-700 text-xs py-1">{t('careers.moreClubs', { n: MAX_CLUES - revealed })}</div>
+          {phase === 'playing' && revealed < maxClues && (
+            <div className="text-center text-gray-700 text-xs py-1">{t('careers.moreClubs', { n: maxClues - revealed })}</div>
           )}
         </div>
       </div>
@@ -205,7 +208,7 @@ export default function CareerPath() {
           {mode === 'daily' && <DailyStats game="careers" stats={dailyStats} />}
           <ShareCard text={[
             phase === 'won'
-              ? `🧭 Career Path — I guessed the player in ${guesses.length}/${MAX_CLUES} clubs!`
+              ? `🧭 Career Path — I guessed the player in ${guesses.length}/${maxClues} clubs!`
               : `🧭 Career Path — it stumped me. Can you guess the player from their career?`,
             SITE_URL,
           ].join('\n\n')} />
