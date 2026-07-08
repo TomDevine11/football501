@@ -124,11 +124,18 @@ const DAILY_MIN_RECO_CK = 25
 // intersecting nationality + position is far harder than recalling a club's
 // squad. Keep them in Random; drop them from Daily.
 const isNatPosCrossCut = (f) => f.nationality != null && f.position != null && f.club == null
+// A club question only counts if the club has featured in the competition
+// recently — a modern fan doesn't follow clubs long since relegated (e.g.
+// Deportivo, gone from La Liga since 2017), even though their all-time squads
+// are famous. (`clubLast` is the club's most recent season in the catalog.)
+const CLUB_RECENCY = 2020
+const clubRecent = (c) => c.filter.club == null || (c.clubLast ?? 0) >= CLUB_RECENCY
 const DAILY_POOL = CATALOG.filter(c =>
   c.answers >= DAILY_MIN_ANSWERS &&
   (c.reco ?? 0) >= DAILY_MIN_RECO &&
   (c.recoCk ?? 0) >= DAILY_MIN_RECO_CK &&
-  !isNatPosCrossCut(c.filter))
+  !isNatPosCrossCut(c.filter) &&
+  clubRecent(c))
 
 export function getDailyEntry() {
   const now = new Date()

@@ -29,7 +29,10 @@ const OUT = path.join(ROOT, 'src', 'data', 'football501', 'catalog.generated.jso
 // DAILY pool so it stops serving obscure clubs/slices (e.g. Real Murcia) while
 // leaving the full catalogue intact for Random/Unlimited.
 const CANON = path.join(ROOT, 'src', 'data', 'canonical', 'wikidata.generated.json')
-const FAME_BAR = 30 // fame floor for "recognisable" (canonical's own floor is ~20)
+const FAME_BAR = 30   // fame floor for "recognisable" (canonical's own floor is ~20)
+const RECENCY = 2012  // and active since ~this season — all-time fame skews to legends a
+                      // modern fan won't know (e.g. Deportivo's Super Depor era). Recency
+                      // also defuses name-collision fame (an obscure old namesake drops out).
 const normName = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
 const FAME = (() => {
   const m = new Map()
@@ -39,11 +42,12 @@ const FAME = (() => {
   } catch { /* no canonical facts → reco stays 0, daily falls back gracefully */ }
   return m
 })()
-const recoOf = (roster) => Object.values(roster).filter(p => (FAME.get(normName(p.name)) || 0) >= FAME_BAR).length
+const isReco = (id, p, lastById) => (FAME.get(normName(p.name)) || 0) >= FAME_BAR && (lastById[id] || 0) >= RECENCY
+const recoOf = (roster, lastById) => Object.entries(roster).filter(([id, p]) => isReco(id, p, lastById)).length
 // Throwable stat values of the recognisable players only — used to check the
 // question can actually be CHECKED OUT with players a fan knows (not just via
 // obscure low-value fringe players needed for the last dart).
-const recoValues = (roster) => Object.values(roster).filter(p => (FAME.get(normName(p.name)) || 0) >= FAME_BAR && p.value >= 1 && p.value <= 180).map(p => p.value)
+const recoValues = (roster, lastById) => Object.entries(roster).filter(([id, p]) => isReco(id, p, lastById) && p.value >= 1 && p.value <= 180).map(([, p]) => p.value)
 
 const MIN_ANSWERS = 8
 const MIN_NAT_PLAYERS = 15   // ignore nationalities too sparse to ever qualify
@@ -67,6 +71,7 @@ function buildCompetition(comp, catalog) {
   const fact = JSON.parse(readFileSync(FACT(comp.id), 'utf8'))
   const players = fact.players
   const clubs = fact.clubs
+  const lastById = {}; for (const p of players) lastById[p.id] = p.last || 0 // player id → last season played
 
   // Player counts per club/nationality (to drop sparse ones).
   const natDisplay = {}, natCount = {}, clubCount = {}
@@ -98,7 +103,7 @@ function buildCompetition(comp, catalog) {
       catalog.push({
         id: specId(comp.id, spec), comp: comp.id, stat, filter,
         title: titleFor(spec, { compName: comp.name, clubName: clubs[filter.club]?.name, natDisplay: natDisplay[filter.nationality] }),
-        answers: Object.keys(roster).length, maxPlayers, reco: recoOf(roster), recoCk: checkoutCombos(recoValues(roster)),
+        answers: Object.keys(roster).length, maxPlayers, reco: recoOf(roster, lastById), recoCk: checkoutCombos(recoValues(roster, lastById)), clubLast: clubs[filter.club]?.last || 0,
       })
       added++
     }

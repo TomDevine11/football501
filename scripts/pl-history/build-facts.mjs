@@ -66,6 +66,7 @@ function build() {
   const players = new Map() // id → { id, name, nat, natKey, comps }
   const clubIds = new Set()
   const clubSlug = new Map() // clubId → slug (for name fallback)
+  const clubLast = new Map() // clubId → most recent season in this competition
   const posCounts = new Map() // id → { GK: n, DEF: n, ... } from scrape-captured position
   let seasons = new Set()
 
@@ -73,6 +74,7 @@ function build() {
     const { season, clubId, slug, players: rows } = JSON.parse(readFileSync(path.join(DIR.cache, f), 'utf8'))
     seasons.add(season)
     if (slug && !clubSlug.has(clubId)) clubSlug.set(clubId, slug)
+    clubLast.set(clubId, Math.max(clubLast.get(clubId) || 0, Number(season) || 0))
     for (const r of rows) {
       if (!(r.apps > 0)) continue // only real appearances count toward the eligible set
       let p = players.get(r.id)
@@ -80,6 +82,7 @@ function build() {
       if (r.name && r.name.length > (p.name || '').length) p.name = r.name // prefer fuller name
       if (!p.natRaw && r.nat) p.natRaw = r.nat
       if (r.pos) { const e = posCounts.get(r.id) || {}; e[r.pos] = (e[r.pos] || 0) + 1; posCounts.set(r.id, e) }
+      p.last = Math.max(p.last || 0, Number(season) || 0) // most recent season played (for recency weighting)
       const comp = p.comps[COMPETITION.id]
       comp.apps += r.apps; comp.goals += r.goals
       const club = (comp.clubs[clubId] ||= { apps: 0, goals: 0 })
@@ -97,13 +100,13 @@ function build() {
 
   const out = [...players.values()].map(p => {
     const c = normalizeCountry(p.natRaw || '')
-    return { id: p.id, name: p.name, nat: c.display, natKey: c.key, pos: primaryPos(p.id), comps: p.comps }
+    return { id: p.id, name: p.name, nat: c.display, natKey: c.key, pos: primaryPos(p.id), last: p.last, comps: p.comps }
   }).sort((a, b) => String(a.id).localeCompare(String(b.id), undefined, { numeric: true }))
 
   const clubsIndex = {}
   for (const id of [...clubIds].sort()) {
     const name = tmClubNames[id] || clubNames[id] || slugToName(clubSlug.get(id)) || `#${id}`
-    clubsIndex[id] = { name, norm: normalize(name), competitionId: COMPETITION.id }
+    clubsIndex[id] = { name, norm: normalize(name), competitionId: COMPETITION.id, last: clubLast.get(id) || 0 }
   }
 
   const sorted = [...seasons].sort((a, b) => a - b)
