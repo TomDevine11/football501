@@ -108,8 +108,13 @@ async function makeChallenge(spec) {
 export const makeCustomChallenge = (spec) => makeChallenge(spec)
 
 // ── Daily / random selection from the catalog ──────────────────────────────
+// Daily is gated on RECOGNISABILITY, not just answer count: a question only
+// qualifies if it has enough eligible players a moderate-to-avid fan can name
+// (catalog `reco`, from the fame data). This keeps the daily achievable — no
+// "name a Real Murcia player" walls — while the full catalog stays for Random.
 const DAILY_MIN_ANSWERS = 100
-const DAILY_POOL = CATALOG.filter(c => c.answers >= DAILY_MIN_ANSWERS)
+const DAILY_MIN_RECO = 20
+const DAILY_POOL = CATALOG.filter(c => c.answers >= DAILY_MIN_ANSWERS && (c.reco ?? 0) >= DAILY_MIN_RECO)
 
 export function getDailyEntry() {
   const now = new Date()

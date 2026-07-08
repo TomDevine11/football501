@@ -53,15 +53,24 @@ const lastName = (s) => norm(s).split(' ').pop()
 // (used for autocomplete) + every hand-authored Tenable answer (all A-listers).
 // Appearance lists are intrinsically harder than goal lists (journeymen top the
 // apps charts), so they need a higher bar.
-const DAILY_FAME = { goals: 3, apps: 5 }
+// How many of the top-10 must be recognisable for DAILY. Tightened now that the
+// "famous" set is broadened with the canonical fame data (a much wider, graded
+// popularity signal — the same one Football 501's daily uses). Apps lists keep a
+// higher bar than goal lists (journeymen top the apps charts).
+const DAILY_FAME = { goals: 6, apps: 7 }
+const FAME_BAR = 30
 function buildFamousSet() {
   const set = new Set()
   const add = (name) => { set.add(norm(name)); set.add(lastName(name)) }
-  for (const p of FAMOUS_PLAYERS) add(p.name)
+  for (const p of FAMOUS_PLAYERS) add(p.name)                       // curated autocomplete list
   try {
     const src = readFileSync(path.join(DATA_DIR, '..', 'tenable.js'), 'utf8')
-    for (const m of src.matchAll(/text: *'([^']+)'/g)) add(m[1]) // hand-authored answer names
-  } catch { /* famous set falls back to the curated player list alone */ }
+    for (const m of src.matchAll(/text: *'([^']+)'/g)) add(m[1])    // hand-authored answer names
+  } catch { /* fall back to the curated list alone */ }
+  try {
+    const wd = JSON.parse(readFileSync(path.join(DATA_DIR, '..', 'canonical', 'wikidata.generated.json'), 'utf8'))
+    for (const g of ['clubs', 'nationalities', 'trophies']) for (const arr of Object.values(wd[g])) for (const p of arr) if ((p.fame || 0) >= FAME_BAR) add(p.name)
+  } catch { /* canonical facts optional */ }
   return set
 }
 

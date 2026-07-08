@@ -23,6 +23,24 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const FACT = (comp) => path.join(ROOT, 'src', 'data', 'football501', `history.${comp}.generated.json`)
 const OUT = path.join(ROOT, 'src', 'data', 'football501', 'catalog.generated.json')
 
+// ── Recognisability ("reco") ────────────────────────────────────────────────
+// How many of a question's eligible players are names a moderate-to-avid fan
+// would actually know — measured against the canonical fame data. Drives the
+// DAILY pool so it stops serving obscure clubs/slices (e.g. Real Murcia) while
+// leaving the full catalogue intact for Random/Unlimited.
+const CANON = path.join(ROOT, 'src', 'data', 'canonical', 'wikidata.generated.json')
+const FAME_BAR = 30 // fame floor for "recognisable" (canonical's own floor is ~20)
+const normName = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+const FAME = (() => {
+  const m = new Map()
+  try {
+    const wd = JSON.parse(readFileSync(CANON, 'utf8'))
+    for (const g of ['clubs', 'nationalities', 'trophies']) for (const arr of Object.values(wd[g])) for (const p of arr) { const k = normName(p.name); m.set(k, Math.max(m.get(k) || 0, p.fame || 0)) }
+  } catch { /* no canonical facts → reco stays 0, daily falls back gracefully */ }
+  return m
+})()
+const recoOf = (roster) => Object.values(roster).filter(p => (FAME.get(normName(p.name)) || 0) >= FAME_BAR).length
+
 const MIN_ANSWERS = 8
 const MIN_NAT_PLAYERS = 15   // ignore nationalities too sparse to ever qualify
 const MIN_CLUB_PLAYERS = 15  // ignore tiny (qualifier) clubs — keeps CL sane
@@ -76,7 +94,7 @@ function buildCompetition(comp, catalog) {
       catalog.push({
         id: specId(comp.id, spec), comp: comp.id, stat, filter,
         title: titleFor(spec, { compName: comp.name, clubName: clubs[filter.club]?.name, natDisplay: natDisplay[filter.nationality] }),
-        answers: Object.keys(roster).length, maxPlayers,
+        answers: Object.keys(roster).length, maxPlayers, reco: recoOf(roster),
       })
       added++
     }
