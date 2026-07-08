@@ -40,6 +40,10 @@ const FAME = (() => {
   return m
 })()
 const recoOf = (roster) => Object.values(roster).filter(p => (FAME.get(normName(p.name)) || 0) >= FAME_BAR).length
+// Throwable stat values of the recognisable players only — used to check the
+// question can actually be CHECKED OUT with players a fan knows (not just via
+// obscure low-value fringe players needed for the last dart).
+const recoValues = (roster) => Object.values(roster).filter(p => (FAME.get(normName(p.name)) || 0) >= FAME_BAR && p.value >= 1 && p.value <= 180).map(p => p.value)
 
 const MIN_ANSWERS = 8
 const MIN_NAT_PLAYERS = 15   // ignore nationalities too sparse to ever qualify
@@ -94,7 +98,7 @@ function buildCompetition(comp, catalog) {
       catalog.push({
         id: specId(comp.id, spec), comp: comp.id, stat, filter,
         title: titleFor(spec, { compName: comp.name, clubName: clubs[filter.club]?.name, natDisplay: natDisplay[filter.nationality] }),
-        answers: Object.keys(roster).length, maxPlayers, reco: recoOf(roster),
+        answers: Object.keys(roster).length, maxPlayers, reco: recoOf(roster), recoCk: checkoutCombos(recoValues(roster)),
       })
       added++
     }
