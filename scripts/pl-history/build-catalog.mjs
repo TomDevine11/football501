@@ -12,7 +12,7 @@
 //   npm run build:pl-catalog   (after the fact tables are built)
 // ─────────────────────────────────────────────────────────────────────────
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { resolveRoster, titleFor } from '../../src/data/football501/spec.js'
@@ -30,6 +30,7 @@ const OUT = path.join(ROOT, 'src', 'data', 'football501', 'catalog.generated.jso
 // leaving the full catalogue intact for Random/Unlimited.
 const CANON = path.join(ROOT, 'src', 'data', 'canonical', 'wikidata.generated.json')
 const FAME_BAR = 30   // fame floor for "recognisable" (canonical's own floor is ~20)
+const PROM_SINCE = 2018 // club "prominence" is measured over squads since this season
 const RECENCY = 2012  // and active since ~this season — all-time fame skews to legends a
                       // modern fan won't know (e.g. Deportivo's Super Depor era). Recency
                       // also defuses name-collision fame (an obscure old namesake drops out).
@@ -73,6 +74,24 @@ function buildCompetition(comp, catalog) {
   const clubs = fact.clubs
   const lastById = {}; for (const p of players) lastById[p.id] = p.last || 0 // player id → last season played
 
+  // Club "prominence": distinct recognisable players in the club's RECENT squads
+  // (seasons >= PROM_SINCE), read from the per-season scrape cache. This is the
+  // real "would a fan know this club's players" signal — it separates prominent
+  // clubs (stars now) from small feeder clubs whose famous names only passed
+  // through (Empoli) and from clubs long gone (Deportivo).
+  const clubProm = {}
+  const cacheDir = path.join(ROOT, 'data', 'pl-history', 'cache', comp.id)
+  try {
+    for (const fn of readdirSync(cacheDir)) {
+      const season = +fn.split('-')[0]; if (season < PROM_SINCE) continue
+      const clubId = fn.split('-')[1]?.replace('.json', ''); if (!clubId) continue
+      for (const r of JSON.parse(readFileSync(path.join(cacheDir, fn), 'utf8')).players) {
+        if ((FAME.get(normName(r.name)) || 0) >= FAME_BAR) (clubProm[clubId] ||= new Set()).add(normName(r.name))
+      }
+    }
+  } catch { /* cache absent → clubProm stays 0; club questions won't qualify for daily */ }
+  const promOf = (clubId) => clubProm[clubId]?.size || 0
+
   // Player counts per club/nationality (to drop sparse ones).
   const natDisplay = {}, natCount = {}, clubCount = {}
   for (const p of players) {
@@ -103,7 +122,7 @@ function buildCompetition(comp, catalog) {
       catalog.push({
         id: specId(comp.id, spec), comp: comp.id, stat, filter,
         title: titleFor(spec, { compName: comp.name, clubName: clubs[filter.club]?.name, natDisplay: natDisplay[filter.nationality] }),
-        answers: Object.keys(roster).length, maxPlayers, reco: recoOf(roster, lastById), recoCk: checkoutCombos(recoValues(roster, lastById)), clubLast: clubs[filter.club]?.last || 0,
+        answers: Object.keys(roster).length, maxPlayers, reco: recoOf(roster, lastById), recoCk: checkoutCombos(recoValues(roster, lastById)), clubProm: filter.club ? promOf(filter.club) : 0,
       })
       added++
     }
