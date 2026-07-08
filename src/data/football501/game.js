@@ -114,7 +114,12 @@ export const makeCustomChallenge = (spec) => makeChallenge(spec)
 // "name a Real Murcia player" walls — while the full catalog stays for Random.
 const DAILY_MIN_ANSWERS = 100
 const DAILY_MIN_RECO = 20
-const DAILY_POOL = CATALOG.filter(c => c.answers >= DAILY_MIN_ANSWERS && (c.reco ?? 0) >= DAILY_MIN_RECO)
+// Nationality×position questions with no club anchor ("Argentine forwards") are
+// a recall trap: even with recognisable players, producing them from memory by
+// intersecting nationality + position is far harder than recalling a club's
+// squad. Keep them in Random; drop them from Daily.
+const isNatPosCrossCut = (f) => f.nationality != null && f.position != null && f.club == null
+const DAILY_POOL = CATALOG.filter(c => c.answers >= DAILY_MIN_ANSWERS && (c.reco ?? 0) >= DAILY_MIN_RECO && !isNatPosCrossCut(c.filter))
 
 export function getDailyEntry() {
   const now = new Date()
