@@ -250,6 +250,7 @@ export const strings = {
       perfectDay: 'PERFECT DAY',
       perfectDayHint: 'light all nine for 2× points',
       shareDay: 'Share my day',
+      copied: 'Copied!',
     },
     games: {
       tenable: { title: 'Football Tenable', tagline: 'Name the top 10, before you run out of lives', description: "A new football trivia question every day. Name as many of the top 10 answers as you can — get 3 wrong and it's game over." },
@@ -511,6 +512,7 @@ export const strings = {
       perfectDay: 'DÍA PERFECTO',
       perfectDayHint: 'completa los nueve para 2× puntos',
       shareDay: 'Compartir mi día',
+      copied: '¡Copiado!',
     },
     games: {
       tenable: { title: 'Tenable de Fútbol', tagline: 'Nombra el top 10 antes de quedarte sin vidas', description: 'Una nueva pregunta de fútbol cada día. Nombra tantas de las 10 respuestas como puedas: con 3 fallos se acabó.' },

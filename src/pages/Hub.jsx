@@ -1,33 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '../seo/Seo'
 import BrandMark from '../components/BrandMark'
 import GameMotif from '../components/GameMotif'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import AdSlot from '../ads/AdSlot'
-import { routeByPath } from '../seo/seoConfig'
+import { routeByPath, SITE_URL } from '../seo/seoConfig'
 import { useI18n } from '../i18n'
-import { playedToday, getStats, recordVisit, todayIndex } from '../data/dailyStats'
+import { playedToday, getStats, recordVisit, todayIndex, formGuide, weeklyPoints } from '../data/dailyStats'
 
 // Matchday 1 = site launch day. Every visitor worldwide shares today's number.
 const MATCHDAY_EPOCH = 20455
 
-// The lineup. `stats` keys dailyStats (what each game passes to recordResult;
-// 501 doesn't record yet, so its streak/FT stay off until its sweep).
-// `form` is a visual placeholder until the retention layer records last-5
-// results — as is the weekly points value below.
+// The lineup. `stats` keys dailyStats (what each game passes to recordResult).
 const GAMES = [
-  { to: '/tenable', stats: 'tenable', color: '#eab308', form: 'WWLWW' },
-  { to: '/wordle', stats: 'wordle', color: '#3b82f6', form: 'WWWWW' },
-  { to: '/tictactoe', stats: 'tictactoe', color: '#6366f1', form: 'LWWLL' },
-  { to: '/teammates', stats: 'teammates', color: '#ec4899', form: 'WLWW-' },
-  { to: '/career-path', stats: 'careers', color: '#06b6d4', form: 'WWWWL' },
-  { to: '/world-cup', stats: 'wcsquads', color: '#f59e0b', form: '-WL--' },
-  { to: '/connections', stats: 'connections', color: '#14b8a6', form: 'LLWW-' },
-  { to: '/higher-or-lower', stats: 'higherlower', color: '#f97316', form: 'WWW-L' },
-  { to: '/501', stats: '501', color: '#ef4444', form: '--W--' },
+  { to: '/tenable', stats: 'tenable', color: '#eab308' },
+  { to: '/wordle', stats: 'wordle', color: '#3b82f6' },
+  { to: '/tictactoe', stats: 'tictactoe', color: '#6366f1' },
+  { to: '/teammates', stats: 'teammates', color: '#ec4899' },
+  { to: '/career-path', stats: 'careers', color: '#06b6d4' },
+  { to: '/world-cup', stats: 'wcsquads', color: '#f59e0b' },
+  { to: '/connections', stats: 'connections', color: '#14b8a6' },
+  { to: '/higher-or-lower', stats: 'higherlower', color: '#f97316' },
+  { to: '/501', stats: '501', color: '#ef4444' },
 ]
-const DEMO_WEEK_PTS = 310
 
 const FORM_DOT = { W: 'bg-green-500', L: 'bg-red-500/75', '-': 'bg-[#3a3846]' }
 const FormGuide = ({ form, className = '' }) => (
@@ -56,16 +52,40 @@ export default function Hub() {
   const { locale, t, lp } = useI18n()
   const home = routeByPath('/', locale)
   const [visit] = useState(recordVisit)
-  const [countdown] = useState(untilMidnight)
+  const [countdown, setCountdown] = useState(untilMidnight)
+  const [copied, setCopied] = useState(false)
   const matchday = todayIndex() - MATCHDAY_EPOCH
+
+  // Keep the next-dailies countdown live (minute precision).
+  useEffect(() => {
+    const id = setInterval(() => setCountdown(untilMidnight()), 30_000)
+    return () => clearInterval(id)
+  }, [])
 
   const lineup = GAMES.map(g => ({
     ...g,
     id: g.to.slice(1),
     played: playedToday(g.stats),
     streak: getStats(g.stats).currentStreak,
+    form: formGuide(g.stats),
   }))
   const playedCount = lineup.filter(g => g.played).length
+  const points = weeklyPoints()
+
+  const shareDay = async () => {
+    const squares = lineup.map(g => (g.played ? '🟪' : '⬜')).join('')
+    const text = [
+      `TRIVIVERSE · ${t('hub.matchday')} ${matchday}`,
+      `${squares}  ${playedCount}/9${playedCount === 9 ? ` ★ ${t('hub.perfectDay')}` : ''}`,
+      `🔥 ${visit.streak} · ${points} pts`,
+      SITE_URL.replace('https://', ''),
+    ].join('\n')
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch { /* clipboard unavailable */ }
+  }
 
   return (
     <div className="bg-[linear-gradient(160deg,#151024_0%,#0b0a14_60%)] text-[#ecebf2]">
@@ -86,7 +106,7 @@ export default function Hub() {
             <div className="hidden md:flex gap-2">
               <StatChip value={visit.streak} label={t('hub.dayStreak')} />
               <StatChip value={`${playedCount}/9`} label={t('hub.played')} />
-              <StatChip value={DEMO_WEEK_PTS} label={t('hub.ptsWeek')} />
+              <StatChip value={points} label={t('hub.ptsWeek')} />
               <StatChip value={countdown} label={t('hub.nextDailies')} accent />
             </div>
             <span className="md:hidden text-[0.6rem] font-bold tracking-[0.1em] text-[#a78bfa]">
@@ -108,7 +128,7 @@ export default function Hub() {
             <div className="md:hidden flex gap-1.5 mt-2">
               <StatChip value={visit.streak} label={t('hub.streak')} />
               <StatChip value={`${playedCount}/9`} label={t('hub.played')} />
-              <StatChip value={DEMO_WEEK_PTS} label={t('hub.pts')} />
+              <StatChip value={points} label={t('hub.pts')} />
             </div>
           </div>
           <span className="hidden sm:block text-[0.62rem] tracking-[0.1em] text-[#57536e] pb-1">
@@ -175,9 +195,10 @@ export default function Hub() {
           </div>
           <button
             type="button"
+            onClick={shareDay}
             className="bg-[#7c3aed] hover:bg-[#8b5cf6] text-white font-bold text-[0.68rem] sm:text-[0.8rem] tracking-[0.06em] rounded-lg px-3.5 py-2 sm:px-4 sm:py-2.5 whitespace-nowrap transition-colors"
           >
-            {t('hub.shareDay')}
+            {copied ? t('hub.copied') : t('hub.shareDay')}
           </button>
         </div>
       </div>

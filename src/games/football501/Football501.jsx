@@ -7,6 +7,7 @@ import { ShareCard } from '../../components/ShareCard'
 import MoreGames from '../../components/MoreGames'
 import { useI18n } from '../../i18n'
 import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, loadCompetition, COMPETITIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
+import { recordResult } from '../../data/dailyStats'
 
 const MAX_SCORE    = 501
 const CHECKOUT_MIN = -10
@@ -513,6 +514,12 @@ export default function Football501() {
     const used = new Set(history.filter(g => g.valid).map(g => g.resolvedName))
     return challenge.insights(score, used)
   }, [challenge, score, history, phase])
+
+  // Record the daily result (solo daily only; recordResult is idempotent per day).
+  useEffect(() => {
+    if (phase !== 'won' || !isDaily || players.length !== 1) return
+    recordResult('501', !gaveUp)
+  }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Player search (TheSportsDB + local pool) ──────────────────
   useEffect(() => {
