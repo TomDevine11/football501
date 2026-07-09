@@ -32,7 +32,7 @@ Each step keeps the same ~120° hue as `#080c08`, desaturating slightly as it li
 |---|---|---|---|
 | `text-primary` | `#f5f7f5` | ~17:1 | `white` |
 | `text-secondary` | `#a8b3a8` | ~8:1 | `gray-400` |
-| `text-muted` | `#6b756b` | ~4.6:1 | `gray-500`/`gray-600` |
+| `text-muted` | `#788378` | 5.0:1 (4.7:1 on `surface`) | `gray-500`/`gray-600` |
 | `text-faint` | `#586158` | ~3.5:1, **large/decorative only** | `gray-700` text |
 
 **Why:** four levels is the minimum that expresses the hierarchy in ui-principles.md and the maximum a developer can apply without a chart. `text-muted` is tuned to *pass* AA at 4.5:1 — today's `gray-500`-on-`gray-900` hovers around the line and `gray-700` fails outright; the ladder makes the compliant choice the default. `text-faint` is explicitly restricted so the audit's contrast failures can't silently return.

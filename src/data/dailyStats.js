@@ -28,6 +28,30 @@ export function getStats(game) {
   return { ...blank(), ...(load()[game] || {}) }
 }
 
+// Whether a game's daily was played today (drives the Hub's "FT" marks).
+export function playedToday(game) {
+  const s = load()[game]
+  return !!s && s.lastPlayed === todayIndex()
+}
+
+// Hub visit streak: consecutive days the site was opened, recorded once per day.
+// `returning` is false for the whole first day so a brand-new visitor is never
+// greeted with "welcome back".
+const VISIT_KEY = 'ftg-visits-v1'
+
+export function recordVisit() {
+  const day = todayIndex()
+  let v = null
+  try { v = JSON.parse(localStorage.getItem(VISIT_KEY)) } catch { /* storage unavailable */ }
+  if (!v || typeof v.lastDay !== 'number') v = { firstDay: day, lastDay: null, streak: 0 }
+  if (v.lastDay !== day) {
+    v.streak = v.lastDay === day - 1 ? v.streak + 1 : 1
+    v.lastDay = day
+    try { localStorage.setItem(VISIT_KEY, JSON.stringify(v)) } catch { /* storage unavailable */ }
+  }
+  return { streak: v.streak, returning: v.firstDay < day }
+}
+
 // Record today's result once (idempotent per day). Returns the updated stats.
 export function recordResult(game, won, score = null) {
   const all = load()

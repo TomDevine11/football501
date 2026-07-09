@@ -25,7 +25,7 @@ export default {
         // ── Text ladder (muted is tuned to pass AA on pitch; faint is large/decorative only)
         primary: '#f5f7f5',
         secondary: '#a8b3a8',
-        muted: '#6b756b',
+        muted: '#788378', // 4.68:1 on surface, 4.99:1 on pitch — the AA floor for body text
         faint: '#586158',
 
         // ── Brand & semantics (fixed across all games)

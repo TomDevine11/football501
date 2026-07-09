@@ -135,6 +135,103 @@ body {
 .result-modal-in { animation: result-modal-in var(--duration-fast) var(--ease-out); }
 .result-card { animation: result-card-in var(--duration-base) var(--ease-spring); }
 
+/* ── Hub: "stadium at night" scene (design-system.md §8) ──────────────────
+   Depth model: far layer = floodlight haze + vignette (::before), grain
+   (::after), near layer = the wall of game panels. Light means "look here":
+   at rest each card carries its accent as a soft interior wash; attention
+   (hover/focus) brightens that card and dims the rest of the wall. */
+
+.hub-scene {
+  position: relative;
+  isolation: isolate; /* keeps the z-index:-1 layers inside the scene */
+}
+.hub-scene::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(90rem 44rem at 50% -20rem, rgb(74 222 128 / 0.065), transparent 62%),
+    radial-gradient(52rem 26rem at 12% -8rem, rgb(74 222 128 / 0.035), transparent 60%),
+    radial-gradient(52rem 26rem at 88% -8rem, rgb(74 222 128 / 0.035), transparent 60%),
+    radial-gradient(140% 100% at 50% 28%, transparent 55%, rgb(5 7 5 / 0.55) 100%);
+}
+.hub-scene::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.hub-card {
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out),
+    filter var(--duration-fast) var(--ease-out);
+}
+/* Interior accent wash — the card's light source, at rest. Brightens on attention. */
+.hub-card-wash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(120% 95% at 18% -4%, var(--accent-tint), transparent 58%);
+  opacity: 0.55;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+@media (hover: hover) {
+  .hub-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow:
+      0 0 24px -4px color-mix(in srgb, var(--accent) 30%, transparent),
+      0 12px 32px -8px rgb(0 0 0 / 0.6);
+  }
+  .hub-card:hover .hub-card-wash { opacity: 1; }
+}
+.hub-card:active { transform: translateY(0) scale(0.985); }
+.hub-card:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 3px;
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.hub-card:focus-visible .hub-card-wash { opacity: 1; }
+
+/* Spotlight: while one panel holds attention, the rest of the wall steps back. */
+.hub-wall:has(.hub-card:hover) .hub-card:not(:hover),
+.hub-wall:has(.hub-card:focus-visible) .hub-card:not(:focus-visible) {
+  opacity: 0.55;
+  filter: saturate(0.75);
+}
+
+/* Entrance — "the lights come on", once per session. Cards set --i for the stagger. */
+@keyframes hub-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hub-enter .hub-head { animation: hub-rise var(--duration-base) var(--ease-out) backwards; }
+.hub-enter .hub-card {
+  animation: hub-rise var(--duration-base) var(--ease-spring) backwards;
+  animation-delay: calc(80ms + var(--i, 0) * 55ms);
+}
+
+/* Reduced motion (motion-system.md §6): collapse all motion; staged sequences
+   stay informationally intact because nothing gates information on animation. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: theme('colors.pitch-deep'); }
 ::-webkit-scrollbar-thumb { background: theme('colors.surface.high'); border-radius: 3px; }
