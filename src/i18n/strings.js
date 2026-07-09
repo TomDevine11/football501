@@ -225,7 +225,7 @@ export const strings = {
     home: {
       welcome: 'Welcome to',
       subtitle: 'Free daily football trivia games — pick a gamemode and play. No sign-up, no download.',
-      aboutHeading: 'About Football Trivia Games',
+      aboutHeading: 'About Triviverse',
       faqHeading: 'Frequently asked questions',
       welcomeBack: 'Welcome back',
       dayN: 'Day {n}',
@@ -470,7 +470,7 @@ export const strings = {
     home: {
       welcome: 'Bienvenido a',
       subtitle: 'Juegos diarios de trivia de fútbol, gratis — elige un modo y juega. Sin registro, sin descargas.',
-      aboutHeading: 'Sobre Football Trivia Games',
+      aboutHeading: 'Sobre Triviverse',
       faqHeading: 'Preguntas frecuentes',
       welcomeBack: 'Hola de nuevo',
       dayN: 'Día {n}',

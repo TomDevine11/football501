@@ -16,7 +16,7 @@ const WorldCupSquads = lazy(() => import('./games/wcsquads/WorldCupSquads'))
 const HigherLower = lazy(() => import('./games/higherlower/HigherLower'))
 const FootballConnections = lazy(() => import('./games/connections/FootballConnections'))
 
-const Loading = () => <div className="min-h-screen bg-pitch" aria-busy="true" />
+const Loading = () => <div className="min-h-screen bg-canvas" aria-busy="true" />
 
 // Each game route is mounted twice: at the root (English) and under /es
 // (Spanish). GamePage always gets the locale-free path; Seo/SeoContent derive

@@ -29,7 +29,7 @@ const FullTimeMark = ({ label }) => (
     className="inline-flex items-center gap-1 rounded-full border border-border-strong bg-surface-high px-2 py-1"
     title={label}
   >
-    <svg viewBox="0 0 12 12" className="w-2.5 h-2.5 text-brand-bright" aria-hidden="true">
+    <svg viewBox="0 0 12 12" className="w-2.5 h-2.5 text-success-bright" aria-hidden="true">
       <path d="M2 6.2 4.8 9 10 3.4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
     <span className="text-overline-sm uppercase font-semibold text-secondary" aria-hidden="true">FT</span>
@@ -95,7 +95,7 @@ export default function Hub() {
                 to={lp(game.to)}
                 aria-label={played ? `${t('home.playGame', { title })} — ${t('home.playedToday')}` : t('home.playGame', { title })}
                 style={{ ...accentVars(game.accent), '--i': i }}
-                className="hub-card group relative bg-surface border border-border rounded-xl p-5 pb-16 text-left"
+                className="hub-card group relative bg-surface-glass border border-border rounded-xl shadow-panel p-5 pb-16 text-left"
               >
                 <span className="hub-card-wash" aria-hidden="true" />
                 <div className="relative flex items-start justify-between gap-3">
@@ -105,7 +105,7 @@ export default function Hub() {
                   {played && <FullTimeMark label={t('home.playedToday')} />}
                 </div>
                 <div className="relative mt-4 text-title-lg font-bold text-primary leading-tight">{title}</div>
-                <div className="relative mt-1 text-body font-medium text-accent-bright">{tagline}</div>
+                <div className="relative mt-1 text-body font-medium text-secondary">{tagline}</div>
                 <p className="relative mt-2.5 text-caption text-muted leading-relaxed">{description}</p>
                 <span
                   className="absolute bottom-5 right-5 w-8 h-8 rounded-full border border-border-strong flex items-center justify-center text-muted transition-colors duration-fast group-hover:border-accent group-hover:text-accent-bright"

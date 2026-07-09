@@ -8,32 +8,33 @@ Naming convention: semantic first (`surface`, `accent-wordle`), raw values never
 
 ## 1. Colour
 
-### 1.1 The pitch ladder (neutrals)
+### 1.1 The canvas ladder (neutrals) — Triviverse v2
 
-Green-tinted neutrals replacing Tailwind `gray-*` everywhere:
+Violet-cast graphite neutrals replacing Tailwind `gray-*` everywhere (v2 replaced the green "pitch" ladder — the stadium tint read arcade rather than premium):
 
 | Token | Value | Replaces today |
 |---|---|---|
-| `pitch` | `#080c08` | body bg (unchanged) |
-| `pitch-deep` | `#050705` | overlay backdrops, scrollbar track |
-| `surface` | `#101510` | `gray-900` (cards, tiles, inputs) |
-| `surface-raised` | `#1a211a` | `gray-800` (dropdowns, hovers, modal fills) |
-| `surface-high` | `#242c24` | `gray-700` fills (active toggle segment, keys) |
-| `border` | `#1e241e` | `gray-800` borders |
-| `border-strong` | `#2e372e` | `gray-700` borders (inputs, interactive) |
+| `canvas` | `#0a0a10` | body bg |
+| `canvas-deep` | `#060609` | overlay backdrops, scrollbar track |
+| `surface` | `#12121a` | `gray-900` (cards, tiles, inputs) |
+| `surface-raised` | `#1a1a24` | `gray-800` (dropdowns, hovers, modal fills) |
+| `surface-high` | `#232330` | `gray-700` fills (active toggle segment, keys) |
+| `surface-glass` | `rgb(18 18 26 / 0.72)` | translucent card fill over atmosphere layers |
+| `border` | `#1f1f2b` | `gray-800` borders |
+| `border-strong` | `#30303f` | `gray-700` borders (inputs, interactive) |
 
-Each step keeps the same ~120° hue as `#080c08`, desaturating slightly as it lightens.
+The violet undertone is felt, not seen — every step shares the brand's temperature.
 
-**Why:** the audit's most pervasive issue. Tailwind greys are blue-tinted (`gray-900` = `#111827`), so today every card subtly fights the green-black canvas — the "cheap dark mode" feel is literally a colour-temperature clash, repeated hundreds of times. One ladder fixes it product-wide, and fixes the three-blacks problem (`theme-color` meta, route loader, body) by giving them all `pitch`.
+**Why:** the audit's most pervasive issue. Tailwind greys are blue-tinted (`gray-900` = `#111827`), so today every card subtly fights the canvas temperature — the "cheap dark mode" feel is literally a colour-temperature clash, repeated hundreds of times. One ladder fixes it product-wide, and fixes the three-blacks problem (`theme-color` meta, route loader, body) by giving them all `canvas`.
 
 ### 1.2 Text ladder
 
-| Token | Value | Contrast on `pitch` | Replaces |
+| Token | Value | Contrast on `canvas` | Replaces |
 |---|---|---|---|
-| `text-primary` | `#f5f7f5` | ~17:1 | `white` |
-| `text-secondary` | `#a8b3a8` | ~8:1 | `gray-400` |
-| `text-muted` | `#788378` | 5.0:1 (4.7:1 on `surface`) | `gray-500`/`gray-600` |
-| `text-faint` | `#586158` | ~3.5:1, **large/decorative only** | `gray-700` text |
+| `text-primary` | `#f4f4f8` | ~18:1 | `white` |
+| `text-secondary` | `#a9a9bc` | ~8.5:1 | `gray-400` |
+| `text-muted` | `#8a8a9c` | 5.8:1 (5.5:1 on `surface`) | `gray-500`/`gray-600` |
+| `text-faint` | `#5d5d70` | ~3:1, **large/decorative only** | `gray-700` text |
 
 **Why:** four levels is the minimum that expresses the hierarchy in ui-principles.md and the maximum a developer can apply without a chart. `text-muted` is tuned to *pass* AA at 4.5:1 — today's `gray-500`-on-`gray-900` hovers around the line and `gray-700` fails outright; the ladder makes the compliant choice the default. `text-faint` is explicitly restricted so the audit's contrast failures can't silently return.
 
@@ -41,37 +42,41 @@ Each step keeps the same ~120° hue as `#080c08`, desaturating slightly as it li
 
 | Token | Value | Use |
 |---|---|---|
-| `brand` | `#16a34a` | Primary buttons, focus borders (today's green-600) |
-| `brand-strong` | `#15803d` | Primary button base (green-700) |
-| `brand-bright` | `#4ade80` | Success text on dark (green-400) |
+| `brand` | `#8b5cf6` | Triviverse purple — primary buttons, focus rings, links, brand moments |
+| `brand-strong` | `#7c3aed` | Primary button base |
+| `brand-bright` | `#a78bfa` | Brand text on dark |
+| `brand-tint` | `rgb(139 92 246 / 0.12)` | Brand fills |
+| `success` / `-strong` / `-bright` | `#16a34a` / `#15803d` / `#4ade80` | Correct answers ONLY |
 | `danger` / `danger-bright` | `#dc2626` / `#f87171` | Wrong, lives, give-up |
 | `warn` / `warn-bright` | `#d97706` / `#fbbf24` | Near-miss, bust, urgency |
 
-**Why:** these formalise what the games already do (green-700/600/400, red, amber) so semantics stop being re-picked per file. Keeping current values means zero visual regression on the things that already work.
+**Why (v2):** purple is the product's single voice; green is released from double duty (was brand *and* success) and now means exactly one thing — a correct answer — which makes verdicts land harder.
 
 ### 1.4 Game accents (identity)
 
 One hue per game, each with three intensities — `accent` (solid), `accent-bright` (text on dark), `accent-tint` (10–15% fill):
 
+**v2 demotion rule:** an accent is a recognition mark, not an identity. It may appear ONLY as: the game's icon, a small badge, a progress indicator, a subtle gradient, or a hover state. Everything else on a page is Triviverse (canvas ladder + brand). Values are deliberately desaturated:
+
 | Token | Base | Game |
 |---|---|---|
-| `accent-tenable` | `#eab308` yellow | Tenable |
-| `accent-wordle` | `#3b82f6` blue | Wordle |
-| `accent-tictactoe` | `#a855f7` purple | TicTacToe |
-| `accent-teammates` | `#ec4899` pink | Teammates |
-| `accent-careers` | `#06b6d4` cyan | Career Path |
-| `accent-wcsquads` | `#f59e0b` amber | WC Squads |
-| `accent-connections` | `#14b8a6` teal | Connections |
-| `accent-higherlower` | `#f97316` orange | Higher/Lower |
-| `accent-501` | `#ef4444` red | 501 |
+| `accent-tenable` | `#c6a953` gold | Tenable |
+| `accent-wordle` | `#6992d3` blue | Wordle |
+| `accent-tictactoe` | `#797ad8` indigo | TicTacToe (moved off purple — that's the brand now) |
+| `accent-teammates` | `#cd709e` rose | Teammates |
+| `accent-careers` | `#47afc2` cyan | Career Path |
+| `accent-wcsquads` | `#cb9d4d` amber | WC Squads |
+| `accent-connections` | `#47aea2` teal | Connections |
+| `accent-higherlower` | `#cf8a59` terracotta | Higher/Lower |
+| `accent-501` | `#cf6e6e` red | 501 |
 
 Implementation intent: each game route sets `--accent` / `--accent-bright` / `--accent-tint` CSS variables once at its root; components reference `var(--accent)`. Semantic colours (§1.3) always win over accent when both could apply.
 
-**Why:** audit finding #1 — the Hub promises nine personalities the games don't deliver, because accents live in ad-hoc class strings in `Hub.jsx`. As CSS variables, "use the game's accent" becomes a one-liner inside any shared component (wordmark tint, selection ring, stat colour), which is the only realistic way nine games stay themed through shared components. The per-game hues match today's Hub assignments to preserve learned identity.
+**Why:** audit finding #1 — the Hub promises nine personalities the games don't deliver, because accents live in ad-hoc class strings in `Hub.jsx`. As CSS variables, "use the game's accent" becomes a one-liner inside any shared component (wordmark tint, selection ring, stat colour), which is the only realistic way nine games stay themed through shared components. The v2 hues keep each game's learned hue family at lower saturation (TicTacToe excepted — see table).
 
 ### 1.5 Fixed collision resolutions (colour policy, not tokens)
 
-- TicTacToe axis labels: row/col stop using yellow/blue; both use `text-muted` with icon differentiation, selection uses `--accent` (purple).
+- TicTacToe axis labels: row/col stop using yellow/blue; both use `text-muted` with icon differentiation, selection uses `--accent` (indigo).
 - Higher/Lower buttons: More/Fewer both use neutral `surface-high` with accent hover — direction is semantics-free, so no green/blue.
 - X/O in 1v1 keep red/blue *glyphs* (`Mark` renders them; they're pieces, not UI), but banners/borders derive from the glyph colour tokens `mark-x: #f87171` / `mark-o: #60a5fa` documented as game pieces, exempt from the accent rule.
 
@@ -135,9 +140,11 @@ Tailwind's 4px scale stays; tokens fix the *composition* decisions:
 
 | Token | Value | Use |
 |---|---|---|
+| `shadow-panel` | soft ambient + `inset 0 1px 0` white 5% | Cards: depth + top edge "rim light" |
+| `shadow-panel-hover` | deeper ambient + white 7% edge | Card hover lift |
 | `shadow-float` | `0 12px 32px -8px rgb(0 0 0 / 0.6)` | Dropdowns, popovers |
 | `shadow-modal` | `0 24px 64px -12px rgb(0 0 0 / 0.7)` | Modals |
-| `shadow-glow` | `0 0 24px -4px var(--accent)` at 25–40% | *Moments only*: active player, selected cell, checkout zone |
+| `shadow-glow` | `0 0 24px -4px var(--accent)` at 25–40% | *Gameplay verdicts only* (checkout zone, active player) — never decoration or hover |
 
 **Why:** on a near-black canvas, grey drop shadows are nearly invisible — depth here comes from the surface ladder + borders (design-system.md §5), so we need only two real shadows (both for floating layers, replacing scattered `shadow-2xl`). `shadow-glow` is the premium differentiator: accent-driven light is how a "floodlit" moment reads, and tokenising it with an explicit *moments-only* rule keeps it special.
 

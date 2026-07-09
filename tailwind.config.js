@@ -9,27 +9,35 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ── The pitch ladder (green-tinted neutrals; never use gray-* for surfaces)
-        pitch: '#080c08',
-        'pitch-deep': '#050705',
+        // ── The canvas ladder (violet-cast graphite; never use gray-* for surfaces)
+        canvas: '#0a0a10',
+        'canvas-deep': '#060609',
         surface: {
-          DEFAULT: '#101510',
-          raised: '#1a211a',
-          high: '#242c24',
+          DEFAULT: '#12121a',
+          raised: '#1a1a24',
+          high: '#232330',
+          glass: 'rgb(18 18 26 / 0.72)', // translucent card fill over the atmosphere layer
         },
         border: {
-          DEFAULT: '#1e241e',
-          strong: '#2e372e',
+          DEFAULT: '#1f1f2b',
+          strong: '#30303f',
         },
 
-        // ── Text ladder (muted is tuned to pass AA on pitch; faint is large/decorative only)
-        primary: '#f5f7f5',
-        secondary: '#a8b3a8',
-        muted: '#788378', // 4.68:1 on surface, 4.99:1 on pitch — the AA floor for body text
-        faint: '#586158',
+        // ── Text ladder (muted is 5.5:1 on surface — AA with margin; faint is large/decorative only)
+        primary: '#f4f4f8',
+        secondary: '#a9a9bc',
+        muted: '#8a8a9c',
+        faint: '#5d5d70',
 
-        // ── Brand & semantics (fixed across all games)
+        // ── Brand (Triviverse purple) & semantics — fixed across all games.
+        // Purple = brand/primary action/focus. Green = correct only. Red = wrong. Amber = warn.
         brand: {
+          DEFAULT: '#8b5cf6',
+          strong: '#7c3aed',
+          bright: '#a78bfa',
+          tint: 'rgb(139 92 246 / 0.12)',
+        },
+        success: {
           DEFAULT: '#16a34a',
           strong: '#15803d',
           bright: '#4ade80',
@@ -43,22 +51,23 @@ export default {
           bright: '#fbbf24',
         },
 
-        // ── Game accents (identity, not semantics — correct/wrong stays green/red).
+        // ── Game accents: recognition marks, not identities. Allowed slots only:
+        // icon, small badge, progress indicator, subtle gradient, hover state.
         // Bare `accent` resolves to the current game's CSS variables, set once at
-        // each game's route root; defaults to brand green (see :root in index.css).
+        // each game's route root; defaults to brand purple (see :root in index.css).
         accent: {
           DEFAULT: 'var(--accent)',
           bright: 'var(--accent-bright)',
           tint: 'var(--accent-tint)',
-          tenable: { DEFAULT: '#eab308', bright: '#facc15', tint: 'rgb(234 179 8 / 0.12)' },
-          wordle: { DEFAULT: '#3b82f6', bright: '#60a5fa', tint: 'rgb(59 130 246 / 0.12)' },
-          tictactoe: { DEFAULT: '#a855f7', bright: '#c084fc', tint: 'rgb(168 85 247 / 0.12)' },
-          teammates: { DEFAULT: '#ec4899', bright: '#f472b6', tint: 'rgb(236 72 153 / 0.12)' },
-          careers: { DEFAULT: '#06b6d4', bright: '#22d3ee', tint: 'rgb(6 182 212 / 0.12)' },
-          wcsquads: { DEFAULT: '#f59e0b', bright: '#fbbf24', tint: 'rgb(245 158 11 / 0.12)' },
-          connections: { DEFAULT: '#14b8a6', bright: '#2dd4bf', tint: 'rgb(20 184 166 / 0.12)' },
-          higherlower: { DEFAULT: '#f97316', bright: '#fb923c', tint: 'rgb(249 115 22 / 0.12)' },
-          501: { DEFAULT: '#ef4444', bright: '#f87171', tint: 'rgb(239 68 68 / 0.12)' },
+          tenable: { DEFAULT: '#c6a953', bright: '#d5bd76', tint: 'rgb(198 169 83 / 0.10)' },
+          wordle: { DEFAULT: '#6992d3', bright: '#8eaee1', tint: 'rgb(105 146 211 / 0.10)' },
+          tictactoe: { DEFAULT: '#797ad8', bright: '#9698e3', tint: 'rgb(121 122 216 / 0.10)' },
+          teammates: { DEFAULT: '#cd709e', bright: '#dc93b8', tint: 'rgb(205 112 158 / 0.10)' },
+          careers: { DEFAULT: '#47afc2', bright: '#6bc2d1', tint: 'rgb(71 175 194 / 0.10)' },
+          wcsquads: { DEFAULT: '#cb9d4d', bright: '#dab472', tint: 'rgb(203 157 77 / 0.10)' },
+          connections: { DEFAULT: '#47aea2', bright: '#64c4b9', tint: 'rgb(71 174 162 / 0.10)' },
+          higherlower: { DEFAULT: '#cf8a59', bright: '#dda67e', tint: 'rgb(207 138 89 / 0.10)' },
+          501: { DEFAULT: '#cf6e6e', bright: '#dd9292', tint: 'rgb(207 110 110 / 0.10)' },
         },
 
         // X/O are game pieces, not UI — exempt from the accent rule
@@ -127,9 +136,12 @@ export default {
       // (Remapping rounded-sm/md/lg/xl keys would restyle existing markup.)
 
       boxShadow: {
+        // Raised surfaces: soft ambient shadow + 1px top edge highlight (the "rim light")
+        panel: 'inset 0 1px 0 0 rgb(255 255 255 / 0.05), 0 8px 24px -12px rgb(0 0 0 / 0.55)',
+        'panel-hover': 'inset 0 1px 0 0 rgb(255 255 255 / 0.07), 0 16px 40px -16px rgb(0 0 0 / 0.65)',
         float: '0 12px 32px -8px rgb(0 0 0 / 0.6)',
         modal: '0 24px 64px -12px rgb(0 0 0 / 0.7)',
-        // Moments only: active player, selected cell, checkout zone — never static decoration
+        // Gameplay verdict moments ONLY (checkout zone, active player) — never decoration or hover
         glow: '0 0 24px -4px color-mix(in srgb, var(--accent) 35%, transparent)',
       },
 

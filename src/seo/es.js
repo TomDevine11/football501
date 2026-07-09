@@ -3,21 +3,21 @@
 // omitted falls back to the English value. This is what ranks in Spanish search.
 export const ES = {
   '/': {
-    title: 'Juegos de Trivia de Fútbol — Juegos Diarios Gratis',
+    title: 'Triviverse — Juegos de Trivia de Fútbol Diarios Gratis',
     description: 'Juegos diarios de trivia de fútbol gratis: Wordle de futbolistas, tres en raya de fútbol, nombra el top 10 y adivina al jugador por sus compañeros. Juega solo o 1v1.',
     keywords: ['juegos de trivia de futbol', 'trivia de futbol', 'juegos de futbol', 'adivina el futbolista', 'quiz de futbol diario'],
-    h1: 'Juegos de Trivia de Fútbol',
+    h1: 'Triviverse',
     tagline: 'Una colección creciente de juegos diarios de trivia de fútbol, gratis. Sin registro, solo jugar.',
-    about: 'Football Trivia Games reúne los mejores juegos diarios de trivia de fútbol en un solo sitio. Pon a prueba tus conocimientos con el Wordle de futbolistas, rellena una cuadrícula de tres en raya de fútbol, nombra el top 10 en Tenable o adivina al jugador misterioso por sus compañeros de equipo, todo jugable al instante en tu navegador, en móvil o escritorio.',
+    about: 'Triviverse reúne los mejores juegos diarios de trivia de fútbol en un solo sitio. Pon a prueba tus conocimientos con el Wordle de futbolistas, rellena una cuadrícula de tres en raya de fútbol, nombra el top 10 en Tenable o adivina al jugador misterioso por sus compañeros de equipo, todo jugable al instante en tu navegador, en móvil o escritorio.',
     faq: [
-      { q: '¿Qué es Football Trivia Games?', a: 'Football Trivia Games es una colección gratuita de juegos diarios de trivia de fútbol — incluyendo el Wordle de futbolistas, tres en raya de fútbol, Tenable y adivina al jugador — jugables en tu navegador sin registro.' },
+      { q: '¿Qué es Triviverse?', a: 'Triviverse es una colección gratuita de juegos diarios de trivia de fútbol — incluyendo el Wordle de futbolistas, tres en raya de fútbol, Tenable y adivina al jugador — jugables en tu navegador sin registro.' },
       { q: '¿Los juegos son gratis?', a: 'Sí. Todos los juegos son completamente gratis, funcionan en tu navegador y no necesitan cuenta ni descarga.' },
       { q: '¿Hay retos nuevos cada día?', a: 'Sí. Los juegos diarios se renuevan a medianoche (hora local), y los modos ilimitados se pueden jugar tantas veces como quieras.' },
       { q: '¿Puedo jugar en el móvil?', a: 'Sí. Todos los juegos funcionan en cualquier navegador de móvil o escritorio, sin necesidad de instalar nada.' },
     ],
   },
   '/wordle': {
-    title: 'Wordle de Fútbol — Adivina al Futbolista | Football Trivia',
+    title: 'Wordle de Fútbol — Adivina al Futbolista | Triviverse',
     description: 'Juega al Wordle de fútbol (Footdle): adivina el apellido del futbolista misterioso en seis intentos. Un jugador nuevo cada día con pistas de letras verdes y amarillas.',
     keywords: ['wordle de futbol', 'futbol wordle', 'footdle', 'adivina el futbolista', 'wordle futbolistas'],
     h1: 'Wordle de Fútbol',
@@ -30,7 +30,7 @@ export const ES = {
     ],
   },
   '/tictactoe': {
-    title: 'Tres en Raya de Fútbol (Tiki-Taka-Toe) | Football Trivia',
+    title: 'Tres en Raya de Fútbol (Tiki-Taka-Toe) | Triviverse',
     description: 'Juega al tres en raya de fútbol: una cuadrícula 3x3 donde cada fila y columna es una categoría. Nombra a un jugador que cumpla ambas para reclamar una casilla. Solo o 1v1.',
     keywords: ['tres en raya futbol', 'tiki taka toe', 'cuadricula de futbol', 'futbol tic tac toe', 'immaculate grid futbol'],
     h1: 'Tres en Raya de Fútbol',
@@ -43,7 +43,7 @@ export const ES = {
     ],
   },
   '/teammates': {
-    title: 'Compañeros — Adivina al Futbolista | Football Trivia',
+    title: 'Compañeros — Adivina al Futbolista | Triviverse',
     description: 'Adivina al futbolista misterioso por sus compañeros de equipo reales, revelados de uno en uno. Descubre quién es en cinco intentos en este adictivo juego de fútbol.',
     keywords: ['adivina el futbolista', 'adivina al jugador', 'juego de adivinar futbolistas', 'who are ya', 'juego de futbol adivinar'],
     h1: 'Compañeros',
@@ -56,7 +56,7 @@ export const ES = {
     ],
   },
   '/career-path': {
-    title: 'Trayectoria — Adivina al Futbolista | Football Trivia',
+    title: 'Trayectoria — Adivina al Futbolista | Triviverse',
     description: 'Adivina al futbolista por su trayectoria. Los clubes se revelan de uno en uno: nombra al jugador que jugó en todos en cinco intentos.',
     keywords: ['trayectoria futbolista', 'adivina el futbolista por sus clubes', 'juego de fichajes futbol', 'carrera futbolista quiz'],
     h1: 'Trayectoria',
@@ -69,7 +69,7 @@ export const ES = {
     ],
   },
   '/tenable': {
-    title: 'Tenable de Fútbol — Nombra el Top 10 | Football Trivia',
+    title: 'Tenable de Fútbol — Nombra el Top 10 | Triviverse',
     description: 'Juega al Tenable de fútbol: una nueva pregunta cada día. Nombra tantas de las 10 respuestas como puedas — tres fallos y se acabó el juego.',
     keywords: ['tenable futbol', 'futbol tenable', 'tenaball', 'nombra el top 10 futbol', 'quiz top 10 futbol'],
     h1: 'Tenable de Fútbol',
@@ -82,7 +82,7 @@ export const ES = {
     ],
   },
   '/world-cup': {
-    title: 'Nombra la Plantilla Campeona del Mundial | Football Trivia',
+    title: 'Nombra la Plantilla Campeona del Mundial | Triviverse',
     description: 'Nombra la plantilla campeona: elige una selección campeona del Mundial — Brasil 2002, Francia 98, Argentina 2022 — y recuerda a tantos jugadores como puedas.',
     keywords: ['plantillas mundial', 'nombra la plantilla del mundial', 'quiz selecciones campeonas', 'plantilla mundial 2022'],
     h1: 'Nombra la Plantilla Campeona',
@@ -95,7 +95,7 @@ export const ES = {
     ],
   },
   '/connections': {
-    title: 'Connections de Fútbol — Puzle Diario | Football Trivia',
+    title: 'Connections de Fútbol — Puzle Diario | Triviverse',
     description: 'Connections de fútbol: un puzle diario de 16 futbolistas que esconden cuatro grupos de cuatro — clubes, nacionalidades y trofeos. Encuentra los cuatro grupos en cuatro fallos.',
     keywords: ['connections futbol', 'conexiones futbol', 'puzle de futbol diario', 'juego de grupos futbol'],
     h1: 'Connections de Fútbol',
@@ -108,7 +108,7 @@ export const ES = {
     ],
   },
   '/higher-or-lower': {
-    title: 'Fútbol Mayor o Menor | Football Trivia',
+    title: 'Fútbol Mayor o Menor | Triviverse',
     description: 'Fútbol Mayor o Menor: elige qué futbolista marcó más — goles en la Premier, LaLiga, Champions o con su selección — y consigue la racha más larga.',
     keywords: ['futbol mayor o menor', 'mayor o menor futbol', 'juego de rachas futbol', 'quiz goles futbol'],
     h1: 'Fútbol Mayor o Menor',
@@ -121,7 +121,7 @@ export const ES = {
     ],
   },
   '/501': {
-    title: 'Fútbol 501 — Juego de Fútbol Estilo Dardos | Football Trivia',
+    title: 'Fútbol 501 — Juego de Fútbol Estilo Dardos | Triviverse',
     description: 'Fútbol 501, el juego de estadísticas de fútbol estilo dardos: cuenta atrás desde 501 nombrando futbolistas por partidos o goles, de todas las épocas en las grandes ligas.',
     keywords: ['futbol 501', 'juego de dardos futbol', 'trivia dardos futbol', '501 futbol', 'juego estadisticas futbol', 'nombrar futbolistas juego', 'juego maximos goleadores'],
     h1: 'Fútbol 501',

@@ -5,15 +5,15 @@
 // Change values here and in tailwind.config.js together.
 
 export const GAME_ACCENTS = {
-  tenable: { accent: '#eab308', bright: '#facc15', tint: 'rgb(234 179 8 / 0.12)' },
-  wordle: { accent: '#3b82f6', bright: '#60a5fa', tint: 'rgb(59 130 246 / 0.12)' },
-  tictactoe: { accent: '#a855f7', bright: '#c084fc', tint: 'rgb(168 85 247 / 0.12)' },
-  teammates: { accent: '#ec4899', bright: '#f472b6', tint: 'rgb(236 72 153 / 0.12)' },
-  careers: { accent: '#06b6d4', bright: '#22d3ee', tint: 'rgb(6 182 212 / 0.12)' },
-  wcsquads: { accent: '#f59e0b', bright: '#fbbf24', tint: 'rgb(245 158 11 / 0.12)' },
-  connections: { accent: '#14b8a6', bright: '#2dd4bf', tint: 'rgb(20 184 166 / 0.12)' },
-  higherlower: { accent: '#f97316', bright: '#fb923c', tint: 'rgb(249 115 22 / 0.12)' },
-  501: { accent: '#ef4444', bright: '#f87171', tint: 'rgb(239 68 68 / 0.12)' },
+  tenable: { accent: '#c6a953', bright: '#d5bd76', tint: 'rgb(198 169 83 / 0.10)' },
+  wordle: { accent: '#6992d3', bright: '#8eaee1', tint: 'rgb(105 146 211 / 0.10)' },
+  tictactoe: { accent: '#797ad8', bright: '#9698e3', tint: 'rgb(121 122 216 / 0.10)' },
+  teammates: { accent: '#cd709e', bright: '#dc93b8', tint: 'rgb(205 112 158 / 0.10)' },
+  careers: { accent: '#47afc2', bright: '#6bc2d1', tint: 'rgb(71 175 194 / 0.10)' },
+  wcsquads: { accent: '#cb9d4d', bright: '#dab472', tint: 'rgb(203 157 77 / 0.10)' },
+  connections: { accent: '#47aea2', bright: '#64c4b9', tint: 'rgb(71 174 162 / 0.10)' },
+  higherlower: { accent: '#cf8a59', bright: '#dda67e', tint: 'rgb(207 138 89 / 0.10)' },
+  501: { accent: '#cf6e6e', bright: '#dd9292', tint: 'rgb(207 110 110 / 0.10)' },
 }
 
 // Style object for the element that roots a game's accent scope.
