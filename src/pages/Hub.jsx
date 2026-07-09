@@ -1,140 +1,203 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '../seo/Seo'
-import GameIcon from '../components/GameIcon'
+import BrandMark from '../components/BrandMark'
+import GameMotif from '../components/GameMotif'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import AdSlot from '../ads/AdSlot'
 import { routeByPath } from '../seo/seoConfig'
 import { useI18n } from '../i18n'
-import { accentVars } from '../design/accents'
-import { playedToday, recordVisit } from '../data/dailyStats'
+import { playedToday, getStats, recordVisit, todayIndex } from '../data/dailyStats'
 
-// The wall of game panels. id (route without '/') keys the icon and i18n copy;
-// accent keys GAME_ACCENTS; stats keys dailyStats (what each game passes to
-// recordResult — 501 doesn't record dailies yet, so its FT mark stays off).
+// Matchday 1 = site launch day. Every visitor worldwide shares today's number.
+const MATCHDAY_EPOCH = 20455
+
+// The lineup. `stats` keys dailyStats (what each game passes to recordResult;
+// 501 doesn't record yet, so its streak/FT stay off until its sweep).
+// `form` is a visual placeholder until the retention layer records last-5
+// results — as is the weekly points value below.
 const GAMES = [
-  { to: '/tenable', accent: 'tenable', stats: 'tenable' },
-  { to: '/wordle', accent: 'wordle', stats: 'wordle' },
-  { to: '/tictactoe', accent: 'tictactoe', stats: 'tictactoe' },
-  { to: '/teammates', accent: 'teammates', stats: 'teammates' },
-  { to: '/career-path', accent: 'careers', stats: 'careers' },
-  { to: '/world-cup', accent: 'wcsquads', stats: 'wcsquads' },
-  { to: '/connections', accent: 'connections', stats: 'connections' },
-  { to: '/higher-or-lower', accent: 'higherlower', stats: 'higherlower' },
-  { to: '/501', accent: '501', stats: '501' },
+  { to: '/tenable', stats: 'tenable', color: '#eab308', form: 'WWLWW' },
+  { to: '/wordle', stats: 'wordle', color: '#3b82f6', form: 'WWWWW' },
+  { to: '/tictactoe', stats: 'tictactoe', color: '#6366f1', form: 'LWWLL' },
+  { to: '/teammates', stats: 'teammates', color: '#ec4899', form: 'WLWW-' },
+  { to: '/career-path', stats: 'careers', color: '#06b6d4', form: 'WWWWL' },
+  { to: '/world-cup', stats: 'wcsquads', color: '#f59e0b', form: '-WL--' },
+  { to: '/connections', stats: 'connections', color: '#14b8a6', form: 'LLWW-' },
+  { to: '/higher-or-lower', stats: 'higherlower', color: '#f97316', form: 'WWW-L' },
+  { to: '/501', stats: '501', color: '#ef4444', form: '--W--' },
 ]
+const DEMO_WEEK_PTS = 310
 
-const FullTimeMark = ({ label }) => (
-  <span
-    className="inline-flex items-center gap-1 rounded-full border border-border-strong bg-surface-high px-2 py-1"
-    title={label}
-  >
-    <svg viewBox="0 0 12 12" className="w-2.5 h-2.5 text-success-bright" aria-hidden="true">
-      <path d="M2 6.2 4.8 9 10 3.4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-    <span className="text-overline-sm uppercase font-semibold text-secondary" aria-hidden="true">FT</span>
-    <span className="sr-only">{label}</span>
+const FORM_DOT = { W: 'bg-green-500', L: 'bg-red-500/75', '-': 'bg-[#3a3846]' }
+const FormGuide = ({ form, className = '' }) => (
+  <span className={`inline-flex gap-[3px] ${className}`} aria-hidden="true">
+    {form.split('').map((ch, i) => (
+      <i key={i} className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-[2px] ${FORM_DOT[ch]}`} />
+    ))}
   </span>
 )
+
+const StatChip = ({ value, label, accent = false }) => (
+  <span className="bg-[#16151f] border border-[#262433] rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 text-[0.5rem] sm:text-[0.62rem] font-bold tracking-[0.1em] text-[#8c89a3] whitespace-nowrap">
+    <b className={`${accent ? 'text-[#a78bfa]' : 'text-[#ecebf2]'} text-[0.72rem] sm:text-[0.85rem] mr-1 tabular-nums`}>{value}</b>
+    {label}
+  </span>
+)
+
+// hh:mm until local midnight, when the dailies refresh.
+function untilMidnight() {
+  const now = new Date()
+  const mins = 24 * 60 - (now.getHours() * 60 + now.getMinutes())
+  return `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`
+}
 
 export default function Hub() {
   const { locale, t, lp } = useI18n()
   const home = routeByPath('/', locale)
-
-  // Greeting data + entrance gate, computed once per mount. The entrance
-  // choreography plays once per browser session — returning to the Hub
-  // mid-session finds the lights already on.
   const [visit] = useState(recordVisit)
-  const [playedCount] = useState(() => GAMES.filter(g => playedToday(g.stats)).length)
-  const [entering] = useState(() => {
-    try {
-      if (sessionStorage.getItem('ftg-hub-entered')) return false
-      sessionStorage.setItem('ftg-hub-entered', '1')
-      return true
-    } catch { return true }
-  })
+  const [countdown] = useState(untilMidnight)
+  const matchday = todayIndex() - MATCHDAY_EPOCH
 
-  const statusParts = []
-  if (visit.returning) {
-    statusParts.push(t('home.welcomeBack'))
-    if (visit.streak > 1) statusParts.push(t('home.dayN', { n: visit.streak }))
-  }
-  if (playedCount > 0) {
-    statusParts.push(playedCount === 1 ? t('home.dailiesPlayedOne') : t('home.dailiesPlayed', { n: playedCount }))
-  } else if (visit.returning) {
-    statusParts.push(t('home.dailiesWaiting'))
-  }
+  const lineup = GAMES.map(g => ({
+    ...g,
+    id: g.to.slice(1),
+    played: playedToday(g.stats),
+    streak: getStats(g.stats).currentStreak,
+  }))
+  const playedCount = lineup.filter(g => g.played).length
 
   return (
-    <div className={`hub-scene min-h-screen px-page-x pt-6 pb-16 ${entering ? 'hub-enter' : ''}`}>
+    <div className="bg-[linear-gradient(160deg,#151024_0%,#0b0a14_60%)] text-[#ecebf2]">
       <Seo path="/" />
-      <div className="w-full max-w-hub mx-auto flex justify-end mb-4"><LanguageSwitcher /></div>
 
-      <header className="hub-head mb-10 text-center">
-        <p className="text-overline uppercase font-medium text-muted mb-3">{t('home.welcome')}</p>
-        <h1 className="font-display text-display-lg text-primary mb-4">{home.h1}</h1>
-        <p className="text-body-lg text-secondary max-w-md mx-auto leading-relaxed">{t('home.subtitle')}</p>
-        {statusParts.length > 0 && (
-          <p className="mt-5 text-overline-sm uppercase tracking-widest font-semibold text-brand-bright">
-            {statusParts.join(' · ')}
-          </p>
-        )}
-      </header>
+      {/* ── The matchday dashboard: every feature in one viewport, no scroll ── */}
+      <div className="h-dvh max-w-5xl mx-auto flex flex-col gap-2 sm:gap-3 px-3 sm:px-6 py-3 sm:py-4">
 
-      <div className="w-full max-w-hub mx-auto">
-        <div className="hub-wall grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {GAMES.map((game, i) => {
-            const id = game.to.slice(1)
-            const title = t(`games.${id}.title`)
-            const tagline = t(`games.${id}.tagline`)
-            const description = t(`games.${id}.description`)
-            const played = playedToday(game.stats)
-            return (
-              <Link
-                key={game.to}
-                to={lp(game.to)}
-                aria-label={played ? `${t('home.playGame', { title })} — ${t('home.playedToday')}` : t('home.playGame', { title })}
-                style={{ ...accentVars(game.accent), '--i': i }}
-                className="hub-card group relative bg-surface-glass border border-border rounded-xl shadow-panel p-5 pb-16 text-left"
-              >
-                <span className="hub-card-wash" aria-hidden="true" />
-                <div className="relative flex items-start justify-between gap-3">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-accent-tint text-accent-bright">
-                    <GameIcon id={id} className="w-icon-card h-icon-card" />
-                  </div>
-                  {played && <FullTimeMark label={t('home.playedToday')} />}
-                </div>
-                <div className="relative mt-4 text-title-lg font-bold text-primary leading-tight">{title}</div>
-                <div className="relative mt-1 text-body font-medium text-secondary">{tagline}</div>
-                <p className="relative mt-2.5 text-caption text-muted leading-relaxed">{description}</p>
-                <span
-                  className="absolute bottom-5 right-5 w-8 h-8 rounded-full border border-border-strong flex items-center justify-center text-muted transition-colors duration-fast group-hover:border-accent group-hover:text-accent-bright"
-                  aria-hidden="true"
-                >
-                  <svg viewBox="0 0 16 16" className="w-4 h-4 transition-transform duration-fast ease-out group-hover:translate-x-0.5">
-                    <path d="M3 8h9.5M9 3.5 13.5 8 9 12.5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </Link>
-            )
-          })}
+        {/* top bar: brand (the page's h1 — site name + sr-only keywords) · stats · language */}
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <h1 className="flex items-center gap-2 text-[0.66rem] sm:text-[0.85rem] font-black tracking-[0.13em] m-0">
+            <BrandMark className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#a78bfa]" />
+            <span className="text-[#ecebf2]">TRIVIVERSE</span>
+            <span className="text-[#a78bfa]">FOOTBALL</span>
+            <span className="sr-only">— {t('home.subtitle')}</span>
+          </h1>
+          <div className="flex items-center gap-2">
+            <div className="hidden md:flex gap-2">
+              <StatChip value={visit.streak} label={t('hub.dayStreak')} />
+              <StatChip value={`${playedCount}/9`} label={t('hub.played')} />
+              <StatChip value={DEMO_WEEK_PTS} label={t('hub.ptsWeek')} />
+              <StatChip value={countdown} label={t('hub.nextDailies')} accent />
+            </div>
+            <span className="md:hidden text-[0.6rem] font-bold tracking-[0.1em] text-[#a78bfa]">
+              {t('hub.next')} {countdown}
+            </span>
+            <LanguageSwitcher />
+          </div>
         </div>
 
-        <section className="mt-14 text-left max-w-2xl mx-auto">
-          <h2 className="text-primary font-semibold text-lg mb-3">{t('home.aboutHeading')}</h2>
-          <p className="text-muted text-body leading-relaxed mb-8">{home.about}</p>
+        {/* matchday hero */}
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-[0.55rem] sm:text-[0.62rem] font-extrabold tracking-[0.22em] text-[#a78bfa] m-0">
+              {t('hub.kick')}
+            </p>
+            <div className="score-number text-[2rem] sm:text-[2.6rem] leading-none mt-0.5 bg-[linear-gradient(120deg,#fff_30%,#a78bfa_85%)] bg-clip-text text-transparent">
+              {t('hub.matchday')} {matchday}
+            </div>
+            <div className="md:hidden flex gap-1.5 mt-2">
+              <StatChip value={visit.streak} label={t('hub.streak')} />
+              <StatChip value={`${playedCount}/9`} label={t('hub.played')} />
+              <StatChip value={DEMO_WEEK_PTS} label={t('hub.pts')} />
+            </div>
+          </div>
+          <span className="hidden sm:block text-[0.62rem] tracking-[0.1em] text-[#57536e] pb-1">
+            {t('hub.lineupNote')}
+          </span>
+        </div>
 
-          <h2 className="text-primary font-semibold text-lg mb-3">{t('home.faqHeading')}</h2>
+        {/* the pitch — your lineup */}
+        <div className="relative flex-1 min-h-0 border border-[#2c2947] rounded-xl sm:rounded-2xl p-2 sm:p-4 overflow-hidden bg-[linear-gradient(180deg,rgb(124_58_237/.07),transparent_30%),#100e1c]">
+          <div className="absolute left-0 right-0 top-1/2 h-px bg-[#2c2947]" aria-hidden="true" />
+          <div className="absolute left-1/2 top-1/2 w-32 h-32 border border-[#2c2947] rounded-full -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />
+          <div className="relative grid grid-cols-3 grid-rows-3 gap-1.5 sm:gap-4 h-full">
+            {lineup.map(g => (
+              <Link
+                key={g.to}
+                to={lp(g.to)}
+                style={{ '--g': g.color }}
+                aria-label={g.played ? `${t(`games.${g.id}.title`)} — ${t('home.playedToday')}` : t(`games.${g.id}.title`)}
+                className="relative flex flex-col items-center justify-center gap-0.5 sm:gap-1.5 bg-[rgb(22_21_33/.85)] border border-[#2c2947] rounded-lg sm:rounded-xl p-1 sm:p-2 transition-[transform,border-color] duration-150 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--g)_55%,transparent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#a78bfa] active:scale-[0.985]"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`absolute top-1 right-1 sm:top-2 sm:right-2 text-[0.45rem] sm:text-[0.56rem] font-black tracking-[0.1em] rounded px-1 py-px sm:px-1.5 sm:py-0.5 border ${
+                    g.played ? 'text-green-500 border-green-500/40' : 'text-[#a78bfa] border-[#7c3aed]/55'
+                  }`}
+                >
+                  {g.played ? 'FT' : <><span className="sm:hidden">KO</span><span className="hidden sm:inline">{t('hub.kickOff')}</span></>}
+                </span>
+                <GameMotif id={g.id} className="w-5 h-5 sm:w-9 sm:h-9 text-[color:var(--g)]" />
+                <span className="font-extrabold uppercase tracking-[0.03em] text-[0.55rem] sm:text-[0.85rem] text-center leading-tight">
+                  {t(`games.${g.id}.title`).replace(/^Football /, '').replace(/ de Fútbol$/, '')}
+                </span>
+                <span className="flex items-center gap-1 sm:gap-1.5">
+                  {g.streak > 0 ? (
+                    <b className="text-[0.6rem] sm:text-[0.75rem] font-black text-amber-400">
+                      🔥{g.streak}<em className="not-italic hidden sm:inline text-[0.55rem] tracking-[0.12em] text-[#8c89a3] font-extrabold ml-1">{t('hub.streak')}</em>
+                    </b>
+                  ) : (
+                    <b className="text-[0.6rem] font-black text-[#4a4758]">—</b>
+                  )}
+                  <FormGuide form={g.form} />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* footer: perfect-day tracker + share */}
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1" aria-hidden="true">
+              {lineup.map(g => (
+                <i
+                  key={g.to}
+                  style={g.played ? { background: g.color, boxShadow: `0 0 8px color-mix(in srgb, ${g.color} 60%, transparent)` } : undefined}
+                  className="w-4 sm:w-6 h-1.5 sm:h-2 rounded-[3px] bg-[#262433] -skew-x-[14deg]"
+                />
+              ))}
+              <span className={`ml-1 text-base sm:text-xl leading-none ${playedCount === 9 ? 'text-amber-400' : 'text-[#3a3846]'}`}>★</span>
+            </div>
+            <p className="m-0 mt-1 text-[0.5rem] sm:text-[0.66rem] tracking-[0.1em] text-[#8c89a3]">
+              <b className="text-amber-400">{t('hub.perfectDay')}</b> — {t('hub.perfectDayHint')}
+            </p>
+          </div>
+          <button
+            type="button"
+            className="bg-[#7c3aed] hover:bg-[#8b5cf6] text-white font-bold text-[0.68rem] sm:text-[0.8rem] tracking-[0.06em] rounded-lg px-3.5 py-2 sm:px-4 sm:py-2.5 whitespace-nowrap transition-colors"
+          >
+            {t('hub.shareDay')}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Below the fold: SEO content, unchanged in substance ── */}
+      <div className="max-w-2xl mx-auto px-4 pt-14 pb-16">
+        <section className="text-left">
+          <h2 className="text-[#ecebf2] font-semibold text-lg mb-3">{t('home.aboutHeading')}</h2>
+          <p className="text-[#8c89a3] text-sm leading-relaxed mb-8">{home.about}</p>
+
+          <h2 className="text-[#ecebf2] font-semibold text-lg mb-3">{t('home.faqHeading')}</h2>
           <dl className="space-y-4">
             {home.faq.map((f, i) => (
               <div key={i}>
-                <dt className="text-secondary text-body font-medium">{f.q}</dt>
-                <dd className="text-muted text-body mt-1 leading-relaxed">{f.a}</dd>
+                <dt className="text-[#b9b8c6] text-sm font-medium">{f.q}</dt>
+                <dd className="text-[#8c89a3] text-sm mt-1 leading-relaxed">{f.a}</dd>
               </div>
             ))}
           </dl>
         </section>
-
         <AdSlot name="hub-footer" />
       </div>
     </div>
