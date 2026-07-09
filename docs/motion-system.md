@@ -1,6 +1,6 @@
 # Motion System
 
-How things move. Part of the [Floodlight design system](./design-system.md). Exact duration/easing tokens live in [design-tokens.md](./design-tokens.md); this doc is the grammar.
+How things move. Part of the [Triviverse design system](./design-system.md). Exact duration/easing tokens live in [design-tokens.md](./design-tokens.md); this doc is the grammar.
 
 ---
 
@@ -66,7 +66,6 @@ The shared vocabulary — reuse these before inventing new ones:
 | `pyramid-pulse` | "counting up to your rank" (160ms/row step) | Tenable reveal |
 | `slide-in` | list entrance | misc |
 | `result-modal-in` / `result-card-in` | overlay entrance (fade + rise-settle) | ResultModal |
-| `hub-rise` | "the lights come on" — staggered rise, once per session | Hub header + cards |
 
 ### Choreography patterns
 - **Stagger** sibling elements 60–100ms apart (Wordle columns) — one row judged left-to-right reads as a sentence.

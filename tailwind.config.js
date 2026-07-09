@@ -9,65 +9,68 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ── The canvas ladder (violet-cast graphite; never use gray-* for surfaces)
-        canvas: '#0a0a10',
-        'canvas-deep': '#060609',
-        surface: {
-          DEFAULT: '#12121a',
-          raised: '#1a1a24',
-          high: '#232330',
-          glass: 'rgb(18 18 26 / 0.72)', // translucent card fill over the atmosphere layer
+        // ── The night ladder (deep violet-navy — the Triviverse canvas)
+        canvas: {
+          DEFAULT: '#0b0a14', //  page base (bottom of the ambient gradient)
+          high: '#151024', //     top of the ambient gradient (.tv-scene)
         },
+        surface: '#16151f', //    chips, small panels
+        card: 'rgb(22 21 33 / 0.85)', // lineup/player cards (slightly translucent)
+        board: '#100e1c', //      board interiors (the pitch; .tv-board adds the glow)
         border: {
-          DEFAULT: '#1f1f2b',
-          strong: '#30303f',
+          DEFAULT: '#262433', //  chips, small panels
+          strong: '#2c2947', //   boards, cards
         },
+        inert: '#3a3846', //      unlit states: empty form dots, unfilled trackers
+        dim: '#4a4758', //        disabled-ish text ("no streak" dash)
 
-        // ── Text ladder (muted is 5.5:1 on surface — AA with margin; faint is large/decorative only)
-        primary: '#f4f4f8',
-        secondary: '#a9a9bc',
-        muted: '#8a8a9c',
-        faint: '#5d5d70',
+        // ── Text ladder (muted is 5.4:1 on surface — AA with margin; faint is decorative only)
+        primary: '#ecebf2',
+        secondary: '#b9b8c6',
+        muted: '#8c89a3',
+        faint: '#57536e',
 
-        // ── Brand (Triviverse purple) & semantics — fixed across all games.
-        // Purple = brand/primary action/focus. Green = correct only. Red = wrong. Amber = warn.
+        // ── Brand (Triviverse purple) & semantics — fixed across all pages.
+        // Purple = brand/primary action/focus/ready. Green = correct/FT. Red = wrong. Amber = streaks/warnings.
         brand: {
-          DEFAULT: '#8b5cf6',
-          strong: '#7c3aed',
+          DEFAULT: '#7c3aed',
+          hover: '#8b5cf6',
+          strong: '#6d28d9',
           bright: '#a78bfa',
-          tint: 'rgb(139 92 246 / 0.12)',
+          tint: 'rgb(124 58 237 / 0.16)',
         },
         success: {
-          DEFAULT: '#16a34a',
-          strong: '#15803d',
+          DEFAULT: '#22c55e',
+          strong: '#16a34a',
           bright: '#4ade80',
         },
         danger: {
-          DEFAULT: '#dc2626',
+          DEFAULT: '#ef4444',
+          strong: '#dc2626',
           bright: '#f87171',
         },
         warn: {
-          DEFAULT: '#d97706',
-          bright: '#fbbf24',
+          DEFAULT: '#fbbf24',
+          strong: '#d97706',
         },
 
-        // ── Game accents: recognition marks, not identities. Allowed slots only:
-        // icon, small badge, progress indicator, subtle gradient, hover state.
+        // ── Game accents: vivid, one per game. Allowed slots only: motif icon,
+        // small badge, progress indicator, subtle gradient, hover state.
         // Bare `accent` resolves to the current game's CSS variables, set once at
         // each game's route root; defaults to brand purple (see :root in index.css).
         accent: {
           DEFAULT: 'var(--accent)',
           bright: 'var(--accent-bright)',
           tint: 'var(--accent-tint)',
-          tenable: { DEFAULT: '#c6a953', bright: '#d5bd76', tint: 'rgb(198 169 83 / 0.10)' },
-          wordle: { DEFAULT: '#6992d3', bright: '#8eaee1', tint: 'rgb(105 146 211 / 0.10)' },
-          tictactoe: { DEFAULT: '#797ad8', bright: '#9698e3', tint: 'rgb(121 122 216 / 0.10)' },
-          teammates: { DEFAULT: '#cd709e', bright: '#dc93b8', tint: 'rgb(205 112 158 / 0.10)' },
-          careers: { DEFAULT: '#47afc2', bright: '#6bc2d1', tint: 'rgb(71 175 194 / 0.10)' },
-          wcsquads: { DEFAULT: '#cb9d4d', bright: '#dab472', tint: 'rgb(203 157 77 / 0.10)' },
-          connections: { DEFAULT: '#47aea2', bright: '#64c4b9', tint: 'rgb(71 174 162 / 0.10)' },
-          higherlower: { DEFAULT: '#cf8a59', bright: '#dda67e', tint: 'rgb(207 138 89 / 0.10)' },
-          501: { DEFAULT: '#cf6e6e', bright: '#dd9292', tint: 'rgb(207 110 110 / 0.10)' },
+          tenable: { DEFAULT: '#eab308', bright: '#facc15', tint: 'rgb(234 179 8 / 0.12)' },
+          wordle: { DEFAULT: '#3b82f6', bright: '#60a5fa', tint: 'rgb(59 130 246 / 0.12)' },
+          tictactoe: { DEFAULT: '#6366f1', bright: '#818cf8', tint: 'rgb(99 102 241 / 0.12)' },
+          teammates: { DEFAULT: '#ec4899', bright: '#f472b6', tint: 'rgb(236 72 153 / 0.12)' },
+          careers: { DEFAULT: '#06b6d4', bright: '#22d3ee', tint: 'rgb(6 182 212 / 0.12)' },
+          wcsquads: { DEFAULT: '#f59e0b', bright: '#fbbf24', tint: 'rgb(245 158 11 / 0.12)' },
+          connections: { DEFAULT: '#14b8a6', bright: '#2dd4bf', tint: 'rgb(20 184 166 / 0.12)' },
+          higherlower: { DEFAULT: '#f97316', bright: '#fb923c', tint: 'rgb(249 115 22 / 0.12)' },
+          501: { DEFAULT: '#ef4444', bright: '#f87171', tint: 'rgb(239 68 68 / 0.12)' },
         },
 
         // X/O are game pieces, not UI — exempt from the accent rule

@@ -1,217 +1,89 @@
-# Design Tokens
+# Design Tokens — Triviverse v2
 
-The single vocabulary every screen is built from. **Implemented** (July 2026): `tailwind.config.js` `theme.extend` + the `:root` CSS-variable block in `src/index.css`. This document is the contract — token changes update config, `:root`, and this doc together (§10).
+The single vocabulary every screen is built from. **Implemented**: `tailwind.config.js` `theme.extend` + the `:root` CSS-variable block in `src/index.css` + the `.tv-*` scene utilities. This document is the contract — token changes update config, `:root`, and this doc together. Components reference tokens only; raw hex/ms/z-index values in components are review blockers.
 
-Naming convention: semantic first (`surface`, `accent-wordle`), raw values never referenced in components. Rationale follows each group, because the point of every token is the same: *a decision made once, drift made impossible*.
+Reference implementation: `src/pages/Hub.jsx` (zero raw values).
 
 ---
 
 ## 1. Colour
 
-### 1.1 The canvas ladder (neutrals) — Triviverse v2
+### 1.1 The night ladder (neutrals)
 
-Violet-cast graphite neutrals replacing Tailwind `gray-*` everywhere (v2 replaced the green "pitch" ladder — the stadium tint read arcade rather than premium):
-
-| Token | Value | Replaces today |
+| Token | Value | Use |
 |---|---|---|
-| `canvas` | `#0a0a10` | body bg |
-| `canvas-deep` | `#060609` | overlay backdrops, scrollbar track |
-| `surface` | `#12121a` | `gray-900` (cards, tiles, inputs) |
-| `surface-raised` | `#1a1a24` | `gray-800` (dropdowns, hovers, modal fills) |
-| `surface-high` | `#232330` | `gray-700` fills (active toggle segment, keys) |
-| `surface-glass` | `rgb(18 18 26 / 0.72)` | translucent card fill over atmosphere layers |
-| `border` | `#1f1f2b` | `gray-800` borders |
-| `border-strong` | `#30303f` | `gray-700` borders (inputs, interactive) |
-
-The violet undertone is felt, not seen — every step shares the brand's temperature.
-
-**Why:** the audit's most pervasive issue. Tailwind greys are blue-tinted (`gray-900` = `#111827`), so today every card subtly fights the canvas temperature — the "cheap dark mode" feel is literally a colour-temperature clash, repeated hundreds of times. One ladder fixes it product-wide, and fixes the three-blacks problem (`theme-color` meta, route loader, body) by giving them all `canvas`.
+| `canvas` | `#0b0a14` | Page base; bottom of the `.tv-scene` gradient; scrollbar track; `theme-color` meta |
+| `canvas-high` | `#151024` | Top of the `.tv-scene` gradient |
+| `surface` | `#16151f` | Chips, small panels |
+| `card` | `rgb(22 21 33 / 0.85)` | Lineup/player cards (slightly translucent over the board) |
+| `board` | `#100e1c` | Board interiors (`.tv-board` adds the brand-light breath) |
+| `border` | `#262433` | Chip/panel borders |
+| `border-strong` | `#2c2947` | Board and card borders |
+| `inert` | `#3a3846` | Unlit states: empty form dots, unfilled tracker segments |
+| `dim` | `#4a4758` | Disabled-ish text ("no streak" dash) |
 
 ### 1.2 Text ladder
 
-| Token | Value | Contrast on `canvas` | Replaces |
+| Token | Value | Contrast on `surface` | Use |
 |---|---|---|---|
-| `text-primary` | `#f4f4f8` | ~18:1 | `white` |
-| `text-secondary` | `#a9a9bc` | ~8.5:1 | `gray-400` |
-| `text-muted` | `#8a8a9c` | 5.8:1 (5.5:1 on `surface`) | `gray-500`/`gray-600` |
-| `text-faint` | `#5d5d70` | ~3:1, **large/decorative only** | `gray-700` text |
+| `primary` | `#ecebf2` | 15.3:1 | Headings, names, values |
+| `secondary` | `#b9b8c6` | 9.2:1 | Supporting copy |
+| `muted` | `#8c89a3` | 5.4:1 | Labels, hints, meta — the AA floor for body text |
+| `faint` | `#57536e` | 2.5:1 — **decorative/large only, never body text** | Footnotes at display sizes, dividers |
 
-**Why:** four levels is the minimum that expresses the hierarchy in ui-principles.md and the maximum a developer can apply without a chart. `text-muted` is tuned to *pass* AA at 4.5:1 — today's `gray-500`-on-`gray-900` hovers around the line and `gray-700` fails outright; the ladder makes the compliant choice the default. `text-faint` is explicitly restricted so the audit's contrast failures can't silently return.
-
-### 1.3 Brand & semantics
+### 1.3 Brand & semantics (fixed across all pages)
 
 | Token | Value | Use |
 |---|---|---|
-| `brand` | `#8b5cf6` | Triviverse purple — primary buttons, focus rings, links, brand moments |
-| `brand-strong` | `#7c3aed` | Primary button base |
-| `brand-bright` | `#a78bfa` | Brand text on dark |
-| `brand-tint` | `rgb(139 92 246 / 0.12)` | Brand fills |
-| `success` / `-strong` / `-bright` | `#16a34a` / `#15803d` / `#4ade80` | Correct answers ONLY |
-| `danger` / `danger-bright` | `#dc2626` / `#f87171` | Wrong, lives, give-up |
-| `warn` / `warn-bright` | `#d97706` / `#fbbf24` | Near-miss, bust, urgency |
+| `brand` | `#7c3aed` | Primary buttons, KICK OFF/READY states, active chrome |
+| `brand-hover` | `#8b5cf6` | Button hover |
+| `brand-strong` | `#6d28d9` | Pressed/deep fills |
+| `brand-bright` | `#a78bfa` | Brand text on dark, focus outlines, the FOOTBALL half of the lockup |
+| `brand-tint` | `rgb(124 58 237 / 0.16)` | Brand fills/washes |
+| `success` / `-strong` / `-bright` | `#22c55e` / `#16a34a` / `#4ade80` | Correct, FT, win dots — nothing else |
+| `danger` / `-strong` / `-bright` | `#ef4444` / `#dc2626` / `#f87171` | Wrong, losses, lives, give-up |
+| `warn` / `-strong` | `#fbbf24` / `#d97706` | Streak flames, perfect-day star, urgency |
 
-**Why (v2):** purple is the product's single voice; green is released from double duty (was brand *and* success) and now means exactly one thing — a correct answer — which makes verdicts land harder.
+### 1.4 Game accents (vivid — recognition marks only)
 
-### 1.4 Game accents (identity)
+Allowed slots: motif icon, small badge, progress indicator, subtle gradient, hover state. Each with `DEFAULT` / `bright` / `tint` (12% fill). Runtime twin: `src/design/accents.js` (game routes set `--accent`/`--accent-bright`/`--accent-tint` once at their root; bare `accent-*` classes resolve to those variables, defaulting to brand purple).
 
-One hue per game, each with three intensities — `accent` (solid), `accent-bright` (text on dark), `accent-tint` (10–15% fill):
+| Token | Base | Bright | Game |
+|---|---|---|---|
+| `accent-tenable` | `#eab308` | `#facc15` | Tenable |
+| `accent-wordle` | `#3b82f6` | `#60a5fa` | Wordle |
+| `accent-tictactoe` | `#6366f1` | `#818cf8` | TicTacToe (indigo — purple is the brand) |
+| `accent-teammates` | `#ec4899` | `#f472b6` | Teammates |
+| `accent-careers` | `#06b6d4` | `#22d3ee` | Career Path |
+| `accent-wcsquads` | `#f59e0b` | `#fbbf24` | WC Squads |
+| `accent-connections` | `#14b8a6` | `#2dd4bf` | Connections |
+| `accent-higherlower` | `#f97316` | `#fb923c` | Higher/Lower |
+| `accent-501` | `#ef4444` | `#f87171` | 501 |
 
-**v2 demotion rule:** an accent is a recognition mark, not an identity. It may appear ONLY as: the game's icon, a small badge, a progress indicator, a subtle gradient, or a hover state. Everything else on a page is Triviverse (canvas ladder + brand). Values are deliberately desaturated:
+X/O glyphs in TicTacToe 1v1 remain game pieces (`mark-x #f87171` / `mark-o #60a5fa`), exempt from the accent rule.
 
-| Token | Base | Game |
-|---|---|---|
-| `accent-tenable` | `#c6a953` gold | Tenable |
-| `accent-wordle` | `#6992d3` blue | Wordle |
-| `accent-tictactoe` | `#797ad8` indigo | TicTacToe (moved off purple — that's the brand now) |
-| `accent-teammates` | `#cd709e` rose | Teammates |
-| `accent-careers` | `#47afc2` cyan | Career Path |
-| `accent-wcsquads` | `#cb9d4d` amber | WC Squads |
-| `accent-connections` | `#47aea2` teal | Connections |
-| `accent-higherlower` | `#cf8a59` terracotta | Higher/Lower |
-| `accent-501` | `#cf6e6e` red | 501 |
+## 2. Scene utilities (`index.css`)
 
-Implementation intent: each game route sets `--accent` / `--accent-bright` / `--accent-tint` CSS variables once at its root; components reference `var(--accent)`. Semantic colours (§1.3) always win over accent when both could apply.
+| Utility | What it paints |
+|---|---|
+| `.tv-scene` | `linear-gradient(160deg, canvas-high 0%, canvas 60%)` — every page wrapper |
+| `.tv-board` | brand-light breath over `board` — every play surface |
+| `.tv-wordmark` | white→`brand-bright` gradient clipped to text — wordmarks, matchday numbers |
 
-**Why:** audit finding #1 — the Hub promises nine personalities the games don't deliver, because accents live in ad-hoc class strings in `Hub.jsx`. As CSS variables, "use the game's accent" becomes a one-liner inside any shared component (wordmark tint, selection ring, stat colour), which is the only realistic way nine games stay themed through shared components. The v2 hues keep each game's learned hue family at lower saturation (TicTacToe excepted — see table).
+## 3. Typography
 
-### 1.5 Fixed collision resolutions (colour policy, not tokens)
+Bebas Neue (`.score-number` / `font-display`) for scoreboard voice; Inter (`font-sans`) for UI. The named sizes (`display-xl` … `overline-sm`) in `tailwind.config.js` are unchanged from v1 — see config for the table. Hard rules: `tabular-nums` on changing numbers; Bebas never under ~20px; brand/label caps use black weight + wide tracking.
 
-- TicTacToe axis labels: row/col stop using yellow/blue; both use `text-muted` with icon differentiation, selection uses `--accent` (indigo).
-- Higher/Lower buttons: More/Fewer both use neutral `surface-high` with accent hover — direction is semantics-free, so no green/blue.
-- X/O in 1v1 keep red/blue *glyphs* (`Mark` renders them; they're pieces, not UI), but banners/borders derive from the glyph colour tokens `mark-x: #f87171` / `mark-o: #60a5fa` documented as game pieces, exempt from the accent rule.
+## 4. Spacing, radii, shadows, z-index, motion
 
-**Why:** these are the audit's "colour meaning collision" items; writing the resolution here means the token PR settles them once instead of leaving each to future judgement.
+Unchanged from v1 and defined in `tailwind.config.js` / `:root`:
 
----
+- **Spacing & sizes**: 4px scale + named tokens (`section`, `card-x/y`, `touch` 44px, `input` 52px, containers `game`/`entry`/`hub`).
+- **Radii**: `--radius-sm/md/lg/xl` (6/8/12/16px) — use Tailwind's matching `rounded-md/lg/xl/2xl`.
+- **Shadows**: `panel`, `panel-hover`, `float`, `modal`; `glow` for gameplay verdict moments only.
+- **Z-index**: `board 0 · dropdown 10 · sticky 20 · overlay 30 · modal 40 · toast 50`.
+- **Motion**: `--duration-instant/fast/base/slow/dramatic` (100/180/280/420/650ms), `--ease-out/spring`, `--delay-result` 2500ms (JS twin `RESULT_REVEAL_DELAY_MS`). Grammar in [motion-system.md](./motion-system.md).
 
-## 2. Typography
+## 5. Retention constants
 
-| Token | Font | Size / line-height | Tracking | Use |
-|---|---|---|---|---|
-| `display-xl` | Bebas | `clamp(5rem, 20vw, 8rem)` / 0.9 | 0.02em | 501 score |
-| `display-lg` | Bebas | `clamp(3rem, 10vw, 4.5rem)` / 0.95 | 0.02em | Hub H1, entry heroes |
-| `display-md` | Bebas | 2.25rem / 1 | 0.02em | Result headlines |
-| `display-sm` | Bebas | 1.5rem / 1 | 0.04em | Wordmarks, stat values |
-| `title-lg` | Inter 700 | 1.25rem / 1.3 | 0 | Card titles (Hub/menu) |
-| `title` | Inter 700 | 0.875rem / 1.3 | 0 | Context-card titles |
-| `body` | Inter 400–500 | 0.875rem / 1.5 | 0 | Default |
-| `body-lg` | Inter 400 | 1rem / 1.5 | 0 | Inputs (iOS 16px floor), intros |
-| `caption` | Inter 500 | 0.75rem / 1.4 | 0 | Hints, meta |
-| `overline` | Inter 500–600 | 0.75rem / 1.2, uppercase | 0.1em | Section labels |
-| `overline-sm` | Inter 500 | 0.625rem / 1.2, uppercase | 0.05em | Stat labels, chips |
-
-**Why:** today's screens use ~14 ad-hoc size/weight combos that mostly cluster around these 11 — tokenising collapses the outliers instead of inventing a new look. The two `clamp()` display sizes replace breakpoint pairs (`text-8xl md:text-9xl`) with fluid scaling, which is both smoother on mid-size phones and one less decision per hero. `body-lg` at 1rem is deliberately named as *the input size* so the 16px iOS anti-zoom floor becomes a rule with a name, not folklore. `overline` codifies the product's signature label style so it can never half-apply (today tracking varies between `tracking-wide` and `tracking-widest`).
-
----
-
-## 3. Spacing
-
-Tailwind's 4px scale stays; tokens fix the *composition* decisions:
-
-| Token | Value | Use |
-|---|---|---|
-| `space-page-x` | 1rem (16px) | Page horizontal padding |
-| `space-page-y` | 2rem (32px) | Play-screen top/bottom |
-| `space-section` | 1.5rem (24px) | Between anatomy slots (header→toggle→card→board…) |
-| `space-card-x` / `space-card-y` | 1.25rem / 1rem | Card interiors |
-| `space-row` | 0.625rem (10px) | List-row vertical padding |
-| `space-gap` | 0.5rem (8px) | Grid/tile gaps |
-| `space-gap-sm` | 0.375rem (6px) | Dense boards (Wordle tiles, squad slots) |
-
-**Why:** the audit's "rhythm wobble" (`mb-5` vs `mb-6` alternating per game) exists because every file re-decides the section gap. One named `space-section` ends the wobble and makes the eight-slot anatomy mechanical: each slot ends with the same margin. The rest are the values the majority of screens already use — tokenising the winner, deprecating the variants.
-
----
-
-## 4. Border radii
-
-| Token | Value | Use |
-|---|---|---|
-| `radius-sm` | 6px | Chips, badges, keyboard keys |
-| `radius-md` | 8px | Inline buttons, toggle segments, small tiles |
-| `radius-lg` | 12px | Cards, inputs, board cells, full-width buttons |
-| `radius-xl` | 16px | Modals, hero cards |
-| `radius-full` | 9999px | Icon buttons, life dots, pills |
-
-**Why:** five steps, each mapped to a component class, replacing today's per-file choice among `md/lg/xl/2xl` (audit: same primary button ships two radii). Values match the current mode (`rounded-xl`=12px is today's card radius) so the change is consolidation, not restyling.
-
----
-
-## 5. Shadows
-
-| Token | Value | Use |
-|---|---|---|
-| `shadow-panel` | soft ambient + `inset 0 1px 0` white 5% | Cards: depth + top edge "rim light" |
-| `shadow-panel-hover` | deeper ambient + white 7% edge | Card hover lift |
-| `shadow-float` | `0 12px 32px -8px rgb(0 0 0 / 0.6)` | Dropdowns, popovers |
-| `shadow-modal` | `0 24px 64px -12px rgb(0 0 0 / 0.7)` | Modals |
-| `shadow-glow` | `0 0 24px -4px var(--accent)` at 25–40% | *Gameplay verdicts only* (checkout zone, active player) — never decoration or hover |
-
-**Why:** on a near-black canvas, grey drop shadows are nearly invisible — depth here comes from the surface ladder + borders (design-system.md §5), so we need only two real shadows (both for floating layers, replacing scattered `shadow-2xl`). `shadow-glow` is the premium differentiator: accent-driven light is how a "floodlit" moment reads, and tokenising it with an explicit *moments-only* rule keeps it special.
-
----
-
-## 6. Motion durations
-
-| Token | Value | Use |
-|---|---|---|
-| `duration-instant` | 100ms | Acknowledgement (tile pop, press) |
-| `duration-fast` | 180ms | Hovers, fades, overlay entrances |
-| `duration-base` | 280ms | Standard reveals (clue, score pop) |
-| `duration-slow` | 420ms | Verdicts (shake, cell reveal, flip half) |
-| `duration-dramatic` | 650ms | Celebrations, history flashes |
-| `delay-result` | 2500ms | Board-settle → result modal (product signature) |
-
-**Why:** today's eleven keyframes use nine distinct durations (100–700ms) that cluster exactly around these five stops — the scale legitimises the cluster and forbids the ninth one-off. Naming `delay-result` protects the product's most important timing constant, currently a magic `2500` repeated in eight files.
-
-## 7. Easing
-
-| Token | Value | Use |
-|---|---|---|
-| `ease-out` | `cubic-bezier(0, 0, 0.2, 1)` | Default: entrances, reveals |
-| `ease-spring` | `cubic-bezier(0.16, 1, 0.3, 1)` | Overlay/card entrances (the "settle") |
-| `ease-swing` | `ease-in-out` | Loops & round-trips: shake, pulse, flip |
-
-**Why:** three curves cover every existing animation (motion-system.md §4). `ease-spring` is already the modal's curve — promoting it to a token spreads the best-feeling entrance in the product to every overlay for free.
-
-## 8. Z-index
-
-| Token | Value | Layer |
-|---|---|---|
-| `z-board` | 0 | Play surface |
-| `z-dropdown` | 10 | Suggestion lists |
-| `z-sticky` | 20 | Floating chrome (language switcher) |
-| `z-overlay` | 30 | Confirm dialogs, answer popovers |
-| `z-modal` | 40 | ResultModal |
-| `z-toast` | 50 | Toasts/announcements |
-
-**Why:** current values are assigned per-file and the audit found a real collision (LanguageSwitcher and ResultModal both 40 — the switcher can float over the end-of-game sheet). The fix falls out of the naming: the switcher is *sticky chrome* (20), so it can never outrank a modal again. Six named layers is the full stacking story of this product; a seventh needs a design review by definition.
-
----
-
-## 9. Component sizes
-
-| Token | Value | Applies to |
-|---|---|---|
-| `size-touch` | 44px | Minimum hit area, all interactive elements |
-| `size-input` | 52px | GuessInput height |
-| `size-btn-lg` | 48px | Full-width actions (submit, give up) |
-| `size-btn` | 40px | Inline buttons (44px hit via padding) |
-| `size-btn-sm` | 32px | Compact controls (toggle segments — padded to 44px hit) |
-| `size-icon-btn` | 40px | Round icon buttons (share row) |
-| `size-key` | 40×46px min | On-screen keyboard keys |
-| `size-icon-inline` / `-card` / `-hero` | 20 / 30 / 40px | Icon tiers |
-| `size-cell` | 64–80px | Board cells (pyramid, TTT min) |
-| `container-game` | 32rem | The game column (`max-w-lg`, unchanged) |
-| `container-entry` | 42rem | Entry/menu screens |
-| `container-hub` | 64rem | Hub grid |
-
-**Why:** `size-touch` is the token that turns the audit's touch-target failures (ModeToggle ~26px, Wordle keys 32px wide, switcher) into lint-able violations rather than opinions. The container trio names the layout system that already exists implicitly, so "which max-width?" stops being answered per-file. Input/button heights encode the current best examples (the `py-3.5` input ≈ 52px) so every game converges on the tallest, most thumb-friendly variants already shipping.
-
----
-
-## 10. Adoption rules
-
-1. Components reference tokens only — a raw hex, ms value, or z-index in a component is a review blocker.
-2. Token changes happen in one PR, alone: `tailwind.config.js` + `:root` block + this doc updated together.
-3. Migration order (pending approval): tokens land → shared components extracted against them (component-library.md §8) → per-game sweep in the audit's league-table order (worst first).
-4. Deletions that ride along with the token PR because they're pure debt: `src/App.css` (dead Vite template), the `#0a0a0a` theme-color (→ `pitch`), the `bg-gray-950` route loader (→ `pitch`).
+Live in `src/data/dailyStats.js`, not CSS: `PTS_PLAY 10 · PTS_WIN 25 · PTS_STREAK_PER 5 · PTS_STREAK_CAP 25 · PERFECT_MULT 2`; `MATCHDAY_EPOCH` in `Hub.jsx`. Tune there only.
