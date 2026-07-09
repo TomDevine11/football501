@@ -10,6 +10,7 @@ import { recordResult } from '../../data/dailyStats'
 import { ShareCard } from '../../components/ShareCard'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
+import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 const MAX_LIVES = 4
 const SHARE_EMOJI = ['🟨', '🟩', '🟦', '🟪'] // per group index
@@ -54,7 +55,7 @@ export default function FootballConnections() {
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
     if (!over) return
-    const t = setTimeout(() => setShowResult(true), 2500) // let the solved groups show first
+    const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the solved groups show first
     return () => clearTimeout(t)
   }, [over])
 

@@ -10,6 +10,7 @@ import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
+import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 export default function WorldCupSquads() {
   const { t, lp } = useI18n()
@@ -80,7 +81,7 @@ export default function WorldCupSquads() {
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
     if (!over) return
-    const t = setTimeout(() => setShowResult(true), 2500)
+    const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS)
     return () => clearTimeout(t)
   }, [over])
   const pick = (s) => reset(s)                  // unlimited: chosen squad

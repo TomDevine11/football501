@@ -13,6 +13,7 @@ import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 import { useI18n } from '../../i18n'
+import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 // Maps each question to the club crest / league logo / flag / trophy icon that
 // represents its subject (shown on the question card). Questions with no natural
@@ -92,7 +93,7 @@ export default function FootballTenable() {
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
     if (phase === 'playing') return
-    const t = setTimeout(() => setShowResult(true), 2500) // let the revealed answers show first
+    const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the revealed answers show first
     return () => clearTimeout(t)
   }, [phase])
   const [pulseRow, setPulseRow] = useState(null)

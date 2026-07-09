@@ -9,6 +9,7 @@ import ResultModal from '../../components/ResultModal'
 import { recordResult, todayIndex } from '../../data/dailyStats'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
+import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 const BEST_KEY = 'ftg-higherlower-best'
 
@@ -72,7 +73,7 @@ export default function HigherLower() {
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
     if (phase !== 'over') return
-    const t = setTimeout(() => setShowResult(true), 2500)
+    const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS)
     return () => clearTimeout(t)
   }, [phase])
 

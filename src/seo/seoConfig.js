@@ -457,7 +457,7 @@ export function metaTagsFor(route, lang = 'en') {
     { name: 'description', content: route.description },
     { name: 'keywords', content: (route.keywords || []).join(', ') },
     { name: 'robots', content: route.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large' },
-    { name: 'theme-color', content: '#0a0a0a' },
+    { name: 'theme-color', content: '#080c08' }, // pitch — must match the body canvas (design-tokens.md §1.1)
     { property: 'og:type', content: 'website' },
     { property: 'og:site_name', content: BRAND },
     { property: 'og:locale', content: lang === 'es' ? 'es_ES' : 'en_GB' },

@@ -9,6 +9,7 @@ import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
 import { useI18n } from '../../i18n'
+import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 const MAX_GUESSES = 6
 
@@ -64,7 +65,7 @@ export default function FootballWordle() {
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
     if (phase === 'playing') return
-    const t = setTimeout(() => setShowResult(true), 2500) // let the board settle first
+    const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the board settle first
     return () => clearTimeout(t)
   }, [phase])
 

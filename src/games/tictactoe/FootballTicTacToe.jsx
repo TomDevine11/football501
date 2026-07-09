@@ -12,6 +12,7 @@ import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import { recordResult } from '../../data/dailyStats'
 import { useI18n } from '../../i18n'
+import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 const MAX_LIVES = 3
 
@@ -48,7 +49,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
     if (phase === 'playing') return
-    const t = setTimeout(() => setShowResult(true), 2500) // let the revealed grid show first
+    const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the revealed grid show first
     return () => clearTimeout(t)
   }, [phase])
   const inputRef = useRef(null)
