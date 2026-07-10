@@ -91,7 +91,7 @@ function DescentRail({ score, stops }) {
   const pos = v => `${Math.min(97, Math.max(0, ((MAX_SCORE - v) / (MAX_SCORE - CHECKOUT_MIN)) * 100))}%`
   const inZone = score <= 0 && score >= CHECKOUT_MIN
   return (
-    <div className="flex flex-col items-center gap-1.5 h-full min-h-[24rem]" aria-hidden="true">
+    <div className="flex flex-col items-center gap-1.5 h-full" aria-hidden="true">
       <span className="text-[0.6rem] font-black text-faint tabular-nums">501</span>
       <div className="relative flex-1 w-2.5 rounded-full bg-gradient-to-b from-border-strong via-surface to-surface">
         {stops.map((v, i) => (
@@ -310,14 +310,14 @@ function GuessHistory({ history, showPlayer, className = '' }) {
   if (!history.length) return (
     <div className={`w-full ${className}`}>
       <div className="text-[0.58rem] text-faint uppercase tracking-[0.18em] mb-2 font-black px-1">{t('five01.history', { n: 0 })}</div>
-      <div className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-xs text-faint leading-relaxed">{t('five01.historyEmpty')}</div>
+      <div className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-xs text-faint leading-relaxed">{t('five01.historyEmpty')}</div>
     </div>
   )
   return (
-    <div className={`w-full ${className}`}>
-      <div className="text-[0.58rem] text-faint uppercase tracking-[0.18em] mb-2 font-black px-1">{t('five01.history', { n: history.length })}</div>
-      <div className="rounded-xl border border-border overflow-hidden">
-        <div className="divide-y divide-border/40 max-h-[26rem] overflow-y-auto">
+    <div className={`w-full h-full min-h-0 flex flex-col ${className}`}>
+      <div className="shrink-0 text-[0.58rem] text-faint uppercase tracking-[0.18em] mb-2 font-black px-1">{t('five01.history', { n: history.length })}</div>
+      <div className="flex-1 min-h-0 rounded-xl border border-border overflow-hidden">
+        <div className="divide-y divide-border/40 max-h-full overflow-y-auto">
           {[...history].reverse().map((g, i) => (
             <div key={i} className={`px-3 py-2.5 ${g.valid ? 'flash-valid' : 'flash-invalid'}`}>
               <div className="flex items-center gap-2">
@@ -772,25 +772,22 @@ export default function Football501() {
   )
 
   return shell(
-    <div className="max-w-7xl mx-auto px-4 pb-10">
+    <div className="max-w-4xl mx-auto px-4 pb-3 h-dvh flex flex-col">
       <GameChrome
         motifId="501"
         title={t('five01.wordmark')}
         right={<button onClick={() => setPhase('entry')} className="text-muted hover:text-secondary transition-colors">{t('five01.menu')} · <b className="text-secondary tabular-nums">{t('five01.dartsCount', { n: validCount })}</b></button>}
       />
 
-      {/* The stage is dead-centre of the page; the rail and history are pinned
-          to the sides absolutely so they never shift it. Below xl they fall
-          back: rail hidden, history beneath the stage. */}
-      <div className="relative">
-        <div className="hidden xl:flex absolute left-0 top-1 bottom-1">
-          <DescentRail score={score} stops={[MAX_SCORE, ...history.filter(g => g.valid && g.playerIdx === currentPlayerIndex).map(g => g.newScore)]} />
-        </div>
-        <div className="hidden xl:block absolute right-0 top-1 w-[17rem]">
-          <GuessHistory history={history} showPlayer={numPlayers > 1} />
-        </div>
+      {/* One page: stage centre-top (rail on its left shoulder, absolutely
+          positioned so it never shifts the centreline), history filling the
+          remaining viewport below with its own scroll. */}
+      <div className="flex-1 min-h-0 flex flex-col">
         {/* the stage — centre top */}
-        <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto pt-1">
+        <div className="relative shrink-0 flex flex-col gap-3 w-full max-w-2xl mx-auto pt-1">
+          <div className="hidden lg:flex absolute -left-20 top-1 bottom-1 w-12 justify-center">
+            <DescentRail score={score} stops={[MAX_SCORE, ...history.filter(g => g.valid && g.playerIdx === currentPlayerIndex).map(g => g.newScore)]} />
+          </div>
           {/* question card — red spine, possible answers, skip (non-daily) */}
           <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -859,9 +856,9 @@ export default function Football501() {
             </button>
           )}
         </div>
-        {/* history below the stage when the side panel is hidden */}
-        <div className="xl:hidden">
-          <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5" />
+        {/* history — under the main content, scrolling inside the page */}
+        <div className="flex-1 min-h-[5rem] w-full max-w-2xl mx-auto pt-4 pb-1">
+          <GuessHistory history={history} showPlayer={numPlayers > 1} />
         </div>
       </div>
       {overlay}
