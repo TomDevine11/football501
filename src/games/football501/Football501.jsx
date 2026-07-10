@@ -779,15 +779,11 @@ export default function Football501() {
         right={<button onClick={() => setPhase('entry')} className="text-muted hover:text-secondary transition-colors">{t('five01.menu')} · <b className="text-secondary tabular-nums">{t('five01.dartsCount', { n: validCount })}</b></button>}
       />
 
-      <div className="flex flex-col lg:grid lg:grid-cols-[17rem,3rem,1fr] lg:gap-6 lg:items-stretch">
-        {/* history — the left column on desktop, below the stage on mobile */}
-        <div className="order-2 lg:order-none lg:pt-1">
-          <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5 lg:mt-0" />
-        </div>
-        {/* the descent — the fall from 501 to the checkout zone */}
+      <div className="flex flex-col lg:grid lg:grid-cols-[3rem,1fr,19rem] lg:gap-6 lg:items-stretch">
+        {/* the descent — far left: the fall from 501 to the checkout zone */}
         <DescentRail score={score} stops={[MAX_SCORE, ...history.filter(g => g.valid && g.playerIdx === currentPlayerIndex).map(g => g.newScore)]} />
-        {/* the stage — oche centre-top */}
-        <div className="order-1 lg:order-none flex flex-col gap-3 w-full max-w-2xl mx-auto lg:mx-0 lg:pt-1">
+        {/* the stage — centre top */}
+        <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto lg:pt-1">
           {/* question card — red spine, possible answers, skip (non-daily) */}
           <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -856,7 +852,10 @@ export default function Football501() {
             </button>
           )}
         </div>
-
+        {/* history — the right column on desktop, below the stage on mobile */}
+        <div className="lg:pt-1">
+          <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5 lg:mt-0" />
+        </div>
       </div>
       {overlay}
     </div>
