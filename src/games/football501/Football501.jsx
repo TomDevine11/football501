@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { players as localPlayers } from '../../data/players'
 import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import MoreGames from '../../components/MoreGames'
+import GameChrome from '../../components/GameChrome'
+import GameMotif from '../../components/GameMotif'
 import { useI18n } from '../../i18n'
 import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, loadCompetition, COMPETITIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, playedToday, getStats, formGuide } from '../../data/dailyStats'
+import { accentVars } from '../../design/accents'
 
 const MAX_SCORE    = 501
 const CHECKOUT_MIN = -10
@@ -19,12 +21,7 @@ const EXCLUDE_SPORTS = new Set(['basketball','american football','baseball','ice
 
 // Position badges use the same GK/DEF/MID/FWD codes as the challenge filter, so
 // what a player shows in the dropdown is exactly what the filter tests against.
-const POS_META = {
-  GK:  { abbr: 'GK',  cls: 'text-yellow-400 bg-yellow-900/40 border-yellow-800/50' },
-  DEF: { abbr: 'DEF', cls: 'text-blue-400   bg-blue-900/40   border-blue-800/50' },
-  MID: { abbr: 'MID', cls: 'text-green-400  bg-green-900/40  border-green-800/50' },
-  FWD: { abbr: 'FWD', cls: 'text-red-400    bg-red-900/40    border-red-800/50' },
-}
+const POS_BADGE = 'shrink-0 text-[0.6rem] font-bold px-1.5 py-0.5 rounded border border-border-strong bg-surface text-secondary'
 
 function broadenPosition(raw) {
   if (!raw) return null
@@ -38,11 +35,12 @@ function broadenPosition(raw) {
 
 const isValidDartsScore = (n) => Number.isInteger(n) && n >= DARTS_MIN && n <= DARTS_MAX
 
-function getScoreColor(score) {
-  if (score <= 40)  return 'text-green-400'
-  if (score <= 100) return 'text-yellow-400'
-  if (score <= 200) return 'text-orange-400'
-  return 'text-white'
+// Score colour keeps its range semantics on the new ladder: checkout range
+// glows success, getting close warms up, otherwise the brand wordmark gradient.
+function scoreClasses(score) {
+  if (score <= 40)  return 'text-success-bright'
+  if (score <= 100) return 'text-warn'
+  return 'tv-wordmark'
 }
 
 function rankSuggestions(list, query, knownNames = new Set()) {
@@ -66,38 +64,39 @@ function rankSuggestions(list, query, knownNames = new Set()) {
     .map(({ p }) => p)
 }
 
-// ── Score display ─────────────────────────────────────────────────
+// ── The oche: giant score, the stage of the screen ─────────────────
 function ScoreDisplay({ score }) {
   const { t } = useI18n()
   const [animKey, setAnimKey] = useState(0)
   useEffect(() => { setAnimKey(k => k + 1) }, [score])
   return (
     <div className="flex flex-col items-center">
-      <div className="text-xs uppercase tracking-widest text-gray-500 mb-1 font-medium">{t('five01.score')}</div>
-      <div key={animKey} className={`score-number score-pop text-8xl md:text-9xl font-black ${getScoreColor(score)} leading-none tabular-nums`}>
+      <div key={animKey} className={`score-number score-pop text-[clamp(4.5rem,16vh,8rem)] font-black ${scoreClasses(score)} leading-none tabular-nums`}>
         {score}
       </div>
-      {score <= 40 && score > 0 && (
-        <div className="mt-2 text-green-400 text-sm font-semibold uppercase tracking-widest animate-pulse">{t('five01.checkoutZone')}</div>
+      {score <= 40 && score > 0 ? (
+        <div className="mt-1 text-success-bright text-[0.66rem] font-extrabold uppercase tracking-[0.2em] animate-pulse">{t('five01.checkoutZone')}</div>
+      ) : (
+        <div className="mt-1 text-faint text-[0.6rem] font-extrabold uppercase tracking-[0.2em]">{t('five01.ruleCheckout')}</div>
       )}
     </div>
   )
 }
 
-// ── Scoreboard (local multiplayer) ─────────────────────────────────
+// ── PDC split scoreboard (local multiplayer) ───────────────────────
 function Scoreboard({ players, currentPlayerIndex }) {
   const { t } = useI18n()
   if (players.length <= 1) return null
   return (
-    <div className="w-full max-w-lg mb-5 grid grid-cols-2 sm:grid-cols-5 gap-2">
+    <div className="w-full grid grid-cols-2 sm:grid-cols-5 gap-2 mb-1">
       {players.map((p, i) => {
         const active = i === currentPlayerIndex && !p.finished
         return (
-          <div key={i} className={`rounded-lg border px-3 py-2 text-center transition-colors ${active ? 'border-green-500 bg-green-900/20' : 'border-gray-800 bg-gray-900'}`}>
-            <div className="text-xs text-gray-400 truncate">{p.name}</div>
-            <div className={`text-lg font-black tabular-nums ${p.finished ? 'text-green-400' : 'text-white'}`}>{p.score}</div>
-            {p.finished && <div className="text-[10px] text-green-500 uppercase tracking-wide font-medium">{t('five01.checkedOut')}</div>}
-            {active && <div className="text-[10px] text-green-400 uppercase tracking-wide font-medium animate-pulse">{t('five01.yourTurn')}</div>}
+          <div key={i} className={`rounded-xl border px-3 py-2 text-center transition-colors bg-card ${active ? 'border-brand shadow-glow' : 'border-border-strong'}`}>
+            <div className="text-[0.6rem] font-black tracking-[0.1em] text-secondary truncate uppercase">{p.name}</div>
+            <div className={`score-number text-2xl tabular-nums ${p.finished ? 'text-success-bright' : 'text-primary'}`}>{p.score}</div>
+            {p.finished && <div className="text-[0.55rem] text-success font-black uppercase tracking-[0.1em]">FT</div>}
+            {active && <div className="text-[0.55rem] text-brand-bright font-black uppercase tracking-[0.1em] animate-pulse">{t('five01.yourTurn')}</div>}
           </div>
         )
       })}
@@ -125,21 +124,21 @@ function AnswerReveal({ challenge, finishingScore, usedNames }) {
   const perfect = answers.filter(a => a.value === finishingScore)
   return (
     <>
-      <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
-        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.perfectFrom', { score: finishingScore })}</div>
+      <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-4">
+        <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.perfectFrom', { score: finishingScore })}</div>
         <div className="px-4 py-3 text-sm">
           {perfect.length
-            ? <span className="text-green-300">{perfect.map(p => p.name).join(', ')}</span>
-            : <span className="text-gray-500">{t('five01.noExact', { score: finishingScore })}</span>}
+            ? <span className="text-success-bright">{perfect.map(p => p.name).join(', ')}</span>
+            : <span className="text-muted">{t('five01.noExact', { score: finishingScore })}</span>}
         </div>
       </div>
-      <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6">
-        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.allAnswers', { n: answers.length })}</div>
-        <div className="divide-y divide-gray-800/40 max-h-80 overflow-y-auto">
+      <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-6">
+        <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.allAnswers', { n: answers.length })}</div>
+        <div className="divide-y divide-border/40 max-h-80 overflow-y-auto">
           {answers.map((a, i) => (
             <div key={i} className="flex items-center justify-between px-4 py-2">
-              <span className={`text-sm ${usedNames.has(a.name) ? 'text-green-400 font-medium' : 'text-gray-300'}`}>{usedNames.has(a.name) ? '✓ ' : ''}{a.name}</span>
-              <span className="text-gray-500 text-xs font-mono tabular-nums">{a.value}</span>
+              <span className={`text-sm ${usedNames.has(a.name) ? 'text-success-bright font-medium' : 'text-secondary'}`}>{usedNames.has(a.name) ? '✓ ' : ''}{a.name}</span>
+              <span className="text-muted text-xs font-mono tabular-nums">{a.value}</span>
             </div>
           ))}
         </div>
@@ -156,6 +155,13 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
   const usedNames = new Set(valid.map(g => g.resolvedName))
   const lastValid = valid[valid.length - 1]
 
+  const buttons = (
+    <div className="flex gap-3">
+      <button onClick={onPlayAgain} className="px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">{t('five01.playAgain')}</button>
+      <button onClick={onExit} className="px-5 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
+    </div>
+  )
+
   if (isSolo) {
     const score = players[0].finalScore
     // Finishing position (give up = remaining score; checkout = score before the last dart).
@@ -164,10 +170,10 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
         <div className="text-center mb-8">
-          <div className="text-6xl mb-4">{gaveUp ? '🏳️' : '🎯'}</div>
-          <h2 className={`score-number text-6xl mb-2 ${gaveUp ? 'text-gray-300' : 'text-green-400'}`}>{gaveUp ? t('five01.gaveUpTitle') : t('five01.checkoutTitle')}</h2>
-          <p className="text-gray-400">
-            {challenge.title} (<span className="text-gray-300">{challenge.statLabel}</span>)<br />
+          <GameMotif id="501" className={`w-14 h-14 mx-auto mb-4 ${gaveUp ? 'text-dim' : 'text-accent-bright'}`} />
+          <h2 className={`score-number text-6xl mb-2 ${gaveUp ? 'text-secondary' : 'text-success-bright'}`}>{gaveUp ? t('five01.gaveUpTitle') : t('five01.checkoutTitle')}</h2>
+          <p className="text-muted">
+            {challenge.title} (<span className="text-secondary">{challenge.statLabel}</span>)<br />
             {gaveUp
               ? t('five01.gaveUpOn', { score, n: valid.length })
               : t('five01.finishedOn', { score, n: valid.length })}
@@ -175,18 +181,18 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
         </div>
 
         {valid.length > 0 && (
-          <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-4">
-            <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.yourRoute')}</div>
-            <div className="divide-y divide-gray-800/50 max-h-56 overflow-y-auto">
+          <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-4">
+            <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.yourRoute')}</div>
+            <div className="divide-y divide-border/50 max-h-56 overflow-y-auto">
               {valid.map((g, i) => (
                 <div key={i} className="flex items-center justify-between px-4 py-3">
                   <div className="flex items-center gap-2">
                     <span className="text-base">{g.player.flag}</span>
-                    <span className="text-white text-sm font-medium">{g.player.name}</span>
+                    <span className="text-primary text-sm font-medium">{g.player.name}</span>
                   </div>
                   <div className="flex items-center gap-4 text-sm font-mono">
-                    <span className="text-red-400 font-medium">−{g.scoreDeducted}</span>
-                    <span className={`font-bold tabular-nums w-10 text-right ${g.isCheckout ? 'text-green-400' : 'text-gray-300'}`}>{g.newScore}</span>
+                    <span className="text-danger-bright font-medium">−{g.scoreDeducted}</span>
+                    <span className={`font-bold tabular-nums w-10 text-right ${g.isCheckout ? 'text-success-bright' : 'text-secondary'}`}>{g.newScore}</span>
                   </div>
                 </div>
               ))}
@@ -197,10 +203,7 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
         <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
 
         <ShareCard text={buildSoloShareText(t, challenge, score, valid)} />
-        <div className="flex gap-3">
-          <button onClick={onPlayAgain} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.playAgain')}</button>
-          <button onClick={onExit} className="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
-        </div>
+        {buttons}
         <MoreGames current="/501" />
       </div>
     )
@@ -217,24 +220,24 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="text-center mb-8">
-        <div className="text-6xl mb-4">🏆</div>
-        <h2 className="score-number text-5xl text-green-400 mb-2">{winners.length > 1 ? t('five01.tie') : t('five01.wins', { name: winners[0].name })}</h2>
-        <p className="text-gray-400">{challenge.title}<br />{t('five01.closestWins')}</p>
+        <span className="block text-warn text-5xl mb-3" aria-hidden="true">★</span>
+        <h2 className="score-number text-5xl text-success-bright mb-2">{winners.length > 1 ? t('five01.tie') : t('five01.wins', { name: winners[0].name })}</h2>
+        <p className="text-muted">{challenge.title}<br />{t('five01.closestWins')}</p>
       </div>
 
-      <div className="w-full max-w-md bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6">
-        <div className="px-4 py-3 border-b border-gray-800 text-xs text-gray-500 uppercase tracking-widest font-medium">{t('five01.finalScores')}</div>
-        <div className="divide-y divide-gray-800/50">
+      <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-6">
+        <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.finalScores')}</div>
+        <div className="divide-y divide-border/50">
           {ranked.map((p, i) => (
             <div key={p.idx} className="flex items-center justify-between px-4 py-3">
               <div className="flex items-center gap-2">
-                <span className="text-gray-500 text-sm font-mono w-5">{i + 1}</span>
-                <span className="text-white text-sm font-medium">{p.name}</span>
-                {p.finished && fs(p) === winnerScore && <span className="text-base">🏆</span>}
+                <span className="text-muted text-sm font-mono w-5">{i + 1}</span>
+                <span className="text-primary text-sm font-medium">{p.name}</span>
+                {p.finished && fs(p) === winnerScore && <span className="text-warn" aria-hidden="true">★</span>}
               </div>
               {p.finished
-                ? <span className="font-bold tabular-nums text-green-400">{p.finalScore}</span>
-                : <span className="text-gray-500 text-xs">{t('five01.noCheckout')}</span>}
+                ? <span className="font-bold tabular-nums text-success-bright">{p.finalScore}</span>
+                : <span className="text-muted text-xs">{t('five01.noCheckout')}</span>}
             </div>
           ))}
         </div>
@@ -243,46 +246,43 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
       <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
 
       <ShareCard text={buildMultiplayerShareText(t, challenge, ranked, winners)} />
-      <div className="flex gap-3">
-        <button onClick={onPlayAgain} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.playAgain')}</button>
-        <button onClick={onExit} className="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
-      </div>
+      {buttons}
       <MoreGames current="/501" />
     </div>
   )
 }
 
-// ── Guess history ─────────────────────────────────────────────────
-function GuessHistory({ history, showPlayer }) {
+// ── Guess history — the ticker ─────────────────────────────────────
+function GuessHistory({ history, showPlayer, className = '' }) {
   const { t } = useI18n()
   if (!history.length) return null
   return (
-    <div className="w-full max-w-lg mt-5">
-      <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">{t('five01.history', { n: history.length })}</div>
-      <div className="rounded-xl border border-gray-800 overflow-hidden">
-        <div className="divide-y divide-gray-800/40 max-h-72 overflow-y-auto">
+    <div className={`w-full ${className}`}>
+      <div className="text-[0.58rem] text-faint uppercase tracking-[0.18em] mb-2 font-black px-1">{t('five01.history', { n: history.length })}</div>
+      <div className="rounded-xl border border-border overflow-hidden">
+        <div className="divide-y divide-border/40 max-h-72 overflow-y-auto">
           {[...history].reverse().map((g, i) => (
-            <div key={i} className={`flex items-center justify-between px-4 py-2.5 ${g.valid ? 'flash-valid' : 'flash-invalid'}`}>
-              <div className="flex-1 min-w-0 mr-4 flex items-center gap-2">
+            <div key={i} className={`flex items-center justify-between px-3 py-2.5 ${g.valid ? 'flash-valid' : 'flash-invalid'}`}>
+              <div className="flex-1 min-w-0 mr-3 flex items-center gap-2">
                 <span className="text-base shrink-0">{g.player.flag}</span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
-                    {showPlayer && <span className="text-xs text-gray-500 shrink-0">{g.playerName}:</span>}
-                    <span className="text-sm font-medium text-white truncate">{g.player.name}</span>
-                    {g.player.position && POS_META[g.player.position] && <span className={`shrink-0 text-xs font-bold px-1 py-0 rounded border ${POS_META[g.player.position].cls}`}>{POS_META[g.player.position].abbr}</span>}
+                    {showPlayer && <span className="text-xs text-muted shrink-0">{g.playerName}:</span>}
+                    <span className="text-sm font-medium text-primary truncate">{g.player.name}</span>
+                    {g.player.position && <span className={POS_BADGE}>{g.player.position}</span>}
                   </div>
-                  {!g.valid && <div className="text-xs text-red-400 mt-0.5 truncate">{g.reason}</div>}
+                  {!g.valid && <div className="text-xs text-danger-bright mt-0.5 truncate">{g.reason}</div>}
                 </div>
               </div>
               <div className="flex items-center gap-3 text-sm font-mono shrink-0">
                 {g.valid ? (
                   <>
-                    <span className="text-red-400">−{g.scoreDeducted}</span>
-                    <span className={`font-bold tabular-nums w-8 text-right ${g.isCheckout ? 'text-green-400' : 'text-gray-300'}`}>{g.newScore}</span>
+                    <span className="text-danger-bright">−{g.scoreDeducted}</span>
+                    <span className={`font-bold tabular-nums w-8 text-right ${g.isCheckout ? 'text-success-bright' : 'text-secondary'}`}>{g.newScore}</span>
                   </>
                 ) : g.statScore != null ? (
-                  <span className="text-orange-400 text-xs font-semibold tabular-nums">{t('five01.bustTag', { n: g.statScore })}</span>
-                ) : <span className="text-red-500 text-xs font-semibold">✗</span>}
+                  <span className="text-warn text-xs font-semibold tabular-nums">{t('five01.bustTag', { n: g.statScore })}</span>
+                ) : <span className="text-danger text-xs font-semibold">✗</span>}
               </div>
             </div>
           ))}
@@ -292,66 +292,73 @@ function GuessHistory({ history, showPlayer }) {
   )
 }
 
-// ── Entry: Daily (solo) vs Unlimited (multiplayer) ────────────────
+// ── Entry: the mode select ─────────────────────────────────────────
 function EntryScreen({ onDaily, onUnlimited }) {
-  const { t, lp } = useI18n()
+  const { t } = useI18n()
   const daily = getDailyEntry()
+  const played = playedToday('501')
+  const streak = getStats('501').currentStreak
+  const form = formGuide('501')
+  const formDot = { W: 'bg-success', L: 'bg-danger/75', '-': 'bg-inert' }
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-2xl mb-6">
-        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
+    <div className="max-w-3xl mx-auto px-4 pb-12">
+      <GameChrome motifId="501" title={t('five01.wordmark')} />
+      <div className="mt-8 mb-8 text-center">
+        <h1 className="score-number text-[clamp(3rem,9vw,4.5rem)] tv-wordmark leading-none mb-3">{t('five01.wordmark')}</h1>
+        <p className="text-secondary text-base max-w-md mx-auto leading-relaxed">{t('five01.entryBlurb')}</p>
       </div>
-      <div className="mb-10 text-center">
-        <h1 className="score-number text-6xl md:text-7xl text-white mb-4">{t('five01.wordmark')}</h1>
-        <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">{t('five01.entryBlurb')}</p>
-      </div>
-      <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button onClick={onDaily} className="group bg-gray-900 border border-gray-800 hover:border-green-600 hover:ring-1 hover:ring-green-600/30 rounded-xl p-6 text-left transition-all">
-          <div className="text-4xl mb-3">🎯</div>
-          <div className="text-white font-bold text-xl">{t('five01.dailyChallenge')}</div>
-          <div className="text-green-400 text-sm mt-1 font-medium">{t('five01.solo')}</div>
-          <div className="text-gray-600 text-xs mt-3 leading-relaxed">{t('five01.today', { title: daily.title })}</div>
+      <div className="grid grid-cols-1 gap-3">
+        <button onClick={onDaily} className="group relative text-left bg-[linear-gradient(120deg,var(--accent-tint),transparent_45%)] bg-card border border-border-strong hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] rounded-xl p-5 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
+          <span className={`absolute top-4 right-4 text-[0.58rem] font-black tracking-[0.1em] rounded px-1.5 py-0.5 border ${played ? 'text-success border-success/40' : 'text-brand-bright border-brand/55'}`}>
+            {played ? 'FT' : t('hub.kickOff')}
+          </span>
+          <GameMotif id="501" className="w-9 h-9 text-accent-bright mb-2" />
+          <div className="text-primary font-bold text-xl">{t('five01.dailyChallenge')}</div>
+          <div className="text-muted text-xs mt-1 leading-relaxed">{t('five01.today', { title: daily.title })}</div>
+          <div className="flex items-center gap-2 mt-3">
+            {streak > 0 ? <b className="text-[0.72rem] font-black text-warn">🔥 {streak} <em className="not-italic text-[0.55rem] tracking-[0.12em] text-muted">{t('hub.streak')}</em></b> : <b className="text-[0.6rem] font-black text-dim">—</b>}
+            <span className="inline-flex gap-[3px]" aria-hidden="true">{form.split('').map((ch, i) => <i key={i} className={`w-2 h-2 rounded-[2px] ${formDot[ch]}`} />)}</span>
+          </div>
         </button>
-        <button onClick={onUnlimited} className="group bg-gray-900 border border-gray-800 hover:border-purple-500 hover:ring-1 hover:ring-purple-500/30 rounded-xl p-6 text-left transition-all">
-          <div className="text-4xl mb-3">👥</div>
-          <div className="text-white font-bold text-xl">{t('five01.unlimited')}</div>
-          <div className="text-purple-400 text-sm mt-1 font-medium">{t('five01.localMultiplayer')}</div>
-          <div className="text-gray-600 text-xs mt-3 leading-relaxed">{t('five01.unlimitedBlurb')}</div>
+        <button onClick={onUnlimited} className="group text-left bg-card border border-border-strong hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] rounded-xl p-5 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
+          <GameMotif id="501" className="w-7 h-7 text-muted mb-2" />
+          <div className="text-primary font-bold text-lg">{t('five01.unlimited')}</div>
+          <div className="text-brand-bright text-xs mt-0.5 font-bold uppercase tracking-[0.08em]">{t('five01.localMultiplayer')}</div>
+          <div className="text-muted text-xs mt-2 leading-relaxed">{t('five01.unlimitedBlurb')}</div>
         </button>
       </div>
-      <div className="mt-8 text-gray-700 text-xs text-center max-w-sm leading-relaxed">{t('five01.rulesFooter')}</div>
+      <div className="mt-6 text-muted text-xs text-center max-w-sm mx-auto leading-relaxed">{t('five01.rulesFooter')}</div>
     </div>
   )
 }
 
 // ── Unlimited setup: pick a challenge, then player count ───────────
 const Pill = ({ active, onClick, children }) => (
-  <button onClick={onClick} className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${active ? 'border-green-500 bg-green-900/30 text-white' : 'border-gray-800 bg-gray-900 text-gray-400 hover:border-gray-600'}`}>{children}</button>
+  <button onClick={onClick} className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${active ? 'border-brand bg-brand-tint text-primary' : 'border-border-strong bg-surface text-muted hover:border-muted'}`}>{children}</button>
 )
 
 const InfoBox = ({ label, value, tone }) => (
-  <div className="bg-gray-900 border border-gray-800 rounded-lg px-2 py-2.5 text-center">
-    <div className={`score-number text-2xl tabular-nums ${tone === 'green' ? 'text-green-400' : tone === 'amber' ? 'text-amber-400' : 'text-white'}`}>{value}</div>
-    <div className="text-[10px] text-gray-500 uppercase tracking-wide mt-0.5 leading-tight">{label}</div>
+  <div className="bg-surface border border-border rounded-lg px-2 py-2 text-center">
+    <div className={`score-number text-2xl tabular-nums ${tone === 'green' ? 'text-success-bright' : tone === 'amber' ? 'text-warn' : 'text-primary'}`}>{value}</div>
+    <div className="text-[0.55rem] text-muted uppercase tracking-[0.1em] font-extrabold mt-0.5 leading-tight">{label}</div>
   </div>
 )
 
 function CountPicker({ title, sub, onPick, onBack }) {
   const { t } = useI18n()
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">{t('common.back')}</button>
-        <div className="mb-8 text-center">
-          <h2 className="text-white font-black text-2xl">{title}</h2>
-          {sub && <div className="text-gray-500 text-sm mt-1">{sub}</div>}
-          <div className="text-gray-500 text-sm mt-1">{t('five01.howManyPlayers')}</div>
-        </div>
-        <div className="grid grid-cols-4 gap-3">
-          {[2, 3, 4, 5].map(n => (
-            <button key={n} onClick={() => onPick(n)} className="bg-gray-900 border border-gray-800 hover:border-green-600 rounded-xl py-6 text-center text-2xl font-black text-white transition-colors">{n}</button>
-          ))}
-        </div>
+    <div className="max-w-md mx-auto px-4 pb-12">
+      <GameChrome motifId="501" title={t('five01.wordmark')} />
+      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4 mb-6">{t('common.back')}</button>
+      <div className="mb-8 text-center">
+        <h2 className="text-primary font-black text-2xl">{title}</h2>
+        {sub && <div className="text-muted text-sm mt-1">{sub}</div>}
+        <div className="text-muted text-sm mt-1">{t('five01.howManyPlayers')}</div>
+      </div>
+      <div className="grid grid-cols-4 gap-3">
+        {[2, 3, 4, 5].map(n => (
+          <button key={n} onClick={() => onPick(n)} className="bg-card border border-border-strong hover:border-brand rounded-xl py-6 text-center text-2xl font-black text-primary transition-colors">{n}</button>
+        ))}
       </div>
     </div>
   )
@@ -387,68 +394,68 @@ function CustomBuilder({ onStart, onBack }) {
   const ev = useMemo(() => (data ? evaluateSpec(spec, data.fact) : null), [spec, data])
   const ok = ev && ev.answers > 0 && ev.solvable && ev.maxPlayers >= count
 
-  const selectCls = 'w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2.5 text-white text-sm outline-none focus:border-green-600'
+  const selectCls = 'w-full bg-surface border border-border-strong rounded-lg px-3 py-2.5 text-primary text-sm outline-none focus:border-brand'
+  const label = 'text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold mb-2'
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-10">
-      <div className="w-full max-w-lg">
-        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">{t('common.back')}</button>
-        <h2 className="text-white font-black text-2xl mb-6">{t('five01.buildQuestion')}</h2>
-        <div className="space-y-5">
+    <div className="max-w-lg mx-auto px-4 pb-12">
+      <GameChrome motifId="501" title={t('five01.wordmark')} />
+      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4 mb-4">{t('common.back')}</button>
+      <h2 className="text-primary font-black text-2xl mb-6">{t('five01.buildQuestion')}</h2>
+      <div className="space-y-5">
+        <div>
+          <div className={label}>{t('five01.competition')}</div>
+          <select value={comp} onChange={e => setComp(e.target.value)} className={selectCls}>
+            {COMPETITIONS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
+        <div>
+          <div className={label}>{t('five01.stat')}</div>
+          <div className="flex flex-wrap gap-2">{STAT_OPTIONS.map(s => <Pill key={s.id} active={statId === s.id} onClick={() => setStatId(s.id)}>{t(`five01.statOpt.${s.id}`)}</Pill>)}</div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.competition')}</div>
-            <select value={comp} onChange={e => setComp(e.target.value)} className={selectCls}>
-              {COMPETITIONS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            <div className={label}>{t('five01.nationality')}</div>
+            <select value={nat} onChange={e => setNat(e.target.value)} disabled={!data} className={selectCls}>
+              <option value="">{t('five01.anyNationality')}</option>
+              {(data?.nations || []).map(n => <option key={n.key} value={n.key}>{n.display}</option>)}
             </select>
           </div>
           <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.stat')}</div>
-            <div className="flex flex-wrap gap-2">{STAT_OPTIONS.map(s => <Pill key={s.id} active={statId === s.id} onClick={() => setStatId(s.id)}>{t(`five01.statOpt.${s.id}`)}</Pill>)}</div>
+            <div className={label}>{t('five01.club')}</div>
+            <select value={club} onChange={e => setClub(e.target.value)} disabled={!data} className={selectCls}>
+              <option value="">{t('five01.anyClub')}</option>
+              {(data?.clubs || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.nationality')}</div>
-              <select value={nat} onChange={e => setNat(e.target.value)} disabled={!data} className={selectCls}>
-                <option value="">{t('five01.anyNationality')}</option>
-                {(data?.nations || []).map(n => <option key={n.key} value={n.key}>{n.display}</option>)}
-              </select>
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.club')}</div>
-              <select value={club} onChange={e => setClub(e.target.value)} disabled={!data} className={selectCls}>
-                <option value="">{t('five01.anyClub')}</option>
-                {(data?.clubs || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.position')}</div>
-            <div className="flex flex-wrap gap-2">
-              <Pill active={pos === ''} onClick={() => setPos('')}>{t('five01.any')}</Pill>
-              {POSITIONS.map(p => <Pill key={p.code} active={pos === p.code} onClick={() => setPos(p.code)}>{t(`five01.posOpt.${p.code}`)}</Pill>)}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">{t('five01.players')}</div>
-            <div className="flex gap-2">{[2, 3, 4, 5].map(n => <Pill key={n} active={count === n} onClick={() => setCount(n)}>{n}</Pill>)}</div>
-          </div>
-          <div className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 min-h-[3.5rem]">
-            {!ev ? <div className="text-gray-600 text-xs">{t('five01.loadingComp', { name: COMPETITIONS.find(c => c.id === comp)?.name })}</div> : (
-              <>
-                <div className="text-white text-sm font-semibold">{ev.title}</div>
-                <div className={`text-xs mt-1 ${ok ? 'text-gray-500' : 'text-amber-400'}`}>
-                  {ev.answers === 0 ? t('five01.noMatch')
-                    : !ev.solvable ? t('five01.notEnough', { n: ev.answers })
-                      : ev.maxPlayers < count ? t('five01.notEnoughPlayers', { max: ev.maxPlayers, count })
-                        : t('five01.okInfo', { answers: ev.answers, count })}
-                </div>
-              </>
-            )}
-          </div>
-          <button disabled={!ok} onClick={() => onStart(spec, count)}
-            className="w-full bg-green-700 hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3.5 transition-colors">
-            {t('five01.startGame')}
-          </button>
         </div>
+        <div>
+          <div className={label}>{t('five01.position')}</div>
+          <div className="flex flex-wrap gap-2">
+            <Pill active={pos === ''} onClick={() => setPos('')}>{t('five01.any')}</Pill>
+            {POSITIONS.map(p => <Pill key={p.code} active={pos === p.code} onClick={() => setPos(p.code)}>{t(`five01.posOpt.${p.code}`)}</Pill>)}
+          </div>
+        </div>
+        <div>
+          <div className={label}>{t('five01.players')}</div>
+          <div className="flex gap-2">{[2, 3, 4, 5].map(n => <Pill key={n} active={count === n} onClick={() => setCount(n)}>{n}</Pill>)}</div>
+        </div>
+        <div className="bg-card border border-l-4 border-border-strong border-l-brand rounded-xl px-4 py-3 min-h-[3.5rem]">
+          {!ev ? <div className="text-muted text-xs">{t('five01.loadingComp', { name: COMPETITIONS.find(c => c.id === comp)?.name })}</div> : (
+            <>
+              <div className="text-primary text-sm font-semibold">{ev.title}</div>
+              <div className={`text-xs mt-1 ${ok ? 'text-muted' : 'text-warn'}`}>
+                {ev.answers === 0 ? t('five01.noMatch')
+                  : !ev.solvable ? t('five01.notEnough', { n: ev.answers })
+                    : ev.maxPlayers < count ? t('five01.notEnoughPlayers', { max: ev.maxPlayers, count })
+                      : t('five01.okInfo', { answers: ev.answers, count })}
+              </div>
+            </>
+          )}
+        </div>
+        <button disabled={!ok} onClick={() => onStart(spec, count)}
+          className="w-full bg-brand hover:bg-brand-hover disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl py-3.5 transition-colors">
+          {t('five01.startGame')}
+        </button>
       </div>
     </div>
   )
@@ -460,25 +467,24 @@ function UnlimitedSetup({ onStart, onBack }) {
   if (step === 'random') return <CountPicker title={t('five01.randomTitle')} sub={t('five01.randomSub')} onBack={() => setStep('mode')} onPick={(n) => onStart(getRandomChallenge(n), n)} />
   if (step === 'custom') return <CustomBuilder onBack={() => setStep('mode')} onStart={(spec, count) => onStart(makeCustomChallenge(spec), count)} />
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg">
-        <button onClick={onBack} className="text-gray-600 hover:text-gray-400 text-sm transition-colors mb-6">{t('common.back')}</button>
-        <div className="mb-8 text-center">
-          <h2 className="text-white font-black text-2xl">{t('five01.localMultiplayerTitle')}</h2>
-          <div className="text-gray-500 text-sm mt-1">{t('five01.everyoneSame')}</div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button onClick={() => setStep('random')} className="bg-gray-900 border border-gray-800 hover:border-green-600 hover:ring-1 hover:ring-green-600/30 rounded-xl p-6 text-left transition-all">
-            <div className="text-3xl mb-3">🎲</div>
-            <div className="text-white font-bold text-lg">{t('five01.randomQuestion')}</div>
-            <div className="text-gray-600 text-xs mt-2 leading-relaxed">{t('five01.randomQuestionBlurb')}</div>
-          </button>
-          <button onClick={() => setStep('custom')} className="bg-gray-900 border border-gray-800 hover:border-purple-500 hover:ring-1 hover:ring-purple-500/30 rounded-xl p-6 text-left transition-all">
-            <div className="text-3xl mb-3">🛠️</div>
-            <div className="text-white font-bold text-lg">{t('five01.buildYourOwn')}</div>
-            <div className="text-gray-600 text-xs mt-2 leading-relaxed">{t('five01.buildYourOwnBlurb')}</div>
-          </button>
-        </div>
+    <div className="max-w-lg mx-auto px-4 pb-12">
+      <GameChrome motifId="501" title={t('five01.wordmark')} />
+      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4 mb-6">{t('common.back')}</button>
+      <div className="mb-8 text-center">
+        <h2 className="text-primary font-black text-2xl">{t('five01.localMultiplayerTitle')}</h2>
+        <div className="text-muted text-sm mt-1">{t('five01.everyoneSame')}</div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <button onClick={() => setStep('random')} className="bg-card border border-border-strong hover:border-brand rounded-xl p-6 text-left transition-all">
+          <GameMotif id="higher-or-lower" className="w-7 h-7 text-brand-bright mb-3 rotate-90" />
+          <div className="text-primary font-bold text-lg">{t('five01.randomQuestion')}</div>
+          <div className="text-muted text-xs mt-2 leading-relaxed">{t('five01.randomQuestionBlurb')}</div>
+        </button>
+        <button onClick={() => setStep('custom')} className="bg-card border border-border-strong hover:border-brand rounded-xl p-6 text-left transition-all">
+          <GameMotif id="connections" className="w-7 h-7 text-brand-bright mb-3" />
+          <div className="text-primary font-bold text-lg">{t('five01.buildYourOwn')}</div>
+          <div className="text-muted text-xs mt-2 leading-relaxed">{t('five01.buildYourOwnBlurb')}</div>
+        </button>
       </div>
     </div>
   )
@@ -663,95 +669,106 @@ export default function Football501() {
   }, [])
 
   // ── Render ────────────────────────────────────────────────────
-  if (loading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4">
-      <div className="w-8 h-8 border-2 border-gray-700 border-t-green-500 rounded-full animate-spin mb-4" />
-      <div className="text-gray-500 text-sm">{t('five01.loading')}</div>
+  const shell = (content) => (
+    <div className="tv-scene min-h-dvh text-primary" style={accentVars('501')}>{content}</div>
+  )
+
+  if (loading) return shell(
+    <div className="min-h-dvh flex flex-col items-center justify-center px-4">
+      <div className="w-8 h-8 border-2 border-border-strong border-t-brand rounded-full animate-spin mb-4" />
+      <div className="text-muted text-sm">{t('five01.loading')}</div>
     </div>
   )
-  if (phase === 'entry') return <EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />
-  if (phase === 'unlimited') return <UnlimitedSetup onStart={(challengePromise, n) => startFrom(challengePromise, n, false)} onBack={() => setPhase('entry')} />
-  if (phase === 'won') return <WinScreen history={history} players={players} challenge={challenge} gaveUp={gaveUp} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />
+  if (phase === 'entry') return shell(<EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />)
+  if (phase === 'unlimited') return shell(<UnlimitedSetup onStart={(challengePromise, n) => startFrom(challengePromise, n, false)} onBack={() => setPhase('entry')} />)
+  if (phase === 'won') return shell(<WinScreen history={history} players={players} challenge={challenge} gaveUp={gaveUp} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />)
 
   const validCount = history.filter(g => g.valid).length
   const currentPlayer = players[currentPlayerIndex]
 
-  return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-8">
-      <div className="w-full max-w-lg flex items-center justify-between mb-6">
-        <button onClick={() => setPhase('entry')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('five01.menu')}</button>
-        <div className="score-number text-xl text-gray-500 tracking-wider">{t('five01.wordmark')}</div>
-        <div className="text-gray-600 text-sm tabular-nums">{t('five01.dartsCount', { n: validCount })}</div>
-      </div>
+  return shell(
+    <div className="max-w-4xl mx-auto px-4 pb-10">
+      <GameChrome
+        motifId="501"
+        title={t('five01.wordmark')}
+        right={<button onClick={() => setPhase('entry')} className="text-muted hover:text-secondary transition-colors">{t('five01.menu')} · <b className="text-secondary tabular-nums">{t('five01.dartsCount', { n: validCount })}</b></button>}
+      />
 
-      {/* Challenge card */}
-      <div className="w-full max-w-lg mb-6">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <div className="text-white font-bold text-sm">{challenge.title}</div>
-            <div className="text-gray-500 text-xs mt-0.5">{t('five01.possibleAnswers', { n: challenge.answers })}</div>
+      <div className="lg:grid lg:grid-cols-[1fr,15rem] lg:gap-6">
+        {/* the stage */}
+        <div className="flex flex-col gap-3">
+          {/* question card — red spine, possible answers, skip (non-daily) */}
+          <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3 flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{isDaily ? t('five01.dailyChallenge').toUpperCase() : t('five01.unlimited').toUpperCase()}</div>
+              <div className="text-primary font-bold text-sm mt-0.5">{challenge.title}</div>
+              <div className="text-muted text-xs mt-0.5">{t('five01.possibleAnswers', { n: challenge.answers })}</div>
+            </div>
+            {!isDaily && (
+              <button onClick={skipQuestion} className="shrink-0 text-xs text-muted hover:text-secondary border border-border-strong hover:border-muted rounded-lg px-2.5 py-1 transition-colors">{t('five01.skip')}</button>
+            )}
           </div>
-          {!isDaily && (
-            <button onClick={skipQuestion} className="shrink-0 text-xs text-gray-500 hover:text-gray-300 border border-gray-700 hover:border-gray-500 rounded-lg px-2.5 py-1 transition-colors">{t('five01.skip')}</button>
+
+          <Scoreboard players={players} currentPlayerIndex={currentPlayerIndex} />
+          {numPlayers > 1 && <div className="text-center text-[0.66rem] font-extrabold text-brand-bright uppercase tracking-[0.2em] animate-pulse">{t('five01.turnOf', { name: currentPlayer.name })}</div>}
+
+          <ScoreDisplay score={score} />
+
+          {/* Input */}
+          <div className="relative w-full">
+            <input
+              ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
+              placeholder={t('five01.typePlayer')} autoFocus
+              className="w-full bg-surface border border-border-strong focus:border-brand rounded-xl px-4 py-3.5 text-primary placeholder-muted text-base outline-none transition-colors"
+              autoComplete="off" autoCorrect="off" spellCheck="false"
+              role="combobox" aria-expanded={suggestions.length > 0} aria-autocomplete="list" aria-label={t('five01.typePlayer')}
+            />
+            {isSearching && <div className="absolute right-4 top-6 -translate-y-1/2"><div className="w-4 h-4 border-2 border-border-strong border-t-brand rounded-full animate-spin" /></div>}
+            {suggestions.length > 0 && (
+              <div ref={dropdownRef} role="listbox" className="absolute top-full left-0 right-0 mt-1 bg-surface border border-border-strong rounded-xl overflow-hidden z-dropdown shadow-float">
+                {suggestions.map((player, i) => (
+                  <button key={player.name} role="option" aria-selected={i === highlightedIndex}
+                    onMouseDown={e => { e.preventDefault(); submitGuess(player) }} onMouseEnter={() => setHighlightedIndex(i)}
+                    className={`w-full text-left px-4 py-2.5 transition-colors border-b border-border/50 last:border-0 ${i === highlightedIndex ? 'bg-border' : 'hover:bg-border/60'}`}>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl shrink-0">{player.flag}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-primary text-sm font-medium truncate">{player.name}</div>
+                        <div className="text-muted text-xs">{player.nationality}{player.dob ? ` · ${player.dob}` : ''}</div>
+                      </div>
+                      {player.position && <span className={POS_BADGE}>{player.position}</span>}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-between text-[0.62rem] text-muted px-1">
+            <span>{t('five01.ruleValid')}</span><span>{t('five01.ruleCheckout')}</span><span>{t('five01.ruleBust')}</span>
+          </div>
+
+          {/* Live strategy boxes — highest left · checkouts · perfect finishes */}
+          {insights && (
+            <div className="grid grid-cols-3 gap-2">
+              <InfoBox label={t('five01.highestLeft')} value={insights.highest || '—'} />
+              <InfoBox label={t('five01.checkouts')} value={score <= 180 ? insights.checkouts : '—'} tone="green" />
+              <InfoBox label={t('five01.perfectFinish')} value={score <= 180 ? insights.perfect : '—'} tone="amber" />
+            </div>
+          )}
+
+          {/* Give up (solo) — end the round from here and reveal the answers */}
+          {numPlayers === 1 && (
+            <button type="button" onClick={giveUp}
+              className="w-full border border-danger/40 text-danger-bright hover:bg-danger/10 hover:border-danger text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
+              {t('five01.giveUpReveal')}
+            </button>
           )}
         </div>
+
+        {/* the ticker */}
+        <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5 lg:mt-0" />
       </div>
-
-      <Scoreboard players={players} currentPlayerIndex={currentPlayerIndex} />
-      {numPlayers > 1 && <div className="mb-3 text-sm font-semibold text-green-400 uppercase tracking-widest animate-pulse">{t('five01.turnOf', { name: currentPlayer.name })}</div>}
-
-      <div className="mb-7"><ScoreDisplay score={score} /></div>
-
-      {/* Input */}
-      <div className="relative w-full max-w-lg">
-        <input
-          ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-          placeholder={t('five01.typePlayer')} autoFocus
-          className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
-          autoComplete="off" autoCorrect="off" spellCheck="false"
-        />
-        {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2"><div className="w-4 h-4 border-2 border-gray-600 border-t-green-500 rounded-full animate-spin" /></div>}
-        {suggestions.length > 0 && (
-          <div ref={dropdownRef} className="absolute top-full left-0 right-0 mt-1 bg-gray-900 border border-gray-700 rounded-xl overflow-hidden z-10 shadow-2xl">
-            {suggestions.map((player, i) => (
-              <button key={player.name} onMouseDown={e => { e.preventDefault(); submitGuess(player) }} onMouseEnter={() => setHighlightedIndex(i)}
-                className={`w-full text-left px-4 py-2.5 transition-colors border-b border-gray-800/50 last:border-0 ${i === highlightedIndex ? 'bg-gray-800' : 'hover:bg-gray-800/60'}`}>
-                <div className="flex items-center gap-3">
-                  <span className="text-xl shrink-0">{player.flag}</span>
-                  <div className="min-w-0 flex-1">
-                    <div className="text-white text-sm font-medium truncate">{player.name}</div>
-                    <div className="text-gray-500 text-xs">{player.nationality}{player.dob ? ` · ${player.dob}` : ''}</div>
-                  </div>
-                  {player.position && POS_META[player.position] && <span className={`shrink-0 text-xs font-bold px-1.5 py-0.5 rounded border ${POS_META[player.position].cls}`}>{POS_META[player.position].abbr}</span>}
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="w-full max-w-lg mt-3 flex justify-between text-xs text-gray-700 px-1">
-        <span>{t('five01.ruleValid')}</span><span>{t('five01.ruleCheckout')}</span><span>{t('five01.ruleBust')}</span>
-      </div>
-
-      {/* Live strategy boxes */}
-      {insights && (
-        <div className="w-full max-w-lg mt-4 grid grid-cols-3 gap-2">
-          <InfoBox label={t('five01.highestLeft')} value={insights.highest || '—'} />
-          <InfoBox label={t('five01.checkouts')} value={score <= 180 ? insights.checkouts : '—'} tone="green" />
-          <InfoBox label={t('five01.perfectFinish')} value={score <= 180 ? insights.perfect : '—'} tone="amber" />
-        </div>
-      )}
-
-      {/* Give up (solo) — end the round from here and reveal the answers */}
-      {numPlayers === 1 && (
-        <button type="button" onClick={giveUp}
-          className="mt-4 w-full max-w-lg border border-red-900/60 text-red-400 hover:bg-red-900/20 hover:border-red-700 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
-          {t('five01.giveUpReveal')}
-        </button>
-      )}
-
-      <GuessHistory history={history} showPlayer={numPlayers > 1} />
     </div>
   )
 }

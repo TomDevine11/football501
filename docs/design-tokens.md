@@ -86,4 +86,4 @@ Unchanged from v1 and defined in `tailwind.config.js` / `:root`:
 
 ## 5. Retention constants
 
-Live in `src/data/dailyStats.js`, not CSS: `PTS_PLAY 10 · PTS_WIN 25 · PTS_STREAK_PER 5 · PTS_STREAK_CAP 25 · PERFECT_MULT 2`; `MATCHDAY_EPOCH` in `Hub.jsx`. Tune there only.
+Live in `src/data/dailyStats.js`, not CSS: `PTS_PLAY 10 · PTS_WIN 25 · PTS_STREAK_PER 5 · PTS_STREAK_CAP 25 · PERFECT_MULT 2`; `MATCHDAY_EPOCH` in `dailyStats.js`. Tune there only.

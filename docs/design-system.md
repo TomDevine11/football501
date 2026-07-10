@@ -62,7 +62,7 @@ All localStorage, no backend. Implementation + tunable constants: `src/data/dail
 
 | Mechanic | Spec |
 |---|---|
-| **Matchday** | `todayIndex() − MATCHDAY_EPOCH` (epoch in `Hub.jsx`). One shared daily number, everywhere. |
+| **Matchday** | `todayIndex() − MATCHDAY_EPOCH` (`matchdayNumber()` in `dailyStats.js`). One shared daily number, everywhere. |
 | **Per-game record** | `recordResult(game, won, score?)` — daily mode only, idempotent per day. Feeds streaks, form, points. Every game MUST call it at its daily end. |
 | **Form** | `formGuide(game)` — last 5 days as W/L/gap. Rendered as dots (success/danger/inert). |
 | **Points** | Play 10 · win 25 · +5×streak (cap 25) · perfect day ×2 (fires once, on the ninth record). Weekly total, resets Monday local. |

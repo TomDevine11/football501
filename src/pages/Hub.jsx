@@ -7,10 +7,7 @@ import LanguageSwitcher from '../components/LanguageSwitcher'
 import AdSlot from '../ads/AdSlot'
 import { routeByPath, SITE_URL } from '../seo/seoConfig'
 import { useI18n } from '../i18n'
-import { playedToday, getStats, recordVisit, todayIndex, formGuide, weeklyPoints } from '../data/dailyStats'
-
-// Matchday 1 = site launch day. Every visitor worldwide shares today's number.
-const MATCHDAY_EPOCH = 20455
+import { playedToday, getStats, recordVisit, formGuide, weeklyPoints, matchdayNumber } from '../data/dailyStats'
 
 // The lineup. `stats` keys dailyStats (what each game passes to recordResult).
 const GAMES = [
@@ -54,7 +51,7 @@ export default function Hub() {
   const [visit] = useState(recordVisit)
   const [countdown, setCountdown] = useState(untilMidnight)
   const [copied, setCopied] = useState(false)
-  const matchday = todayIndex() - MATCHDAY_EPOCH
+  const matchday = matchdayNumber()
 
   // Keep the next-dailies countdown live (minute precision).
   useEffect(() => {

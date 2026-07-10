@@ -31,6 +31,12 @@ export function todayIndex() {
   return Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
 }
 
+// Matchday 1 = site launch day. Every visitor worldwide shares today's number.
+const MATCHDAY_EPOCH = 20455
+export function matchdayNumber() {
+  return todayIndex() - MATCHDAY_EPOCH
+}
+
 // Monday that starts the week containing local day `idx` (day 0 = a Thursday).
 export function weekStart(idx = todayIndex()) {
   return idx - ((idx + 3) % 7)
