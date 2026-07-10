@@ -45,6 +45,7 @@ export const strings = {
       highestLeft: 'Highest left', checkouts: 'Checkouts', perfectFinish: 'Perfect finish',
       giveUpReveal: 'Give up & reveal answers', history: 'History ({n})', bustTag: '{n} · bust',
       historyEmpty: 'Your darts land here — every guess, hit or miss.',
+      upNext: 'UP NEXT', allGames: 'All games →',
       ambiguous: 'Ambiguous — did you mean {options}?',
       notValidAnswer: "{name} isn't a valid answer for this challenge",
       over180: '{n} — over 180, bust', cantDeduct: "{n} — can't be deducted",

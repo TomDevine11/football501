@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { players as localPlayers } from '../../data/players'
 import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
-import MoreGames from '../../components/MoreGames'
 import GameChrome from '../../components/GameChrome'
 import GameMotif from '../../components/GameMotif'
 import { useI18n } from '../../i18n'
@@ -115,139 +115,169 @@ function buildMultiplayerShareText(t, challenge, ranked, winners) {
   return [t('five01.shareTitle', { title: challenge.title }), headline, '', ...ranked.map((p, i) => `${i + 1}. ${p.name} — ${p.finalScore ?? t('five01.noCheckout')}`), '', SITE_URL].join('\n')
 }
 
-// Shared end-of-game reveal: who was a perfect finish from `finishingScore`,
-// and every valid answer (used ones ticked). Shown for solo AND multiplayer,
-// win or not.
-function AnswerReveal({ challenge, finishingScore, usedNames }) {
-  const { t } = useI18n()
-  const answers = challenge.answersList()
-  const perfect = answers.filter(a => a.value === finishingScore)
+// ── Win screen: the tabbed match report ───────────────────────────
+// One centred card that fits the viewport: verdict on top, the bulk behind
+// tabs (route/scores · all answers · share), actions + UP NEXT pills below.
+// Only the answer list scrolls, inside its own panel.
+
+// Other dailies to offer post-game (stats key → route). The first two still
+// on KICK OFF today become the UP NEXT pills.
+const NEXT_POOL = [
+  { stats: 'wordle', to: '/wordle' },
+  { stats: 'tenable', to: '/tenable' },
+  { stats: 'tictactoe', to: '/tictactoe' },
+  { stats: 'teammates', to: '/teammates' },
+  { stats: 'careers', to: '/career-path' },
+  { stats: 'wcsquads', to: '/world-cup' },
+  { stats: 'connections', to: '/connections' },
+  { stats: 'higherlower', to: '/higher-or-lower' },
+]
+
+function UpNextPills() {
+  const { t, lp } = useI18n()
+  const next = NEXT_POOL.filter(g => !playedToday(g.stats)).slice(0, 2)
   return (
-    <>
-      <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-4">
-        <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.perfectFrom', { score: finishingScore })}</div>
-        <div className="px-4 py-3 text-sm">
-          {perfect.length
-            ? <span className="text-success-bright">{perfect.map(p => p.name).join(', ')}</span>
-            : <span className="text-muted">{t('five01.noExact', { score: finishingScore })}</span>}
-        </div>
-      </div>
-      <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-6">
-        <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.allAnswers', { n: answers.length })}</div>
-        <div className="divide-y divide-border/40 max-h-80 overflow-y-auto">
-          {answers.map((a, i) => (
-            <div key={i} className="flex items-center justify-between px-4 py-2">
-              <span className={`text-sm ${usedNames.has(a.name) ? 'text-success-bright font-medium' : 'text-secondary'}`}>{usedNames.has(a.name) ? '✓ ' : ''}{a.name}</span>
-              <span className="text-muted text-xs font-mono tabular-nums">{a.value}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
+    <div className="flex items-center justify-center gap-2 flex-wrap mt-3 pt-3 border-t border-border">
+      <span className="text-[0.56rem] font-black tracking-[0.16em] text-faint">{t('five01.upNext')}</span>
+      {next.map(g => {
+        const id = g.to.slice(1)
+        return (
+          <Link key={g.to} to={lp(g.to)} className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary border border-border rounded-full px-2.5 py-1 hover:border-brand transition-colors">
+            <GameMotif id={id} className="w-4 h-4 text-accent-bright" />
+            {t(`games.${id}.title`).replace(/^Football /, '').replace(/ de Fútbol$/, '')}
+            <i className="not-italic text-[0.5rem] font-black text-brand-bright tracking-[0.08em]">KO</i>
+          </Link>
+        )
+      })}
+      <Link to={lp('/')} className="text-xs font-bold text-brand-bright border border-brand/40 rounded-full px-2.5 py-1 hover:border-brand transition-colors">{t('five01.allGames')}</Link>
+    </div>
   )
 }
 
-// ── Win screen ────────────────────────────────────────────────────
 function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit }) {
   const { t } = useI18n()
+  const [tab, setTab] = useState('route')
+  const [copied, setCopied] = useState(false)
   const isSolo = players.length === 1
   const valid = history.filter(g => g.valid)
   const usedNames = new Set(valid.map(g => g.resolvedName))
   const lastValid = valid[valid.length - 1]
+  const answers = challenge.answersList()
 
-  const buttons = (
-    <div className="flex gap-3">
-      <button onClick={onPlayAgain} className="px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">{t('five01.playAgain')}</button>
-      <button onClick={onExit} className="px-5 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
-    </div>
-  )
-
-  if (isSolo) {
-    const score = players[0].finalScore
-    // Finishing position (give up = remaining score; checkout = score before the last dart).
-    const finishingScore = gaveUp ? score : (lastValid ? lastValid.scoreAtTime : MAX_SCORE)
-
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-        <div className="text-center mb-8">
-          <GameMotif id="501" className={`w-14 h-14 mx-auto mb-4 ${gaveUp ? 'text-dim' : 'text-accent-bright'}`} />
-          <h2 className={`score-number text-6xl mb-2 ${gaveUp ? 'text-secondary' : 'text-success-bright'}`}>{gaveUp ? t('five01.gaveUpTitle') : t('five01.checkoutTitle')}</h2>
-          <p className="text-muted">
-            {challenge.title} (<span className="text-secondary">{challenge.statLabel}</span>)<br />
-            {gaveUp
-              ? t('five01.gaveUpOn', { score, n: valid.length })
-              : t('five01.finishedOn', { score, n: valid.length })}
-          </p>
-        </div>
-
-        {valid.length > 0 && (
-          <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-4">
-            <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.yourRoute')}</div>
-            <div className="divide-y divide-border/50 max-h-56 overflow-y-auto">
-              {valid.map((g, i) => (
-                <div key={i} className="flex items-center justify-between px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">{g.player.flag}</span>
-                    <span className="text-primary text-sm font-medium">{g.player.name}</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm font-mono">
-                    <span className="text-danger-bright font-medium">−{g.scoreDeducted}</span>
-                    <span className={`font-bold tabular-nums w-10 text-right ${g.isCheckout ? 'text-success-bright' : 'text-secondary'}`}>{g.newScore}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
-
-        <ShareCard text={buildSoloShareText(t, challenge, score, valid)} />
-        {buttons}
-        <MoreGames current="/501" />
-      </div>
-    )
-  }
-
-  // Closest-to-0 checkout wins; a player who never checked out (finalScore null,
-  // e.g. beaten to it by player 2) can't win. Ties on the winning score = draw.
+  // Finishing position (give up = remaining score; checkout = score before the last dart).
+  const soloScore = players[0].finalScore
   const fs = (p) => (p.finalScore ?? -Infinity)
   const ranked = players.map((p, i) => ({ ...p, idx: i })).sort((a, b) => fs(b) - fs(a))
   const winnerScore = fs(ranked[0])
   const winners = ranked.filter(p => p.finished && fs(p) === winnerScore)
-  const finishingScore = lastValid ? lastValid.scoreAtTime : MAX_SCORE
+  const finishingScore = isSolo
+    ? (gaveUp ? soloScore : (lastValid ? lastValid.scoreAtTime : MAX_SCORE))
+    : (lastValid ? lastValid.scoreAtTime : MAX_SCORE)
+  const perfect = answers.filter(a => a.value === finishingScore)
+  const shareText = isSolo
+    ? buildSoloShareText(t, challenge, soloScore, valid)
+    : buildMultiplayerShareText(t, challenge, ranked, winners)
+
+  const copyResult = async () => {
+    try {
+      await navigator.clipboard.writeText(shareText)
+      setCopied(true); setTimeout(() => setCopied(false), 2000)
+    } catch { /* clipboard unavailable */ }
+  }
+
+  const headline = isSolo
+    ? (gaveUp ? t('five01.gaveUpTitle') : t('five01.checkoutTitle'))
+    : (winners.length > 1 ? t('five01.tie') : t('five01.wins', { name: winners[0].name }))
+  const headlineCls = isSolo && gaveUp ? 'text-secondary' : 'text-success-bright'
+  const subline = isSolo
+    ? (gaveUp ? t('five01.gaveUpOn', { score: soloScore, n: valid.length }) : t('five01.finishedOn', { score: soloScore, n: valid.length }))
+    : t('five01.closestWins')
+
+  const tabBtn = (id, label) => (
+    <button key={id} onClick={() => setTab(id)}
+      className={`text-[0.6rem] font-black tracking-[0.12em] rounded-full px-3 py-1.5 border transition-colors ${tab === id ? 'bg-brand border-brand text-white' : 'border-border text-muted hover:text-secondary'}`}>
+      {label}
+    </button>
+  )
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      <div className="text-center mb-8">
-        <span className="block text-warn text-5xl mb-3" aria-hidden="true">★</span>
-        <h2 className="score-number text-5xl text-success-bright mb-2">{winners.length > 1 ? t('five01.tie') : t('five01.wins', { name: winners[0].name })}</h2>
-        <p className="text-muted">{challenge.title}<br />{t('five01.closestWins')}</p>
-      </div>
-
-      <div className="w-full max-w-md bg-card rounded-xl border border-border-strong overflow-hidden mb-6">
-        <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('five01.finalScores')}</div>
-        <div className="divide-y divide-border/50">
-          {ranked.map((p, i) => (
-            <div key={p.idx} className="flex items-center justify-between px-4 py-3">
-              <div className="flex items-center gap-2">
-                <span className="text-muted text-sm font-mono w-5">{i + 1}</span>
-                <span className="text-primary text-sm font-medium">{p.name}</span>
-                {p.finished && fs(p) === winnerScore && <span className="text-warn" aria-hidden="true">★</span>}
-              </div>
-              {p.finished
-                ? <span className="font-bold tabular-nums text-success-bright">{p.finalScore}</span>
-                : <span className="text-muted text-xs">{t('five01.noCheckout')}</span>}
-            </div>
-          ))}
+    <div className="max-w-2xl mx-auto px-4 pb-14 h-dvh flex flex-col">
+      <GameChrome motifId="501" title={t('five01.wordmark')} right={<span className="tabular-nums">{t('five01.dartsCount', { n: valid.length })}</span>} />
+      <div className="flex-1 min-h-0 bg-card border border-border-strong rounded-2xl px-5 py-5 flex flex-col">
+        <div className="text-center">
+          <GameMotif id="501" className={`w-10 h-10 mx-auto mb-1.5 ${isSolo && gaveUp ? 'text-dim' : 'text-accent-bright'}`} />
+          <h2 className={`score-number text-4xl sm:text-5xl ${headlineCls}`}>{headline}</h2>
+          <p className="text-muted text-sm mt-1 leading-snug">
+            {challenge.title}{isSolo && <> (<span className="text-secondary">{challenge.statLabel}</span>)</>}<br />
+            <b className="text-secondary font-semibold">{subline}</b>
+          </p>
         </div>
+
+        <div className="flex gap-1.5 justify-center my-3.5 flex-wrap">
+          {tabBtn('route', isSolo ? t('five01.yourRoute').toUpperCase() : t('five01.finalScores').toUpperCase())}
+          {tabBtn('answers', t('five01.allAnswers', { n: answers.length }).toUpperCase())}
+          {tabBtn('share', t('share.share').toUpperCase())}
+        </div>
+
+        <div className="flex-1 min-h-0 flex flex-col">
+          {tab === 'route' && (
+            <>
+              <div className="flex justify-between items-center bg-success/10 border border-success/30 rounded-lg px-3 py-2 mb-2">
+                <span className="text-[0.56rem] font-black tracking-[0.14em] text-success-bright">{t('five01.perfectFrom', { score: finishingScore }).toUpperCase()}</span>
+                <span className="text-xs font-bold text-primary truncate ml-3">
+                  {perfect.length ? perfect.map(a => a.name).join(', ') : <span className="text-muted font-normal">{t('five01.noExact', { score: finishingScore })}</span>}
+                </span>
+              </div>
+              <div className="flex-1 min-h-0 overflow-y-auto border border-border rounded-lg divide-y divide-border/40">
+                {isSolo ? (
+                  valid.length ? valid.map((g, i) => (
+                    <div key={i} className="flex items-center gap-2 px-3 py-2 text-sm">
+                      <span>{g.player.flag}</span>
+                      <span className="flex-1 font-medium text-primary truncate">{g.player.name}</span>
+                      <span className="text-danger-bright font-mono">−{g.scoreDeducted}</span>
+                      <span className={`w-10 text-right font-bold font-mono tabular-nums ${g.isCheckout ? 'text-success-bright' : 'text-secondary'}`}>{g.newScore}</span>
+                    </div>
+                  )) : <div className="px-3 py-4 text-xs text-muted text-center">—</div>
+                ) : (
+                  ranked.map((pl, i) => (
+                    <div key={pl.idx} className="flex items-center gap-2 px-3 py-2 text-sm">
+                      <span className="text-muted font-mono w-5">{i + 1}</span>
+                      <span className="flex-1 font-medium text-primary truncate">{pl.name}</span>
+                      {pl.finished && fs(pl) === winnerScore && <span className="text-warn" aria-hidden="true">★</span>}
+                      {pl.finished
+                        ? <span className="font-bold tabular-nums text-success-bright">{pl.finalScore}</span>
+                        : <span className="text-muted text-xs">{t('five01.noCheckout')}</span>}
+                    </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+          {tab === 'answers' && (
+            <div className="flex-1 min-h-0 overflow-y-auto border border-border rounded-lg divide-y divide-border/40">
+              {answers.map((a, i) => (
+                <div key={i} className="flex items-center justify-between px-3 py-1.5 text-sm">
+                  <span className={usedNames.has(a.name) ? 'text-success-bright font-medium' : 'text-secondary'}>{usedNames.has(a.name) ? '✓ ' : ''}{a.name}</span>
+                  <span className="text-muted text-xs font-mono tabular-nums">{a.value}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {tab === 'share' && (
+            <div className="flex-1 min-h-0 overflow-y-auto flex flex-col items-center gap-3 pt-1">
+              <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
+              <ShareCard text={shareText} />
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-2 justify-center mt-3.5">
+          <button onClick={copyResult} className="px-4 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">{copied ? t('hub.copied') : t('share.copy')}</button>
+          <button onClick={onPlayAgain} className="px-4 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">{t('five01.playAgain')}</button>
+          <button onClick={onExit} className="px-4 py-2.5 text-muted hover:text-secondary border border-border text-sm font-bold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
+        </div>
+        <UpNextPills />
       </div>
-
-      <AnswerReveal challenge={challenge} finishingScore={finishingScore} usedNames={usedNames} />
-
-      <ShareCard text={buildMultiplayerShareText(t, challenge, ranked, winners)} />
-      {buttons}
-      <MoreGames current="/501" />
     </div>
   )
 }
