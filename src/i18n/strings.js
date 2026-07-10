@@ -44,6 +44,7 @@ export const strings = {
       ruleValid: 'Valid: 1–180', ruleCheckout: 'Checkout: 0 to −10', ruleBust: 'Below −10 = bust',
       highestLeft: 'Highest left', checkouts: 'Checkouts', perfectFinish: 'Perfect finish',
       giveUpReveal: 'Give up & reveal answers', history: 'History ({n})', bustTag: '{n} · bust',
+      historyEmpty: 'Your darts land here — every guess, hit or miss.',
       ambiguous: 'Ambiguous — did you mean {options}?',
       notValidAnswer: "{name} isn't a valid answer for this challenge",
       over180: '{n} — over 180, bust', cantDeduct: "{n} — can't be deducted",

@@ -253,36 +253,39 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
 }
 
 // ── Guess history — the ticker ─────────────────────────────────────
+// Two-line rows so names never truncate away: name + deduction on top,
+// running score / reason underneath. Empty state keeps the desktop rail
+// balanced before the first dart (hidden on mobile, where it would be noise).
 function GuessHistory({ history, showPlayer, className = '' }) {
   const { t } = useI18n()
-  if (!history.length) return null
+  if (!history.length) return (
+    <div className={`hidden lg:block w-full ${className}`}>
+      <div className="text-[0.58rem] text-faint uppercase tracking-[0.18em] mb-2 font-black px-1">{t('five01.history', { n: 0 })}</div>
+      <div className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-xs text-faint leading-relaxed">{t('five01.historyEmpty')}</div>
+    </div>
+  )
   return (
     <div className={`w-full ${className}`}>
       <div className="text-[0.58rem] text-faint uppercase tracking-[0.18em] mb-2 font-black px-1">{t('five01.history', { n: history.length })}</div>
       <div className="rounded-xl border border-border overflow-hidden">
-        <div className="divide-y divide-border/40 max-h-72 overflow-y-auto">
+        <div className="divide-y divide-border/40 max-h-[26rem] overflow-y-auto">
           {[...history].reverse().map((g, i) => (
-            <div key={i} className={`flex items-center justify-between px-3 py-2.5 ${g.valid ? 'flash-valid' : 'flash-invalid'}`}>
-              <div className="flex-1 min-w-0 mr-3 flex items-center gap-2">
+            <div key={i} className={`px-3 py-2.5 ${g.valid ? 'flash-valid' : 'flash-invalid'}`}>
+              <div className="flex items-center gap-2">
                 <span className="text-base shrink-0">{g.player.flag}</span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    {showPlayer && <span className="text-xs text-muted shrink-0">{g.playerName}:</span>}
-                    <span className="text-sm font-medium text-primary truncate">{g.player.name}</span>
-                    {g.player.position && <span className={POS_BADGE}>{g.player.position}</span>}
-                  </div>
-                  {!g.valid && <div className="text-xs text-danger-bright mt-0.5 truncate">{g.reason}</div>}
-                </div>
+                {showPlayer && <span className="text-xs text-muted shrink-0">{g.playerName}:</span>}
+                <span className="text-sm font-medium text-primary truncate flex-1">{g.player.name}</span>
+                {g.player.position && <span className={POS_BADGE}>{g.player.position}</span>}
+                {g.valid
+                  ? <span className="text-danger-bright text-sm font-mono shrink-0">−{g.scoreDeducted}</span>
+                  : g.statScore != null
+                    ? <span className="text-warn text-xs font-semibold tabular-nums shrink-0">{t('five01.bustTag', { n: g.statScore })}</span>
+                    : <span className="text-danger text-xs font-semibold shrink-0">✗</span>}
               </div>
-              <div className="flex items-center gap-3 text-sm font-mono shrink-0">
-                {g.valid ? (
-                  <>
-                    <span className="text-danger-bright">−{g.scoreDeducted}</span>
-                    <span className={`font-bold tabular-nums w-8 text-right ${g.isCheckout ? 'text-success-bright' : 'text-secondary'}`}>{g.newScore}</span>
-                  </>
-                ) : g.statScore != null ? (
-                  <span className="text-warn text-xs font-semibold tabular-nums">{t('five01.bustTag', { n: g.statScore })}</span>
-                ) : <span className="text-danger text-xs font-semibold">✗</span>}
+              <div className="mt-0.5 pl-7 text-xs">
+                {g.valid
+                  ? <span className="text-muted font-mono tabular-nums">{g.scoreAtTime} → <b className={g.isCheckout ? 'text-success-bright' : 'text-secondary'}>{g.newScore}</b></span>
+                  : <span className="text-danger-bright truncate block">{g.reason}</span>}
               </div>
             </div>
           ))}
@@ -694,9 +697,9 @@ export default function Football501() {
         right={<button onClick={() => setPhase('entry')} className="text-muted hover:text-secondary transition-colors">{t('five01.menu')} · <b className="text-secondary tabular-nums">{t('five01.dartsCount', { n: validCount })}</b></button>}
       />
 
-      <div className="lg:grid lg:grid-cols-[1fr,15rem] lg:gap-6">
-        {/* the stage */}
-        <div className="flex flex-col gap-3">
+      <div className="lg:grid lg:grid-cols-[1fr,19rem] lg:gap-8">
+        {/* the stage — vertically centred on desktop so the oche sits mid-screen */}
+        <div className="flex flex-col justify-center gap-3 w-full max-w-2xl mx-auto lg:min-h-[calc(100dvh-7rem)]">
           {/* question card — red spine, possible answers, skip (non-daily) */}
           <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -767,7 +770,9 @@ export default function Football501() {
         </div>
 
         {/* the ticker */}
-        <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5 lg:mt-0" />
+        <div className="lg:self-center">
+          <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5 lg:mt-0" />
+        </div>
       </div>
     </div>
   )
