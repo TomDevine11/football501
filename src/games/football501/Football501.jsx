@@ -83,6 +83,28 @@ function ScoreDisplay({ score }) {
   )
 }
 
+// ── The descent rail: the countdown drawn as a fall from 501 to checkout ──
+// Dots mark every score the current player has landed on; the marker is where
+// they are now; the zone at the bottom is the 0..−10 checkout window (drawn
+// oversized — to scale it would be 2% of the rail and invisible).
+function DescentRail({ score, stops }) {
+  const pos = v => `${Math.min(97, Math.max(0, ((MAX_SCORE - v) / (MAX_SCORE - CHECKOUT_MIN)) * 100))}%`
+  const inZone = score <= 0 && score >= CHECKOUT_MIN
+  return (
+    <div className="hidden lg:flex flex-col items-center gap-1.5 self-stretch min-h-[24rem]" aria-hidden="true">
+      <span className="text-[0.6rem] font-black text-faint tabular-nums">501</span>
+      <div className="relative flex-1 w-2.5 rounded-full bg-gradient-to-b from-border-strong via-surface to-surface">
+        {stops.map((v, i) => (
+          <i key={i} className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-success" style={{ top: pos(v) }} />
+        ))}
+        <i className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-canvas transition-[top] duration-slow ease-out ${inZone ? 'bg-success shadow-glow' : 'bg-accent shadow-glow'}`} style={{ top: pos(score) }} />
+        <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-10 rounded-lg border ${inZone ? 'bg-success/30 border-success' : 'bg-success/10 border-success/40'}`} />
+      </div>
+      <span className="text-[0.55rem] font-black text-success-bright tracking-[0.08em] text-center leading-tight">0<br/>−10</span>
+    </div>
+  )
+}
+
 // ── PDC split scoreboard (local multiplayer) ───────────────────────
 function Scoreboard({ players, currentPlayerIndex }) {
   const { t } = useI18n()
@@ -201,9 +223,7 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
   )
 
   return (
-    <div className="max-w-2xl mx-auto px-4 pb-14 h-dvh flex flex-col">
-      <GameChrome motifId="501" title={t('five01.wordmark')} right={<span className="tabular-nums">{t('five01.dartsCount', { n: valid.length })}</span>} />
-      <div className="flex-1 min-h-0 bg-card border border-border-strong rounded-2xl px-5 py-5 flex flex-col">
+    <div className="w-full max-h-full min-h-0 bg-surface border border-border-strong rounded-2xl px-5 py-5 flex flex-col shadow-modal">
         <div className="text-center">
           <GameMotif id="501" className={`w-10 h-10 mx-auto mb-1.5 ${isSolo && gaveUp ? 'text-dim' : 'text-accent-bright'}`} />
           <h2 className={`score-number text-4xl sm:text-5xl ${headlineCls}`}>{headline}</h2>
@@ -277,7 +297,6 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
           <button onClick={onExit} className="px-4 py-2.5 text-muted hover:text-secondary border border-border text-sm font-bold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
         </div>
         <UpNextPills />
-      </div>
     </div>
   )
 }
@@ -366,10 +385,6 @@ function EntryScreen({ onDaily, onUnlimited }) {
 }
 
 // ── Unlimited setup: pick a challenge, then player count ───────────
-const Pill = ({ active, onClick, children }) => (
-  <button onClick={onClick} className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${active ? 'border-brand bg-brand-tint text-primary' : 'border-border-strong bg-surface text-muted hover:border-muted'}`}>{children}</button>
-)
-
 const InfoBox = ({ label, value, tone }) => (
   <div className="bg-surface border border-border rounded-lg px-2 py-2 text-center">
     <div className={`score-number text-2xl tabular-nums ${tone === 'green' ? 'text-success-bright' : tone === 'amber' ? 'text-warn' : 'text-primary'}`}>{value}</div>
@@ -380,17 +395,21 @@ const InfoBox = ({ label, value, tone }) => (
 function CountPicker({ title, sub, onPick, onBack }) {
   const { t } = useI18n()
   return (
-    <div className="max-w-md mx-auto px-4 pb-12">
+    <div className="max-w-2xl mx-auto px-4 pb-12">
       <GameChrome motifId="501" title={t('five01.wordmark')} />
-      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4 mb-6">{t('common.back')}</button>
-      <div className="mb-8 text-center">
-        <h2 className="text-primary font-black text-2xl">{title}</h2>
-        {sub && <div className="text-muted text-sm mt-1">{sub}</div>}
-        <div className="text-muted text-sm mt-1">{t('five01.howManyPlayers')}</div>
+      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4">{t('common.back')}</button>
+      <div className="mt-6 mb-8 text-center">
+        <h2 className="score-number text-[clamp(2rem,5vw,2.6rem)] tv-wordmark leading-none mb-2">{title.toUpperCase()}</h2>
+        {sub && <div className="text-secondary text-sm">{sub}</div>}
+        <div className="text-muted text-xs mt-1 font-bold tracking-[0.12em] uppercase">{t('five01.howManyPlayers')}</div>
       </div>
       <div className="grid grid-cols-4 gap-3">
         {[2, 3, 4, 5].map(n => (
-          <button key={n} onClick={() => onPick(n)} className="bg-card border border-border-strong hover:border-brand rounded-xl py-6 text-center text-2xl font-black text-primary transition-colors">{n}</button>
+          <button key={n} onClick={() => onPick(n)}
+            className="group bg-card border border-border-strong hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] rounded-xl py-7 text-center transition-all hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
+            <span className="score-number text-4xl text-primary group-hover:text-accent-bright transition-colors">{n}</span>
+            <span className="block mt-1 text-[0.55rem] font-black tracking-[0.14em] text-faint">{t('five01.players').toUpperCase()}</span>
+          </button>
         ))}
       </div>
     </div>
@@ -427,69 +446,81 @@ function CustomBuilder({ onStart, onBack }) {
   const ev = useMemo(() => (data ? evaluateSpec(spec, data.fact) : null), [spec, data])
   const ok = ev && ev.answers > 0 && ev.solvable && ev.maxPlayers >= count
 
-  const selectCls = 'w-full bg-surface border border-border-strong rounded-lg px-3 py-2.5 text-primary text-sm outline-none focus:border-brand'
-  const label = 'text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold mb-2'
+  // Filters as a team-sheet: uniform boxes, label over value.
+  const box = 'bg-surface border border-border rounded-lg px-3 py-2 focus-within:border-brand transition-colors'
+  const boxLabel = 'block text-[0.52rem] font-black tracking-[0.16em] text-faint mb-0.5'
+  const sel = 'w-full bg-transparent text-primary text-sm font-bold outline-none cursor-pointer'
+  const meterPct = ev ? Math.min(100, Math.round((ev.answers / 60) * 100)) : 0
+
   return (
-    <div className="max-w-lg mx-auto px-4 pb-12">
+    <div className="max-w-2xl mx-auto px-4 pb-12">
       <GameChrome motifId="501" title={t('five01.wordmark')} />
-      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4 mb-4">{t('common.back')}</button>
-      <h2 className="text-primary font-black text-2xl mb-6">{t('five01.buildQuestion')}</h2>
-      <div className="space-y-5">
-        <div>
-          <div className={label}>{t('five01.competition')}</div>
-          <select value={comp} onChange={e => setComp(e.target.value)} className={selectCls}>
+      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4">{t('common.back')}</button>
+      <div className="mt-6 mb-6 text-center">
+        <h2 className="score-number text-[clamp(2rem,5vw,2.6rem)] tv-wordmark leading-none">{t('five01.buildQuestion').toUpperCase()}</h2>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+        <label className={box}><span className={boxLabel}>{t('five01.competition').toUpperCase()}</span>
+          <select value={comp} onChange={e => setComp(e.target.value)} className={sel}>
             {COMPETITIONS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
-        </div>
-        <div>
-          <div className={label}>{t('five01.stat')}</div>
-          <div className="flex flex-wrap gap-2">{STAT_OPTIONS.map(s => <Pill key={s.id} active={statId === s.id} onClick={() => setStatId(s.id)}>{t(`five01.statOpt.${s.id}`)}</Pill>)}</div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <div className={label}>{t('five01.nationality')}</div>
-            <select value={nat} onChange={e => setNat(e.target.value)} disabled={!data} className={selectCls}>
-              <option value="">{t('five01.anyNationality')}</option>
-              {(data?.nations || []).map(n => <option key={n.key} value={n.key}>{n.display}</option>)}
-            </select>
-          </div>
-          <div>
-            <div className={label}>{t('five01.club')}</div>
-            <select value={club} onChange={e => setClub(e.target.value)} disabled={!data} className={selectCls}>
-              <option value="">{t('five01.anyClub')}</option>
-              {(data?.clubs || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
-          </div>
-        </div>
-        <div>
-          <div className={label}>{t('five01.position')}</div>
-          <div className="flex flex-wrap gap-2">
-            <Pill active={pos === ''} onClick={() => setPos('')}>{t('five01.any')}</Pill>
-            {POSITIONS.map(p => <Pill key={p.code} active={pos === p.code} onClick={() => setPos(p.code)}>{t(`five01.posOpt.${p.code}`)}</Pill>)}
-          </div>
-        </div>
-        <div>
-          <div className={label}>{t('five01.players')}</div>
-          <div className="flex gap-2">{[2, 3, 4, 5].map(n => <Pill key={n} active={count === n} onClick={() => setCount(n)}>{n}</Pill>)}</div>
-        </div>
-        <div className="bg-card border border-l-4 border-border-strong border-l-brand rounded-xl px-4 py-3 min-h-[3.5rem]">
-          {!ev ? <div className="text-muted text-xs">{t('five01.loadingComp', { name: COMPETITIONS.find(c => c.id === comp)?.name })}</div> : (
-            <>
-              <div className="text-primary text-sm font-semibold">{ev.title}</div>
-              <div className={`text-xs mt-1 ${ok ? 'text-muted' : 'text-warn'}`}>
+        </label>
+        <label className={box}><span className={boxLabel}>{t('five01.stat').toUpperCase()}</span>
+          <select value={statId} onChange={e => setStatId(e.target.value)} className={sel}>
+            {STAT_OPTIONS.map(o => <option key={o.id} value={o.id}>{t(`five01.statOpt.${o.id}`)}</option>)}
+          </select>
+        </label>
+        <label className={box}><span className={boxLabel}>{t('five01.nationality').toUpperCase()}</span>
+          <select value={nat} onChange={e => setNat(e.target.value)} disabled={!data} className={sel}>
+            <option value="">{t('five01.anyNationality')}</option>
+            {(data?.nations || []).map(n => <option key={n.key} value={n.key}>{n.display}</option>)}
+          </select>
+        </label>
+        <label className={box}><span className={boxLabel}>{t('five01.club').toUpperCase()}</span>
+          <select value={club} onChange={e => setClub(e.target.value)} disabled={!data} className={sel}>
+            <option value="">{t('five01.anyClub')}</option>
+            {(data?.clubs || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </label>
+        <label className={box}><span className={boxLabel}>{t('five01.position').toUpperCase()}</span>
+          <select value={pos} onChange={e => setPos(e.target.value)} className={sel}>
+            <option value="">{t('five01.any')}</option>
+            {POSITIONS.map(o => <option key={o.code} value={o.code}>{t(`five01.posOpt.${o.code}`)}</option>)}
+          </select>
+        </label>
+        <label className={box}><span className={boxLabel}>{t('five01.players').toUpperCase()}</span>
+          <select value={count} onChange={e => setCount(Number(e.target.value))} className={sel}>
+            {[2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </label>
+      </div>
+
+      {/* live question preview + validity meter */}
+      <div className="mt-4 bg-card border border-l-4 border-border-strong border-l-accent rounded-xl px-4 py-3">
+        {!ev ? <div className="text-muted text-xs">{t('five01.loadingComp', { name: COMPETITIONS.find(c => c.id === comp)?.name })}</div> : (
+          <>
+            <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{t('five01.buildQuestion').toUpperCase()}</div>
+            <div className="text-primary text-sm font-bold mt-0.5">{ev.title}</div>
+            <div className="flex items-center gap-3 mt-2.5">
+              <div className="flex-1 h-2 bg-surface rounded-full overflow-hidden">
+                <i className={`block h-full rounded-full transition-[width] duration-base ease-out ${ok ? 'bg-success' : 'bg-warn'}`} style={{ width: `${meterPct}%` }} />
+              </div>
+              <span className={`text-xs shrink-0 ${ok ? 'text-success-bright' : 'text-warn'}`}>
                 {ev.answers === 0 ? t('five01.noMatch')
                   : !ev.solvable ? t('five01.notEnough', { n: ev.answers })
                     : ev.maxPlayers < count ? t('five01.notEnoughPlayers', { max: ev.maxPlayers, count })
-                      : t('five01.okInfo', { answers: ev.answers, count })}
-              </div>
-            </>
-          )}
-        </div>
-        <button disabled={!ok} onClick={() => onStart(spec, count)}
-          className="w-full bg-brand hover:bg-brand-hover disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl py-3.5 transition-colors">
-          {t('five01.startGame')}
-        </button>
+                      : `✓ ${t('five01.okInfo', { answers: ev.answers, count })}`}
+              </span>
+            </div>
+          </>
+        )}
       </div>
+
+      <button disabled={!ok} onClick={() => onStart(spec, count)}
+        className="mt-4 w-full bg-brand hover:bg-brand-hover disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl py-3.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
+        {t('five01.startGame')}
+      </button>
     </div>
   )
 }
@@ -500,25 +531,37 @@ function UnlimitedSetup({ onStart, onBack }) {
   if (step === 'random') return <CountPicker title={t('five01.randomTitle')} sub={t('five01.randomSub')} onBack={() => setStep('mode')} onPick={(n) => onStart(getRandomChallenge(n), n)} />
   if (step === 'custom') return <CustomBuilder onBack={() => setStep('mode')} onStart={(spec, count) => onStart(makeCustomChallenge(spec), count)} />
   return (
-    <div className="max-w-lg mx-auto px-4 pb-12">
+    <div className="max-w-2xl mx-auto px-4 pb-12">
       <GameChrome motifId="501" title={t('five01.wordmark')} />
-      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4 mb-6">{t('common.back')}</button>
-      <div className="mb-8 text-center">
-        <h2 className="text-primary font-black text-2xl">{t('five01.localMultiplayerTitle')}</h2>
-        <div className="text-muted text-sm mt-1">{t('five01.everyoneSame')}</div>
+      <button onClick={onBack} className="text-muted hover:text-secondary text-sm transition-colors mt-4">{t('common.back')}</button>
+      <div className="mt-6 mb-8 text-center">
+        <h2 className="score-number text-[clamp(2.2rem,6vw,3rem)] tv-wordmark leading-none mb-2">{t('five01.localMultiplayerTitle').toUpperCase()}</h2>
+        <div className="text-secondary text-sm">{t('five01.everyoneSame')}</div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button onClick={() => setStep('random')} className="bg-card border border-border-strong hover:border-brand rounded-xl p-6 text-left transition-all">
-          <GameMotif id="higher-or-lower" className="w-7 h-7 text-brand-bright mb-3 rotate-90" />
+        <button onClick={() => setStep('random')}
+          className="group relative text-left bg-[linear-gradient(120deg,var(--accent-tint),transparent_50%)] bg-card border border-border-strong hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] rounded-xl p-6 transition-all hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
+          <svg viewBox="0 0 24 24" className="w-9 h-9 text-accent-bright mb-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 7h3.5c1.8 0 3.2.8 4.2 2.3l2.6 5.4c1 1.5 2.4 2.3 4.2 2.3H21" />
+            <path d="M18.5 14.5 21 17l-2.5 2.5M18.5 4.5 21 7l-2.5 2.5" />
+            <path d="M3 17h3.5c1 0 1.9-.25 2.6-.75" />
+          </svg>
           <div className="text-primary font-bold text-lg">{t('five01.randomQuestion')}</div>
           <div className="text-muted text-xs mt-2 leading-relaxed">{t('five01.randomQuestionBlurb')}</div>
+          <div className="mt-4 text-[0.58rem] font-black tracking-[0.12em] text-brand-bright opacity-0 group-hover:opacity-100 transition-opacity">{t('hub.kickOff')} →</div>
         </button>
-        <button onClick={() => setStep('custom')} className="bg-card border border-border-strong hover:border-brand rounded-xl p-6 text-left transition-all">
-          <GameMotif id="connections" className="w-7 h-7 text-brand-bright mb-3" />
+        <button onClick={() => setStep('custom')}
+          className="group relative text-left bg-[linear-gradient(120deg,rgb(124_58_237/.14),transparent_50%)] bg-card border border-border-strong hover:border-brand rounded-xl p-6 transition-all hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
+          <svg viewBox="0 0 24 24" className="w-9 h-9 text-brand-bright mb-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+            <circle cx="9" cy="7" r="2.2" fill="currentColor" stroke="none" /><circle cx="15.5" cy="12" r="2.2" fill="currentColor" stroke="none" /><circle cx="7" cy="17" r="2.2" fill="currentColor" stroke="none" />
+          </svg>
           <div className="text-primary font-bold text-lg">{t('five01.buildYourOwn')}</div>
           <div className="text-muted text-xs mt-2 leading-relaxed">{t('five01.buildYourOwnBlurb')}</div>
+          <div className="mt-4 text-[0.58rem] font-black tracking-[0.12em] text-brand-bright opacity-0 group-hover:opacity-100 transition-opacity">{t('five01.buildQuestion').toUpperCase()} →</div>
         </button>
       </div>
+      <div className="mt-6 text-muted text-xs text-center leading-relaxed">{t('five01.rulesFooter')}</div>
     </div>
   )
 }
@@ -714,10 +757,19 @@ export default function Football501() {
   )
   if (phase === 'entry') return shell(<EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />)
   if (phase === 'unlimited') return shell(<UnlimitedSetup onStart={(challengePromise, n) => startFrom(challengePromise, n, false)} onBack={() => setPhase('entry')} />)
-  if (phase === 'won') return shell(<WinScreen history={history} players={players} challenge={challenge} gaveUp={gaveUp} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />)
 
   const validCount = history.filter(g => g.valid).length
   const currentPlayer = players[currentPlayerIndex]
+
+  // The board stays mounted under the result overlay so the report card
+  // floats over a dimmed, still-visible oche (the product's modal contract).
+  const overlay = phase === 'won' && (
+    <div className="fixed inset-0 z-modal bg-black/70 backdrop-blur-sm result-modal-in flex items-center justify-center p-4 sm:p-6">
+      <div className="result-card w-full max-w-2xl max-h-[88dvh] flex">
+        <WinScreen history={history} players={players} challenge={challenge} gaveUp={gaveUp} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />
+      </div>
+    </div>
+  )
 
   return shell(
     <div className="max-w-4xl mx-auto px-4 pb-10">
@@ -727,9 +779,15 @@ export default function Football501() {
         right={<button onClick={() => setPhase('entry')} className="text-muted hover:text-secondary transition-colors">{t('five01.menu')} · <b className="text-secondary tabular-nums">{t('five01.dartsCount', { n: validCount })}</b></button>}
       />
 
-      <div className="lg:grid lg:grid-cols-[1fr,19rem] lg:gap-8">
-        {/* the stage — vertically centred on desktop so the oche sits mid-screen */}
-        <div className="flex flex-col justify-center gap-3 w-full max-w-2xl mx-auto lg:min-h-[calc(100dvh-7rem)]">
+      <div className="flex flex-col lg:grid lg:grid-cols-[17rem,3rem,1fr] lg:gap-6 lg:items-stretch">
+        {/* history — the left column on desktop, below the stage on mobile */}
+        <div className="order-2 lg:order-none lg:pt-1">
+          <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5 lg:mt-0" />
+        </div>
+        {/* the descent — the fall from 501 to the checkout zone */}
+        <DescentRail score={score} stops={[MAX_SCORE, ...history.filter(g => g.valid && g.playerIdx === currentPlayerIndex).map(g => g.newScore)]} />
+        {/* the stage — oche centre-top */}
+        <div className="order-1 lg:order-none flex flex-col gap-3 w-full max-w-2xl mx-auto lg:mx-0 lg:pt-1">
           {/* question card — red spine, possible answers, skip (non-daily) */}
           <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -751,7 +809,7 @@ export default function Football501() {
           <div className="relative w-full">
             <input
               ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-              placeholder={t('five01.typePlayer')} autoFocus
+              placeholder={t('five01.typePlayer')} autoFocus disabled={phase !== 'playing'}
               className="w-full bg-surface border border-border-strong focus:border-brand rounded-xl px-4 py-3.5 text-primary placeholder-muted text-base outline-none transition-colors"
               autoComplete="off" autoCorrect="off" spellCheck="false"
               role="combobox" aria-expanded={suggestions.length > 0} aria-autocomplete="list" aria-label={t('five01.typePlayer')}
@@ -799,11 +857,8 @@ export default function Football501() {
           )}
         </div>
 
-        {/* the ticker */}
-        <div className="lg:self-center">
-          <GuessHistory history={history} showPlayer={numPlayers > 1} className="mt-5 lg:mt-0" />
-        </div>
       </div>
+      {overlay}
     </div>
   )
 }
