@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { SITE_URL } from '../utils/site'
 import { useI18n } from '../i18n'
 
-export const ICON_BTN = 'w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 text-white transition-colors'
+export const ICON_BTN = 'w-10 h-10 flex items-center justify-center rounded-full bg-border hover:bg-border-strong text-primary transition-colors'
 
 export function WhatsAppIcon() {
   return (
@@ -80,11 +80,11 @@ export function ShareCard({ text }) {
   return (
     <div className="w-full max-w-md flex flex-col items-center gap-3 mb-2">
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <button onClick={handleCopy} className="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors">
+        <button onClick={handleCopy} className="px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">
           {copied ? t('share.copied') : t('share.copy')}
         </button>
         {canNativeShare && (
-          <button onClick={handleNativeShare} className="flex items-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">
+          <button onClick={handleNativeShare} className="flex items-center gap-2 px-5 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">
             <ShareIcon /> {t('share.share')}
           </button>
         )}
@@ -103,7 +103,7 @@ export function ShareCard({ text }) {
           <InstagramIcon />
         </button>
       </div>
-      {toast && <div className="text-xs text-gray-400 text-center">{toast}</div>}
+      {toast && <div className="text-xs text-secondary text-center">{toast}</div>}
     </div>
   )
 }

@@ -4,9 +4,9 @@ import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
-import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import GameChrome from '../../components/GameChrome'
+import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
 import { useI18n } from '../../i18n'
@@ -243,7 +243,7 @@ export default function GuessByTeammates() {
           <button onClick={() => newGame('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('teammates.newPlayer')}</button>
           {mode === 'daily' && <p className="text-faint text-xs mt-3">{t('common.comeBackTomorrow')}</p>}
         </div>
-        <MoreGames current="/teammates" />
+        <UpNext exclude="teammates" />
       </ResultModal>
 
       {/* Guess history */}

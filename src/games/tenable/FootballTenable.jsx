@@ -7,10 +7,10 @@ import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
-import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
 import GameChrome from '../../components/GameChrome'
+import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
@@ -93,9 +93,10 @@ export default function FootballTenable() {
     setQuestion(m === 'daily' ? getDailyTenableQuestion() : getRandomTenableQuestion())
     setRevealed({}); setLives(MAX_LIVES); setInput(''); setHistory([])
     setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false)
-    setPendingRank(null); setPendingAnswer(null); setPulseRow(null); setShowResult(false)
+    setPendingRank(null); setPendingAnswer(null); setPulseRow(null); setShowResult(false); setResultTab('answers')
   }
   const [showResult, setShowResult] = useState(false)
+  const [resultTab, setResultTab] = useState('answers')
   useEffect(() => {
     if (phase === 'playing') return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the revealed answers show first
@@ -492,41 +493,53 @@ export default function FootballTenable() {
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
-        {phase === 'won' && (
-          <div className="w-full flex flex-col items-center text-center">
-            <GameMotif id="tenable" className="w-12 h-12 text-accent-bright mb-3" />
-            <h2 className="score-number text-4xl text-success-bright mb-2">{t('tenable.pyramidComplete')}</h2>
-            <p className="text-muted mb-2">{lives === 1 ? t('tenable.foundAllLife', { n: lives }) : t('tenable.foundAllLives', { n: lives })}</p>
-          </div>
-        )}
-        {phase === 'lost' && (
-          <div className="w-full flex flex-col items-center text-center">
-            <GameMotif id="tenable" className="w-12 h-12 text-dim mb-3" />
-            <h2 className="score-number text-4xl text-danger-bright mb-2">{gaveUp ? t('tenable.gaveUp') : t('tenable.gameOver')}</h2>
-            <p className="text-muted mb-2">{gaveUp ? t('tenable.foundBeforeGaveUp', { n: correctCount }) : t('tenable.foundBeforeLost', { n: correctCount })}</p>
-          </div>
-        )}
+        <div className="w-full flex flex-col items-center text-center">
+          <GameMotif id="tenable" className={`w-11 h-11 mb-2 ${phase === 'won' ? 'text-accent-bright' : 'text-dim'}`} />
+          <h2 className={`score-number text-4xl mb-1 ${phase === 'won' ? 'text-success-bright' : 'text-danger-bright'}`}>
+            {phase === 'won' ? t('tenable.pyramidComplete') : gaveUp ? t('tenable.gaveUp') : t('tenable.gameOver')}
+          </h2>
+          <p className="text-muted text-sm mb-1">
+            {phase === 'won'
+              ? (lives === 1 ? t('tenable.foundAllLife', { n: lives }) : t('tenable.foundAllLives', { n: lives }))
+              : gaveUp ? t('tenable.foundBeforeGaveUp', { n: correctCount }) : t('tenable.foundBeforeLost', { n: correctCount })}
+          </p>
+        </div>
         {mode === 'daily' && <DailyStats game="tenable" stats={dailyStats} />}
-        <ShareCard text={shareText} />
-        <button onClick={() => newGame('unlimited')} className="mt-3 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tenable.newQuestion')}</button>
-        <MoreGames current="/tenable" />
-        {phase === 'lost' && (
-          <div className="w-full bg-card rounded-xl border border-border-strong overflow-hidden mt-6">
-            <div className="px-4 py-3 border-b border-border text-[0.62rem] text-muted uppercase tracking-[0.16em] font-extrabold">{t('tenable.fullAnswerList')}</div>
-            <div className="divide-y divide-border/50">
+
+        {/* the bulk behind tabs, 501-style */}
+        <div className="w-full flex gap-1.5 justify-center mb-3">
+          {[['answers', t('tenable.fullAnswerList')], ['share', t('share.share')]].map(([id, label]) => (
+            <button key={id} onClick={() => setResultTab(id)}
+              className={`text-[0.6rem] font-black tracking-[0.12em] uppercase rounded-full px-3 py-1.5 border transition-colors ${resultTab === id ? 'bg-brand border-brand text-white' : 'border-border text-muted hover:text-secondary'}`}>
+              {label}
+            </button>
+          ))}
+        </div>
+        {resultTab === 'answers' && (
+          <div className="w-full rounded-xl border border-border overflow-hidden mb-1">
+            <div className="divide-y divide-border/50 max-h-56 overflow-y-auto">
               {question.answers.map(a => (
-                <div key={a.rank} className="flex items-center justify-between px-4 py-2.5">
-                  <div className="flex items-center gap-3">
-                    <span className="text-muted text-sm font-mono w-5">{a.rank}</span>
+                <div key={a.rank} className="flex items-center justify-between px-4 py-2">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-muted text-sm font-mono w-5 shrink-0">{a.rank}</span>
                     {question.type === 'club' && <CategoryIcon category={{ type: 'club', value: a.text }} size={20} />}
-                    <span className={`text-sm font-medium ${revealed[a.rank] ? 'text-success-bright' : 'text-primary'}`}>{a.text}</span>
+                    <span className={`text-sm font-medium truncate ${revealed[a.rank] ? 'text-success-bright' : 'text-primary'}`}>{revealed[a.rank] ? '✓ ' : ''}{a.text}</span>
                   </div>
-                  <span className="text-muted text-xs">{a.detail}</span>
+                  <span className="text-muted text-xs shrink-0 ml-2">{a.detail}</span>
                 </div>
               ))}
             </div>
           </div>
         )}
+        {resultTab === 'share' && (
+          <div className="w-full flex flex-col items-center gap-2 mb-1">
+            <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
+            <ShareCard text={shareText} />
+          </div>
+        )}
+
+        <button onClick={() => newGame('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tenable.newQuestion')}</button>
+        <UpNext exclude="tenable" />
       </ResultModal>
 
       {/* Guess history */}

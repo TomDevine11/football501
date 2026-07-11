@@ -17,6 +17,7 @@ export const strings = {
       comeBackTomorrow: 'Come back tomorrow for a new daily.',
       cancel: 'Cancel',
       back: '← Back',
+      upNext: 'UP NEXT', allGames2: 'All games →',
     },
     stats: { played: 'Played', winPct: 'Win %', best: 'Best', streak: 'Streak', dayStreak: 'Day streak', max: 'Max' },
     share: {
@@ -282,6 +283,7 @@ export const strings = {
       comeBackTomorrow: 'Vuelve mañana para un nuevo reto diario.',
       cancel: 'Cancelar',
       back: '← Atrás',
+      upNext: 'A CONTINUACIÓN', allGames2: 'Todos los juegos →',
     },
     stats: { played: 'Jugadas', winPct: '% Victorias', best: 'Mejor', streak: 'Racha', dayStreak: 'Racha diaria', max: 'Máx' },
     share: {

@@ -4,9 +4,9 @@ import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
-import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import GameChrome from '../../components/GameChrome'
+import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
@@ -289,7 +289,7 @@ export default function FootballWordle() {
         {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
         <ShareCard text={shareText} />
         <button onClick={() => newGame('unlimited')} className="mt-3 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('wordle.newWord')}</button>
-        <MoreGames current="/wordle" />
+        <UpNext exclude="wordle" />
       </ResultModal>
     </div>
     </div>

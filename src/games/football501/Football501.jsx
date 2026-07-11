@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { players as localPlayers } from '../../data/players'
 import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import GameChrome from '../../components/GameChrome'
+import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { useI18n } from '../../i18n'
 import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, loadCompetition, COMPETITIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
@@ -142,40 +142,6 @@ function buildMultiplayerShareText(t, challenge, ranked, winners) {
 // tabs (route/scores · all answers · share), actions + UP NEXT pills below.
 // Only the answer list scrolls, inside its own panel.
 
-// Other dailies to offer post-game (stats key → route). The first two still
-// on KICK OFF today become the UP NEXT pills.
-const NEXT_POOL = [
-  { stats: 'wordle', to: '/wordle' },
-  { stats: 'tenable', to: '/tenable' },
-  { stats: 'tictactoe', to: '/tictactoe' },
-  { stats: 'teammates', to: '/teammates' },
-  { stats: 'careers', to: '/career-path' },
-  { stats: 'wcsquads', to: '/world-cup' },
-  { stats: 'connections', to: '/connections' },
-  { stats: 'higherlower', to: '/higher-or-lower' },
-]
-
-function UpNextPills() {
-  const { t, lp } = useI18n()
-  const next = NEXT_POOL.filter(g => !playedToday(g.stats)).slice(0, 2)
-  return (
-    <div className="flex items-center justify-center gap-2 flex-wrap mt-3 pt-3 border-t border-border">
-      <span className="text-[0.56rem] font-black tracking-[0.16em] text-faint">{t('five01.upNext')}</span>
-      {next.map(g => {
-        const id = g.to.slice(1)
-        return (
-          <Link key={g.to} to={lp(g.to)} className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary border border-border rounded-full px-2.5 py-1 hover:border-brand transition-colors">
-            <GameMotif id={id} className="w-4 h-4 text-accent-bright" />
-            {t(`games.${id}.title`).replace(/^Football /, '').replace(/ de Fútbol$/, '')}
-            <i className="not-italic text-[0.5rem] font-black text-brand-bright tracking-[0.08em]">KO</i>
-          </Link>
-        )
-      })}
-      <Link to={lp('/')} className="text-xs font-bold text-brand-bright border border-brand/40 rounded-full px-2.5 py-1 hover:border-brand transition-colors">{t('five01.allGames')}</Link>
-    </div>
-  )
-}
-
 function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit }) {
   const { t } = useI18n()
   const [tab, setTab] = useState('route')
@@ -296,7 +262,7 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
           <button onClick={onPlayAgain} className="px-4 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">{t('five01.playAgain')}</button>
           <button onClick={onExit} className="px-4 py-2.5 text-muted hover:text-secondary border border-border text-sm font-bold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
         </div>
-        <UpNextPills />
+        <UpNext exclude="501" />
     </div>
   )
 }

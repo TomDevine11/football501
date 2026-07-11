@@ -4,8 +4,8 @@ import { useI18n } from '../i18n'
 function Stat({ label, value }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="score-number text-2xl text-white tabular-nums leading-none">{value}</div>
-      <div className="text-gray-500 text-[10px] uppercase tracking-wide mt-1">{label}</div>
+      <div className="score-number text-2xl text-primary tabular-nums leading-none">{value}</div>
+      <div className="text-muted text-[10px] uppercase tracking-[0.1em] font-bold mt-1">{label}</div>
     </div>
   )
 }
