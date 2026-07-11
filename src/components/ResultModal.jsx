@@ -10,21 +10,21 @@ export default function ResultModal({ open, onClose, children }) {
   if (!open) return null
   return (
     <div
-      className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm overflow-y-auto result-modal-in"
+      className="fixed inset-0 z-modal bg-black/70 backdrop-blur-sm overflow-y-auto result-modal-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
       <div className="flex min-h-full items-center justify-center p-4">
         <div
-          className="result-card relative w-full max-w-md bg-gray-950 border border-gray-800 rounded-2xl shadow-2xl px-5 py-6 flex flex-col items-center"
+          className="result-card relative w-full max-w-md bg-surface border border-border-strong rounded-2xl shadow-modal px-5 py-6 flex flex-col items-center"
           onClick={e => e.stopPropagation()}
         >
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-200 hover:bg-gray-800 transition-colors text-lg leading-none"
+            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-primary hover:bg-border transition-colors text-lg leading-none"
           >
             ✕
           </button>

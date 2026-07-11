@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { getDailyWordlePlayer, getRandomWordlePlayer } from '../../data/wordle'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
@@ -7,16 +6,21 @@ import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
+import GameChrome from '../../components/GameChrome'
+import GameMotif from '../../components/GameMotif'
+import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 const MAX_GUESSES = 6
 
+// Letter-verdict colours — the `tile.*` tokens in tailwind.config.js
+// (inline here because the flip keyframe reads them via CSS variables).
 const COLORS = {
-  green:  { bg: '#16a34a', border: '#16a34a' }, // green-600
-  yellow: { bg: '#ca8a04', border: '#ca8a04' }, // yellow-600
-  grey:   { bg: '#374151', border: '#374151' }, // gray-700
+  green:  { bg: '#16a34a', border: '#16a34a' }, // tile.hit
+  yellow: { bg: '#ca8a04', border: '#ca8a04' }, // tile.near
+  grey:   { bg: '#26243a', border: '#26243a' }, // tile.miss
 }
 
 const KEYBOARD_ROWS = [
@@ -49,7 +53,7 @@ function evaluateGuess(guess, answer) {
 }
 
 export default function FootballWordle() {
-  const { t, lp } = useI18n()
+  const { t } = useI18n()
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [question, setQuestion] = useState(() => getDailyWordlePlayer())
   const answer = question.surname
@@ -162,23 +166,22 @@ export default function FootballWordle() {
   ].join('\n')
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-8">
-      {/* Header */}
-      <div className="w-full max-w-lg flex items-center justify-between mb-6">
-        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
-          {t('common.allGames')}
-        </Link>
-        <div className="score-number text-xl text-gray-500 tracking-wider">WORDLE</div>
-        <div className="text-sm text-gray-700 tabular-nums">{guesses.length}/{MAX_GUESSES}</div>
-      </div>
+    <div className="tv-scene min-h-dvh text-primary" style={accentVars('wordle')}>
+    <div className="flex flex-col items-center px-4 pb-8 max-w-3xl mx-auto">
+      <div className="w-full"><GameChrome
+        motifId="wordle"
+        title="FOOTBALL WORDLE"
+        right={<b className="text-secondary tabular-nums">{guesses.length}/{MAX_GUESSES}</b>}
+      /></div>
 
-      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
+      <ModeToggle mode={mode} onChange={newGame} className="mt-1 mb-4" />
 
       {/* Hint card */}
-      <div className="w-full max-w-lg mb-6">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">{mode === 'daily' ? t('wordle.guessToday') : t('wordle.guessAny')}</div>
-          <div className="text-gray-500 text-xs mt-0.5">{t('wordle.hint', { n: answer.length, max: MAX_GUESSES })}</div>
+      <div className="w-full max-w-lg mb-5">
+        <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()}</div>
+          <div className="text-primary font-bold text-sm mt-0.5">{mode === 'daily' ? t('wordle.guessToday') : t('wordle.guessAny')}</div>
+          <div className="text-muted text-xs mt-0.5">{t('wordle.hint', { n: answer.length, max: MAX_GUESSES })}</div>
         </div>
       </div>
 
@@ -218,8 +221,8 @@ export default function FootballWordle() {
                   <div
                     key={colIdx}
                     style={style}
-                    className={`w-full aspect-square border-2 rounded-md flex items-center justify-center font-bold uppercase text-white select-none
-                      ${!colors ? (letter ? 'border-gray-500' : 'border-gray-800') : ''}
+                    className={`w-full aspect-square border-2 rounded-md bg-board flex items-center justify-center font-black uppercase text-primary select-none
+                      ${!colors ? (letter ? 'border-muted' : 'border-border-strong') : ''}
                       ${isFlipping ? 'tile-flip' : ''}
                       ${isBouncing ? 'tile-bounce' : ''}
                       ${isCurrent && poppedIndex === colIdx ? 'tile-pop' : ''}`}
@@ -241,19 +244,19 @@ export default function FootballWordle() {
               const status = letterStatuses[key]
               const isWide = key === 'ENTER' || key === 'BACKSPACE'
               const bg = status === 'green'
-                ? 'bg-green-600 text-white'
+                ? 'bg-tile-hit text-white'
                 : status === 'yellow'
-                  ? 'bg-yellow-600 text-white'
+                  ? 'bg-tile-near text-white'
                   : status === 'grey'
-                    ? 'bg-gray-800 text-gray-500'
-                    : 'bg-gray-700 hover:bg-gray-600 text-white'
+                    ? 'bg-board text-faint'
+                    : 'bg-border hover:bg-border-strong text-primary'
               return (
                 <button
                   key={key}
                   type="button"
                   onClick={() => handleKey(key)}
                   disabled={phase !== 'playing'}
-                  className={`${isWide ? 'px-2.5 text-[10px] sm:text-xs' : 'w-8 sm:w-10 text-sm'} h-11 sm:h-12 ${bg} font-semibold rounded-md flex items-center justify-center transition-colors`}
+                  className={`${isWide ? 'px-2.5 text-[10px] sm:text-xs' : 'w-8 sm:w-10 text-sm'} h-12 ${bg} font-bold rounded-md flex items-center justify-center transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright`}
                 >
                   {key === 'BACKSPACE' ? '⌫' : key === 'ENTER' ? 'ENTER' : key}
                 </button>
@@ -264,30 +267,31 @@ export default function FootballWordle() {
       </div>
 
       {phase !== 'playing' && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
+        <button onClick={() => setShowResult(true)} className="mb-6 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         {phase === 'won' && (
           <div className="w-full flex flex-col items-center text-center">
-            <div className="text-6xl mb-3">🎉</div>
-            <h2 className="score-number text-4xl text-green-400 mb-2">{t('wordle.correct')}</h2>
-            <p className="text-gray-400 mb-1">{t('wordle.itWas')} <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
-            <p className="text-gray-500 text-sm">{t('wordle.solvedIn')} <span className="text-white font-bold">{guesses.length}</span>/{MAX_GUESSES}</p>
+            <GameMotif id="wordle" className="w-12 h-12 text-accent-bright mb-3" />
+            <h2 className="score-number text-4xl text-success-bright mb-2">{t('wordle.correct')}</h2>
+            <p className="text-muted mb-1">{t('wordle.itWas')} <span className="text-primary font-bold">{question.fullName}</span> {question.flag}</p>
+            <p className="text-muted text-sm">{t('wordle.solvedIn')} <span className="text-primary font-bold">{guesses.length}</span>/{MAX_GUESSES}</p>
           </div>
         )}
         {phase === 'lost' && (
           <div className="w-full flex flex-col items-center text-center">
-            <div className="text-6xl mb-3">💔</div>
-            <h2 className="score-number text-4xl text-red-400 mb-2">{t('wordle.gameOver')}</h2>
-            <p className="text-gray-400 mb-2">{t('wordle.itWas')} <span className="text-white font-bold">{question.fullName}</span> {question.flag}</p>
+            <GameMotif id="wordle" className="w-12 h-12 text-dim mb-3" />
+            <h2 className="score-number text-4xl text-danger-bright mb-2">{t('wordle.gameOver')}</h2>
+            <p className="text-muted mb-2">{t('wordle.itWas')} <span className="text-primary font-bold">{question.fullName}</span> {question.flag}</p>
           </div>
         )}
         {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
         <ShareCard text={shareText} />
-        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('wordle.newWord')}</button>
+        <button onClick={() => newGame('unlimited')} className="mt-3 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('wordle.newWord')}</button>
         <MoreGames current="/wordle" />
       </ResultModal>
+    </div>
     </div>
   )
 }

@@ -78,6 +78,12 @@ export default {
           x: '#f87171',
           o: '#60a5fa',
         },
+        // Wordle letter verdicts (board pieces, shared by tiles + keyboard)
+        tile: {
+          hit: '#16a34a', //  right letter, right spot
+          near: '#ca8a04', // right letter, wrong spot
+          miss: '#26243a', // not in the word
+        },
       },
 
       fontFamily: {
