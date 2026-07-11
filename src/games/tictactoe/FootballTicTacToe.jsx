@@ -7,9 +7,12 @@ import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
-import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
+import GameChrome from '../../components/GameChrome'
+import GameMotif from '../../components/GameMotif'
+import UpNext from '../../components/UpNext'
+import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
@@ -18,6 +21,33 @@ const MAX_LIVES = 3
 
 const TSDB = 'https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p='
 const EXCLUDE_SPORTS = new Set(['basketball','american football','baseball','ice hockey','tennis','golf','cricket','rugby','swimming','athletics','motorsport','cycling','boxing','mma'])
+
+// Axis header chip — neutral, told apart by position + icon, never colour.
+function HeaderChip({ category, t }) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center gap-1 rounded-lg bg-surface/60 border border-border px-1 py-2 text-[10px] sm:text-xs font-bold text-secondary leading-tight">
+      <CategoryIcon category={category} size={22} />
+      <span>{categoryLabel(category, t)}</span>
+    </div>
+  )
+}
+
+// The row + column categories a square must satisfy, as neutral pills.
+function CategoryPair({ rowCat, colCat, t, size = 13 }) {
+  return (
+    <>
+      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/60 px-2 py-0.5 font-medium text-secondary">
+        <CategoryIcon category={rowCat} size={size} />
+        {categoryLabel(rowCat, t)}
+      </span>
+      <span className="text-faint font-black">+</span>
+      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/60 px-2 py-0.5 font-medium text-secondary">
+        <CategoryIcon category={colCat} size={size} />
+        {categoryLabel(colCat, t)}
+      </span>
+    </>
+  )
+}
 
 export default function FootballTicTacToe({ onBackToModes }) {
   const { t, lp } = useI18n()
@@ -39,12 +69,13 @@ export default function FootballTicTacToe({ onBackToModes }) {
   const [gaveUp, setGaveUp] = useState(false)
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false)
   const [answersCell, setAnswersCell] = useState(null) // cell whose full answer list is open
+  const [resultTab, setResultTab] = useState('board')
 
   const newGame = (m) => {
     setMode(m)
     setGrid(m === 'daily' ? getDailyGrid() : getRandomGrid())
     setFilled({}); setLives(MAX_LIVES); setSelectedCell(null); setInput(''); setHistory([])
-    setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false); setAnswersCell(null); setShowResult(false)
+    setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false); setAnswersCell(null); setShowResult(false); setResultTab('board')
   }
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
@@ -231,38 +262,46 @@ export default function FootballTicTacToe({ onBackToModes }) {
   ].join('\n')
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-8">
-      {/* Header */}
-      <div className="w-full max-w-lg flex items-center justify-between mb-6">
+    <div className="tv-scene min-h-dvh text-primary" style={accentVars('tictactoe')}>
+    <div className="flex flex-col items-center px-4 pb-8 max-w-4xl mx-auto">
+      <div className="w-full"><GameChrome
+        motifId="tictactoe"
+        title={t('tictactoe.wordmark')}
+        right={
+          <span className="inline-flex items-center gap-1.5" aria-label={lives === 1 ? t('tictactoe.lifeLeft', { n: lives }) : t('tictactoe.livesLeft', { n: lives })}>
+            {Array.from({ length: MAX_LIVES }, (_, i) => (
+              <i key={i} className={`w-2.5 h-2.5 rounded-full ${i < lives ? 'bg-accent' : 'bg-inert'}`} aria-hidden="true" />
+            ))}
+            <b className="ml-1 text-secondary tabular-nums">{filledCount}/9</b>
+          </span>
+        }
+      /></div>
+
+      {/* Mode toggle stays dead-centre; the modes link is a satellite. */}
+      <div className="relative w-full max-w-lg flex justify-center mt-1 mb-4">
         {onBackToModes ? (
-          <button onClick={onBackToModes} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+          <button onClick={onBackToModes} className="absolute left-0 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-secondary transition-colors">
             {t('tictactoe.modes')}
           </button>
         ) : (
-          <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+          <Link to={lp('/')} className="absolute left-0 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-secondary transition-colors">
             {t('common.allGames')}
           </Link>
         )}
-        <div className="score-number text-xl text-gray-500 tracking-wider">{t('tictactoe.wordmark')}</div>
-        <div className="flex items-center gap-1 text-sm tabular-nums">
-          {Array.from({ length: MAX_LIVES }, (_, i) => (
-            <span key={i} className={i < lives ? 'text-red-500' : 'text-gray-700'}>♥</span>
-          ))}
-        </div>
+        <ModeToggle mode={mode} onChange={newGame} />
       </div>
-
-      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
 
       {/* Intro card */}
-      <div className="w-full max-w-lg mb-6">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">{t('tictactoe.fillEvery')}</div>
-          <div className="text-gray-500 text-xs mt-0.5">{t('tictactoe.fillEverySub')}</div>
+      <div className="w-full max-w-lg mb-4">
+        <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · 3 × 3</div>
+          <div className="text-primary font-bold text-sm mt-0.5">{t('tictactoe.fillEvery')}</div>
+          <div className="text-muted text-xs mt-0.5">{t('tictactoe.fillEverySub')}</div>
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="w-full max-w-lg mb-6 overflow-x-auto">
+      {/* Grid — headers sit outside the board as neutral chips */}
+      <div className="w-full max-w-lg mb-5 overflow-x-auto">
         <div
           className="grid gap-1.5 mx-auto"
           style={{ gridTemplateColumns: `minmax(70px, 1fr) repeat(3, minmax(90px, 1fr))`, width: 'fit-content', minWidth: '100%' }}
@@ -271,19 +310,13 @@ export default function FootballTicTacToe({ onBackToModes }) {
           <div />
           {/* column headers */}
           {grid.colCategories.map((cat, i) => (
-            <div key={`col-${i}`} className="flex flex-col items-center justify-center text-center px-1 py-2 gap-1 text-[10px] sm:text-xs font-bold text-blue-400 leading-tight">
-              <CategoryIcon category={cat} size={24} />
-              <span>{categoryLabel(cat, t)}</span>
-            </div>
+            <HeaderChip key={`col-${i}`} category={cat} t={t} />
           ))}
 
           {/* rows */}
           {[0, 1, 2].map(r => (
             <Fragment key={r}>
-              <div className="flex flex-col items-center justify-center text-center px-1 gap-1 text-[10px] sm:text-xs font-bold text-yellow-400 leading-tight">
-                <CategoryIcon category={grid.rowCategories[r]} size={24} />
-                <span>{categoryLabel(grid.rowCategories[r], t)}</span>
-              </div>
+              <HeaderChip category={grid.rowCategories[r]} t={t} />
               {[0, 1, 2].map(c => {
                 const idx = r * 3 + c
                 const playerName = filled[idx]
@@ -297,29 +330,29 @@ export default function FootballTicTacToe({ onBackToModes }) {
                     onClick={() => gameOver ? setAnswersCell(idx) : selectCell(idx)}
                     disabled={phase === 'playing' && !!playerName}
                     className={`relative aspect-square w-full rounded-lg border flex flex-col items-center justify-center text-center px-1 transition-colors ${
-                      gameOver ? 'cursor-pointer hover:ring-1 hover:ring-gray-500' : ''
+                      gameOver ? 'cursor-pointer hover:ring-1 hover:ring-muted' : ''
                     } ${
                       playerName
-                        ? 'border-green-600 bg-green-900/20 cell-reveal'
+                        ? 'border-success/60 bg-success/10 cell-reveal'
                         : revealName
-                          ? 'border-red-900 bg-red-900/10'
+                          ? 'border-danger/40 bg-danger/5'
                           : isSelected
-                            ? 'border-green-600 bg-gray-800 ring-2 ring-green-600/40'
-                            : 'border-gray-800 bg-gray-900 hover:border-gray-600'
+                            ? 'border-accent ring-2 ring-accent/40 bg-[color-mix(in_srgb,var(--accent)_12%,#100e1c)]'
+                            : 'border-border-strong bg-board hover:border-muted'
                     }`}
                   >
-                    {gameOver && <span className="absolute top-1 right-1 text-[10px] opacity-50">🔍</span>}
+                    {gameOver && <span className="absolute top-1 right-1 text-[10px] opacity-50" aria-hidden="true">🔍</span>}
                     {playerName ? (
                       <>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-green-400">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-success-bright">
                           <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
-                        <span className="text-[10px] sm:text-xs font-bold text-white leading-tight mt-1 line-clamp-2">{playerName}</span>
+                        <span className="text-[10px] sm:text-xs font-bold text-primary leading-tight mt-1 line-clamp-2">{playerName}</span>
                       </>
                     ) : revealName ? (
-                      <span className="text-[10px] sm:text-xs font-medium text-gray-400 leading-tight line-clamp-2">{revealName}</span>
+                      <span className="text-[10px] sm:text-xs font-medium text-muted leading-tight line-clamp-2">{revealName}</span>
                     ) : (
-                      <span className="text-gray-700 text-xl">+</span>
+                      <span className="text-dim text-xl" aria-hidden="true">+</span>
                     )}
                   </button>
                 )
@@ -330,17 +363,15 @@ export default function FootballTicTacToe({ onBackToModes }) {
       </div>
 
       {phase !== 'playing' && (
-        <div className="w-full max-w-lg -mt-3 mb-4 text-center text-xs text-gray-500">
+        <div className="w-full max-w-lg -mt-2 mb-4 text-center text-xs text-muted">
           {t('tictactoe.tapSquare')}
         </div>
       )}
 
       {phase === 'playing' && selectedCell != null && (
         <>
-          <div className="w-full max-w-lg mb-2 text-center text-xs text-gray-500">
-            <span className="text-yellow-400 font-medium">{categoryLabel(grid.rowCategories[Math.floor(selectedCell / 3)], t)}</span>
-            {' '}+{' '}
-            <span className="text-blue-400 font-medium">{categoryLabel(grid.colCategories[selectedCell % 3], t)}</span>
+          <div className="w-full max-w-lg mb-2 flex items-center justify-center gap-1.5 text-xs">
+            <CategoryPair rowCat={grid.rowCategories[Math.floor(selectedCell / 3)]} colCat={grid.colCategories[selectedCell % 3]} t={t} />
           </div>
           <form onSubmit={handleSubmit} className={`relative w-full max-w-lg ${shake ? 'shake' : ''}`}>
             <input
@@ -351,27 +382,35 @@ export default function FootballTicTacToe({ onBackToModes }) {
               onKeyDown={handleKeyDown}
               placeholder={t('tictactoe.placeholder')}
               autoFocus
-              className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
+              role="combobox"
+              aria-expanded={visibleSuggestions.length > 0}
+              aria-controls="ttt-suggestions"
+              aria-autocomplete="list"
+              aria-activedescendant={highlightedIndex >= 0 ? `ttt-option-${highlightedIndex}` : undefined}
+              className="w-full bg-surface border border-border-strong focus:border-accent rounded-xl px-4 py-3.5 text-primary placeholder-faint text-base outline-none transition-colors"
               autoComplete="off" autoCorrect="off" spellCheck="false"
             />
             {isSearching && (
               <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                <div className="w-4 h-4 border-2 border-gray-600 border-t-green-500 rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-inert border-t-accent rounded-full animate-spin" />
               </div>
             )}
             {visibleSuggestions.length > 0 && (
-              <div ref={dropdownRef} className="absolute top-full left-0 right-0 mt-1 bg-gray-900 border border-gray-700 rounded-xl overflow-hidden z-10 shadow-2xl">
+              <div ref={dropdownRef} id="ttt-suggestions" role="listbox" className="absolute top-full left-0 right-0 mt-1 bg-surface border border-border-strong rounded-xl overflow-hidden z-10 shadow-2xl">
                 {visibleSuggestions.map((item, i) => (
                   <button
                     key={item.name}
                     type="button"
+                    id={`ttt-option-${i}`}
+                    role="option"
+                    aria-selected={i === highlightedIndex}
                     onMouseDown={e => { e.preventDefault(); submitGuess(item.name) }}
                     onMouseEnter={() => setHighlightedIndex(i)}
-                    className={`w-full text-left px-4 py-2.5 transition-colors border-b border-gray-800/50 last:border-0 ${i === highlightedIndex ? 'bg-gray-800' : 'hover:bg-gray-800/60'}`}
+                    className={`w-full text-left px-4 py-2.5 transition-colors border-b border-border/50 last:border-0 ${i === highlightedIndex ? 'bg-canvas-high' : 'hover:bg-canvas-high/60'}`}
                   >
                     <div className="flex items-center gap-2">
                       {item.flag && <span className="text-base shrink-0">{item.flag}</span>}
-                      <span className="text-white text-sm font-medium truncate">{item.name}</span>
+                      <span className="text-primary text-sm font-medium truncate">{item.name}</span>
                     </div>
                   </button>
                 ))}
@@ -381,7 +420,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
           <button
             type="button"
             onClick={() => setSelectedCell(null)}
-            className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors"
+            className="mt-2 text-xs text-muted hover:text-secondary transition-colors"
           >
             {t('common.cancel')}
           </button>
@@ -390,7 +429,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
 
       {phase === 'playing' && (
         <>
-          <div className="w-full max-w-lg mt-3 flex justify-between items-center text-xs text-gray-700 px-1">
+          <div className="w-full max-w-lg mt-3 flex justify-between items-center text-xs text-faint px-1">
             <span>{t('tictactoe.squares', { n: filledCount })}</span>
             <span>{lives === 1 ? t('tictactoe.lifeLeft', { n: lives }) : t('tictactoe.livesLeft', { n: lives })}</span>
           </div>
@@ -398,7 +437,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
           <button
             type="button"
             onClick={() => setShowGiveUpConfirm(true)}
-            className="mt-4 w-full max-w-lg border border-red-900/60 text-red-400 hover:bg-red-900/20 hover:border-red-700 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
+            className="mt-4 w-full max-w-lg border border-danger/40 text-danger-bright hover:bg-danger/10 hover:border-danger/70 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
           >
             {t('tictactoe.giveUp')}
           </button>
@@ -407,21 +446,21 @@ export default function FootballTicTacToe({ onBackToModes }) {
 
       {showGiveUpConfirm && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-20 px-4">
-          <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-5 text-center">
-            <p className="text-white font-medium mb-1">{t('tictactoe.giveUpTitle')}</p>
-            <p className="text-gray-500 text-sm mb-5">{t('tictactoe.giveUpBody')}</p>
+          <div className="w-full max-w-sm bg-card border border-border-strong rounded-2xl p-5 text-center">
+            <p className="text-primary font-medium mb-1">{t('tictactoe.giveUpTitle')}</p>
+            <p className="text-muted text-sm mb-5">{t('tictactoe.giveUpBody')}</p>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setShowGiveUpConfirm(false)}
-                className="flex-1 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
+                className="flex-1 border border-border-strong text-secondary hover:bg-surface text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
               >
                 {t('common.cancel')}
               </button>
               <button
                 type="button"
                 onClick={confirmGiveUp}
-                className="flex-1 bg-red-900/60 hover:bg-red-900 text-red-200 text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
+                className="flex-1 bg-danger/80 hover:bg-danger text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
               >
                 {t('tictactoe.giveUpConfirm')}
               </button>
@@ -433,20 +472,18 @@ export default function FootballTicTacToe({ onBackToModes }) {
       {/* All-answers reveal for a finished square */}
       {answersCell != null && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-30 px-4" onClick={() => setAnswersCell(null)}>
-          <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-5 max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
-            <div className="text-center mb-1 leading-tight">
-              <span className="text-yellow-400 text-xs font-medium">{categoryLabel(grid.rowCategories[Math.floor(answersCell / 3)], t)}</span>
-              <span className="text-gray-600 text-xs"> + </span>
-              <span className="text-blue-400 text-xs font-medium">{categoryLabel(grid.colCategories[answersCell % 3], t)}</span>
+          <div className="w-full max-w-sm bg-card border border-border-strong rounded-2xl p-5 max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-center flex-wrap gap-1.5 mb-1 leading-tight text-xs">
+              <CategoryPair rowCat={grid.rowCategories[Math.floor(answersCell / 3)]} colCat={grid.colCategories[answersCell % 3]} t={t} size={12} />
             </div>
-            <div className="text-gray-500 text-xs text-center mb-3">{t('tictactoe.possibleAnswers', { n: grid.candidates[answersCell].length })}</div>
+            <div className="text-muted text-xs text-center mb-3">{t('tictactoe.possibleAnswers', { n: grid.candidates[answersCell].length })}</div>
             <div className="overflow-y-auto -mx-1 px-1">
               <div className="grid grid-cols-2 gap-1.5">
                 {grid.candidates[answersCell].map(name => (
                   <div
                     key={name}
                     className={`text-xs rounded px-2 py-1.5 leading-tight ${
-                      name === filled[answersCell] ? 'bg-green-900/50 text-green-300 font-semibold' : 'bg-gray-800/60 text-gray-300'
+                      name === filled[answersCell] ? 'bg-success/15 border border-success/40 text-success-bright font-semibold' : 'bg-surface text-secondary'
                     }`}
                   >
                     {name}
@@ -457,7 +494,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
             <button
               type="button"
               onClick={() => setAnswersCell(null)}
-              className="mt-4 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
+              className="mt-4 border border-border-strong text-secondary hover:bg-surface text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
             >
               {t('tictactoe.close')}
             </button>
@@ -466,44 +503,74 @@ export default function FootballTicTacToe({ onBackToModes }) {
       )}
 
       {phase !== 'playing' && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
+        <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
-        {phase === 'won' && (
-          <div className="w-full flex flex-col items-center text-center">
-            <div className="text-6xl mb-3">🏆</div>
-            <h2 className="score-number text-4xl text-green-400 mb-2">{t('tictactoe.gridComplete')}</h2>
-            <p className="text-gray-400 mb-2">{lives === 1 ? t('tictactoe.filledAllLife', { n: lives }) : t('tictactoe.filledAllLives', { n: lives })}</p>
-          </div>
-        )}
-        {phase === 'lost' && (
-          <div className="w-full flex flex-col items-center text-center">
-            <div className="text-6xl mb-3">{gaveUp ? '🏳️' : '💔'}</div>
-            <h2 className="score-number text-4xl text-red-400 mb-2">{gaveUp ? t('tictactoe.gaveUp') : t('tictactoe.gameOver')}</h2>
-            <p className="text-gray-400 mb-2">{gaveUp ? t('tictactoe.filledBeforeGaveUp', { n: filledCount }) : t('tictactoe.filledBeforeLost', { n: filledCount })}</p>
-          </div>
-        )}
+        <div className="w-full flex flex-col items-center text-center">
+          <GameMotif id="tictactoe" className={`w-11 h-11 mb-2 ${phase === 'won' ? 'text-accent-bright' : 'text-dim'}`} />
+          <h2 className={`score-number text-4xl mb-1 ${phase === 'won' ? 'text-success-bright' : 'text-danger-bright'}`}>
+            {phase === 'won' ? t('tictactoe.gridComplete') : gaveUp ? t('tictactoe.gaveUp') : t('tictactoe.gameOver')}
+          </h2>
+          <p className="text-muted text-sm mb-1">
+            {phase === 'won'
+              ? (lives === 1 ? t('tictactoe.filledAllLife', { n: lives }) : t('tictactoe.filledAllLives', { n: lives }))
+              : gaveUp ? t('tictactoe.filledBeforeGaveUp', { n: filledCount }) : t('tictactoe.filledBeforeLost', { n: filledCount })}
+          </p>
+        </div>
         {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
-        <ShareCard text={shareText} />
-        <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tictactoe.newGrid')}</button>
-        <MoreGames current="/tictactoe" />
+
+        <div className="w-full flex gap-1.5 justify-center mb-3">
+          {[['board', t('tictactoe.boardTab')], ['share', t('share.share')]].map(([id, label]) => (
+            <button key={id} onClick={() => setResultTab(id)}
+              className={`text-[0.6rem] font-black tracking-[0.12em] uppercase rounded-full px-3 py-1.5 border transition-colors ${resultTab === id ? 'bg-brand border-brand text-white' : 'border-border text-muted hover:text-secondary'}`}>
+              {label}
+            </button>
+          ))}
+        </div>
+        {resultTab === 'board' && (
+          <div className="w-full mb-1">
+            <div className="grid grid-cols-3 gap-1.5">
+              {Array.from({ length: 9 }, (_, i) => {
+                const name = filled[i] ?? revealAssignment?.[i]
+                const got = filled[i] != null
+                return (
+                  <div key={i} className={`rounded-lg border px-1 py-2.5 text-center text-[10px] font-medium leading-tight ${
+                    got ? 'border-success/50 bg-success/10 text-primary' : 'border-danger/30 bg-danger/5 text-muted'
+                  }`}>
+                    {name}
+                  </div>
+                )
+              })}
+            </div>
+            <p className="text-faint text-[0.64rem] text-center mt-2">{t('tictactoe.tapSquare')}</p>
+          </div>
+        )}
+        {resultTab === 'share' && (
+          <div className="w-full flex flex-col items-center gap-2 mb-1">
+            <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
+            <ShareCard text={shareText} />
+          </div>
+        )}
+
+        <button onClick={() => newGame('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tictactoe.newGrid')}</button>
+        <UpNext exclude="tictactoe" />
       </ResultModal>
 
       {/* Guess history */}
       {history.length > 0 && (
         <div className="w-full max-w-lg mt-2">
-          <div className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-medium px-1">
+          <div className="text-[0.56rem] font-black tracking-[0.16em] uppercase text-faint mb-2 px-1">
             {t('tictactoe.guesses', { n: history.length })}
           </div>
-          <div className="rounded-xl border border-gray-800 overflow-hidden">
-            <div className="divide-y divide-gray-800/40 max-h-56 overflow-y-auto">
+          <div className="rounded-xl border border-border overflow-hidden">
+            <div className="divide-y divide-border/40 max-h-56 overflow-y-auto">
               {[...history].reverse().map((g, i) => (
                 <div key={i} className={`flex items-center justify-between px-4 py-2.5 ${g.correct === true ? 'flash-valid' : 'flash-invalid'}`}>
-                  <span className="text-sm text-white truncate">{g.text}</span>
+                  <span className="text-sm text-primary truncate">{g.text}</span>
                   {g.correct === true
-                    ? <span className="text-green-400 text-xs font-semibold shrink-0">{t('tictactoe.square', { n: g.cell + 1 })}</span>
-                    : <span className="text-red-500 text-xs font-semibold shrink-0">✗</span>}
+                    ? <span className="text-success-bright text-xs font-semibold shrink-0">{t('tictactoe.square', { n: g.cell + 1 })}</span>
+                    : <span className="text-danger-bright text-xs font-semibold shrink-0">✗</span>}
                 </div>
               ))}
             </div>
@@ -511,6 +578,6 @@ export default function FootballTicTacToe({ onBackToModes }) {
         </div>
       )}
     </div>
+    </div>
   )
 }
-

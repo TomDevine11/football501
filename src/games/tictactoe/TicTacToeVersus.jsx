@@ -4,11 +4,18 @@ import { usePlayerSuggestions } from './usePlayerSuggestions'
 import { getWinner, isFull } from './winner'
 import GridBuilder from './GridBuilder'
 import CategoryIcon from '../../components/CategoryIcon'
+import GameChrome from '../../components/GameChrome'
+import ResultModal from '../../components/ResultModal'
+import UpNext from '../../components/UpNext'
 import Mark from './Mark'
+import { accentVars } from '../../design/accents'
 import { useI18n } from '../../i18n'
+import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 const MARK = { X: 'X', O: 'O' } // letters for inline text; <Mark> renders the glyph
-const MARK_COLOR = { X: 'text-red-400', O: 'text-blue-400' }
+// X/O are game pieces, not UI — they keep their own mark.* colours.
+const MARK_COLOR = { X: 'text-mark-x', O: 'text-mark-o' }
+const MARK_EDGE = { X: 'border-l-mark-x', O: 'border-l-mark-o' }
 
 export default function TicTacToeVersus({ onBackToModes }) {
   const { t } = useI18n()
@@ -44,6 +51,14 @@ export default function TicTacToeVersus({ onBackToModes }) {
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [])
+
+  // Let the winning line show on the board first, then raise the finish card.
+  const [showResult, setShowResult] = useState(false)
+  useEffect(() => {
+    if (result == null) return
+    const timer = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS)
+    return () => clearTimeout(timer)
+  }, [result])
 
   const selectCell = (idx) => {
     if (result != null || owners[idx]) return
@@ -132,7 +147,7 @@ export default function TicTacToeVersus({ onBackToModes }) {
   const resetBoard = (nextStarter) => {
     setOwners({}); setCellPlayers({})
     setStarter(nextStarter); setTurn(nextStarter)
-    setSelectedCell(null); setInput(''); setResult(null); setLastWrong(null)
+    setSelectedCell(null); setInput(''); setResult(null); setLastWrong(null); setShowResult(false)
   }
   const startRandom = () => { setGrid(getRandomGrid()); setScores({ X: 0, O: 0 }); resetBoard('X') }
   const startCustom = (rowCats, colCats) => { setGrid(buildGrid(rowCats, colCats)); setBuilding(false); setScores({ X: 0, O: 0 }); resetBoard('X') }
@@ -141,64 +156,77 @@ export default function TicTacToeVersus({ onBackToModes }) {
 
   const winningLine = result && result !== 'draw' ? result.line : []
 
+  const scoreline = (
+    <span className="inline-flex items-center gap-2 tabular-nums">
+      <span className={`inline-flex items-center gap-1 ${MARK_COLOR.X}`}><Mark mark="X" size={13} /> {scores.X}</span>
+      <span className="text-faint">·</span>
+      <span className={`inline-flex items-center gap-1 ${MARK_COLOR.O}`}><Mark mark="O" size={13} /> {scores.O}</span>
+    </span>
+  )
+
+  const chrome = (right) => (
+    <div className="w-full"><GameChrome motifId="tictactoe" title={t('tictactoe.wordmark')} right={right} /></div>
+  )
+
+  const modesLink = (
+    <div className="relative w-full max-w-lg flex justify-center mt-1 mb-4 min-h-[1rem]">
+      <button onClick={onBackToModes} className="absolute left-0 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-secondary transition-colors">
+        {t('tictactoe.modes')}
+      </button>
+    </div>
+  )
+
   // ── Grid builder ──────────────────────────────────────────────────
   if (building) return <GridBuilder onBuild={startCustom} onCancel={() => setBuilding(false)} />
 
   // ── Setup: choose a random or custom grid ─────────────────────────
   if (!grid) {
     return (
-      <div className="min-h-screen flex flex-col items-center px-4 py-8">
-        <div className="w-full max-w-lg flex items-center justify-between mb-6">
-          <button onClick={onBackToModes} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('tictactoe.modes')}</button>
-          <div className="score-number text-xl text-gray-500 tracking-wider">1v1</div>
-          <div className="w-12" />
-        </div>
-        <div className="w-full max-w-lg text-center mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">{t('tictactoe.versusTitle')}</h1>
-          <p className="text-gray-500 text-sm">{t('tictactoe.vsChoose')}</p>
-        </div>
-        <div className="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button onClick={startRandom} className="bg-gray-900 border border-gray-800 hover:border-green-600 hover:ring-1 hover:ring-green-600/30 rounded-xl p-6 text-left transition-all">
-            <div className="text-3xl mb-2">🎲</div>
-            <div className="text-white font-bold text-lg">{t('tictactoe.randomGrid')}</div>
-            <div className="text-gray-500 text-xs mt-1">{t('tictactoe.randomGridDesc')}</div>
-          </button>
-          <button onClick={() => setBuilding(true)} className="bg-gray-900 border border-gray-800 hover:border-purple-500 hover:ring-1 hover:ring-purple-500/30 rounded-xl p-6 text-left transition-all">
-            <div className="text-3xl mb-2">🛠️</div>
-            <div className="text-white font-bold text-lg">{t('tictactoe.buildOwn')}</div>
-            <div className="text-gray-500 text-xs mt-1">{t('tictactoe.buildOwnDesc')}</div>
-          </button>
+      <div className="tv-scene min-h-dvh text-primary" style={accentVars('tictactoe')}>
+        <div className="flex flex-col items-center px-4 pb-8 max-w-4xl mx-auto">
+          {chrome('1V1')}
+          {modesLink}
+          <div className="w-full max-w-lg text-center mt-6 mb-6">
+            <div className="flex items-center justify-center gap-1.5 mb-3"><Mark mark="X" size={30} /><Mark mark="O" size={30} /></div>
+            <h1 className="score-number text-3xl text-primary mb-1">{t('tictactoe.versusTitle')}</h1>
+            <p className="text-muted text-sm">{t('tictactoe.vsChoose')}</p>
+          </div>
+          <div className="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button onClick={startRandom} className="bg-card border border-border-strong hover:border-accent rounded-2xl p-6 text-left transition-colors">
+              <div className="text-primary font-bold text-lg">{t('tictactoe.randomGrid')}</div>
+              <div className="text-muted text-xs mt-1">{t('tictactoe.randomGridDesc')}</div>
+              <div className="text-accent-bright text-sm font-black mt-3" aria-hidden="true">→</div>
+            </button>
+            <button onClick={() => setBuilding(true)} className="bg-card border border-border-strong hover:border-accent rounded-2xl p-6 text-left transition-colors">
+              <div className="text-primary font-bold text-lg">{t('tictactoe.buildOwn')}</div>
+              <div className="text-muted text-xs mt-1">{t('tictactoe.buildOwnDesc')}</div>
+              <div className="text-accent-bright text-sm font-black mt-3" aria-hidden="true">→</div>
+            </button>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-8">
-      {/* Header */}
-      <div className="w-full max-w-lg flex items-center justify-between mb-5">
-        <button onClick={onBackToModes} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('tictactoe.modes')}</button>
-        <div className="score-number text-xl text-gray-500 tracking-wider">1v1</div>
-        <div className="flex items-center gap-2 text-sm tabular-nums">
-          <span className={`inline-flex items-center gap-1 ${MARK_COLOR.X}`}><Mark mark="X" size={15} /> {scores.X}</span>
-          <span className="text-gray-700">·</span>
-          <span className={`inline-flex items-center gap-1 ${MARK_COLOR.O}`}><Mark mark="O" size={15} /> {scores.O}</span>
-        </div>
-      </div>
+    <div className="tv-scene min-h-dvh text-primary" style={accentVars('tictactoe')}>
+    <div className="flex flex-col items-center px-4 pb-8 max-w-4xl mx-auto">
+      {chrome(scoreline)}
+      {modesLink}
 
       {/* Wrong-guess alert — clear, persistent, explains why */}
       {result == null && lastWrong && (
         lastWrong.skipped ? (
-          <div className={`w-full max-w-lg mb-3 rounded-xl border border-gray-700 bg-gray-800/40 px-5 py-3 text-center ${shake ? 'shake' : ''}`}>
-            <div className="text-gray-300 text-sm font-semibold">{t('tictactoe.playerSkipped', { mark: MARK[lastWrong.by] })}</div>
-            <div className="text-gray-500 text-xs mt-0.5">{t('tictactoe.turnPasses', { mark: MARK[turn] })}</div>
+          <div className={`w-full max-w-lg mb-3 rounded-xl border border-border-strong bg-surface/60 px-5 py-3 text-center ${shake ? 'shake' : ''}`}>
+            <div className="text-secondary text-sm font-semibold">{t('tictactoe.playerSkipped', { mark: MARK[lastWrong.by] })}</div>
+            <div className="text-muted text-xs mt-0.5">{t('tictactoe.turnPasses', { mark: MARK[turn] })}</div>
           </div>
         ) : (
-          <div className={`w-full max-w-lg mb-3 rounded-xl border border-red-800 bg-red-900/25 px-5 py-3 text-center ${shake ? 'shake' : ''}`}>
-            <div className="text-red-300 text-sm font-semibold">
+          <div className={`w-full max-w-lg mb-3 rounded-xl border border-danger/50 bg-danger/10 px-5 py-3 text-center ${shake ? 'shake' : ''}`}>
+            <div className="text-danger-bright text-sm font-semibold">
               {t('tictactoe.wrongGuess', { mark: MARK[lastWrong.by], text: lastWrong.text })}
             </div>
-            <div className="text-red-400/90 text-xs mt-0.5">
+            <div className="text-danger-bright/80 text-xs mt-0.5">
               {t('tictactoe.wrongDetail', { text: lastWrong.text, why: lastWrong.why, mark: MARK[turn] })}
             </div>
           </div>
@@ -206,26 +234,31 @@ export default function TicTacToeVersus({ onBackToModes }) {
       )}
 
       {/* Turn / result banner */}
-      <div className="w-full max-w-lg mb-5">
+      <div className="w-full max-w-lg mb-4">
         {result == null ? (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-3 text-center">
-            <div className="text-sm">
-              <span className={`font-bold ${MARK_COLOR[turn]}`}>{t('tictactoe.playerTurn', { mark: MARK[turn] })}</span>
-              <span className="text-gray-400">{t('tictactoe.claimSquare')}</span>
+          <div className={`bg-card border border-border-strong border-l-4 ${MARK_EDGE[turn]} rounded-xl px-4 py-3`}>
+            <div className="text-sm flex items-center gap-2">
+              <Mark mark={turn} size={18} />
+              <span>
+                <span className={`font-bold ${MARK_COLOR[turn]}`}>{t('tictactoe.playerTurn', { mark: MARK[turn] })}</span>
+                <span className="text-secondary">{t('tictactoe.claimSquare')}</span>
+              </span>
             </div>
           </div>
         ) : (
-          <div className="bg-gray-900 border border-gray-700 rounded-xl px-5 py-4 text-center">
+          <div className="bg-card border border-border-strong rounded-xl px-4 py-4 text-center">
             {result === 'draw' ? (
-              <div className="text-white font-bold">{t('tictactoe.draw')}</div>
+              <div className="text-primary font-bold">{t('tictactoe.draw')}</div>
             ) : (
-              <div className={`font-bold text-lg ${MARK_COLOR[result.mark]}`}>{t('tictactoe.wins', { mark: MARK[result.mark] })}</div>
+              <div className={`font-bold text-lg inline-flex items-center gap-2 ${MARK_COLOR[result.mark]}`}>
+                <Mark mark={result.mark} size={20} />{t('tictactoe.wins', { mark: MARK[result.mark] })}
+              </div>
             )}
             <div className="mt-3 flex items-center justify-center gap-3">
-              <button onClick={playAgain} className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-5 py-2 transition-colors">
+              <button onClick={playAgain} className="bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-5 py-2 transition-colors">
                 {t('tictactoe.playAgain')}
               </button>
-              <button onClick={toSetup} className="border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-lg px-5 py-2 transition-colors">
+              <button onClick={toSetup} className="border border-border-strong text-secondary hover:bg-surface text-sm font-medium rounded-lg px-5 py-2 transition-colors">
                 {t('tictactoe.newGridBtn')}
               </button>
             </div>
@@ -233,20 +266,20 @@ export default function TicTacToeVersus({ onBackToModes }) {
         )}
       </div>
 
-      {/* Grid */}
-      <div className="w-full max-w-lg mb-6 overflow-x-auto">
+      {/* Grid — headers sit outside the board as neutral chips */}
+      <div className="w-full max-w-lg mb-5 overflow-x-auto">
         <div className="grid gap-1.5 mx-auto" style={{ gridTemplateColumns: `minmax(70px, 1fr) repeat(3, minmax(90px, 1fr))`, width: 'fit-content', minWidth: '100%' }}>
           <div />
           {grid.colCategories.map((cat, i) => (
-            <div key={`col-${i}`} className="flex flex-col items-center justify-center text-center px-1 py-2 gap-1 text-[10px] sm:text-xs font-bold text-blue-400 leading-tight">
-              <CategoryIcon category={cat} size={24} />
+            <div key={`col-${i}`} className="flex flex-col items-center justify-center text-center gap-1 rounded-lg bg-surface/60 border border-border px-1 py-2 text-[10px] sm:text-xs font-bold text-secondary leading-tight">
+              <CategoryIcon category={cat} size={22} />
               <span>{categoryLabel(cat, t)}</span>
             </div>
           ))}
           {[0, 1, 2].map(r => (
             <Fragment key={r}>
-              <div className="flex flex-col items-center justify-center text-center px-1 gap-1 text-[10px] sm:text-xs font-bold text-yellow-400 leading-tight">
-                <CategoryIcon category={grid.rowCategories[r]} size={24} />
+              <div className="flex flex-col items-center justify-center text-center gap-1 rounded-lg bg-surface/60 border border-border px-1 py-2 text-[10px] sm:text-xs font-bold text-secondary leading-tight">
+                <CategoryIcon category={grid.rowCategories[r]} size={22} />
                 <span>{categoryLabel(grid.rowCategories[r], t)}</span>
               </div>
               {[0, 1, 2].map(c => {
@@ -262,19 +295,19 @@ export default function TicTacToeVersus({ onBackToModes }) {
                     disabled={result != null || !!owner}
                     className={`aspect-square w-full rounded-lg border flex flex-col items-center justify-center text-center px-1 transition-colors ${
                       owner
-                        ? `${inWin ? 'border-green-500 bg-green-900/30' : owner === 'X' ? 'border-red-800 bg-red-900/15' : 'border-blue-800 bg-blue-900/15'} cell-reveal`
+                        ? `${inWin ? 'border-success bg-success/15' : owner === 'X' ? 'border-mark-x/40 bg-mark-x/10' : 'border-mark-o/40 bg-mark-o/10'} cell-reveal`
                         : isSelected
-                          ? 'border-green-600 bg-gray-800 ring-2 ring-green-600/40'
-                          : 'border-gray-800 bg-gray-900 hover:border-gray-600'
+                          ? 'border-accent ring-2 ring-accent/40 bg-[color-mix(in_srgb,var(--accent)_12%,#100e1c)]'
+                          : 'border-border-strong bg-board hover:border-muted'
                     }`}
                   >
                     {owner ? (
                       <>
                         <Mark mark={owner} size={28} />
-                        <span className="text-[10px] sm:text-xs font-medium text-gray-300 leading-tight mt-1 line-clamp-2">{cellPlayers[idx]}</span>
+                        <span className="text-[10px] sm:text-xs font-medium text-secondary leading-tight mt-1 line-clamp-2">{cellPlayers[idx]}</span>
                       </>
                     ) : (
-                      <span className="text-gray-700 text-xl">+</span>
+                      <span className="text-dim text-xl" aria-hidden="true">+</span>
                     )}
                   </button>
                 )
@@ -287,10 +320,16 @@ export default function TicTacToeVersus({ onBackToModes }) {
       {/* Input */}
       {active && (
         <>
-          <div className="w-full max-w-lg mb-2 text-center text-xs text-gray-500">
-            <span className="text-yellow-400 font-medium">{categoryLabel(grid.rowCategories[Math.floor(selectedCell / 3)], t)}</span>
-            {' '}+{' '}
-            <span className="text-blue-400 font-medium">{categoryLabel(grid.colCategories[selectedCell % 3], t)}</span>
+          <div className="w-full max-w-lg mb-2 flex items-center justify-center gap-1.5 text-xs">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/60 px-2 py-0.5 font-medium text-secondary">
+              <CategoryIcon category={grid.rowCategories[Math.floor(selectedCell / 3)]} size={13} />
+              {categoryLabel(grid.rowCategories[Math.floor(selectedCell / 3)], t)}
+            </span>
+            <span className="text-faint font-black">+</span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/60 px-2 py-0.5 font-medium text-secondary">
+              <CategoryIcon category={grid.colCategories[selectedCell % 3]} size={13} />
+              {categoryLabel(grid.colCategories[selectedCell % 3], t)}
+            </span>
           </div>
           <form onSubmit={handleSubmit} className={`relative w-full max-w-lg ${shake ? 'shake' : ''}`}>
             <input
@@ -301,41 +340,49 @@ export default function TicTacToeVersus({ onBackToModes }) {
               onKeyDown={handleKeyDown}
               placeholder={t('tictactoe.vsPlaceholder', { mark: MARK[turn] })}
               autoFocus
-              className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
+              role="combobox"
+              aria-expanded={visibleSuggestions.length > 0}
+              aria-controls="ttt-vs-suggestions"
+              aria-autocomplete="list"
+              aria-activedescendant={highlightedIndex >= 0 ? `ttt-vs-option-${highlightedIndex}` : undefined}
+              className="w-full bg-surface border border-border-strong focus:border-accent rounded-xl px-4 py-3.5 text-primary placeholder-faint text-base outline-none transition-colors"
               autoComplete="off" autoCorrect="off" spellCheck="false"
             />
             {isSearching && (
               <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                <div className="w-4 h-4 border-2 border-gray-600 border-t-green-500 rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-inert border-t-accent rounded-full animate-spin" />
               </div>
             )}
             {visibleSuggestions.length > 0 && (
-              <div ref={dropdownRef} className="absolute top-full left-0 right-0 mt-1 bg-gray-900 border border-gray-700 rounded-xl overflow-hidden z-10 shadow-2xl">
+              <div ref={dropdownRef} id="ttt-vs-suggestions" role="listbox" className="absolute top-full left-0 right-0 mt-1 bg-surface border border-border-strong rounded-xl overflow-hidden z-10 shadow-2xl">
                 {visibleSuggestions.map((item, i) => (
                   <button
                     key={item.name}
                     type="button"
+                    id={`ttt-vs-option-${i}`}
+                    role="option"
+                    aria-selected={i === highlightedIndex}
                     onMouseDown={e => { e.preventDefault(); submitGuess(item.name) }}
                     onMouseEnter={() => setHighlightedIndex(i)}
-                    className={`w-full text-left px-4 py-2.5 transition-colors border-b border-gray-800/50 last:border-0 ${i === highlightedIndex ? 'bg-gray-800' : 'hover:bg-gray-800/60'}`}
+                    className={`w-full text-left px-4 py-2.5 transition-colors border-b border-border/50 last:border-0 ${i === highlightedIndex ? 'bg-canvas-high' : 'hover:bg-canvas-high/60'}`}
                   >
                     <div className="flex items-center gap-2">
                       {item.flag && <span className="text-base shrink-0">{item.flag}</span>}
-                      <span className="text-white text-sm font-medium truncate">{item.name}</span>
+                      <span className="text-primary text-sm font-medium truncate">{item.name}</span>
                     </div>
                   </button>
                 ))}
               </div>
             )}
           </form>
-          <button type="button" onClick={() => setSelectedCell(null)} className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors">
+          <button type="button" onClick={() => setSelectedCell(null)} className="mt-2 text-xs text-muted hover:text-secondary transition-colors">
             {t('common.cancel')}
           </button>
         </>
       )}
 
       {result == null && selectedCell == null && (
-        <p className="text-gray-600 text-xs mt-1">{t('tictactoe.tapEmpty')}</p>
+        <p className="text-faint text-xs mt-1">{t('tictactoe.tapEmpty')}</p>
       )}
 
       {result == null && (
@@ -343,19 +390,48 @@ export default function TicTacToeVersus({ onBackToModes }) {
           <button
             type="button"
             onClick={skipTurn}
-            className="mt-3 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
+            className="mt-3 w-full max-w-lg border border-border-strong text-secondary hover:bg-surface hover:text-primary text-sm font-medium rounded-xl px-4 py-2.5 transition-colors"
           >
             {t('tictactoe.skipGo', { mark: MARK[turn] })}
           </button>
           <button
             type="button"
             onClick={toSetup}
-            className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors"
+            className="mt-2 text-xs text-muted hover:text-secondary transition-colors"
           >
             {t('tictactoe.newGridLink')}
           </button>
         </>
       )}
+
+      {/* Finish card — round scoreline instead of daily stats */}
+      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+        <div className="w-full flex flex-col items-center text-center">
+          {result === 'draw' ? (
+            <div className="flex items-center gap-1.5 mb-2"><Mark mark="X" size={34} /><Mark mark="O" size={34} /></div>
+          ) : (
+            <Mark mark={result?.mark ?? 'X'} size={44} className="mb-2" />
+          )}
+          <h2 className={`score-number text-4xl mb-1 ${result === 'draw' ? 'text-primary' : MARK_COLOR[result?.mark ?? 'X']}`}>
+            {result === 'draw' ? t('tictactoe.draw') : t('tictactoe.wins', { mark: MARK[result?.mark ?? 'X'] })}
+          </h2>
+          <div className="score-number text-2xl text-secondary tabular-nums mt-1 mb-2 inline-flex items-center gap-3">
+            <span className={`inline-flex items-center gap-1.5 ${MARK_COLOR.X}`}><Mark mark="X" size={18} /> {scores.X}</span>
+            <span className="text-faint">—</span>
+            <span className={`inline-flex items-center gap-1.5 ${MARK_COLOR.O}`}>{scores.O} <Mark mark="O" size={18} /></span>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-3 mt-1">
+          <button onClick={playAgain} className="bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">
+            {t('tictactoe.playAgain')}
+          </button>
+          <button onClick={toSetup} className="border border-border-strong text-secondary hover:bg-surface text-sm font-medium rounded-lg px-6 py-2.5 transition-colors">
+            {t('tictactoe.newGridBtn')}
+          </button>
+        </div>
+        <UpNext exclude="tictactoe" />
+      </ResultModal>
+    </div>
     </div>
   )
 }
