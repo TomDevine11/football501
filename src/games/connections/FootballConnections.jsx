@@ -1,11 +1,13 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { getDailyConnections, getRandomConnections, shuffleNames } from '../../data/connections'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
-import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import CategoryIcon from '../../components/CategoryIcon'
+import GameChrome from '../../components/GameChrome'
+import GameMotif from '../../components/GameMotif'
+import UpNext from '../../components/UpNext'
+import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
 import { ShareCard } from '../../components/ShareCard'
 import { SITE_URL } from '../../utils/site'
@@ -14,16 +16,17 @@ import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 const MAX_LIVES = 4
 const SHARE_EMOJI = ['🟨', '🟩', '🟦', '🟪'] // per group index
-const GROUP_COLORS = [
-  'bg-amber-800/40 border-amber-600',
-  'bg-green-800/40 border-green-600',
-  'bg-blue-800/40 border-blue-600',
-  'bg-purple-800/40 border-purple-600',
-]
+// Group tier colours (board pieces, like Wordle's tile.*): the difficulty ramp
+// volt → cyan → gold → purple. Applied inline (bg/border/text derive from one hex).
+const GROUP_TIERS = ['#a3e635', '#22d3ee', '#eab308', '#a78bfa']
+const tierStyle = (i) => ({
+  background: `${GROUP_TIERS[i]}1f`,
+  borderColor: `${GROUP_TIERS[i]}88`,
+})
 const keyOf = names => [...names].sort().join('|')
 
 export default function FootballConnections() {
-  const { t, lp } = useI18n()
+  const { t } = useI18n()
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [puzzle, setPuzzle] = useState(() => getDailyConnections())
   const [solved, setSolved] = useState([])        // [{ groupIndex, label, players }]
@@ -34,6 +37,7 @@ export default function FootballConnections() {
   const [pastGuesses, setPastGuesses] = useState(new Set())
   const [guessRows, setGuessRows] = useState([]) // each row: group index per selected tile
   const [shake, setShake] = useState(false)
+  const [resultTab, setResultTab] = useState('groups')
 
   const solvedNames = useMemo(() => new Set(solved.flatMap(s => s.players)), [solved])
   const remaining = order.filter(n => !solvedNames.has(n))
@@ -50,7 +54,7 @@ export default function FootballConnections() {
     const p = m === 'daily' ? getDailyConnections() : getRandomConnections()
     setPuzzle(p); setOrder(p.tiles)
     setSolved([]); setSelected([]); setLives(MAX_LIVES); setMessage('')
-    setPastGuesses(new Set()); setGuessRows([]); setDailyStats(null); setShowResult(false)
+    setPastGuesses(new Set()); setGuessRows([]); setDailyStats(null); setShowResult(false); setResultTab('groups')
   }
   const [showResult, setShowResult] = useState(false)
   useEffect(() => {
@@ -100,6 +104,8 @@ export default function FootballConnections() {
         .filter(g => !solved.some(s => s.groupIndex === g.groupIndex))
     : []
   const shownGroups = [...solved, ...revealed]
+  // The finish card always lists all four in difficulty order.
+  const allGroups = puzzle.groups.map((g, i) => ({ groupIndex: i, label: g.label, players: g.players }))
 
   const mistakes = MAX_LIVES - lives
   const shareText = [
@@ -113,41 +119,45 @@ export default function FootballConnections() {
   ].join('\n')
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-8">
-      <div className="w-full max-w-lg flex items-center justify-between mb-5">
-        <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
-        <div className="score-number text-xl text-gray-500 tracking-wider">{t('connections.wordmark')}</div>
-        <div className="flex items-center gap-1">
-          {Array.from({ length: MAX_LIVES }, (_, i) => (
-            <span key={i} className={`w-2.5 h-2.5 rounded-full ${i < lives ? 'bg-gray-300' : 'bg-gray-800'}`} />
-          ))}
+    <div className="tv-scene min-h-dvh text-primary" style={accentVars('connections')}>
+    <div className="flex flex-col items-center px-4 pb-8 max-w-4xl mx-auto">
+      <div className="w-full"><GameChrome
+        motifId="connections"
+        title={t('connections.wordmark')}
+        right={
+          <span className="inline-flex items-center gap-1.5" aria-label={t('connections.introSub')}>
+            {Array.from({ length: MAX_LIVES }, (_, i) => (
+              <i key={i} className={`w-2.5 h-2.5 rounded-full ${i < lives ? 'bg-accent' : 'bg-inert'}`} aria-hidden="true" />
+            ))}
+            <b className="ml-1 text-secondary tabular-nums">{solved.length}/4</b>
+          </span>
+        }
+      /></div>
+
+      <ModeToggle mode={mode} onChange={newGame} className="mt-1 mb-4" />
+
+      {/* The board — a wider stage on desktop, the tight grid on mobile */}
+      <div className="w-full max-w-lg lg:max-w-[52rem] space-y-2.5">
+        <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · 4 × 4</div>
+          <div className="text-primary font-bold text-sm mt-0.5">{t('connections.intro')}</div>
+          <div className="text-muted text-xs mt-0.5">{t('connections.introSub')}</div>
         </div>
-      </div>
 
-      <ModeToggle mode={mode} onChange={newGame} className="mb-4" />
-
-      <div className="w-full max-w-lg mb-4">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">{t('connections.intro')}</div>
-          <div className="text-gray-500 text-xs mt-0.5">{t('connections.introSub')}</div>
-        </div>
-      </div>
-
-      <div className="w-full max-w-lg space-y-2">
         {/* Solved / revealed group bars */}
         {shownGroups.map(g => (
-          <div key={g.groupIndex} className={`rounded-xl border px-4 py-3 text-center ${GROUP_COLORS[g.groupIndex]}`}>
+          <div key={g.groupIndex} style={tierStyle(g.groupIndex)} className="rounded-xl border px-4 py-3 text-center cell-reveal">
             <div className="flex items-center justify-center gap-1.5">
               <CategoryIcon category={puzzle.groups[g.groupIndex].category} size={18} />
-              <div className="text-white font-bold text-xs uppercase tracking-wide">{g.label}</div>
+              <div className="font-black text-xs uppercase tracking-[0.1em]" style={{ color: GROUP_TIERS[g.groupIndex] }}>{g.label}</div>
             </div>
-            <div className="text-gray-200 text-sm mt-0.5">{g.players.join(', ')}</div>
+            <div className="text-secondary text-sm mt-0.5">{g.players.join(', ')}</div>
           </div>
         ))}
 
         {/* Remaining tiles */}
         {!over && (
-          <div className={`grid grid-cols-4 gap-2 ${shake ? 'shake' : ''}`}>
+          <div className={`grid grid-cols-4 gap-2 lg:gap-2.5 ${shake ? 'shake' : ''}`}>
             {remaining.map(name => {
               const isSel = selected.includes(name)
               return (
@@ -155,8 +165,11 @@ export default function FootballConnections() {
                   key={name}
                   type="button"
                   onClick={() => toggle(name)}
-                  className={`aspect-square rounded-lg border px-1 flex items-center justify-center text-center text-[11px] sm:text-xs font-semibold leading-tight transition-colors ${
-                    isSel ? 'border-green-500 bg-gray-700 text-white' : 'border-gray-800 bg-gray-900 text-gray-300 hover:border-gray-600'
+                  aria-pressed={isSel}
+                  className={`rounded-lg lg:rounded-xl border px-1 py-4 lg:py-6 flex items-center justify-center text-center text-[11px] sm:text-xs lg:text-sm font-bold leading-tight transition-[transform,border-color,background-color] duration-fast ${
+                    isSel
+                      ? 'border-accent bg-[color-mix(in_srgb,var(--accent)_12%,#16151f)] text-primary -translate-y-0.5'
+                      : 'border-border-strong bg-surface text-secondary hover:border-muted'
                   }`}
                 >
                   {name}
@@ -165,39 +178,65 @@ export default function FootballConnections() {
             })}
           </div>
         )}
+
+        {message && <div className="text-center text-sm text-warn font-semibold">{message}</div>}
+
+        {!over && (
+          <div className="flex gap-3 pt-1">
+            <button onClick={shuffleTiles} className="flex-1 border border-border-strong text-secondary hover:bg-surface text-sm font-medium rounded-xl py-3 transition-colors">{t('connections.shuffle')}</button>
+            <button onClick={() => setSelected([])} disabled={!selected.length} className="flex-1 border border-border-strong text-secondary hover:bg-surface disabled:opacity-40 text-sm font-medium rounded-xl py-3 transition-colors">{t('connections.deselect')}</button>
+            <button onClick={submit} disabled={selected.length !== 4} className="flex-1 bg-brand hover:bg-brand-hover disabled:opacity-40 text-white text-sm font-bold rounded-xl py-3 transition-colors">{t('connections.submit')}</button>
+          </div>
+        )}
       </div>
 
-      {message && <div className="w-full max-w-lg mt-3 text-center text-sm text-amber-400">{message}</div>}
-
-      {!over && (
-        <div className="w-full max-w-lg mt-4 flex gap-3">
-          <button onClick={shuffleTiles} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-medium rounded-xl py-3 transition-colors">{t('connections.shuffle')}</button>
-          <button onClick={() => setSelected([])} disabled={!selected.length} className="flex-1 border border-gray-700 text-gray-300 hover:bg-gray-800 disabled:opacity-40 text-sm font-medium rounded-xl py-3 transition-colors">{t('connections.deselect')}</button>
-          <button onClick={submit} disabled={selected.length !== 4} className="flex-1 bg-green-700 hover:bg-green-600 disabled:opacity-40 text-white text-sm font-semibold rounded-xl py-3 transition-colors">{t('connections.submit')}</button>
-        </div>
-      )}
-
       {over && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
+        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
-          <div className="text-5xl mb-2">{won ? '🎉' : '💔'}</div>
-          <h2 className={`score-number text-3xl mb-1 ${won ? 'text-green-400' : 'text-red-400'}`}>
+          <GameMotif id="connections" className={`w-11 h-11 mb-2 ${won ? 'text-accent-bright' : 'text-dim'}`} />
+          <h2 className={`score-number text-4xl mb-1 ${won ? 'text-success-bright' : 'text-danger-bright'}`}>
             {won ? t('connections.solved') : t('connections.outOf')}
           </h2>
-          <p className="text-gray-400">
+          <p className="text-muted text-sm mb-1">
             {won
-              ? t('connections.foundAll', { n: MAX_LIVES - lives })
+              ? t('connections.foundAll', { n: mistakes })
               : mode === 'daily' ? t('common.comeBackTomorrow') : t('connections.betterLuck')}
           </p>
-          {mode === 'daily' && <DailyStats game="connections" stats={dailyStats} />}
-          <ShareCard text={shareText} />
-          <button onClick={() => newGame('unlimited')} className="mt-3 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('connections.newPuzzle')}</button>
         </div>
-        <MoreGames current="/connections" />
+        {mode === 'daily' && <DailyStats game="connections" stats={dailyStats} />}
+
+        <div className="w-full flex gap-1.5 justify-center mb-3">
+          {[['groups', t('connections.theGroups')], ['share', t('share.share')]].map(([id, label]) => (
+            <button key={id} onClick={() => setResultTab(id)}
+              className={`text-[0.6rem] font-black tracking-[0.12em] uppercase rounded-full px-3 py-1.5 border transition-colors ${resultTab === id ? 'bg-brand border-brand text-white' : 'border-border text-muted hover:text-secondary'}`}>
+              {label}
+            </button>
+          ))}
+        </div>
+        {resultTab === 'groups' && (
+          <div className="w-full space-y-1.5 mb-1 max-h-56 overflow-y-auto">
+            {allGroups.map(g => (
+              <div key={g.groupIndex} style={tierStyle(g.groupIndex)} className="rounded-lg border px-3 py-2 text-center">
+                <div className="font-black text-[0.66rem] uppercase tracking-[0.1em]" style={{ color: GROUP_TIERS[g.groupIndex] }}>{g.label}</div>
+                <div className="text-secondary text-xs mt-0.5">{g.players.join(' · ')}</div>
+              </div>
+            ))}
+          </div>
+        )}
+        {resultTab === 'share' && (
+          <div className="w-full flex flex-col items-center gap-2 mb-1">
+            <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
+            <ShareCard text={shareText} />
+          </div>
+        )}
+
+        <button onClick={() => newGame('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('connections.newPuzzle')}</button>
+        <UpNext exclude="connections" />
       </ResultModal>
+    </div>
     </div>
   )
 }

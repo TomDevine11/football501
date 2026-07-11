@@ -11,7 +11,7 @@ export const GAME_ACCENTS = {
   teammates: { accent: '#ec4899', bright: '#f472b6', tint: 'rgb(236 72 153 / 0.12)' },
   careers: { accent: '#06b6d4', bright: '#22d3ee', tint: 'rgb(6 182 212 / 0.12)' },
   wcsquads: { accent: '#f59e0b', bright: '#fbbf24', tint: 'rgb(245 158 11 / 0.12)' },
-  connections: { accent: '#14b8a6', bright: '#2dd4bf', tint: 'rgb(20 184 166 / 0.12)' },
+  connections: { accent: '#a3e635', bright: '#bef264', tint: 'rgb(163 230 53 / 0.12)' }, // volt
   higherlower: { accent: '#f97316', bright: '#fb923c', tint: 'rgb(249 115 22 / 0.12)' },
   501: { accent: '#ef4444', bright: '#f87171', tint: 'rgb(239 68 68 / 0.12)' },
 }

@@ -68,7 +68,7 @@ export default {
           teammates: { DEFAULT: '#ec4899', bright: '#f472b6', tint: 'rgb(236 72 153 / 0.12)' },
           careers: { DEFAULT: '#06b6d4', bright: '#22d3ee', tint: 'rgb(6 182 212 / 0.12)' },
           wcsquads: { DEFAULT: '#f59e0b', bright: '#fbbf24', tint: 'rgb(245 158 11 / 0.12)' },
-          connections: { DEFAULT: '#14b8a6', bright: '#2dd4bf', tint: 'rgb(20 184 166 / 0.12)' },
+          connections: { DEFAULT: '#a3e635', bright: '#bef264', tint: 'rgb(163 230 53 / 0.12)' }, // volt
           higherlower: { DEFAULT: '#f97316', bright: '#fb923c', tint: 'rgb(249 115 22 / 0.12)' },
           501: { DEFAULT: '#ef4444', bright: '#f87171', tint: 'rgb(239 68 68 / 0.12)' },
         },

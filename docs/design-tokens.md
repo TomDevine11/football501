@@ -56,7 +56,7 @@ Allowed slots: motif icon, small badge, progress indicator, subtle gradient, hov
 | `accent-teammates` | `#ec4899` | `#f472b6` | Teammates |
 | `accent-careers` | `#06b6d4` | `#22d3ee` | Career Path |
 | `accent-wcsquads` | `#f59e0b` | `#fbbf24` | WC Squads |
-| `accent-connections` | `#14b8a6` | `#2dd4bf` | Connections |
+| `accent-connections` | `#a3e635` | `#bef264` | Connections (volt) |
 | `accent-higherlower` | `#f97316` | `#fb923c` | Higher/Lower |
 | `accent-501` | `#ef4444` | `#f87171` | 501 |
 
