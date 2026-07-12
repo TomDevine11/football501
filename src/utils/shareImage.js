@@ -20,6 +20,13 @@ const C = {
 // Result-tile tokens, exported so each game builds its rows from the same set.
 export const TILE = { hit: '#22c55e', near: '#fbbf24', miss: '#26243a' }
 
+// gameId → route, so a shared card links straight to that gamemode.
+export const GAME_ROUTES = {
+  '501': '/501', wordle: '/wordle', tenable: '/tenable', tictactoe: '/tictactoe',
+  teammates: '/teammates', connections: '/connections', careers: '/career-path',
+  wcsquads: '/world-cup', higherlower: '/higher-or-lower',
+}
+
 const hostname = SITE_URL.replace(/^https?:\/\//, '').replace(/\/$/, '')
 
 // Ensure the app's webfonts are rasterisable before we draw (async @import).

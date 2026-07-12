@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { SITE_URL } from '../utils/site'
-import { renderShareCard } from '../utils/shareImage'
+import { renderShareCard, GAME_ROUTES } from '../utils/shareImage'
 import { useI18n } from '../i18n'
 
 export const ICON_BTN = 'w-10 h-10 flex items-center justify-center rounded-full bg-border hover:bg-border-strong text-primary transition-colors'
@@ -81,8 +81,12 @@ export function ShareCard({ text, card }) {
     })
   }
 
-  // Share the generated Fixture Card image + link; download it if the platform
-  // can't share files (most desktops). Falls back to a text share with no card.
+  // The card image carries the game, result and branding, so the share is just
+  // the picture + a link straight to that gamemode — no emoji-grid text bubble.
+  const gameUrl = card ? SITE_URL + (GAME_ROUTES[card.gameId] || '') : SITE_URL
+
+  // Share the generated Fixture Card image + game link; download it if the
+  // platform can't share files (most desktops). No `card` → plain text share.
   const handleShareImage = async () => {
     if (!card) return navigator.share({ text, url: SITE_URL }).catch(() => {})
     if (busy) return
@@ -91,7 +95,7 @@ export function ShareCard({ text, card }) {
       const blob = await renderShareCard(card)
       const file = new File([blob], 'triviverse.png', { type: 'image/png' })
       if (canShareFiles(file) && canNativeShare) {
-        await navigator.share({ files: [file], text, url: SITE_URL })
+        await navigator.share({ files: [file], url: gameUrl })
       } else {
         downloadBlob(blob, 'triviverse.png')
         flashToast(t('share.imageSaved'))
