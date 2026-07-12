@@ -8,19 +8,24 @@ import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import { recordResult } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 export default function WorldCupSquads() {
   const { t, lp } = useI18n()
+  // Today's daily state, if any: resume it, or lock a finished one to its result.
+  const [saved] = useState(() => loadDailyProgress('wcsquads'))
+  const restoredDone = !!saved?.done
+
   const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
   const [squad, setSquad] = useState(() => getDailySquad())
-  const [named, setNamed] = useState(() => new Set())
+  const [named, setNamed] = useState(() => new Set(saved?.named ?? []))
   const [input, setInput] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [dismissed, setDismissed] = useState(false)
-  const [revealed, setRevealed] = useState(false)
+  const [revealed, setRevealed] = useState(() => saved?.revealed ?? false)
   const [flash, setFlash] = useState('')
   const [shake, setShake] = useState(false)
   const [dailyStats, setDailyStats] = useState(null)
@@ -45,10 +50,20 @@ export default function WorldCupSquads() {
 
   const complete = squad && named.size === squad.players.length
   const over = !!squad && (complete || revealed)
+  // A finished daily is locked to its result and offers Unlimited.
+  const dailyLocked = mode === 'daily' && over
   // Daily mode records a score (squad members named) once the round ends.
   useEffect(() => {
     if (over && mode === 'daily') setDailyStats(recordResult('wcsquads', true, named.size))
   }, [over, mode]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Persist the daily as it's played so a refresh resumes it and a finished
+  // round stays locked (no bailing out to re-attempt for a higher score).
+  useEffect(() => {
+    if (mode !== 'daily' || !squad) return
+    if (named.size === 0 && !over) return
+    saveDailyProgress('wcsquads', { named: [...named], revealed }, over)
+  }, [mode, squad, named, revealed, over])
 
   const submit = (text) => {
     if (!active || !text.trim()) return
@@ -78,7 +93,7 @@ export default function WorldCupSquads() {
   }
 
   const reset = (s) => { setSquad(s); setNamed(new Set()); setRevealed(false); setInput(''); setFlash(''); setDailyStats(null); setShowResult(false) }
-  const [showResult, setShowResult] = useState(false)
+  const [showResult, setShowResult] = useState(restoredDone)
   useEffect(() => {
     if (!over) return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS)
@@ -86,9 +101,16 @@ export default function WorldCupSquads() {
   }, [over])
   const pick = (s) => reset(s)                  // unlimited: chosen squad
   const back = () => reset(null)                // unlimited: back to picker
+  // Return to the daily: rehydrate today's saved squad progress (locked, resumed, or fresh).
+  const restoreDaily = () => {
+    const s = loadDailyProgress('wcsquads')
+    setSquad(getDailySquad()); setNamed(new Set(s?.named ?? [])); setRevealed(s?.revealed ?? false)
+    setInput(''); setFlash(''); setDailyStats(null); setShowResult(!!s?.done)
+  }
   const switchMode = (m) => {                   // toggle daily ⇄ unlimited
     setMode(m)
-    reset(m === 'daily' ? getDailySquad() : null)
+    if (m === 'daily') restoreDaily()
+    else reset(null)
   }
 
   // ── Squad picker (Unlimited only) ─────────────────────────────────
@@ -137,7 +159,7 @@ export default function WorldCupSquads() {
 
       <div className="w-full max-w-lg mb-4 text-center">
         <h1 className="text-xl font-bold text-white">{squad.nation} {squad.year}</h1>
-        <p className="text-gray-500 text-xs">{mode === 'daily' ? t('wcsquads.subtitleDaily') : t('wcsquads.subtitleUnlimited')}</p>
+        <p className="text-gray-500 text-xs">{dailyLocked ? t('common.dailyDone') : mode === 'daily' ? t('wcsquads.subtitleDaily') : t('wcsquads.subtitleUnlimited')}</p>
       </div>
 
       {active && (
@@ -189,11 +211,15 @@ export default function WorldCupSquads() {
           {t('wcsquads.giveUp')}
         </button>
       )}
-      {over && !showResult && (
+      {/* Unlimited: the squad slots reveal every name in place — just a replay button. */}
+      {mode === 'unlimited' && over && (
+        <button onClick={back} className="mt-5 w-full max-w-lg bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-xl px-6 py-3 transition-colors">{t('wcsquads.anotherSquad')}</button>
+      )}
+      {mode === 'daily' && over && !showResult && (
         <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+      <ResultModal open={showResult && mode === 'daily'} onClose={() => setShowResult(false)}>
         <div className="w-full text-center">
           {complete ? (
             <>

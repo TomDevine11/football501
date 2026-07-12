@@ -10,6 +10,7 @@ import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
@@ -54,30 +55,54 @@ function evaluateGuess(guess, answer) {
 
 export default function FootballWordle() {
   const { t } = useI18n()
+  // Today's daily state, if any: resume it, or lock a finished one to its result.
+  const [saved] = useState(() => loadDailyProgress('wordle'))
+  const restoredDone = !!saved?.done
+
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [question, setQuestion] = useState(() => getDailyWordlePlayer())
   const answer = question.surname
 
-  const [guesses, setGuesses] = useState([])
+  const [guesses, setGuesses] = useState(() => saved?.guesses ?? [])
   const [current, setCurrent] = useState('')
-  const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
+  const [phase, setPhase] = useState(() => saved?.phase ?? 'playing') // 'playing' | 'won' | 'lost'
   const [dailyStats, setDailyStats] = useState(null)
   useEffect(() => {
-    // Only Daily mode records stats/streaks.
+    // Only Daily mode records stats/streaks (idempotent per day).
     if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('wordle', phase === 'won'))
   }, [phase, mode])
-  const [showResult, setShowResult] = useState(false)
+
+  // A finished daily is locked to its result and offers Unlimited.
+  const dailyLocked = mode === 'daily' && phase !== 'playing'
+
+  // Persist the daily as it's played so a refresh resumes it and a finished
+  // round stays locked (guesses + phase; a half-typed word isn't kept).
+  useEffect(() => {
+    if (mode !== 'daily') return
+    if (guesses.length === 0 && phase === 'playing') return
+    saveDailyProgress('wordle', { guesses, phase }, phase !== 'playing')
+  }, [mode, guesses, phase])
+
+  const [showResult, setShowResult] = useState(restoredDone)
   useEffect(() => {
     if (phase === 'playing') return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the board settle first
     return () => clearTimeout(t)
   }, [phase])
 
-  const newGame = (m) => {
-    setMode(m)
-    setQuestion(m === 'daily' ? getDailyWordlePlayer() : getRandomWordlePlayer())
+  // Leave the daily untouched; start a fresh, replayable Unlimited round.
+  const startUnlimited = () => {
+    setMode('unlimited'); setQuestion(getRandomWordlePlayer())
     setGuesses([]); setCurrent(''); setPhase('playing'); setDailyStats(null); setShowResult(false)
   }
+  // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
+  const restoreDaily = () => {
+    const s = loadDailyProgress('wordle')
+    setMode('daily'); setQuestion(getDailyWordlePlayer())
+    setGuesses(s?.guesses ?? []); setCurrent(''); setPhase(s?.phase ?? 'playing')
+    setDailyStats(null); setShowResult(!!s?.done)
+  }
+  const onModeChange = (m) => (m === 'daily' ? restoreDaily() : startUnlimited())
   const [shake, setShake] = useState(false)
   const [flippingRow, setFlippingRow] = useState(null)
   const [bounceRow, setBounceRow] = useState(null)
@@ -174,14 +199,14 @@ export default function FootballWordle() {
         right={<b className="text-secondary tabular-nums">{guesses.length}/{MAX_GUESSES}</b>}
       /></div>
 
-      <ModeToggle mode={mode} onChange={newGame} className="mt-1 mb-4" />
+      <ModeToggle mode={mode} onChange={onModeChange} className="mt-1 mb-4" />
 
-      {/* Hint card */}
+      {/* Hint card (or the locked-daily banner once today's round is finished) */}
       <div className="w-full max-w-lg mb-5">
         <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
-          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()}</div>
-          <div className="text-primary font-bold text-sm mt-0.5">{mode === 'daily' ? t('wordle.guessToday') : t('wordle.guessAny')}</div>
-          <div className="text-muted text-xs mt-0.5">{t('wordle.hint', { n: answer.length, max: MAX_GUESSES })}</div>
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()}{dailyLocked ? ` · ${t('common.complete')}` : ''}</div>
+          <div className="text-primary font-bold text-sm mt-0.5">{dailyLocked ? t('common.dailyDone') : mode === 'daily' ? t('wordle.guessToday') : t('wordle.guessAny')}</div>
+          <div className="text-muted text-xs mt-0.5">{dailyLocked ? t('common.comeBackTomorrow') : t('wordle.hint', { n: answer.length, max: MAX_GUESSES })}</div>
         </div>
       </div>
 
@@ -266,11 +291,19 @@ export default function FootballWordle() {
         ))}
       </div>
 
-      {phase !== 'playing' && !showResult && (
+      {/* Unlimited: no result card — reveal the answer in place, then a replay button. */}
+      {mode === 'unlimited' && phase !== 'playing' && (
+        <div className="w-full max-w-lg mb-6 flex flex-col items-center gap-3 text-center">
+          <p className="text-muted text-sm">{t('wordle.itWas')} <span className="text-primary font-bold">{question.fullName}</span> {question.flag}</p>
+          <button onClick={startUnlimited} className="w-full bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl px-6 py-3 transition-colors">{t('wordle.newWord')}</button>
+        </div>
+      )}
+
+      {mode === 'daily' && phase !== 'playing' && !showResult && (
         <button onClick={() => setShowResult(true)} className="mb-6 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+      <ResultModal open={showResult && mode === 'daily'} onClose={() => setShowResult(false)}>
         {phase === 'won' && (
           <div className="w-full flex flex-col items-center text-center">
             <GameMotif id="wordle" className="w-12 h-12 text-accent-bright mb-3" />
@@ -286,9 +319,10 @@ export default function FootballWordle() {
             <p className="text-muted mb-2">{t('wordle.itWas')} <span className="text-primary font-bold">{question.fullName}</span> {question.flag}</p>
           </div>
         )}
+        {dailyLocked && <p className="text-[0.62rem] font-black tracking-[0.14em] uppercase text-faint mb-1">{t('common.dailyDone')}</p>}
         {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
         <ShareCard text={shareText} />
-        <button onClick={() => newGame('unlimited')} className="mt-3 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('wordle.newWord')}</button>
+        <button onClick={startUnlimited} className="mt-3 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
         <UpNext exclude="wordle" />
       </ResultModal>
     </div>

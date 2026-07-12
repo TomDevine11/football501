@@ -11,19 +11,24 @@ import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
 import { useI18n } from '../../i18n'
 import { recordResult } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { SITE_URL } from '../../utils/site'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 export default function GuessByTeammates() {
   const { t } = useI18n()
+  // Today's daily state, if any: resume it, or lock a finished one to its result.
+  const [saved] = useState(() => loadDailyProgress('teammates'))
+  const restoredDone = !!saved?.done
+
   const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
   const [target, setTarget] = useState(() => getDailyTarget())
-  const [revealed, setRevealed] = useState(1)      // clues shown so far (1..MAX_CLUES)
-  const [guesses, setGuesses] = useState([])       // { text, correct }
+  const [revealed, setRevealed] = useState(() => saved?.revealed ?? 1)      // clues shown so far (1..MAX_CLUES)
+  const [guesses, setGuesses] = useState(() => saved?.guesses ?? [])       // { text, correct }
   const [input, setInput] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [dismissed, setDismissed] = useState(false)
-  const [phase, setPhase] = useState('playing')    // 'playing' | 'won' | 'lost'
+  const [phase, setPhase] = useState(() => saved?.phase ?? 'playing')    // 'playing' | 'won' | 'lost'
   const [shake, setShake] = useState(false)
   const [dailyStats, setDailyStats] = useState(null)
   const inputRef = useRef(null)
@@ -88,18 +93,37 @@ export default function GuessByTeammates() {
     setTimeout(() => inputRef.current?.focus(), 0)
   }
 
-  const [showResult, setShowResult] = useState(false)
+  const [showResult, setShowResult] = useState(restoredDone)
   useEffect(() => {
     if (phase === 'playing') return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS)
     return () => clearTimeout(t)
   }, [phase])
 
-  const newGame = (m) => {
-    setMode(m)
-    setTarget(m === 'daily' ? getDailyTarget() : getRandomTarget())
+  // A finished daily is locked to its result and offers Unlimited.
+  const dailyLocked = mode === 'daily' && phase !== 'playing'
+
+  // Persist the daily as it's played so a refresh resumes it and a finished
+  // round stays locked (no bailing out to reset tries).
+  useEffect(() => {
+    if (mode !== 'daily') return
+    if (guesses.length === 0 && phase === 'playing') return
+    saveDailyProgress('teammates', { revealed, guesses, phase }, phase !== 'playing')
+  }, [mode, revealed, guesses, phase])
+
+  // Leave the daily untouched; start a fresh, replayable Unlimited round.
+  const startUnlimited = () => {
+    setMode('unlimited'); setTarget(getRandomTarget())
     setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1); setDailyStats(null); setShowResult(false)
   }
+  // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
+  const restoreDaily = () => {
+    const s = loadDailyProgress('teammates')
+    setMode('daily'); setTarget(getDailyTarget())
+    setRevealed(s?.revealed ?? 1); setGuesses(s?.guesses ?? []); setInput(''); setPhase(s?.phase ?? 'playing')
+    setHighlightedIndex(-1); setDailyStats(null); setShowResult(!!s?.done)
+  }
+  const onModeChange = (m) => (m === 'daily' ? restoreDaily() : startUnlimited())
 
   const cluesToShow = phase === 'playing' ? revealed : MAX_CLUES
   const guessesLeft = MAX_CLUES - guesses.length
@@ -113,14 +137,14 @@ export default function GuessByTeammates() {
         right={phase === 'playing' ? <b className="text-secondary tabular-nums">{t('teammates.left', { n: guessesLeft })}</b> : null}
       /></div>
 
-      <ModeToggle mode={mode} onChange={newGame} className="mt-1 mb-4" />
+      <ModeToggle mode={mode} onChange={onModeChange} className="mt-1 mb-4" />
 
-      {/* Intro card */}
+      {/* Intro card (or the locked-daily banner once today's round is finished) */}
       <div className="w-full max-w-lg mb-3">
         <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
-          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()}</div>
-          <div className="text-primary font-bold text-sm mt-0.5">{t('teammates.intro')}</div>
-          <div className="text-muted text-xs mt-0.5">{t('teammates.introSub', { max: MAX_CLUES })}</div>
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()}{dailyLocked ? ` · ${t('common.complete')}` : ''}</div>
+          <div className="text-primary font-bold text-sm mt-0.5">{dailyLocked ? t('common.dailyDone') : t('teammates.intro')}</div>
+          <div className="text-muted text-xs mt-0.5">{dailyLocked ? t('common.comeBackTomorrow') : t('teammates.introSub', { max: MAX_CLUES })}</div>
         </div>
       </div>
 
@@ -218,12 +242,17 @@ export default function GuessByTeammates() {
         </button>
       )}
 
+      {/* Unlimited: the team sheet + mystery entry reveal the answer in place — just a replay button. */}
+      {mode === 'unlimited' && phase !== 'playing' && (
+        <button onClick={startUnlimited} className="mt-1 mb-4 w-full max-w-lg bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl px-6 py-3 transition-colors">{t('teammates.newPlayer')}</button>
+      )}
+
       {/* Result */}
-      {phase !== 'playing' && !showResult && (
+      {mode === 'daily' && phase !== 'playing' && !showResult && (
         <button onClick={() => setShowResult(true)} className="mt-1 mb-4 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+      <ResultModal open={showResult && mode === 'daily'} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <GameMotif id="teammates" className={`w-12 h-12 mb-2 ${phase === 'won' ? 'text-accent-bright' : 'text-dim'}`} />
           <h2 className={`score-number text-3xl mb-1 ${phase === 'won' ? 'text-success-bright' : 'text-danger-bright'}`}>
@@ -240,7 +269,7 @@ export default function GuessByTeammates() {
               : t('share.teammatesLost'),
             SITE_URL,
           ].join('\n\n')} />
-          <button onClick={() => newGame('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('teammates.newPlayer')}</button>
+          <button onClick={startUnlimited} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
           {mode === 'daily' && <p className="text-faint text-xs mt-3">{t('common.comeBackTomorrow')}</p>}
         </div>
         <UpNext exclude="teammates" />

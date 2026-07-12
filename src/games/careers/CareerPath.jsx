@@ -10,19 +10,24 @@ import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import { useI18n } from '../../i18n'
 import { recordResult } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { SITE_URL } from '../../utils/site'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
 export default function CareerPath() {
   const { t, lp } = useI18n()
+  // Today's daily state, if any: resume it, or lock a finished one to its result.
+  const [saved] = useState(() => loadDailyProgress('careers'))
+  const restoredDone = !!saved?.done
+
   const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
   const [target, setTarget] = useState(() => getDailyTarget())
-  const [revealed, setRevealed] = useState(1)
-  const [guesses, setGuesses] = useState([])
+  const [revealed, setRevealed] = useState(() => saved?.revealed ?? 1)
+  const [guesses, setGuesses] = useState(() => saved?.guesses ?? [])
   const [input, setInput] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [dismissed, setDismissed] = useState(false)
-  const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
+  const [phase, setPhase] = useState(() => saved?.phase ?? 'playing') // 'playing' | 'won' | 'lost'
   const [shake, setShake] = useState(false)
   const [dailyStats, setDailyStats] = useState(null)
   const inputRef = useRef(null)
@@ -90,18 +95,37 @@ export default function CareerPath() {
     setTimeout(() => inputRef.current?.focus(), 0)
   }
 
-  const [showResult, setShowResult] = useState(false)
+  const [showResult, setShowResult] = useState(restoredDone)
   useEffect(() => {
     if (phase === 'playing') return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS)
     return () => clearTimeout(t)
   }, [phase])
 
-  const newGame = (m) => {
-    setMode(m)
-    setTarget(m === 'daily' ? getDailyTarget() : getRandomTarget())
+  // A finished daily is locked to its result and offers Unlimited.
+  const dailyLocked = mode === 'daily' && phase !== 'playing'
+
+  // Persist the daily as it's played so a refresh resumes it and a finished
+  // round stays locked (no bailing out to reset tries).
+  useEffect(() => {
+    if (mode !== 'daily') return
+    if (guesses.length === 0 && phase === 'playing') return
+    saveDailyProgress('careers', { revealed, guesses, phase }, phase !== 'playing')
+  }, [mode, revealed, guesses, phase])
+
+  // Leave the daily untouched; start a fresh, replayable Unlimited round.
+  const startUnlimited = () => {
+    setMode('unlimited'); setTarget(getRandomTarget())
     setRevealed(1); setGuesses([]); setInput(''); setPhase('playing'); setHighlightedIndex(-1); setDailyStats(null); setShowResult(false)
   }
+  // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
+  const restoreDaily = () => {
+    const s = loadDailyProgress('careers')
+    setMode('daily'); setTarget(getDailyTarget())
+    setRevealed(s?.revealed ?? 1); setGuesses(s?.guesses ?? []); setInput(''); setPhase(s?.phase ?? 'playing')
+    setHighlightedIndex(-1); setDailyStats(null); setShowResult(!!s?.done)
+  }
+  const onModeChange = (m) => (m === 'daily' ? restoreDaily() : startUnlimited())
 
   const cluesToShow = phase === 'playing' ? revealed : maxClues
   const guessesLeft = maxClues - guesses.length
@@ -117,12 +141,12 @@ export default function CareerPath() {
         <div className={`text-sm tabular-nums font-semibold ${leftClass}`}>{phase === 'playing' ? t('teammates.left', { n: guessesLeft }) : ''}</div>
       </div>
 
-      <ModeToggle mode={mode} onChange={newGame} className="mb-5" />
+      <ModeToggle mode={mode} onChange={onModeChange} className="mb-5" />
 
       <div className="w-full max-w-lg mb-5">
         <div className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 text-center">
-          <div className="text-white font-bold text-sm">{t('careers.intro')}</div>
-          <div className="text-gray-500 text-xs mt-0.5">{t('careers.introSub', { max: maxClues })}</div>
+          <div className="text-white font-bold text-sm">{dailyLocked ? t('common.dailyDone') : t('careers.intro')}</div>
+          <div className="text-gray-500 text-xs mt-0.5">{dailyLocked ? t('common.comeBackTomorrow') : t('careers.introSub', { max: maxClues })}</div>
         </div>
       </div>
 
@@ -204,11 +228,19 @@ export default function CareerPath() {
         </>
       )}
 
-      {phase !== 'playing' && !showResult && (
+      {/* Unlimited: reveal the player in place (the path only shows clubs), then a replay button. */}
+      {mode === 'unlimited' && phase !== 'playing' && (
+        <div className="w-full max-w-lg mt-1 mb-4 flex flex-col items-center gap-3 text-center">
+          <p className="text-gray-400 text-sm">{t('teammates.mysteryWas')} <span className="text-white font-bold">{target.name}</span></p>
+          <button onClick={startUnlimited} className="w-full bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-xl px-6 py-3 transition-colors">{t('careers.newPlayer')}</button>
+        </div>
+      )}
+
+      {mode === 'daily' && phase !== 'playing' && !showResult && (
         <button onClick={() => setShowResult(true)} className="mt-1 mb-4 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+      <ResultModal open={showResult && mode === 'daily'} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <div className="text-5xl mb-2">{phase === 'won' ? '🎉' : '💔'}</div>
           <h2 className={`score-number text-3xl mb-1 ${phase === 'won' ? 'text-green-400' : 'text-red-400'}`}>
@@ -225,7 +257,7 @@ export default function CareerPath() {
               : t('share.careersLost'),
             SITE_URL,
           ].join('\n\n')} />
-          <button onClick={() => newGame('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('careers.newPlayer')}</button>
+          <button onClick={startUnlimited} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
           {mode === 'daily' && <p className="text-gray-600 text-xs mt-3">{t('common.comeBackTomorrow')}</p>}
         </div>
         <MoreGames current="/career-path" />

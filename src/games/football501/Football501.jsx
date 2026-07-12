@@ -8,7 +8,8 @@ import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { useI18n } from '../../i18n'
 import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, loadCompetition, COMPETITIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
-import { recordResult, playedToday, getStats, formGuide } from '../../data/dailyStats'
+import { recordResult, getStats, formGuide } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress, inProgressToday, finishedToday } from '../../data/dailyProgress'
 import { accentVars } from '../../design/accents'
 
 const MAX_SCORE    = 501
@@ -142,7 +143,7 @@ function buildMultiplayerShareText(t, challenge, ranked, winners) {
 // tabs (route/scores · all answers · share), actions + UP NEXT pills below.
 // Only the answer list scrolls, inside its own panel.
 
-function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit }) {
+function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit, playAgainLabel }) {
   const { t } = useI18n()
   const [tab, setTab] = useState('route')
   const [copied, setCopied] = useState(false)
@@ -259,7 +260,7 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit })
 
         <div className="flex gap-2 justify-center mt-3.5">
           <button onClick={copyResult} className="px-4 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">{copied ? t('hub.copied') : t('share.copy')}</button>
-          <button onClick={onPlayAgain} className="px-4 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">{t('five01.playAgain')}</button>
+          <button onClick={onPlayAgain} className="px-4 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">{playAgainLabel || t('five01.playAgain')}</button>
           <button onClick={onExit} className="px-4 py-2.5 text-muted hover:text-secondary border border-border text-sm font-bold rounded-lg transition-colors">{t('five01.menuBtn')}</button>
         </div>
         <UpNext exclude="501" />
@@ -311,13 +312,18 @@ function GuessHistory({ history, showPlayer, className = '' }) {
 }
 
 // ── Entry: the mode select ─────────────────────────────────────────
-function EntryScreen({ onDaily, onUnlimited }) {
+function EntryScreen({ onDaily, onUnlimited, dailyStatus = 'kickoff' }) {
   const { t } = useI18n()
   const daily = getDailyEntry()
-  const played = playedToday('501')
   const streak = getStats('501').currentStreak
   const form = formGuide('501')
   const formDot = { W: 'bg-success', L: 'bg-danger/75', '-': 'bg-inert' }
+  // KICK OFF (fresh) · IN PLAY (started, resumable) · FT (finished, locked to result)
+  const tag = dailyStatus === 'ft'
+    ? { label: 'FT', cls: 'text-success border-success/40' }
+    : dailyStatus === 'inplay'
+      ? { label: t('common.inPlay').toUpperCase(), cls: 'text-warn border-warn/40' }
+      : { label: t('hub.kickOff'), cls: 'text-brand-bright border-brand/55' }
   return (
     <div className="max-w-3xl mx-auto px-4 pb-12">
       <GameChrome motifId="501" title={t('five01.wordmark')} />
@@ -327,8 +333,8 @@ function EntryScreen({ onDaily, onUnlimited }) {
       </div>
       <div className="grid grid-cols-1 gap-3">
         <button onClick={onDaily} className="group relative text-left bg-[linear-gradient(120deg,var(--accent-tint),transparent_45%)] bg-card border border-border-strong hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] rounded-xl p-5 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
-          <span className={`absolute top-4 right-4 text-[0.58rem] font-black tracking-[0.1em] rounded px-1.5 py-0.5 border ${played ? 'text-success border-success/40' : 'text-brand-bright border-brand/55'}`}>
-            {played ? 'FT' : t('hub.kickOff')}
+          <span className={`absolute top-4 right-4 text-[0.58rem] font-black tracking-[0.1em] rounded px-1.5 py-0.5 border ${tag.cls}`}>
+            {tag.label}
           </span>
           <GameMotif id="501" className="w-9 h-9 text-accent-bright mb-2" />
           <div className="text-primary font-bold text-xl">{t('five01.dailyChallenge')}</div>
@@ -569,6 +575,16 @@ export default function Football501() {
     recordResult('501', !gaveUp)
   }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Persist the solo daily board as it's played, so leaving mid-checkout and
+  // coming back resumes the same attempt (no bailing out to farm a better
+  // finish) and a finished daily stays locked to its result. The challenge is
+  // deterministic (getDailyChallenge) so it's re-derived on resume, not stored.
+  const soloDaily = isDaily && players.length === 1
+  useEffect(() => {
+    if (!soloDaily || (phase !== 'playing' && phase !== 'won')) return
+    saveDailyProgress('501', { players, history, currentPlayerIndex, gaveUp }, phase === 'won')
+  }, [soloDaily, players, history, currentPlayerIndex, gaveUp, phase])
+
   // ── Player search (TheSportsDB + local pool) ──────────────────
   useEffect(() => {
     if (phase !== 'playing') return
@@ -625,6 +641,26 @@ export default function Football501() {
     finally { setLoading(false) }
   }
   const playDaily = () => startFrom(getDailyChallenge(), 1, true)
+  // Return to today's daily: a finished one opens locked to its result (phase
+  // 'won'), an in-progress one resumes mid-checkout. The board is restored from
+  // the snapshot; the challenge is re-derived deterministically.
+  const resumeDaily = async () => {
+    const snap = loadDailyProgress('501')
+    if (!snap) { playDaily(); return }
+    setLoading(true)
+    try {
+      const ch = await getDailyChallenge()
+      setChallenge(ch); setIsDaily(true); setNumPlayers(1)
+      setKnownNames(new Set(localPlayers.map(p => p.name)))
+      setPlayers(snap.players); setHistory(snap.history)
+      setCurrentPlayerIndex(snap.currentPlayerIndex ?? 0); setGaveUp(!!snap.gaveUp)
+      setInput(''); setSuggestions([]); setHighlightedIndex(-1)
+      setPhase(snap.done ? 'won' : 'playing')
+      if (!snap.done) setTimeout(() => inputRef.current?.focus(), 100)
+    } finally { setLoading(false) }
+  }
+  // Route the entry Daily card: fresh, resume, or locked result.
+  const onDailyCard = () => (loadDailyProgress('501') ? resumeDaily() : playDaily())
   const playAgain = () => startFrom(isDaily ? getDailyChallenge() : getRandomChallenge(numPlayers), numPlayers, isDaily)
   const skipQuestion = () => startFrom(getRandomChallenge(numPlayers), numPlayers, false) // endless: new question
   const giveUp = () => {
@@ -721,7 +757,10 @@ export default function Football501() {
       <div className="text-muted text-sm">{t('five01.loading')}</div>
     </div>
   )
-  if (phase === 'entry') return shell(<EntryScreen onDaily={playDaily} onUnlimited={() => setPhase('unlimited')} />)
+  if (phase === 'entry') {
+    const dailyStatus = finishedToday('501') ? 'ft' : inProgressToday('501') ? 'inplay' : 'kickoff'
+    return shell(<EntryScreen onDaily={onDailyCard} onUnlimited={() => setPhase('unlimited')} dailyStatus={dailyStatus} />)
+  }
   if (phase === 'unlimited') return shell(<UnlimitedSetup onStart={(challengePromise, n) => startFrom(challengePromise, n, false)} onBack={() => setPhase('entry')} />)
 
   const validCount = history.filter(g => g.valid).length
@@ -732,7 +771,12 @@ export default function Football501() {
   const overlay = phase === 'won' && (
     <div className="fixed inset-0 z-modal bg-black/70 backdrop-blur-sm result-modal-in flex items-center justify-center p-4 sm:p-6">
       <div className="result-card w-full max-w-2xl max-h-[88dvh] flex">
-        <WinScreen history={history} players={players} challenge={challenge} gaveUp={gaveUp} onPlayAgain={playAgain} onExit={() => setPhase('entry')} />
+        <WinScreen
+          history={history} players={players} challenge={challenge} gaveUp={gaveUp}
+          onPlayAgain={soloDaily ? () => setPhase('unlimited') : playAgain}
+          playAgainLabel={soloDaily ? t('common.playUnlimited') : t('five01.playAgain')}
+          onExit={() => setPhase('entry')}
+        />
       </div>
     </div>
   )

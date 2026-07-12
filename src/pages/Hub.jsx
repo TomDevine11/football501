@@ -8,6 +8,7 @@ import AdSlot from '../ads/AdSlot'
 import { routeByPath, SITE_URL } from '../seo/seoConfig'
 import { useI18n } from '../i18n'
 import { playedToday, getStats, recordVisit, formGuide, weeklyPoints, matchdayNumber } from '../data/dailyStats'
+import { inProgressToday } from '../data/dailyProgress'
 
 // The lineup. `stats` keys dailyStats (what each game passes to recordResult).
 const GAMES = [
@@ -63,6 +64,7 @@ export default function Hub() {
     ...g,
     id: g.to.slice(1),
     played: playedToday(g.stats),
+    inPlay: inProgressToday(g.stats),
     streak: getStats(g.stats).currentStreak,
     form: formGuide(g.stats),
   }))
@@ -149,10 +151,14 @@ export default function Hub() {
                 <span
                   aria-hidden="true"
                   className={`absolute top-1 right-1 sm:top-2 sm:right-2 text-[0.45rem] sm:text-[0.56rem] font-black tracking-[0.1em] rounded px-1 py-px sm:px-1.5 sm:py-0.5 border ${
-                    g.played ? 'text-success border-success/40' : 'text-brand-bright border-brand/55'
+                    g.played ? 'text-success border-success/40' : g.inPlay ? 'text-warn border-warn/40' : 'text-brand-bright border-brand/55'
                   }`}
                 >
-                  {g.played ? 'FT' : <><span className="sm:hidden">KO</span><span className="hidden sm:inline">{t('hub.kickOff')}</span></>}
+                  {g.played
+                    ? 'FT'
+                    : g.inPlay
+                      ? <><span className="sm:hidden">▶</span><span className="hidden sm:inline">{t('common.inPlay').toUpperCase()}</span></>
+                      : <><span className="sm:hidden">KO</span><span className="hidden sm:inline">{t('hub.kickOff')}</span></>}
                 </span>
                 <GameMotif id={g.id} className="w-5 h-5 sm:w-9 sm:h-9 text-[color:var(--g)]" />
                 <span className="font-extrabold uppercase tracking-[0.03em] text-[0.55rem] sm:text-[0.85rem] text-center leading-tight">

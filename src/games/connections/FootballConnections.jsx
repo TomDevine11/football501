@@ -9,6 +9,7 @@ import GameMotif from '../../components/GameMotif'
 import UpNext from '../../components/UpNext'
 import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { ShareCard } from '../../components/ShareCard'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
@@ -27,15 +28,19 @@ const keyOf = names => [...names].sort().join('|')
 
 export default function FootballConnections() {
   const { t } = useI18n()
+  // Today's daily state, if any: resume it, or lock a finished one to its result.
+  const [saved] = useState(() => loadDailyProgress('connections'))
+  const restoredDone = !!saved?.done
+
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [puzzle, setPuzzle] = useState(() => getDailyConnections())
-  const [solved, setSolved] = useState([])        // [{ groupIndex, label, players }]
+  const [solved, setSolved] = useState(() => saved?.solved ?? [])        // [{ groupIndex, label, players }]
   const [selected, setSelected] = useState([])    // names
-  const [lives, setLives] = useState(MAX_LIVES)
-  const [order, setOrder] = useState(() => puzzle.tiles)
+  const [lives, setLives] = useState(() => saved?.lives ?? MAX_LIVES)
+  const [order, setOrder] = useState(() => saved?.order ?? puzzle.tiles)
   const [message, setMessage] = useState('')
-  const [pastGuesses, setPastGuesses] = useState(new Set())
-  const [guessRows, setGuessRows] = useState([]) // each row: group index per selected tile
+  const [pastGuesses, setPastGuesses] = useState(() => new Set(saved?.pastGuesses ?? []))
+  const [guessRows, setGuessRows] = useState(() => saved?.guessRows ?? []) // each row: group index per selected tile
   const [shake, setShake] = useState(false)
   const [resultTab, setResultTab] = useState('groups')
 
@@ -44,19 +49,39 @@ export default function FootballConnections() {
   const won = solved.length === 4
   const lost = lives <= 0 && !won
   const over = won || lost
+  // A finished daily is locked to its result and offers Unlimited.
+  const dailyLocked = mode === 'daily' && over
 
   const [dailyStats, setDailyStats] = useState(null)
-  // Only Daily mode records stats/streaks.
+  // Only Daily mode records stats/streaks (idempotent per day).
   useEffect(() => { if (over && mode === 'daily') setDailyStats(recordResult('connections', won)) }, [over, won, mode])
 
-  const newGame = (m) => {
-    setMode(m)
-    const p = m === 'daily' ? getDailyConnections() : getRandomConnections()
-    setPuzzle(p); setOrder(p.tiles)
+  // Persist the daily as it's played so a refresh resumes it and a finished
+  // round stays locked (no bailing out to reset lives). Set → array for storage.
+  useEffect(() => {
+    if (mode !== 'daily') return
+    if (solved.length === 0 && guessRows.length === 0 && !over) return
+    saveDailyProgress('connections', { solved, lives, order, guessRows, pastGuesses: [...pastGuesses] }, over)
+  }, [mode, solved, lives, order, guessRows, pastGuesses, over])
+
+  // Leave the daily untouched; start a fresh, replayable Unlimited round.
+  const startUnlimited = () => {
+    const p = getRandomConnections()
+    setMode('unlimited'); setPuzzle(p); setOrder(p.tiles)
     setSolved([]); setSelected([]); setLives(MAX_LIVES); setMessage('')
     setPastGuesses(new Set()); setGuessRows([]); setDailyStats(null); setShowResult(false); setResultTab('groups')
   }
-  const [showResult, setShowResult] = useState(false)
+  // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
+  const restoreDaily = () => {
+    const s = loadDailyProgress('connections')
+    const p = getDailyConnections()
+    setMode('daily'); setPuzzle(p); setOrder(s?.order ?? p.tiles)
+    setSolved(s?.solved ?? []); setSelected([]); setLives(s?.lives ?? MAX_LIVES); setMessage('')
+    setPastGuesses(new Set(s?.pastGuesses ?? [])); setGuessRows(s?.guessRows ?? []); setDailyStats(null)
+    setShowResult(!!s?.done); setResultTab('groups')
+  }
+  const onModeChange = (m) => (m === 'daily' ? restoreDaily() : startUnlimited())
+  const [showResult, setShowResult] = useState(restoredDone)
   useEffect(() => {
     if (!over) return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the solved groups show first
@@ -134,14 +159,14 @@ export default function FootballConnections() {
         }
       /></div>
 
-      <ModeToggle mode={mode} onChange={newGame} className="mt-1 mb-4" />
+      <ModeToggle mode={mode} onChange={onModeChange} className="mt-1 mb-4" />
 
       {/* The board — a wider stage on desktop, the tight grid on mobile */}
       <div className="w-full max-w-lg lg:max-w-[52rem] space-y-2.5">
         <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
-          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · 4 × 4</div>
-          <div className="text-primary font-bold text-sm mt-0.5">{t('connections.intro')}</div>
-          <div className="text-muted text-xs mt-0.5">{t('connections.introSub')}</div>
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · 4 × 4{dailyLocked ? ` · ${t('common.complete')}` : ''}</div>
+          <div className="text-primary font-bold text-sm mt-0.5">{dailyLocked ? t('common.dailyDone') : t('connections.intro')}</div>
+          <div className="text-muted text-xs mt-0.5">{dailyLocked ? t('common.comeBackTomorrow') : t('connections.introSub')}</div>
         </div>
 
         {/* Solved / revealed group bars */}
@@ -190,11 +215,16 @@ export default function FootballConnections() {
         )}
       </div>
 
-      {over && !showResult && (
+      {/* Unlimited: the group bars reveal in place — just a replay button. */}
+      {mode === 'unlimited' && over && (
+        <button onClick={startUnlimited} className="mt-5 w-full max-w-lg lg:max-w-[52rem] bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl px-6 py-3 transition-colors">{t('connections.newPuzzle')}</button>
+      )}
+
+      {mode === 'daily' && over && !showResult && (
         <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+      <ResultModal open={showResult && mode === 'daily'} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <GameMotif id="connections" className={`w-11 h-11 mb-2 ${won ? 'text-accent-bright' : 'text-dim'}`} />
           <h2 className={`score-number text-4xl mb-1 ${won ? 'text-success-bright' : 'text-danger-bright'}`}>
@@ -206,6 +236,7 @@ export default function FootballConnections() {
               : mode === 'daily' ? t('common.comeBackTomorrow') : t('connections.betterLuck')}
           </p>
         </div>
+        {dailyLocked && <p className="text-[0.62rem] font-black tracking-[0.14em] uppercase text-faint mb-1">{t('common.dailyDone')}</p>}
         {mode === 'daily' && <DailyStats game="connections" stats={dailyStats} />}
 
         <div className="w-full flex gap-1.5 justify-center mb-3">
@@ -233,7 +264,7 @@ export default function FootballConnections() {
           </div>
         )}
 
-        <button onClick={() => newGame('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('connections.newPuzzle')}</button>
+        <button onClick={startUnlimited} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
         <UpNext exclude="connections" />
       </ResultModal>
     </div>

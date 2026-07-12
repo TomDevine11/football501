@@ -9,6 +9,7 @@ import GameMotif from '../../components/GameMotif'
 import UpNext from '../../components/UpNext'
 import { accentVars } from '../../design/accents'
 import { recordResult, todayIndex } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
@@ -57,16 +58,19 @@ function PlayerCard({ player, statLabel, showValue, mystery, revealTone }) {
 export default function HigherLower() {
   const { t } = useI18n()
   const [dailyMode, setDailyMode] = useState('daily')  // 'daily' | 'unlimited'
+  // Today's daily chain progress, if any (current/challenger derive from seqIdx).
+  const [saved] = useState(() => loadDailyProgress('higherlower'))
+  const restoredDone = !!saved?.done
   const [run, setRun] = useState(() => getDailyRun(todayIndex())) // daily chain
-  const [seqIdx, setSeqIdx] = useState(1)              // position in the daily chain
+  const [seqIdx, setSeqIdx] = useState(() => saved?.seqIdx ?? 1)              // position in the daily chain
   const [mode, setMode] = useState(run.mode)           // chosen STAT_MODE (daily auto / unlimited picked)
-  const [current, setCurrent] = useState(run.sequence[0])
-  const [challenger, setChallenger] = useState(run.sequence[1])
-  const [streak, setStreak] = useState(0)
-  const [trail, setTrail] = useState([])               // players you've moved past (the chain)
+  const [current, setCurrent] = useState(() => run.sequence[(saved?.seqIdx ?? 1) - 1])
+  const [challenger, setChallenger] = useState(() => run.sequence[saved?.seqIdx ?? 1])
+  const [streak, setStreak] = useState(() => saved?.streak ?? 0)
+  const [trail, setTrail] = useState(() => saved?.trail ?? [])               // players you've moved past (the chain)
   const [best, setBest] = useState(() => Number((typeof localStorage !== 'undefined' && localStorage.getItem(BEST_KEY)) || 0))
-  const [phase, setPhase] = useState('playing')        // 'playing' | 'reveal' | 'over'
-  const [lastCorrect, setLastCorrect] = useState(null)
+  const [phase, setPhase] = useState(() => saved?.phase ?? 'playing')        // 'playing' | 'reveal' | 'over'
+  const [lastCorrect, setLastCorrect] = useState(() => saved?.lastCorrect ?? null)
   const [dailyStats, setDailyStats] = useState(null)
 
   // Daily mode records the run's final streak as a score, once it ends.
@@ -76,12 +80,27 @@ export default function HigherLower() {
 
   // In daily, finishing on a correct answer means the chain was exhausted (a win).
   const dailyCleared = dailyMode === 'daily' && phase === 'over' && lastCorrect === true
+  // A finished daily is locked to its result and offers Unlimited.
+  const dailyLocked = dailyMode === 'daily' && phase === 'over'
 
+  // Persist the daily chain so a refresh resumes it and a finished run stays
+  // locked (no bailing out mid-chain to farm a longer streak). 'reveal' is a
+  // transient animation frame, so it's never the persisted state.
+  useEffect(() => {
+    if (dailyMode !== 'daily' || phase === 'reveal') return
+    if (streak === 0 && phase !== 'over') return
+    saveDailyProgress('higherlower', { seqIdx, streak, trail, phase, lastCorrect }, phase === 'over')
+  }, [dailyMode, seqIdx, streak, trail, phase, lastCorrect])
+
+  // Return to the daily: rehydrate today's chain (locked, resumed, or fresh).
   const startDaily = () => {
     const r = getDailyRun(todayIndex())
-    setRun(r); setSeqIdx(1); setMode(r.mode)
-    setCurrent(r.sequence[0]); setChallenger(r.sequence[1])
-    setStreak(0); setTrail([]); setPhase('playing'); setLastCorrect(null); setDailyStats(null); setShowResult(false)
+    const s = loadDailyProgress('higherlower')
+    const idx = s?.seqIdx ?? 1
+    setRun(r); setSeqIdx(idx); setMode(r.mode)
+    setCurrent(r.sequence[idx - 1]); setChallenger(r.sequence[idx])
+    setStreak(s?.streak ?? 0); setTrail(s?.trail ?? []); setPhase(s?.phase ?? 'playing')
+    setLastCorrect(s?.lastCorrect ?? null); setDailyStats(null); setShowResult(!!s?.done)
   }
 
   const startMode = (m) => {
@@ -98,7 +117,7 @@ export default function HigherLower() {
     if (dm === 'daily') startDaily()
     else { setMode(null); setPhase('playing'); setStreak(0); setTrail([]); setLastCorrect(null); setDailyStats(null); setShowResult(false) }
   }
-  const [showResult, setShowResult] = useState(false)
+  const [showResult, setShowResult] = useState(restoredDone)
   useEffect(() => {
     if (phase !== 'over') return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS)
@@ -175,9 +194,9 @@ export default function HigherLower() {
 
       <div className="w-full max-w-2xl space-y-3">
         <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
-          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(dailyMode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · <span className="capitalize">{mode.label}</span></div>
-          <div className="text-primary font-bold text-sm mt-0.5">{t('higherlower.moreOrFewer')}</div>
-          <div className="text-muted text-xs mt-0.5">{dailyMode === 'daily' ? t('higherlower.todayChain') : t('higherlower.allTime', { competition: mode.competition })}</div>
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(dailyMode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · <span className="capitalize">{mode.label}</span>{dailyLocked ? ` · ${t('common.complete')}` : ''}</div>
+          <div className="text-primary font-bold text-sm mt-0.5">{dailyLocked ? t('common.dailyDone') : t('higherlower.moreOrFewer')}</div>
+          <div className="text-muted text-xs mt-0.5">{dailyLocked ? t('common.comeBackTomorrow') : dailyMode === 'daily' ? t('higherlower.todayChain') : t('higherlower.allTime', { competition: mode.competition })}</div>
         </div>
 
         {/* The chain — your streak as objects */}
@@ -237,14 +256,29 @@ export default function HigherLower() {
           </div>
         )}
 
-        {phase === 'over' && !showResult && (
+        {/* Unlimited: the duel already reveals the number in place — show the
+            outcome line and replay controls inline, no result card. */}
+        {dailyMode === 'unlimited' && phase === 'over' && (
+          <div className="flex flex-col items-center gap-3 text-center pt-1">
+            <div>
+              <p className="text-danger-bright font-black tracking-[0.06em]">{t('higherlower.gameOver')} · 🔥 {streak}</p>
+              <p className="text-secondary text-sm mt-1">{t('higherlower.scoredLine', { name: challenger.name, value: challenger.value, label: mode.label })}</p>
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => startMode(mode)} className="bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl px-6 py-3 transition-colors">{t('higherlower.playAgain')}</button>
+              <button onClick={() => setMode(null)} className="border border-border-strong text-secondary hover:bg-surface text-sm font-medium rounded-xl px-6 py-3 transition-colors">{t('higherlower.changeStat').replace('← ', '')}</button>
+            </div>
+          </div>
+        )}
+
+        {dailyMode === 'daily' && phase === 'over' && !showResult && (
           <div className="text-center">
             <button onClick={() => setShowResult(true)} className="text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
           </div>
         )}
       </div>
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+      <ResultModal open={showResult && dailyMode === 'daily'} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <GameMotif id="higher-or-lower" className={`w-11 h-11 mb-2 ${dailyCleared ? 'text-accent-bright' : 'text-dim'}`} />
           <h2 className={`score-number text-4xl mb-1 ${dailyCleared ? 'text-success-bright' : 'text-danger-bright'}`}>{dailyCleared ? t('higherlower.chainCleared') : t('higherlower.gameOver')}</h2>
