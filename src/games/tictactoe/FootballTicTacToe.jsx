@@ -14,6 +14,7 @@ import GameMotif from '../../components/GameMotif'
 import UpNext from '../../components/UpNext'
 import { accentVars } from '../../design/accents'
 import { recordResult } from '../../data/dailyStats'
+import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
@@ -51,33 +52,62 @@ function CategoryPair({ rowCat, colCat, t, size = 13 }) {
 
 export default function FootballTicTacToe({ onBackToModes }) {
   const { t, lp } = useI18n()
+  // Today's daily state, if any: a terminal snapshot (done) locks the round to
+  // its result screen; a live snapshot resumes it. Read once at mount.
+  const [saved] = useState(() => loadDailyProgress('tictactoe'))
+  const restoredDone = !!saved?.done
+
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
   const [grid, setGrid] = useState(() => getDailyGrid())
-  const [filled, setFilled] = useState({}) // cellIndex -> player name
-  const [lives, setLives] = useState(MAX_LIVES)
+  const [filled, setFilled] = useState(() => saved?.filled ?? {}) // cellIndex -> player name
+  const [lives, setLives] = useState(() => saved?.lives ?? MAX_LIVES)
   const [selectedCell, setSelectedCell] = useState(null)
   const [input, setInput] = useState('')
-  const [history, setHistory] = useState([])
-  const [phase, setPhase] = useState('playing') // 'playing' | 'won' | 'lost'
+  const [history, setHistory] = useState(() => saved?.history ?? [])
+  const [phase, setPhase] = useState(() => saved?.phase ?? 'playing') // 'playing' | 'won' | 'lost'
   const [dailyStats, setDailyStats] = useState(null)
   useEffect(() => {
-    // Only Daily mode records stats/streaks.
+    // Only Daily mode records stats/streaks (idempotent per day).
     if (phase !== 'playing' && mode === 'daily') setDailyStats(recordResult('tictactoe', phase === 'won'))
   }, [phase, mode])
   const [shake, setShake] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
-  const [gaveUp, setGaveUp] = useState(false)
+  const [gaveUp, setGaveUp] = useState(() => saved?.gaveUp ?? false)
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false)
   const [answersCell, setAnswersCell] = useState(null) // cell whose full answer list is open
   const [resultTab, setResultTab] = useState('board')
 
-  const newGame = (m) => {
-    setMode(m)
-    setGrid(m === 'daily' ? getDailyGrid() : getRandomGrid())
+  // A finished daily is locked: it shows its result and offers Unlimited, but
+  // the board can't be replayed. (True for a just-finished or a restored round.)
+  const dailyLocked = mode === 'daily' && phase !== 'playing'
+
+  // Persist the daily as it's played, so a mid-round refresh resumes the same
+  // game (no bailing out to reset lives) and a finished one stays locked.
+  useEffect(() => {
+    if (mode !== 'daily') return
+    const started = Object.keys(filled).length > 0 || history.length > 0 || phase !== 'playing'
+    if (!started) return
+    saveDailyProgress('tictactoe', { filled, lives, history, phase, gaveUp }, phase !== 'playing')
+  }, [mode, filled, lives, history, phase, gaveUp])
+
+  // Leave the daily untouched; start a fresh, replayable Unlimited round.
+  const startUnlimited = () => {
+    setMode('unlimited'); setGrid(getRandomGrid())
     setFilled({}); setLives(MAX_LIVES); setSelectedCell(null); setInput(''); setHistory([])
     setPhase('playing'); setDailyStats(null); setGaveUp(false); setShowGiveUpConfirm(false); setAnswersCell(null); setShowResult(false); setResultTab('board')
   }
-  const [showResult, setShowResult] = useState(false)
+  // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
+  const restoreDaily = () => {
+    const s = loadDailyProgress('tictactoe')
+    setMode('daily'); setGrid(getDailyGrid())
+    setFilled(s?.filled ?? {}); setLives(s?.lives ?? MAX_LIVES); setHistory(s?.history ?? [])
+    setPhase(s?.phase ?? 'playing'); setGaveUp(s?.gaveUp ?? false)
+    setSelectedCell(null); setInput(''); setShowGiveUpConfirm(false); setAnswersCell(null)
+    setShowResult(!!s?.done); setResultTab('board'); setDailyStats(null)
+  }
+  const onModeChange = (m) => (m === 'daily' ? restoreDaily() : startUnlimited())
+
+  const [showResult, setShowResult] = useState(restoredDone) // a restored finished daily shows its result at once
   useEffect(() => {
     if (phase === 'playing') return
     const t = setTimeout(() => setShowResult(true), RESULT_REVEAL_DELAY_MS) // let the revealed grid show first
@@ -288,15 +318,17 @@ export default function FootballTicTacToe({ onBackToModes }) {
             {t('common.allGames')}
           </Link>
         )}
-        <ModeToggle mode={mode} onChange={newGame} />
+        <ModeToggle mode={mode} onChange={onModeChange} />
       </div>
 
-      {/* Intro card */}
+      {/* Intro card (or the locked-daily banner once today's round is finished) */}
       <div className="w-full max-w-lg mb-4">
         <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
-          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · 3 × 3</div>
-          <div className="text-primary font-bold text-sm mt-0.5">{t('tictactoe.fillEvery')}</div>
-          <div className="text-muted text-xs mt-0.5">{t('tictactoe.fillEverySub')}</div>
+          <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">
+            {(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()} · 3 × 3{dailyLocked ? ` · ${t('common.complete')}` : ''}
+          </div>
+          <div className="text-primary font-bold text-sm mt-0.5">{dailyLocked ? t('common.dailyDone') : t('tictactoe.fillEvery')}</div>
+          <div className="text-muted text-xs mt-0.5">{dailyLocked ? t('common.comeBackTomorrow') : t('tictactoe.fillEverySub')}</div>
         </div>
       </div>
 
@@ -506,7 +538,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
         <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)}>
+      <ResultModal open={showResult} onClose={() => setShowResult(false)} inline={mode === 'unlimited'}>
         <div className="w-full flex flex-col items-center text-center">
           <GameMotif id="tictactoe" className={`w-11 h-11 mb-2 ${phase === 'won' ? 'text-accent-bright' : 'text-dim'}`} />
           <h2 className={`score-number text-4xl mb-1 ${phase === 'won' ? 'text-success-bright' : 'text-danger-bright'}`}>
@@ -517,6 +549,9 @@ export default function FootballTicTacToe({ onBackToModes }) {
               ? (lives === 1 ? t('tictactoe.filledAllLife', { n: lives }) : t('tictactoe.filledAllLives', { n: lives }))
               : gaveUp ? t('tictactoe.filledBeforeGaveUp', { n: filledCount }) : t('tictactoe.filledBeforeLost', { n: filledCount })}
           </p>
+          {dailyLocked && (
+            <p className="text-[0.62rem] font-black tracking-[0.14em] uppercase text-faint mb-1">{t('common.dailyDone')}</p>
+          )}
         </div>
         {mode === 'daily' && <DailyStats game="tictactoe" stats={dailyStats} />}
 
@@ -553,7 +588,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
           </div>
         )}
 
-        <button onClick={() => newGame('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tictactoe.newGrid')}</button>
+        <button onClick={startUnlimited} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{mode === 'daily' ? t('common.playUnlimited') : t('tictactoe.newGrid')}</button>
         <UpNext exclude="tictactoe" />
       </ResultModal>
 
