@@ -5,8 +5,11 @@ import { usePlayerSuggestions } from '../tictactoe/usePlayerSuggestions'
 import { ShareCard } from '../../components/ShareCard'
 import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
-import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
+import GameChrome from '../../components/GameChrome'
+import GameMotif from '../../components/GameMotif'
+import UpNext from '../../components/UpNext'
+import { accentVars } from '../../design/accents'
 import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { TILE } from '../../utils/shareImage'
@@ -117,50 +120,71 @@ export default function WorldCupSquads() {
   // ── Squad picker (Unlimited only) ─────────────────────────────────
   if (!squad) {
     return (
-      <div className="min-h-screen flex flex-col items-center px-4 py-8">
-        <div className="w-full max-w-lg flex items-center justify-between mb-6">
-          <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>
-          <div className="score-number text-xl text-gray-500 tracking-wider">{t('wcsquads.wordmark')}</div>
-          <div className="w-16" />
-        </div>
-        <ModeToggle mode={mode} onChange={switchMode} className="mb-6" />
-        <div className="w-full max-w-lg text-center mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">{t('wcsquads.title')}</h1>
-          <p className="text-gray-500 text-sm">{t('wcsquads.pick')}</p>
-        </div>
-        <div className="w-full max-w-lg grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {SQUADS.map(s => (
-            <button key={s.year} onClick={() => pick(s)}
-              className="bg-gray-900 border border-gray-800 hover:border-amber-500 hover:ring-1 hover:ring-amber-500/30 rounded-xl px-4 py-4 text-center transition-all">
-              <div className="text-white font-semibold">{s.nation}</div>
-              <div className="text-amber-400 text-sm font-medium tabular-nums">{s.year}</div>
-            </button>
-          ))}
+      <div className="tv-scene min-h-dvh text-primary" style={accentVars('wcsquads')}>
+        <div className="flex flex-col items-center px-4 pb-8 max-w-3xl mx-auto">
+          <div className="w-full"><GameChrome motifId="world-cup" title={t('wcsquads.wordmark')} /></div>
+          <div className="relative w-full max-w-lg flex justify-center mt-1 mb-5">
+            <Link to={lp('/')} className="absolute left-0 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-secondary transition-colors">{t('common.allGames')}</Link>
+            <ModeToggle mode={mode} onChange={switchMode} />
+          </div>
+          <div className="w-full max-w-lg text-center mb-6">
+            <h1 className="score-number text-3xl text-primary mb-1">{t('wcsquads.title')}</h1>
+            <p className="text-muted text-sm">{t('wcsquads.pick')}</p>
+          </div>
+          <div className="w-full max-w-lg grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {SQUADS.map(s => (
+              <button key={s.year} onClick={() => pick(s)}
+                className="group bg-card border border-border-strong hover:border-accent rounded-xl px-4 py-5 text-center transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-bright">
+                <div className="text-primary font-bold">{s.nation}</div>
+                <div className="score-number text-2xl text-accent-bright tabular-nums mt-0.5">{s.year}</div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     )
   }
 
   // ── Game ──────────────────────────────────────────────────────────
+  const total = squad.players.length
+  const pct = Math.round((named.size / total) * 100)
   const squadShareText = [
-    t('share.wcsquadsNamed', { n: named.size, total: squad.players.length, nation: squad.nation, year: squad.year }),
+    t('share.wcsquadsNamed', { n: named.size, total, nation: squad.nation, year: squad.year }),
     SITE_URL,
   ].join('\n\n')
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-8">
-      <div className="w-full max-w-lg flex items-center justify-between mb-5">
+    <div className="tv-scene min-h-dvh text-primary" style={accentVars('wcsquads')}>
+    <div className="flex flex-col items-center px-4 pb-8 max-w-3xl mx-auto">
+      <div className="w-full"><GameChrome
+        motifId="world-cup"
+        title={t('wcsquads.wordmark')}
+        right={<b className="text-secondary tabular-nums">{named.size}/{total}</b>}
+      /></div>
+
+      {/* Mode toggle centred; change-squad / all-games link is a satellite. */}
+      <div className="relative w-full max-w-lg flex justify-center mt-1 mb-4">
         {mode === 'unlimited'
-          ? <button onClick={back} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('wcsquads.changeSquad')}</button>
-          : <Link to={lp('/')} className="text-gray-600 hover:text-gray-400 text-sm transition-colors">{t('common.allGames')}</Link>}
-        <div className="score-number text-xl text-gray-500 tracking-wider">{t('wcsquads.wordmark')}</div>
-        <div className="text-sm tabular-nums text-gray-400">{named.size}/{squad.players.length}</div>
+          ? <button onClick={back} className="absolute left-0 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-secondary transition-colors">{t('wcsquads.changeSquad')}</button>
+          : <Link to={lp('/')} className="absolute left-0 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-secondary transition-colors">{t('common.allGames')}</Link>}
+        <ModeToggle mode={mode} onChange={switchMode} />
       </div>
 
-      <ModeToggle mode={mode} onChange={switchMode} className="mb-4" />
-
-      <div className="w-full max-w-lg mb-4 text-center">
-        <h1 className="text-xl font-bold text-white">{squad.nation} {squad.year}</h1>
-        <p className="text-gray-500 text-xs">{dailyLocked ? t('common.dailyDone') : mode === 'daily' ? t('wcsquads.subtitleDaily') : t('wcsquads.subtitleUnlimited')}</p>
+      {/* Hero: the nation + year and a live squad-completion bar */}
+      <div className="w-full max-w-lg mb-4">
+        <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3">
+          <div className="flex items-center gap-3">
+            <GameMotif id="world-cup" className="w-8 h-8 text-accent-bright shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="text-[0.55rem] font-black tracking-[0.18em] text-accent-bright">{(mode === 'daily' ? t('common.daily') : t('common.unlimited')).toUpperCase()}{dailyLocked ? ` · ${t('common.complete')}` : ''}</div>
+              <div className="text-primary font-bold text-lg leading-tight">{squad.nation} {squad.year}</div>
+              <div className="text-muted text-xs mt-0.5">{dailyLocked ? t('common.comeBackTomorrow') : mode === 'daily' ? t('wcsquads.subtitleDaily') : t('wcsquads.subtitleUnlimited')}</div>
+            </div>
+            <div className="score-number text-3xl text-accent-bright tabular-nums leading-none shrink-0">{named.size}<span className="text-muted text-base">/{total}</span></div>
+          </div>
+          <div className="mt-2.5 h-1.5 rounded-full bg-board overflow-hidden" role="progressbar" aria-valuenow={named.size} aria-valuemax={total}>
+            <div className="h-full bg-accent rounded-full transition-[width] duration-500" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
       </div>
 
       {active && (
@@ -168,18 +192,19 @@ export default function WorldCupSquads() {
           <input
             ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
             placeholder={t('wcsquads.placeholder')} autoFocus
-            className="w-full bg-gray-900 border border-gray-700 focus:border-green-600 rounded-xl px-4 py-3.5 text-white placeholder-gray-600 text-base outline-none transition-colors"
+            role="combobox" aria-expanded={visibleSuggestions.length > 0} aria-controls="wc-suggestions" aria-autocomplete="list" aria-label={t('wcsquads.placeholder')}
+            className="w-full bg-surface border border-border-strong focus:border-accent rounded-xl px-4 py-3.5 text-primary placeholder-faint text-base outline-none transition-colors"
             autoComplete="off" autoCorrect="off" spellCheck="false"
           />
-          {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2"><div className="w-4 h-4 border-2 border-gray-600 border-t-green-500 rounded-full animate-spin" /></div>}
+          {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2"><div className="w-4 h-4 border-2 border-inert border-t-accent rounded-full animate-spin" /></div>}
           {visibleSuggestions.length > 0 && (
-            <div ref={dropdownRef} className="absolute top-full left-0 right-0 mt-1 bg-gray-900 border border-gray-700 rounded-xl overflow-hidden z-10 shadow-2xl">
+            <div ref={dropdownRef} id="wc-suggestions" role="listbox" className="absolute top-full left-0 right-0 mt-1 bg-surface border border-border-strong rounded-xl overflow-hidden z-dropdown shadow-float">
               {visibleSuggestions.map((item, i) => (
-                <button key={item.name} type="button" onMouseDown={e => { e.preventDefault(); submit(item.name) }} onMouseEnter={() => setHighlightedIndex(i)}
-                  className={`w-full text-left px-4 py-2.5 transition-colors border-b border-gray-800/50 last:border-0 ${i === highlightedIndex ? 'bg-gray-800' : 'hover:bg-gray-800/60'}`}>
+                <button key={item.name} type="button" role="option" aria-selected={i === highlightedIndex} onMouseDown={e => { e.preventDefault(); submit(item.name) }} onMouseEnter={() => setHighlightedIndex(i)}
+                  className={`w-full text-left px-4 py-2.5 transition-colors border-b border-border/50 last:border-0 ${i === highlightedIndex ? 'bg-border' : 'hover:bg-border/60'}`}>
                   <div className="flex items-center gap-2">
                     {item.flag && <span className="text-base shrink-0">{item.flag}</span>}
-                    <span className="text-white text-sm font-medium truncate">{item.name}</span>
+                    <span className="text-primary text-sm font-medium truncate">{item.name}</span>
                   </div>
                 </button>
               ))}
@@ -187,20 +212,20 @@ export default function WorldCupSquads() {
           )}
         </form>
       )}
-      {active && <div className="w-full max-w-lg mb-4 text-center text-xs h-4 text-amber-400">{flash}</div>}
+      {active && <div className="w-full max-w-lg mb-4 text-center text-xs h-4 text-warn">{flash}</div>}
 
-      {/* Squad slots */}
+      {/* Squad board — slots light up in the accent as you name them */}
       <div className="w-full max-w-lg grid grid-cols-2 sm:grid-cols-3 gap-1.5">
         {squad.players.map(name => {
           const got = named.has(name)
           const show = got || revealed
           return (
-            <div key={name} className={`rounded-lg px-2 py-2 text-center text-[11px] sm:text-xs leading-tight ${
-              got ? 'bg-green-900/40 border border-green-700 text-green-200 font-medium cell-reveal'
-                : revealed ? 'bg-gray-900 border border-gray-800 text-gray-500'
-                  : 'bg-gray-900 border border-gray-800 text-gray-700'
+            <div key={name} className={`rounded-lg border px-2 py-2.5 text-center text-[11px] sm:text-xs leading-tight min-h-[2.6rem] flex items-center justify-center ${
+              got ? 'border-[color-mix(in_srgb,var(--accent)_50%,transparent)] bg-[color-mix(in_srgb,var(--accent)_12%,#16151f)] text-primary font-semibold cell-reveal'
+                : revealed ? 'border-border bg-board text-muted'
+                  : 'border-border-strong bg-surface text-dim'
             }`}>
-              {show ? name : '•'}
+              {show ? name : <span className="text-lg" aria-hidden="true">•</span>}
             </div>
           )
         })}
@@ -208,50 +233,45 @@ export default function WorldCupSquads() {
 
       {/* Controls / result */}
       {!over && (
-        <button onClick={() => setRevealed(true)} className="mt-5 w-full max-w-lg border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
+        <button onClick={() => setRevealed(true)} className="mt-5 w-full max-w-lg border border-border-strong text-secondary hover:bg-surface hover:text-primary text-sm font-medium rounded-xl px-4 py-2.5 transition-colors">
           {t('wcsquads.giveUp')}
         </button>
       )}
       {/* Unlimited: the squad slots reveal every name in place — just a replay button. */}
       {mode === 'unlimited' && over && (
-        <button onClick={back} className="mt-5 w-full max-w-lg bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-xl px-6 py-3 transition-colors">{t('wcsquads.anotherSquad')}</button>
+        <button onClick={back} className="mt-5 w-full max-w-lg bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl px-6 py-3 transition-colors">{t('wcsquads.anotherSquad')}</button>
       )}
       {mode === 'daily' && over && !showResult && (
-        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-green-400 hover:text-green-300 font-medium transition-colors">{t('common.seeResult')}</button>
+        <button onClick={() => setShowResult(true)} className="mt-5 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
       <ResultModal open={showResult && mode === 'daily'} onClose={() => setShowResult(false)}>
-        <div className="w-full text-center">
-          {complete ? (
-            <>
-              <div className="text-4xl mb-1">🏆</div>
-              <h2 className="score-number text-2xl text-green-400 mb-1">{t('wcsquads.fullSquad')}</h2>
-              <p className="text-gray-400 text-sm mb-3">{t('wcsquads.namedAll', { n: squad.players.length })}</p>
-            </>
-          ) : (
-            <p className="text-gray-300 text-sm mb-3">{t('wcsquads.namedOf', { n: named.size, total: squad.players.length })}</p>
-          )}
-          {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
-          <ShareCard text={squadShareText} card={{
-            gameId: 'wcsquads',
-            title: t('wcsquads.wordmark'),
-            challenge: `${squad.nation} ${squad.year}`,
-            result: complete ? t('wcsquads.fullSquad') : t('wcsquads.namedOf', { n: named.size, total: squad.players.length }),
-            rows: (() => {
-              const cells = squad.players.map(p => named.has(p) ? TILE.hit : TILE.miss)
-              return Array.from({ length: Math.ceil(cells.length / 6) }, (_, i) => cells.slice(i * 6, i * 6 + 6))
-            })(),
-            matchday: matchdayNumber(),
-          }} />
-          {mode === 'unlimited'
-            ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('wcsquads.anotherSquad')}</button>
-            : <>
-                <button onClick={() => switchMode('unlimited')} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
-                <p className="text-gray-600 text-xs mt-3">{t('common.comeBackTomorrow')}</p>
-              </>}
+        <div className="w-full flex flex-col items-center text-center">
+          <GameMotif id="world-cup" className={`w-11 h-11 mb-2 ${complete ? 'text-accent-bright' : 'text-dim'}`} />
+          <h2 className={`score-number text-4xl mb-1 ${complete ? 'text-success-bright' : 'text-primary'}`}>
+            {complete ? t('wcsquads.fullSquad') : `${named.size}/${total}`}
+          </h2>
+          <p className="text-muted text-sm mb-1">
+            {complete ? t('wcsquads.namedAll', { n: total }) : t('wcsquads.namedOf', { n: named.size, total })}
+          </p>
+          {dailyLocked && <p className="text-[0.62rem] font-black tracking-[0.14em] uppercase text-faint mb-1">{t('common.dailyDone')}</p>}
         </div>
-        <MoreGames current="/world-cup" />
+        {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
+        <ShareCard text={squadShareText} card={{
+          gameId: 'wcsquads',
+          title: t('wcsquads.wordmark'),
+          challenge: `${squad.nation} ${squad.year}`,
+          result: complete ? t('wcsquads.fullSquad') : t('wcsquads.namedOf', { n: named.size, total }),
+          rows: (() => {
+            const cells = squad.players.map(p => named.has(p) ? TILE.hit : TILE.miss)
+            return Array.from({ length: Math.ceil(cells.length / 6) }, (_, i) => cells.slice(i * 6, i * 6 + 6))
+          })(),
+          matchday: matchdayNumber(),
+        }} />
+        <button onClick={() => switchMode('unlimited')} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
+        <UpNext exclude="wcsquads" />
       </ResultModal>
+    </div>
     </div>
   )
 }
