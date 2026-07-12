@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SITE_URL } from '../utils/site'
+import { renderShareCard } from '../utils/shareImage'
 import { useI18n } from '../i18n'
 
 export const ICON_BTN = 'w-10 h-10 flex items-center justify-center rounded-full bg-border hover:bg-border-strong text-primary transition-colors'
@@ -45,10 +46,27 @@ export function ShareIcon() {
   )
 }
 
-export function ShareCard({ text }) {
+// A generated result image can be shared where the browser supports sharing
+// files; otherwise we fall back to downloading it. Probed lazily (never at
+// prerender time).
+function canShareFiles(file) {
+  try { return !!navigator.canShare && navigator.canShare({ files: [file] }) } catch { return false }
+}
+function downloadBlob(blob, name) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url; a.download = name; document.body.appendChild(a); a.click()
+  a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
+
+// `card` (optional): structured data for the shareable Fixture Card image
+// (see utils/shareImage.js). When present the primary action shares that PNG
+// plus the link; without it, share falls back to text + link.
+export function ShareCard({ text, card }) {
   const { t } = useI18n()
   const [copied, setCopied] = useState(false)
   const [toast, setToast] = useState('')
+  const [busy, setBusy] = useState(false)
   const canNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function'
 
   const flashToast = (msg) => {
@@ -61,6 +79,26 @@ export function ShareCard({ text }) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     })
+  }
+
+  // Share the generated Fixture Card image + link; download it if the platform
+  // can't share files (most desktops). Falls back to a text share with no card.
+  const handleShareImage = async () => {
+    if (!card) return navigator.share({ text, url: SITE_URL }).catch(() => {})
+    if (busy) return
+    setBusy(true)
+    try {
+      const blob = await renderShareCard(card)
+      const file = new File([blob], 'triviverse.png', { type: 'image/png' })
+      if (canShareFiles(file) && canNativeShare) {
+        await navigator.share({ files: [file], text, url: SITE_URL })
+      } else {
+        downloadBlob(blob, 'triviverse.png')
+        flashToast(t('share.imageSaved'))
+      }
+    } catch { /* user cancelled or generation failed */ } finally {
+      setBusy(false)
+    }
   }
 
   const handleNativeShare = () => {
@@ -80,14 +118,18 @@ export function ShareCard({ text }) {
   return (
     <div className="w-full max-w-md flex flex-col items-center gap-3 mb-2">
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <button onClick={handleCopy} className="px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">
-          {copied ? t('share.copied') : t('share.copy')}
-        </button>
-        {canNativeShare && (
-          <button onClick={handleNativeShare} className="flex items-center gap-2 px-5 py-2.5 bg-surface hover:bg-border border border-border-strong text-primary text-sm font-bold rounded-lg transition-colors">
+        {card ? (
+          <button onClick={handleShareImage} disabled={busy} className="flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover disabled:opacity-60 text-white text-sm font-bold rounded-lg transition-colors">
+            <ShareIcon /> {busy ? t('share.preparing') : t('share.shareCard')}
+          </button>
+        ) : canNativeShare && (
+          <button onClick={handleNativeShare} className="flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">
             <ShareIcon /> {t('share.share')}
           </button>
         )}
+        <button onClick={handleCopy} className={`px-5 py-2.5 text-sm font-bold rounded-lg transition-colors ${card ? 'bg-surface hover:bg-border border border-border-strong text-primary' : 'bg-brand hover:bg-brand-hover text-white'}`}>
+          {copied ? t('share.copied') : t('share.copy')}
+        </button>
       </div>
       <div className="flex items-center justify-center gap-2.5">
         <a href={`https://wa.me/?text=${encodedText}`} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" className={ICON_BTN}>

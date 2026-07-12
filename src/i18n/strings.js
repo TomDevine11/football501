@@ -24,7 +24,7 @@ export const strings = {
     },
     stats: { played: 'Played', winPct: 'Win %', best: 'Best', streak: 'Streak', dayStreak: 'Day streak', max: 'Max' },
     share: {
-      copy: 'Copy result', copied: 'Copied!', share: 'Share', instagram: 'Result copied — paste it into your Instagram story or DM',
+      copy: 'Copy result', copied: 'Copied!', share: 'Share', shareCard: 'Share card', preparing: 'Preparing…', imageSaved: 'Image saved — share it anywhere', instagram: 'Result copied — paste it into your Instagram story or DM',
       dayStreak: '🔥 {n}-day streak',
       wordleTitle: '⚽ Football Wordle', wordleWon: 'Guessed in {n}/{max}', wordleLost: 'X/{max}',
       tenableTitle: '🔺 Football Tenable — {title}', tenableScore: '{n}/10 correct · {lost}/{max} lives lost',
@@ -294,7 +294,7 @@ export const strings = {
     },
     stats: { played: 'Jugadas', winPct: '% Victorias', best: 'Mejor', streak: 'Racha', dayStreak: 'Racha diaria', max: 'Máx' },
     share: {
-      copy: 'Copiar resultado', copied: '¡Copiado!', share: 'Compartir', instagram: 'Resultado copiado: pégalo en tu historia o mensaje de Instagram',
+      copy: 'Copiar resultado', copied: '¡Copiado!', share: 'Compartir', shareCard: 'Compartir tarjeta', preparing: 'Preparando…', imageSaved: 'Imagen guardada — compártela donde quieras', instagram: 'Resultado copiado: pégalo en tu historia o mensaje de Instagram',
       dayStreak: '🔥 racha de {n} días',
       wordleTitle: '⚽ Wordle de Fútbol', wordleWon: 'Adivinado en {n}/{max}', wordleLost: 'X/{max}',
       tenableTitle: '🔺 Tenable de Fútbol — {title}', tenableScore: '{n}/10 correctas · {lost}/{max} vidas perdidas',

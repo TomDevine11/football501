@@ -10,8 +10,9 @@ import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
 import { useI18n } from '../../i18n'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { SITE_URL } from '../../utils/site'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
@@ -263,12 +264,22 @@ export default function GuessByTeammates() {
             {phase === 'won' && guesses.length > 0 && <> — {t('teammates.inN', { n: guesses.length })}</>}.
           </p>
           {mode === 'daily' && <DailyStats game="teammates" stats={dailyStats} />}
-          <ShareCard text={[
-            phase === 'won'
-              ? t('share.teammatesWon', { n: guesses.length, max: MAX_CLUES })
-              : t('share.teammatesLost'),
-            SITE_URL,
-          ].join('\n\n')} />
+          <ShareCard
+            text={[
+              phase === 'won'
+                ? t('share.teammatesWon', { n: guesses.length, max: MAX_CLUES })
+                : t('share.teammatesLost'),
+              SITE_URL,
+            ].join('\n\n')}
+            card={{
+              gameId: 'teammates',
+              title: t('teammates.wordmark'),
+              challenge: t('games.teammates.tagline'),
+              result: phase === 'won' ? t('teammates.correct') : t('teammates.outOf'),
+              rows: [guesses.map(g => g.correct ? TILE.hit : g.skipped ? TILE.near : TILE.miss)],
+              matchday: matchdayNumber(),
+            }}
+          />
           <button onClick={startUnlimited} className="mt-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
           {mode === 'daily' && <p className="text-faint text-xs mt-3">{t('common.comeBackTomorrow')}</p>}
         </div>

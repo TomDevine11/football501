@@ -9,8 +9,9 @@ import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
 import { useI18n } from '../../i18n'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { SITE_URL } from '../../utils/site'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
@@ -251,12 +252,22 @@ export default function CareerPath() {
             {phase === 'won' && guesses.length > 0 && <> — {t('teammates.inN', { n: guesses.length })}</>}.
           </p>
           {mode === 'daily' && <DailyStats game="careers" stats={dailyStats} />}
-          <ShareCard text={[
-            phase === 'won'
-              ? t('share.careersWon', { n: guesses.length, max: maxClues })
-              : t('share.careersLost'),
-            SITE_URL,
-          ].join('\n\n')} />
+          <ShareCard
+            text={[
+              phase === 'won'
+                ? t('share.careersWon', { n: guesses.length, max: maxClues })
+                : t('share.careersLost'),
+              SITE_URL,
+            ].join('\n\n')}
+            card={{
+              gameId: 'careers',
+              title: t('careers.wordmark'),
+              challenge: t('games.career-path.tagline'),
+              result: phase === 'won' ? t('teammates.correct') : t('teammates.outOf'),
+              rows: [guesses.map(g => g.correct ? TILE.hit : g.skipped ? TILE.near : TILE.miss)],
+              matchday: matchdayNumber(),
+            }}
+          />
           <button onClick={startUnlimited} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
           {mode === 'daily' && <p className="text-gray-600 text-xs mt-3">{t('common.comeBackTomorrow')}</p>}
         </div>

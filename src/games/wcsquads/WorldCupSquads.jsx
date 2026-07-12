@@ -7,8 +7,9 @@ import DailyStats from '../../components/DailyStats'
 import ModeToggle from '../../components/ModeToggle'
 import MoreGames from '../../components/MoreGames'
 import ResultModal from '../../components/ResultModal'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
@@ -231,7 +232,17 @@ export default function WorldCupSquads() {
             <p className="text-gray-300 text-sm mb-3">{t('wcsquads.namedOf', { n: named.size, total: squad.players.length })}</p>
           )}
           {mode === 'daily' && <DailyStats game="wcsquads" stats={dailyStats} variant="score" />}
-          <ShareCard text={squadShareText} />
+          <ShareCard text={squadShareText} card={{
+            gameId: 'wcsquads',
+            title: t('wcsquads.wordmark'),
+            challenge: `${squad.nation} ${squad.year}`,
+            result: complete ? t('wcsquads.fullSquad') : t('wcsquads.namedOf', { n: named.size, total: squad.players.length }),
+            rows: (() => {
+              const cells = squad.players.map(p => named.has(p) ? TILE.hit : TILE.miss)
+              return Array.from({ length: Math.ceil(cells.length / 6) }, (_, i) => cells.slice(i * 6, i * 6 + 6))
+            })(),
+            matchday: matchdayNumber(),
+          }} />
           {mode === 'unlimited'
             ? <button onClick={back} className="mt-2 bg-green-700 hover:bg-green-600 text-white text-sm font-semibold rounded-lg px-6 py-2.5 transition-colors">{t('wcsquads.anotherSquad')}</button>
             : <>

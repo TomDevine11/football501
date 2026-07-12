@@ -13,8 +13,9 @@ import GameChrome from '../../components/GameChrome'
 import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
@@ -566,7 +567,14 @@ export default function FootballTenable() {
         {resultTab === 'share' && (
           <div className="w-full flex flex-col items-center gap-2 mb-1">
             <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
-            <ShareCard text={shareText} />
+            <ShareCard text={shareText} card={{
+              gameId: 'tenable',
+              title: 'Football Tenable',
+              challenge: question.title,
+              result: phase === 'won' ? t('tenable.pyramidComplete') : gaveUp ? t('tenable.gaveUp') : t('tenable.gameOver'),
+              rows: [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]].map(r => r.map(rk => revealed[rk] ? TILE.hit : TILE.miss)),
+              matchday: matchdayNumber(),
+            }} />
           </div>
         )}
 

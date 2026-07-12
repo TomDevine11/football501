@@ -9,8 +9,9 @@ import GameChrome from '../../components/GameChrome'
 import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { accentVars } from '../../design/accents'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
@@ -321,7 +322,14 @@ export default function FootballWordle() {
         )}
         {dailyLocked && <p className="text-[0.62rem] font-black tracking-[0.14em] uppercase text-faint mb-1">{t('common.dailyDone')}</p>}
         {mode === 'daily' && <DailyStats game="wordle" stats={dailyStats} />}
-        <ShareCard text={shareText} />
+        <ShareCard text={shareText} card={{
+          gameId: 'wordle',
+          title: 'Football Wordle',
+          challenge: t('games.wordle.tagline'),
+          result: phase === 'won' ? `${t('wordle.solvedIn')} ${guesses.length}/${MAX_GUESSES}` : t('wordle.gameOver'),
+          rows: guesses.map(g => evaluateGuess(g, answer).map(s => s === 'green' ? TILE.hit : s === 'yellow' ? TILE.near : TILE.miss)),
+          matchday: matchdayNumber(),
+        }} />
         <button onClick={startUnlimited} className="mt-3 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg px-6 py-2.5 transition-colors">{t('common.playUnlimited')}</button>
         <UpNext exclude="wordle" />
       </ResultModal>

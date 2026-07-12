@@ -8,7 +8,7 @@ import GameChrome from '../../components/GameChrome'
 import GameMotif from '../../components/GameMotif'
 import UpNext from '../../components/UpNext'
 import { accentVars } from '../../design/accents'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
 import { ShareCard } from '../../components/ShareCard'
 import { SITE_URL } from '../../utils/site'
@@ -260,7 +260,14 @@ export default function FootballConnections() {
         {resultTab === 'share' && (
           <div className="w-full flex flex-col items-center gap-2 mb-1">
             <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
-            <ShareCard text={shareText} />
+            <ShareCard text={shareText} card={{
+              gameId: 'connections',
+              title: 'Football Connections',
+              challenge: t('games.connections.tagline'),
+              result: won ? t('connections.solved') : t('connections.outOf'),
+              rows: guessRows.map(row => row.map(g => GROUP_TIERS[g])),
+              matchday: matchdayNumber(),
+            }} />
           </div>
         )}
 

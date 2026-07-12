@@ -13,8 +13,9 @@ import GameChrome from '../../components/GameChrome'
 import GameMotif from '../../components/GameMotif'
 import UpNext from '../../components/UpNext'
 import { accentVars } from '../../design/accents'
-import { recordResult } from '../../data/dailyStats'
+import { recordResult, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 
@@ -592,7 +593,14 @@ export default function FootballTicTacToe({ onBackToModes }) {
         {resultTab === 'share' && (
           <div className="w-full flex flex-col items-center gap-2 mb-1">
             <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
-            <ShareCard text={shareText} />
+            <ShareCard text={shareText} card={{
+              gameId: 'tictactoe',
+              title: t('tictactoe.wordmark'),
+              challenge: t('games.tictactoe.tagline'),
+              result: phase === 'won' ? t('tictactoe.gridComplete') : gaveUp ? t('tictactoe.gaveUp') : t('tictactoe.gameOver'),
+              rows: [0, 1, 2].map(r => [0, 1, 2].map(c => filled[r * 3 + c] != null ? TILE.hit : TILE.miss)),
+              matchday: matchdayNumber(),
+            }} />
           </div>
         )}
 

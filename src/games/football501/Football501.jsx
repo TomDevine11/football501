@@ -8,8 +8,9 @@ import UpNext from '../../components/UpNext'
 import GameMotif from '../../components/GameMotif'
 import { useI18n } from '../../i18n'
 import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallenge, evaluateSpec, loadCompetition, COMPETITIONS, POSITIONS, STAT_OPTIONS } from '../../data/football501/game'
-import { recordResult, getStats, formGuide } from '../../data/dailyStats'
+import { recordResult, getStats, formGuide, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress, inProgressToday, finishedToday } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { accentVars } from '../../design/accents'
 
 const MAX_SCORE    = 501
@@ -253,7 +254,16 @@ function WinScreen({ history, players, challenge, gaveUp, onPlayAgain, onExit, p
           {tab === 'share' && (
             <div className="flex-1 min-h-0 overflow-y-auto flex flex-col items-center gap-3 pt-1">
               <pre className="w-full text-xs leading-relaxed text-secondary bg-board border border-border rounded-lg px-4 py-3 whitespace-pre-wrap">{shareText}</pre>
-              <ShareCard text={shareText} />
+              <ShareCard text={shareText} card={{
+                gameId: '501',
+                title: 'Football 501',
+                challenge: `${challenge.title} · ${challenge.statLabel}`,
+                result: isSolo
+                  ? (gaveUp ? t('five01.gaveUpOn', { score: soloScore, n: valid.length }) : t('five01.finishedOn', { score: soloScore, n: valid.length }))
+                  : headline,
+                rows: [history.map(g => g.valid ? TILE.hit : TILE.miss)],
+                matchday: matchdayNumber(),
+              }} />
             </div>
           )}
         </div>

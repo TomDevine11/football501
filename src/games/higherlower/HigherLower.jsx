@@ -8,8 +8,9 @@ import GameChrome from '../../components/GameChrome'
 import GameMotif from '../../components/GameMotif'
 import UpNext from '../../components/UpNext'
 import { accentVars } from '../../design/accents'
-import { recordResult, todayIndex } from '../../data/dailyStats'
+import { recordResult, todayIndex, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress } from '../../data/dailyProgress'
+import { TILE } from '../../utils/shareImage'
 import { SITE_URL } from '../../utils/site'
 import { useI18n } from '../../i18n'
 import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
@@ -291,12 +292,22 @@ export default function HigherLower() {
             <p className="text-secondary text-sm mb-2">{t('higherlower.scoredLine', { name: challenger.name, value: challenger.value, label: mode.label })}</p>
           )}
           {dailyMode === 'daily' && <DailyStats game="higherlower" stats={dailyStats} variant="score" />}
-          <ShareCard text={[
-            dailyMode === 'daily'
-              ? t('share.hlDaily', { label: mode.label, streak })
-              : t('share.hlUnlimited', { label: mode.label, streak, best }),
-            SITE_URL,
-          ].join('\n\n')} />
+          <ShareCard
+            text={[
+              dailyMode === 'daily'
+                ? t('share.hlDaily', { label: mode.label, streak })
+                : t('share.hlUnlimited', { label: mode.label, streak, best }),
+              SITE_URL,
+            ].join('\n\n')}
+            card={{
+              gameId: 'higherlower',
+              title: 'Higher or Lower',
+              challenge: `${mode.label} · ${t('higherlower.todayChain')}`,
+              result: dailyCleared ? t('higherlower.chainCleared') : t('higherlower.gameOver'),
+              rows: [Array.from({ length: Math.min(streak, 12) }, () => TILE.hit).concat(dailyCleared ? [] : [TILE.miss])],
+              matchday: matchdayNumber(),
+            }}
+          />
           {dailyMode === 'unlimited'
             ? (
               <div className="flex gap-3 mt-2">
