@@ -85,22 +85,39 @@ function ScoreDisplay({ score }) {
   )
 }
 
+// Per-player marker colours on the descent rail + scoreboard (P1 keeps the 501
+// red). One hue each, up to the 5 supported players.
+const PLAYER_DOTS = ['#f87171', '#60a5fa', '#4ade80', '#fbbf24', '#a78bfa']
+
 // ── The descent rail: the countdown drawn as a fall from 501 to checkout ──
-// Dots mark every score the current player has landed on; the marker is where
-// they are now; the zone at the bottom is the 0..−10 checkout window (drawn
-// oversized — to scale it would be 2% of the rail and invisible).
-function DescentRail({ score, stops }) {
+// Each player has a coloured marker that falls as their score drops (the player
+// to throw is emphasised); solo also trails a dot on every score landed on. The
+// zone at the bottom is the 0..−10 checkout window (drawn oversized — to scale
+// it would be 2% of the rail and invisible).
+function DescentRail({ players, currentPlayerIndex, stops }) {
   const pos = v => `${Math.min(97, Math.max(0, ((MAX_SCORE - v) / (MAX_SCORE - CHECKOUT_MIN)) * 100))}%`
-  const inZone = score <= 0 && score >= CHECKOUT_MIN
+  const solo = players.length === 1
+  const zoneHot = players.some(p => !p.finished && p.score <= 0 && p.score >= CHECKOUT_MIN)
   return (
     <div className="flex flex-col items-center gap-1.5 h-full" aria-hidden="true">
       <span className="text-[0.6rem] font-black text-faint tabular-nums">501</span>
       <div className="relative flex-1 w-2.5 rounded-full bg-gradient-to-b from-border-strong via-surface to-surface">
-        {stops.map((v, i) => (
-          <i key={i} className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-success" style={{ top: pos(v) }} />
+        {solo && stops.map((v, i) => (
+          <i key={`s${i}`} className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-success" style={{ top: pos(v) }} />
         ))}
-        <i className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-canvas transition-[top] duration-slow ease-out ${inZone ? 'bg-success shadow-glow' : 'bg-accent shadow-glow'}`} style={{ top: pos(score) }} />
-        <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-10 rounded-lg border ${inZone ? 'bg-success/30 border-success' : 'bg-success/10 border-success/40'}`} />
+        {players.map((p, i) => {
+          const isCurrent = i === currentPlayerIndex && !p.finished
+          const inZone = solo && p.score <= 0 && p.score >= CHECKOUT_MIN
+          const s = solo ? 16 : isCurrent ? 15 : 11
+          return (
+            <i
+              key={`p${i}`}
+              className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-canvas transition-[top] duration-slow ease-out ${isCurrent || solo ? 'shadow-glow z-10' : ''}`}
+              style={{ top: pos(p.score), width: s, height: s, background: inZone ? '#22c55e' : PLAYER_DOTS[i % PLAYER_DOTS.length], opacity: p.finished ? 0.5 : 1 }}
+            />
+          )
+        })}
+        <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-10 rounded-lg border ${zoneHot ? 'bg-success/30 border-success' : 'bg-success/10 border-success/40'}`} />
       </div>
       <span className="text-[0.55rem] font-black text-success-bright tracking-[0.08em] text-center leading-tight">0<br/>−10</span>
     </div>
@@ -117,7 +134,10 @@ function Scoreboard({ players, currentPlayerIndex }) {
         const active = i === currentPlayerIndex && !p.finished
         return (
           <div key={i} className={`rounded-xl border px-3 py-2 text-center transition-colors bg-card ${active ? 'border-brand shadow-glow' : 'border-border-strong'}`}>
-            <div className="text-[0.6rem] font-black tracking-[0.1em] text-secondary truncate uppercase">{p.name}</div>
+            <div className="flex items-center justify-center gap-1.5 min-w-0">
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: PLAYER_DOTS[i % PLAYER_DOTS.length] }} aria-hidden="true" />
+              <div className="text-[0.6rem] font-black tracking-[0.1em] text-secondary truncate uppercase">{p.name}</div>
+            </div>
             <div className={`score-number text-2xl tabular-nums ${p.finished ? 'text-success-bright' : 'text-primary'}`}>{p.score}</div>
             {p.finished && <div className="text-[0.55rem] text-success font-black uppercase tracking-[0.1em]">FT</div>}
             {active && <div className="text-[0.55rem] text-brand-bright font-black uppercase tracking-[0.1em] animate-pulse">{t('five01.yourTurn')}</div>}
@@ -806,7 +826,11 @@ export default function Football501() {
         {/* the stage — centre top */}
         <div className="relative shrink-0 flex flex-col gap-3 w-full max-w-2xl mx-auto pt-1">
           <div className="hidden lg:flex absolute -left-20 top-1 bottom-1 w-12 justify-center">
-            <DescentRail score={score} stops={[MAX_SCORE, ...history.filter(g => g.valid && g.playerIdx === currentPlayerIndex).map(g => g.newScore)]} />
+            <DescentRail
+              players={players}
+              currentPlayerIndex={currentPlayerIndex}
+              stops={[MAX_SCORE, ...history.filter(g => g.valid && g.playerIdx === currentPlayerIndex).map(g => g.newScore)]}
+            />
           </div>
           {/* question card — red spine, possible answers, skip (non-daily) */}
           <div className="bg-card border border-border-strong border-l-4 border-l-accent rounded-xl px-4 py-3 flex items-start justify-between gap-3">
