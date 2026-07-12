@@ -400,6 +400,14 @@ export default function FootballTicTacToe({ onBackToModes }) {
         </div>
       )}
 
+      {/* Unlimited reveals its answers on the board itself — no result card,
+          just a replay button once the round is over. */}
+      {mode === 'unlimited' && phase !== 'playing' && (
+        <button onClick={startUnlimited} className="mb-4 w-full max-w-lg bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl px-6 py-3 transition-colors">
+          {t('tictactoe.newGrid')}
+        </button>
+      )}
+
       {phase === 'playing' && selectedCell != null && (
         <>
           <div className="w-full max-w-lg mb-2 flex items-center justify-center gap-1.5 text-xs">
@@ -534,11 +542,11 @@ export default function FootballTicTacToe({ onBackToModes }) {
         </div>
       )}
 
-      {phase !== 'playing' && !showResult && (
+      {mode === 'daily' && phase !== 'playing' && !showResult && (
         <button onClick={() => setShowResult(true)} className="mt-2 mb-6 text-sm text-brand-bright hover:text-primary font-medium transition-colors">{t('common.seeResult')}</button>
       )}
 
-      <ResultModal open={showResult} onClose={() => setShowResult(false)} inline={mode === 'unlimited'}>
+      <ResultModal open={showResult && mode === 'daily'} onClose={() => setShowResult(false)}>
         <div className="w-full flex flex-col items-center text-center">
           <GameMotif id="tictactoe" className={`w-11 h-11 mb-2 ${phase === 'won' ? 'text-accent-bright' : 'text-dim'}`} />
           <h2 className={`score-number text-4xl mb-1 ${phase === 'won' ? 'text-success-bright' : 'text-danger-bright'}`}>

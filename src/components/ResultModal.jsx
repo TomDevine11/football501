@@ -1,25 +1,17 @@
-// Completion screen shown when a game ends — holds the result, stats, share,
+// Completion popup shown when a game ends — holds the result, stats, share,
 // play-again and "try another game" so the post-game actions are front-and-centre
-// instead of hidden below the board.
+// instead of hidden below the board. Closable (X or backdrop) to review the board.
 //
-// Two presentations from the same content:
-//   • overlay (default) — a closable modal (X or backdrop), used for the daily
-//     end screen and the locked "already played today" state.
-//   • inline — an in-flow card under the board, used by Unlimited mode so replay
-//     never gets interrupted by a popup.
+// Daily only: the daily end screen and the locked "already played today" state.
+// Unlimited never opens this — the board reveals its own answers in place and
+// offers a plain replay button, so practice isn't interrupted by a popup.
 //
-// Scroll structure (overlay): the fixed overlay scrolls, and an inner min-h-full
-// flex wrapper centres the card when it fits but lets it grow and scroll from the
-// top when taller than the viewport (avoids the classic flex-centre top-clip bug).
-export default function ResultModal({ open, onClose, inline = false, children }) {
+// Scroll structure: the fixed overlay scrolls, and an inner min-h-full flex
+// wrapper centres the card when it fits but lets it grow and scroll from the top
+// when the content is taller than the viewport (avoids the classic flex-centre
+// top-clipping bug).
+export default function ResultModal({ open, onClose, children }) {
   if (!open) return null
-  if (inline) {
-    return (
-      <div className="result-card w-full max-w-md mt-5 bg-surface border border-border-strong rounded-2xl shadow-modal px-5 py-6 flex flex-col items-center">
-        {children}
-      </div>
-    )
-  }
   return (
     <div
       className="fixed inset-0 z-modal bg-black/70 backdrop-blur-sm overflow-y-auto result-modal-in"
