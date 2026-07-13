@@ -11,7 +11,7 @@ import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallen
 import { recordResult, getStats, formGuide, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress, inProgressToday, finishedToday } from '../../data/dailyProgress'
 import { TILE } from '../../utils/shareImage'
-import { refineSuggestions } from '../../data/canonical/resolve.js'
+import { refineSuggestions, searchRegistry } from '../../data/canonical/resolve.js'
 import { accentVars } from '../../design/accents'
 
 const MAX_SCORE    = 501
@@ -626,9 +626,9 @@ export default function Football501() {
     const lower = input.toLowerCase()
     const localMatches = localPlayers.filter(p => !usedNames.has(p.name) && p.name.toLowerCase().includes(lower))
     const merge = (apiPlayers) => {
-      // Canonicalise + dedupe against the registry so misspellings and variant
-      // spellings ("Frank Ribery", "Ronaldo") don't clutter the dropdown.
-      const refined = refineSuggestions([...apiPlayers, ...localMatches], usedNames)
+      // Sources: the external API, the local list, AND the whole registry (so any
+      // valid player is findable by name/surname), canonicalised + deduped.
+      const refined = refineSuggestions([...apiPlayers, ...localMatches, ...searchRegistry(input)], usedNames)
       // Prefer OUR position (same source as the filter) so the badge never lies.
       return rankSuggestions(refined, input, knownNames).slice(0, 10)
         .map(p => ({ ...p, position: (challenge && challenge.badgeFor(p.name)) || p.position || null }))
