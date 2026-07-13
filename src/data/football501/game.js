@@ -138,11 +138,40 @@ const DAILY_POOL = CATALOG.filter(c =>
   !isNatPosCrossCut(c.filter) &&
   clubProminent(c))
 
+// The generated catalog stores every stat-variant of the same club-question
+// adjacently (e.g. Sevilla apps, then Sevilla apps+goals). Walking the pool one
+// index per day therefore served near-identical questions on consecutive days —
+// same club, only the stat changing. Round-robin interleave the pool by a coarse
+// "question shape" key (club · nationality · competition) so the day-to-day walk
+// never repeats a club/shape two days running.
+function spreadByShape(pool) {
+  // Group all questions about a given club together (any stat/nationality) so no
+  // two consecutive days ever share a club; club-less questions group by their
+  // nationality · competition shape.
+  const shapeKey = (c) => {
+    const f = c.filter || {}
+    return f.club != null ? `club:${f.club}` : `${f.nationality ?? ''}|${f.comp ?? c.comp ?? ''}`
+  }
+  const groups = new Map()
+  for (const c of pool) {
+    const k = shapeKey(c)
+    const g = groups.get(k)
+    if (g) g.push(c); else groups.set(k, [c])
+  }
+  const buckets = [...groups.values()]
+  const out = []
+  for (let i = 0, more = true; more; i++) {
+    more = false
+    for (const b of buckets) if (i < b.length) { out.push(b[i]); more = true }
+  }
+  return out
+}
+const DAILY_SEQUENCE = DAILY_POOL.length ? spreadByShape(DAILY_POOL) : CATALOG
+
 export function getDailyEntry() {
   const now = new Date()
   const day = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000)
-  const pool = DAILY_POOL.length ? DAILY_POOL : CATALOG
-  return pool[((day % pool.length) + pool.length) % pool.length]
+  return DAILY_SEQUENCE[((day % DAILY_SEQUENCE.length) + DAILY_SEQUENCE.length) % DAILY_SEQUENCE.length]
 }
 export const getDailyChallenge = () => makeChallenge(getDailyEntry())
 
