@@ -94,3 +94,49 @@ export function resolveAgainst(rawInput, candidateNames, usedNames = new Set()) 
   }
   return null
 }
+
+// ── Autocomplete cleanup ──────────────────────────────────────────────────
+// Suggestion dropdowns merge names from an external API + a local list, so
+// near-duplicates slip through: misspellings ("Frank Ribery" vs "Franck Ribéry"),
+// first-name variants ("Emil"/"Emile Smith-Rowe") and bare ambiguous tokens
+// ("Ronaldo"). Run the merged list through the registry so the dropdown only
+// offers clean, resolvable players:
+//   • a name the registry knows     → its canonical spelling
+//   • an ambiguous bare token        → the real people it could mean
+//   • a spelling variant of a known  → dropped (it could never validate)
+//   • a genuinely unknown name        → kept as-is (never hide a real answer)
+// Deduped by canonical identity. `list` is [{ name, flag, … }]; extra fields
+// (e.g. position) are preserved for resolved names.
+function fuzzyKey(name) {
+  const parts = normalize(name).split(' ').filter(Boolean)
+  return `${parts[parts.length - 1] || ''}|${(parts[0] || '').slice(0, 3)}`
+}
+export function refineSuggestions(list, usedNames = new Set()) {
+  const canon = new Map()       // normalized canonical name -> item
+  const knownFuzzy = new Set()  // fuzzy keys already covered by a known player
+  const unknowns = []
+  const addCanon = (name, src) => {
+    const key = normalize(name)
+    if (!canon.has(key)) canon.set(key, { ...src, name })
+    knownFuzzy.add(fuzzyKey(name))
+  }
+  for (const item of list) {
+    const r = resolve(item.name)
+    if (r.status === OK) addCanon(r.displayName, item)
+    else if (r.status === AMBIGUOUS) r.options.forEach(opt => addCanon(opt, {}))
+    else unknowns.push(item)
+  }
+  const out = []
+  const seen = new Set()
+  const push = (item) => {
+    const key = normalize(item.name)
+    if (!key || seen.has(key) || usedNames.has(item.name)) return
+    seen.add(key); out.push(item)
+  }
+  for (const item of canon.values()) push(item)
+  for (const item of unknowns) {
+    if (knownFuzzy.has(fuzzyKey(item.name))) continue // spelling variant of a known player → drop
+    push(item)                                        // genuinely non-registry player → keep
+  }
+  return out
+}

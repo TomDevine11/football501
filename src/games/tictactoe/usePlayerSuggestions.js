@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { players as localPlayers } from '../../data/players'
 import { getFlagFromNationality } from '../../utils/flags'
 import { normalizeName } from '../../data/tictactoe'
+import { refineSuggestions } from '../../data/canonical/resolve.js'
 
 const TSDB = 'https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p='
 const EXCLUDE_SPORTS = new Set(['basketball', 'american football', 'baseball', 'ice hockey', 'tennis', 'golf', 'cricket', 'rugby', 'swimming', 'athletics', 'motorsport', 'cycling', 'boxing', 'mma'])
@@ -44,14 +45,9 @@ export function usePlayerSuggestions(input, active, usedNames) {
       .filter(p => normalizeName(p.name).includes(norm))
       .map(p => ({ name: p.name, flag: p.flag }))
 
-    const seen = new Set()
-    const merged = []
-    for (const p of [...apiPlayers, ...localMatches]) {
-      const key = normalizeName(p.name)
-      if (seen.has(key) || usedNames.has(p.name)) continue
-      seen.add(key)
-      merged.push(p)
-    }
+    // Canonicalise + dedupe against the registry (drops misspellings, expands
+    // ambiguous bare tokens, collapses spelling variants to one clean player).
+    const merged = refineSuggestions([...apiPlayers, ...localMatches], usedNames)
 
     const rank = (name) => {
       const n = normalizeName(name)

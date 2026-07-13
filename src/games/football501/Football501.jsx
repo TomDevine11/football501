@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { players as localPlayers } from '../../data/players'
-import { getFlagFromNationality, formatDOB, normalizeName } from '../../utils/flags'
+import { getFlagFromNationality, formatDOB } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
 import GameChrome from '../../components/GameChrome'
@@ -11,6 +11,7 @@ import { getDailyChallenge, getDailyEntry, getRandomChallenge, makeCustomChallen
 import { recordResult, getStats, formGuide, matchdayNumber } from '../../data/dailyStats'
 import { loadDailyProgress, saveDailyProgress, inProgressToday, finishedToday } from '../../data/dailyProgress'
 import { TILE } from '../../utils/shareImage'
+import { refineSuggestions } from '../../data/canonical/resolve.js'
 import { accentVars } from '../../design/accents'
 
 const MAX_SCORE    = 501
@@ -625,10 +626,11 @@ export default function Football501() {
     const lower = input.toLowerCase()
     const localMatches = localPlayers.filter(p => !usedNames.has(p.name) && p.name.toLowerCase().includes(lower))
     const merge = (apiPlayers) => {
-      const apiNorms = new Set(apiPlayers.map(p => normalizeName(p.name)))
-      const extra = localMatches.filter(p => !apiNorms.has(normalizeName(p.name)))
+      // Canonicalise + dedupe against the registry so misspellings and variant
+      // spellings ("Frank Ribery", "Ronaldo") don't clutter the dropdown.
+      const refined = refineSuggestions([...apiPlayers, ...localMatches], usedNames)
       // Prefer OUR position (same source as the filter) so the badge never lies.
-      return rankSuggestions([...apiPlayers, ...extra], input, knownNames).slice(0, 10)
+      return rankSuggestions(refined, input, knownNames).slice(0, 10)
         .map(p => ({ ...p, position: (challenge && challenge.badgeFor(p.name)) || p.position || null }))
     }
 

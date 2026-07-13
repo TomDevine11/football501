@@ -154,7 +154,7 @@ export const players = [
   { name: 'Antoine Griezmann',    nationality: 'France',         flag: '🇫🇷', dob: '21 Mar 1991' },
   { name: 'Patrick Vieira',       nationality: 'France',         flag: '🇫🇷', dob: '23 Jun 1976' },
   { name: 'Robert Pires',         nationality: 'France',         flag: '🇫🇷', dob: '29 Oct 1973' },
-  { name: 'Frank Ribery',         nationality: 'France',         flag: '🇫🇷', dob: '7 Apr 1983' },
+  { name: 'Franck Ribéry',        nationality: 'France',         flag: '🇫🇷', dob: '7 Apr 1983' },
   { name: 'Olivier Giroud',       nationality: 'France',         flag: '🇫🇷', dob: '30 Sep 1986' },
   { name: 'Paul Pogba',           nationality: 'France',         flag: '🇫🇷', dob: '15 Mar 1993' },
   { name: "N'Golo Kante",         nationality: 'France',         flag: '🇫🇷', dob: '29 Mar 1991' },

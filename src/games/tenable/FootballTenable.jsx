@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo } from 'react'
 import { getDailyTenableQuestion, getRandomTenableQuestion } from '../../data/tenable'
 import { players as localPlayers } from '../../data/players'
 import { clubs } from '../../data/clubs'
+import { refineSuggestions } from '../../data/canonical/resolve.js'
 import { getFlagFromNationality } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
@@ -229,14 +230,9 @@ export default function FootballTenable() {
       .filter(p => normalize(p.name).includes(norm))
       .map(p => ({ name: p.name, flag: p.flag }))
 
-    const seen = new Set()
-    const merged = []
-    for (const p of [...apiPlayers, ...localMatches]) {
-      const key = normalize(p.name)
-      if (seen.has(key)) continue
-      seen.add(key)
-      merged.push(p)
-    }
+    // Canonicalise + dedupe against the registry (drops misspellings, expands
+    // ambiguous bare tokens, collapses spelling variants to one clean player).
+    const merged = refineSuggestions([...apiPlayers, ...localMatches])
 
     const rank = (name) => {
       const n = normalize(name)
