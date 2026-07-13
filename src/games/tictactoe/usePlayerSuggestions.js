@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { players as localPlayers } from '../../data/players'
 import { getFlagFromNationality } from '../../utils/flags'
 import { normalizeName } from '../../data/tictactoe'
-import { refineSuggestions } from '../../data/canonical/resolve.js'
+import { refineSuggestions, searchRegistry } from '../../data/canonical/resolve.js'
 
 const TSDB = 'https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p='
 const EXCLUDE_SPORTS = new Set(['basketball', 'american football', 'baseball', 'ice hockey', 'tennis', 'golf', 'cricket', 'rugby', 'swimming', 'athletics', 'motorsport', 'cycling', 'boxing', 'mma'])
@@ -45,18 +45,19 @@ export function usePlayerSuggestions(input, active, usedNames) {
       .filter(p => normalizeName(p.name).includes(norm))
       .map(p => ({ name: p.name, flag: p.flag }))
 
-    // Canonicalise + dedupe against the registry (drops misspellings, expands
-    // ambiguous bare tokens, collapses spelling variants to one clean player).
-    const merged = refineSuggestions([...apiPlayers, ...localMatches], usedNames)
+    // Sources: the external API, the local list, AND the whole registry (so any
+    // valid player is findable by name or surname). Canonicalised + deduped.
+    const merged = refineSuggestions([...apiPlayers, ...localMatches, ...searchRegistry(input)], usedNames)
 
     const rank = (name) => {
       const n = normalizeName(name)
-      if (n.startsWith(norm)) return 0
-      if (n.split(' ').some(w => w.startsWith(norm))) return 1
-      return 2
+      if (n === norm) return 0                                    // exact name / mononym
+      if (n.startsWith(norm)) return 1
+      if (n.split(' ').some(w => w.startsWith(norm))) return 2    // any word (incl. surname) prefix
+      return 3
     }
     merged.sort((a, b) => rank(a.name) - rank(b.name) || a.name.localeCompare(b.name))
-    return merged.slice(0, 8)
+    return merged.slice(0, 10)
   }, [input, active, apiPlayers, usedNames])
 
   return { suggestions, isSearching }

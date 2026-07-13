@@ -11,7 +11,8 @@
 // quietly picking one and scoring the wrong player.
 // ─────────────────────────────────────────────────────────────────────────
 
-import { allPlayers } from './facts.js'
+import { allPlayers, isNotable } from './facts.js'
+import { getFlagFromNationality } from '../../utils/flags.js'
 // normalize/surnameKeys live in a pure, registry-free module so build scripts can
 // reuse them; re-exported here so existing `from './resolve.js'` imports work.
 import { normalize, surnameKeys } from './normalize.js'
@@ -122,6 +123,39 @@ for (const [bare, opts] of Object.entries(AMBIGUOUS_ALIASES))
   for (const opt of opts)
     if (normalize(opt) === bare || normalize(opt).startsWith(bare + ' ')) primaryBare.set(normalize(opt), titleCase(bare))
 const asShown = (canonicalName) => primaryBare.get(normalize(canonicalName)) || canonicalName
+
+// Prefix/surname search over the WHOLE canonical registry, so every valid player
+// is findable by full name or surname — not just whatever the external API and
+// the small local list happen to return. Exact full-name and exact-surname
+// matches rank first, then more famous players. Cached index built once.
+let searchIndex = null
+function buildSearchIndex() {
+  searchIndex = allPlayers().map(p => ({
+    name: p.displayName,
+    norm: normalize(p.displayName),
+    surnames: surnameKeys(p.displayName),
+    flag: getFlagFromNationality(p.nationalities[0] || ''),
+    notable: isNotable(p),
+  }))
+}
+export function searchRegistry(query, limit = 14) {
+  if (!searchIndex) buildSearchIndex()
+  const q = normalize(query)
+  if (q.length < 2) return []
+  const hits = []
+  for (const p of searchIndex) {
+    if (!p.norm.includes(q)) continue
+    let rank
+    if (p.norm === q) rank = 0                                  // exact full name / mononym
+    else if (p.surnames.includes(q)) rank = 1                  // exact surname
+    else if (p.norm.startsWith(q)) rank = 2                    // full-name prefix
+    else if (p.norm.split(' ').some(w => w.startsWith(q))) rank = 3 // any-word prefix
+    else rank = 4                                              // substring
+    hits.push({ p, rank })
+  }
+  hits.sort((a, b) => a.rank - b.rank || (b.p.notable - a.p.notable) || a.p.name.localeCompare(b.p.name))
+  return hits.slice(0, limit).map(({ p }) => ({ name: p.name, flag: p.flag }))
+}
 
 export function refineSuggestions(list, usedNames = new Set()) {
   const canon = new Map()       // normalized canonical name -> item

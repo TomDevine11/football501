@@ -645,11 +645,11 @@ export default function Football501() {
         setSuggestions(merge(apiPlayers))
       } catch (err) {
         if (err.name === 'AbortError') return
-        setSuggestions(rankSuggestions(localMatches, input, knownNames).slice(0, 10))
+        setSuggestions(merge([]))
       } finally { setIsSearching(false) }
     }, 280)
 
-    setSuggestions(rankSuggestions(localMatches, input, knownNames).slice(0, 10))
+    setSuggestions(merge([]))
     return () => { clearTimeout(timer); controller.abort(); setIsSearching(false) }
   }, [input, phase]) // eslint-disable-line react-hooks/exhaustive-deps
 

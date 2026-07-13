@@ -39,6 +39,17 @@ const CLUB_ALIASES = {
 }
 const canonClub = name => CLUB_ALIASES[name] || name
 
+// Some famous players arrive under several names across sources (curated vs
+// Wikidata full/legal name), which fragments their facts and clutters search.
+// Merge those explicit aliases onto one canonical entry. EXPLICIT only — never
+// merges genuinely different people (e.g. "Ronaldo Vieira" stays itself).
+const PLAYER_ALIASES = {
+  'Ronaldo': 'Ronaldo Nazario',
+  'Ronaldo (Brazilian footballer)': 'Ronaldo Nazario',
+  'Ronaldo Rodrigues de Jesus': 'Ronaldo Nazario',
+}
+const canonPlayer = name => PLAYER_ALIASES[name] || name
+
 const importedClubLeague = {}
 for (const [club, league] of Object.entries(wikidata.clubLeague || {})) importedClubLeague[canonClub(club)] = league
 
@@ -57,6 +68,7 @@ const facts = []
 const factSeen = new Set()
 
 function ensurePlayer(displayName) {
+  displayName = canonPlayer(displayName)
   const id = playerId(displayName)
   if (!registry.has(id)) {
     registry.set(id, { id, displayName, nationalities: [], clubs: [], managers: [], trophies: [], positions: [], fame: 0, curated: false })
