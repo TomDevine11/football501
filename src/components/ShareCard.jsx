@@ -87,6 +87,8 @@ export function ShareCard({ text, card }) {
 
   // Share the generated Fixture Card image + game link; download it if the
   // platform can't share files (most desktops). No `card` → plain text share.
+  // The link goes in `text` (not `url`) so messaging apps show it as a plain
+  // tappable link rather than unfurling a second rich link-preview card.
   const handleShareImage = async () => {
     if (!card) return navigator.share({ text, url: SITE_URL }).catch(() => {})
     if (busy) return
@@ -95,7 +97,7 @@ export function ShareCard({ text, card }) {
       const blob = await renderShareCard(card)
       const file = new File([blob], 'triviverse.png', { type: 'image/png' })
       if (canShareFiles(file) && canNativeShare) {
-        await navigator.share({ files: [file], url: gameUrl })
+        await navigator.share({ files: [file], text: gameUrl })
       } else {
         downloadBlob(blob, 'triviverse.png')
         flashToast(t('share.imageSaved'))

@@ -181,20 +181,30 @@ export async function renderShareCard(card) {
   // ── Result headline + tiles, centred in the band below the challenge ──
   const contentW = SIZE - PAD * 2
   const rows = card.rows || []
+  const nRows = rows.length
   const maxCols = rows.reduce((m, r) => Math.max(m, r.length), 1)
   const gap = 14
-  const tile = Math.min(96, Math.floor((contentW - (maxCols - 1) * gap) / maxCols))
-  const gridH = rows.length ? rows.length * tile + (rows.length - 1) * gap : 0
 
   ctx.font = '700 48px Inter, sans-serif'
   const resLines = wrapLines(ctx, card.result, contentW, 2)
   const resBlockH = resLines.length * 56
-  const gapRG = gridH ? 36 : 0
+  const gapRG = nRows ? 36 : 0
 
   const bandTop = cursorY + 24
   const bandBottom = pillY - 44
+  const availH = bandBottom - bandTop
+
+  // Size tiles to fit BOTH the content width and the vertical band that's left
+  // once the headline is placed — so tall grids (a 6-row Wordle) never overflow
+  // into the footer.
+  const tileW = (contentW - (maxCols - 1) * gap) / maxCols
+  const gridMaxH = availH - resBlockH - gapRG
+  const tileH = nRows ? (gridMaxH - (nRows - 1) * gap) / nRows : Infinity
+  const tile = Math.floor(Math.max(24, Math.min(96, tileW, tileH)))
+  const gridH = nRows ? nRows * tile + (nRows - 1) * gap : 0
+
   const blockH = resBlockH + gapRG + gridH
-  const blockTop = bandTop + Math.max(0, (bandBottom - bandTop - blockH) / 2)
+  const blockTop = bandTop + Math.max(0, (availH - blockH) / 2)
 
   ctx.fillStyle = C.secondary
   resLines.forEach((ln, i) => ctx.fillText(ln, PAD, blockTop + 40 + i * 56))
