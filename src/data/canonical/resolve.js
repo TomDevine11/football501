@@ -111,14 +111,27 @@ function fuzzyKey(name) {
   const parts = normalize(name).split(' ').filter(Boolean)
   return `${parts[parts.length - 1] || ''}|${(parts[0] || '').slice(0, 3)}`
 }
+const titleCase = (s) => s.replace(/\b\w/g, c => c.toUpperCase())
+// For an ambiguous alias, the option the bare token is a prefix of (e.g. "Ronaldo
+// Nazário" for "ronaldo") is the "primary" meaning. Different game modes disagree
+// on that player's canonical spelling (501's rosters use the bare "Ronaldo",
+// TicTacToe's registry uses "Ronaldo Nazário"), but the BARE token validates in
+// both — so we display the primary option under its bare token.
+const primaryBare = new Map() // normalized full option -> bare display
+for (const [bare, opts] of Object.entries(AMBIGUOUS_ALIASES))
+  for (const opt of opts)
+    if (normalize(opt) === bare || normalize(opt).startsWith(bare + ' ')) primaryBare.set(normalize(opt), titleCase(bare))
+const asShown = (canonicalName) => primaryBare.get(normalize(canonicalName)) || canonicalName
+
 export function refineSuggestions(list, usedNames = new Set()) {
   const canon = new Map()       // normalized canonical name -> item
   const knownFuzzy = new Set()  // fuzzy keys already covered by a known player
   const unknowns = []
   const addCanon = (name, src) => {
-    const key = normalize(name)
-    if (!canon.has(key)) canon.set(key, { ...src, name })
-    knownFuzzy.add(fuzzyKey(name))
+    const shown = asShown(name)
+    const key = normalize(shown)
+    if (!canon.has(key)) canon.set(key, { ...src, name: shown })
+    knownFuzzy.add(fuzzyKey(shown))
   }
   for (const item of list) {
     const r = resolve(item.name)
