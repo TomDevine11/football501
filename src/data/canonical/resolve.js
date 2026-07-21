@@ -17,10 +17,21 @@ import { getFlagFromNationality } from '../../utils/flags.js'
 // reuse them; re-exported here so existing `from './resolve.js'` imports work.
 import { normalize, surnameKeys } from './normalize.js'
 export { normalize } from './normalize.js'
+// Phase 3 — the identity crosswalk backs name→id resolution for games migrating
+// to id-based validation.
+import crosswalk from './players.crosswalk.json'
 
 export const OK = 'ok'
 export const AMBIGUOUS = 'ambiguous'
 export const UNKNOWN = 'unknown'
+
+// Resolve a display name to its stable internal player id via the identity
+// crosswalk. Returns null for ambiguous (multiple candidates) or unknown names,
+// so callers can fall back to name matching. Additive — does not affect resolve().
+export function resolveNameToId(name) {
+  const hit = crosswalk.byAlias[normalize(name)]
+  return typeof hit === 'string' ? hit : null
+}
 
 // Bare tokens that genuinely refer to more than one real person — must prompt,
 // never auto-resolve. Curated, small, explicit.
@@ -128,6 +139,8 @@ const asShown = (canonicalName) => primaryBare.get(normalize(canonicalName)) || 
 // is findable by full name or surname — not just whatever the external API and
 // the small local list happen to return. Exact full-name and exact-surname
 // matches rank first, then more famous players. Cached index built once.
+// Map registry position terms → the compact badge codes the games display.
+const POS_BADGE = { goalkeeper: 'GK', defender: 'DEF', midfielder: 'MID', forward: 'FWD' }
 let searchIndex = null
 function buildSearchIndex() {
   searchIndex = allPlayers().map(p => ({
@@ -136,6 +149,9 @@ function buildSearchIndex() {
     surnames: surnameKeys(p.displayName),
     flag: getFlagFromNationality(p.nationalities[0] || ''),
     notable: isNotable(p),
+    id: p.id,
+    nationality: p.nationalities[0] || '',
+    position: POS_BADGE[(p.positions || [])[0]] || null,
   }))
 }
 export function searchRegistry(query, limit = 14) {
@@ -154,7 +170,7 @@ export function searchRegistry(query, limit = 14) {
     hits.push({ p, rank })
   }
   hits.sort((a, b) => a.rank - b.rank || (b.p.notable - a.p.notable) || a.p.name.localeCompare(b.p.name))
-  return hits.slice(0, limit).map(({ p }) => ({ name: p.name, flag: p.flag }))
+  return hits.slice(0, limit).map(({ p }) => ({ name: p.name, flag: p.flag, id: p.id, nationality: p.nationality, position: p.position }))
 }
 
 export function refineSuggestions(list, usedNames = new Set()) {
@@ -164,7 +180,9 @@ export function refineSuggestions(list, usedNames = new Set()) {
   const addCanon = (name, src) => {
     const shown = asShown(name)
     const key = normalize(shown)
-    if (!canon.has(key)) canon.set(key, { ...src, name: shown })
+    // Attach the stable id from the true canonical name (not the possibly-bare
+    // shown form), so suggestions carry identity and dedup by it.
+    if (!canon.has(key)) canon.set(key, { ...src, name: shown, id: resolveNameToId(name) })
     knownFuzzy.add(fuzzyKey(shown))
   }
   for (const item of list) {
@@ -176,7 +194,9 @@ export function refineSuggestions(list, usedNames = new Set()) {
   const out = []
   const seen = new Set()
   const push = (item) => {
-    const key = normalize(item.name)
+    // Dedup by stable id when known (catches two spellings of one player), else
+    // by normalized name (for non-registry suggestions).
+    const key = item.id || normalize(item.name)
     if (!key || seen.has(key) || usedNames.has(item.name)) return
     seen.add(key); out.push(item)
   }

@@ -6,6 +6,8 @@
 
 import data from './careers.generated.json'
 import { isSeniorTeam } from './teamFilter.js'
+import { resolveNameToId } from './canonical/resolve.js'
+import { fixName } from './canonical/nameFixes.js'
 
 export { matchesTarget } from './guessMatch.js'
 
@@ -32,7 +34,10 @@ export const TARGET_COUNT = ELIGIBLE.length
 
 function toRound(p) {
   const clubs = seniorClubs(p).map(c => ({ club: c.name, years: years(c) }))
-  return { name: p.name, clues: clubs }
+  const name = fixName(p.name)
+  // Phase 3: carry the stable player id (null when the name is ambiguous/unknown,
+  // in which case the game keeps name-based matching).
+  return { name, id: resolveNameToId(name), clues: clubs }
 }
 
 export function getRandomTarget() {

@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react'
 import Hub from './pages/Hub'
 import GamePage from './seo/GamePage'
 import ScrollToTop from './components/ScrollToTop'
+import Analytics from './components/Analytics'
 
 // Lazy-load each game so its (sometimes heavy) data only downloads on its own
 // route — the hub and lighter games stay fast, which helps Core Web Vitals.
@@ -15,6 +16,10 @@ const CareerPath = lazy(() => import('./games/careers/CareerPath'))
 const WorldCupSquads = lazy(() => import('./games/wcsquads/WorldCupSquads'))
 const HigherLower = lazy(() => import('./games/higherlower/HigherLower'))
 const FootballConnections = lazy(() => import('./games/connections/FootballConnections'))
+
+// Dev-only: identity foundation inspector (Phase 0). Not linked from the hub;
+// reads only the generated identity artifacts, touches no game code.
+const IdentityInspector = lazy(() => import('./dev/IdentityInspector'))
 
 const Loading = () => <div className="min-h-screen bg-canvas" aria-busy="true" />
 
@@ -37,10 +42,12 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <Analytics />
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<Hub />} />
           <Route path="/es" element={<Hub />} />
+          <Route path="/dev/identity" element={<IdentityInspector />} />
           {GAME_ROUTES.flatMap(({ path, el }) => [
             <Route key={path} path={path} element={el} />,
             <Route key={`es${path}`} path={`/es${path}`} element={el} />,

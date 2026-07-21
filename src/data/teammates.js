@@ -7,6 +7,8 @@
 import data from './teammates.generated.json'
 import { getFlagFromNationality } from '../utils/flags.js'
 import { isSeniorTeam } from './teamFilter.js'
+import { resolveNameToId } from './canonical/resolve.js'
+import { fixName } from './canonical/nameFixes.js'
 
 export { matchesTarget } from './guessMatch.js'
 
@@ -59,7 +61,9 @@ function buildClues(teammates) {
 }
 
 function toRound(p) {
-  return { name: p.name, clues: buildClues(p.teammates) }
+  const name = fixName(p.name)
+  // Phase 3: carry the stable player id (null when ambiguous/unknown → name match).
+  return { name, id: resolveNameToId(name), clues: buildClues(p.teammates) }
 }
 
 export function getRandomTarget() {

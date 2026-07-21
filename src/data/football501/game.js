@@ -17,6 +17,13 @@ import cat from './catalog.generated.json'
 import { resolveRoster, statLabel, titleFor } from './spec.js'
 import { checkoutCombos, maxDisjoint, SOLO_MIN_COMBOS } from './checkout.js'
 import { normalize, surnameKeys } from '../canonical/normalize.js'
+import crosswalk from '../canonical/players.crosswalk.json'
+import curatedDaily from './daily.curated.generated.json'
+
+// Phase 3: map our internal player id → Transfermarkt id (the key 501 rosters
+// use), so a suggestion picked by identity can be validated against the roster.
+const TM_BY_INTERNAL = new Map()
+for (const [ref, id] of Object.entries(crosswalk.byRef)) if (ref.startsWith('tm:')) TM_BY_INTERNAL.set(id, ref.slice(3))
 
 const CATALOG = cat.catalog
 
@@ -83,7 +90,20 @@ async function makeChallenge(spec) {
     id: spec.id, comp: spec.comp, title: titleOf(spec, fact), statLabel: statLabel(spec.stat),
     answers: spec.answers ?? Object.keys(roster).length,
     maxPlayers: spec.maxPlayers ?? maxDisjoint(values),
-    validate(rawName) {
+    validate(rawName, selectedId = null) {
+      // Phase 3: a picked suggestion validates by identity. Map its internal id
+      // to this roster's Transfermarkt key; if that player is on the roster it's
+      // valid, and if the id maps to a real (tm-known) player who ISN'T on the
+      // roster, it's authoritatively not-eligible — a namesake picked from the
+      // dropdown no longer sneaks in via a shared surname. Ids without a tm ref
+      // fall through to name/surname matching.
+      if (selectedId != null) {
+        const tm = TM_BY_INTERNAL.get(selectedId)
+        if (tm) {
+          const r = roster[tm]
+          return r ? { status: 'valid', name: r.name, value: r.value, breakdown: r.breakdown } : { status: 'not-eligible' }
+        }
+      }
       const hit = resolveIds(rosterIndex, rawName)
       if (!hit.size) return { status: 'not-eligible' }
       if (hit.size > 1) return { status: 'ambiguous', options: [...hit].map(id => roster[id].name).sort() }
@@ -103,6 +123,10 @@ async function makeChallenge(spec) {
       return { highest, checkouts, perfect }
     },
     badgeFor(name) { const hit = resolveIds(factIndex, name); return hit.size === 1 ? (posById.get([...hit][0]) || null) : null },
+    // Competition-accurate position by identity: map the internal id → tm id →
+    // this competition's position. Catches players whose canonical name doesn't
+    // match the Transfermarkt spelling (where badgeFor by name would miss).
+    badgeForId(id) { const tm = id != null ? TM_BY_INTERNAL.get(id) : null; return tm ? (posById.get(tm) || null) : null },
   }
 }
 export const makeCustomChallenge = (spec) => makeChallenge(spec)
@@ -166,7 +190,15 @@ function spreadByShape(pool) {
   }
   return out
 }
-const DAILY_SEQUENCE = DAILY_POOL.length ? spreadByShape(DAILY_POOL) : CATALOG
+// The daily now walks the hand-curated "playable only" pool
+// (501_updated_questions.txt), pre-sequenced with a club-cooldown schedule so the
+// same team never returns within ~6 days (see scripts/build-501-daily.mjs).
+// Falls back to the auto-generated pool if the curated file isn't built yet.
+const CATALOG_BY_ID = new Map(CATALOG.map(e => [e.id, e]))
+const CURATED_SEQUENCE = (curatedDaily.sequence || []).map(id => CATALOG_BY_ID.get(id)).filter(Boolean)
+const DAILY_SEQUENCE = CURATED_SEQUENCE.length
+  ? CURATED_SEQUENCE
+  : (DAILY_POOL.length ? spreadByShape(DAILY_POOL) : CATALOG)
 
 export function getDailyEntry() {
   const now = new Date()

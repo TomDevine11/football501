@@ -8,6 +8,7 @@
 // verified; the validator test enforces the answer-set shape in CI.
 
 import generated from './tenable.generated.json'
+import dailyAllow from './tenable.daily.generated.json'
 
 export const TENABLE_AS_OF = '2026-06-30'
 
@@ -486,7 +487,14 @@ export const TENABLE_QUESTIONS = [...HAND_AUTHORED, ...generated.questions]
 // the generated lists that cleared the build-time recognisability gate
 // (`daily`). This keeps Daily fair — no "name the exact top 10 obscure players"
 // — while Unlimited still draws from the full catalogue below.
-export const TENABLE_DAILY_QUESTIONS = TENABLE_QUESTIONS.filter(q => q.daily !== false)
+// Daily rotation is driven by tenable-daily-questions.txt (via the generated
+// allowlist): remove a line there + re-run scripts/build-tenable-daily.mjs and
+// that question stops appearing. Falls back to the built-in `daily` flag if the
+// allowlist is ever empty.
+const DAILY_ALLOW = new Set(dailyAllow.titles || [])
+export const TENABLE_DAILY_QUESTIONS = DAILY_ALLOW.size
+  ? TENABLE_QUESTIONS.filter(q => DAILY_ALLOW.has(q.title))
+  : TENABLE_QUESTIONS.filter(q => q.daily !== false)
 
 export function getTenableQuestionForDay(dayIndex) {
   const n = TENABLE_DAILY_QUESTIONS.length

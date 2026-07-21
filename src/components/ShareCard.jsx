@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { SITE_URL } from '../utils/site'
 import { renderShareCard, GAME_ROUTES } from '../utils/shareImage'
 import { useI18n } from '../i18n'
+import { track } from '../utils/analytics'
 
 export const ICON_BTN = 'w-10 h-10 flex items-center justify-center rounded-full bg-border hover:bg-border-strong text-primary transition-colors'
 
@@ -69,12 +70,15 @@ export function ShareCard({ text, card }) {
   const [busy, setBusy] = useState(false)
   const canNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function'
 
+  const onShare = (method) => track('share', { game: card?.gameId, method })
+
   const flashToast = (msg) => {
     setToast(msg)
     setTimeout(() => setToast(''), 2500)
   }
 
   const handleCopy = () => {
+    onShare('copy')
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
@@ -90,6 +94,7 @@ export function ShareCard({ text, card }) {
   // The link goes in `text` (not `url`) so messaging apps show it as a plain
   // tappable link rather than unfurling a second rich link-preview card.
   const handleShareImage = async () => {
+    onShare('image')
     if (!card) return navigator.share({ text, url: SITE_URL }).catch(() => {})
     if (busy) return
     setBusy(true)
@@ -108,10 +113,12 @@ export function ShareCard({ text, card }) {
   }
 
   const handleNativeShare = () => {
+    onShare('native')
     navigator.share({ text, url: SITE_URL }).catch(() => {})
   }
 
   const handleInstagram = () => {
+    onShare('instagram')
     navigator.clipboard.writeText(text).then(() => {
       flashToast(t('share.instagram'))
       window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
@@ -138,13 +145,13 @@ export function ShareCard({ text, card }) {
         </button>
       </div>
       <div className="flex items-center justify-center gap-2.5">
-        <a href={`https://wa.me/?text=${encodedText}`} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" className={ICON_BTN}>
+        <a href={`https://wa.me/?text=${encodedText}`} onClick={() => onShare('whatsapp')} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" className={ICON_BTN}>
           <WhatsAppIcon />
         </a>
-        <a href={`https://twitter.com/intent/tweet?text=${encodedText}`} target="_blank" rel="noopener noreferrer" aria-label="Share on X" className={ICON_BTN}>
+        <a href={`https://twitter.com/intent/tweet?text=${encodedText}`} onClick={() => onShare('x')} target="_blank" rel="noopener noreferrer" aria-label="Share on X" className={ICON_BTN}>
           <XIcon />
         </a>
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" className={ICON_BTN}>
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`} onClick={() => onShare('facebook')} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" className={ICON_BTN}>
           <FacebookIcon />
         </a>
         <button onClick={handleInstagram} aria-label="Share on Instagram" className={ICON_BTN}>

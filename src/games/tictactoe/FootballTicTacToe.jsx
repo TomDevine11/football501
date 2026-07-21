@@ -1,6 +1,7 @@
 import { Fragment, useState, useRef, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { getDailyGrid, getRandomGrid, categoryLabel, resolveGuess, findAssignment, normalizeName } from '../../data/tictactoe'
+import { resolveNameToId } from '../../data/canonical/resolve'
 import { refineSuggestions, searchRegistry } from '../../data/canonical/resolve.js'
 import { players as localPlayers } from '../../data/players'
 import { getFlagFromNationality } from '../../utils/flags'
@@ -225,10 +226,19 @@ export default function FootballTicTacToe({ onBackToModes }) {
     setTimeout(() => inputRef.current?.focus(), 0)
   }
 
-  const submitGuess = (text) => {
+  const submitGuess = (text, selectedId = null) => {
     if (selectedCell == null) return
     const candidates = grid.candidates[selectedCell]
-    const match = resolveGuess(text, candidates, usedNames)
+    // Phase 3: a picked suggestion validates by stable id against this cell's
+    // candidates. Free-typed text falls back to the (identity-backed) resolver,
+    // which also handles surname disambiguation by cell context.
+    let match = null
+    if (selectedId != null) {
+      for (const name of candidates) {
+        if (resolveNameToId(name) === selectedId && !usedNames.has(name)) { match = name; break }
+      }
+    }
+    if (!match) match = resolveGuess(text, candidates, usedNames)
 
     if (match) {
       setFilled(prev => ({ ...prev, [selectedCell]: match }))
@@ -250,7 +260,8 @@ export default function FootballTicTacToe({ onBackToModes }) {
     if (phase !== 'playing' || selectedCell == null) return
 
     if (highlightedIndex >= 0 && visibleSuggestions[highlightedIndex]) {
-      submitGuess(visibleSuggestions[highlightedIndex].name)
+      const s = visibleSuggestions[highlightedIndex]
+      submitGuess(s.name, s.id)
       return
     }
     if (!input.trim()) return
@@ -442,7 +453,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
                     id={`ttt-option-${i}`}
                     role="option"
                     aria-selected={i === highlightedIndex}
-                    onMouseDown={e => { e.preventDefault(); submitGuess(item.name) }}
+                    onMouseDown={e => { e.preventDefault(); submitGuess(item.name, item.id) }}
                     onMouseEnter={() => setHighlightedIndex(i)}
                     className={`w-full text-left px-4 py-2.5 transition-colors border-b border-border/50 last:border-0 ${i === highlightedIndex ? 'bg-canvas-high' : 'hover:bg-canvas-high/60'}`}
                   >

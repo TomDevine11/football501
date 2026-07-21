@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { players as localPlayers } from '../../data/players'
+import positionById from '../../data/canonical/players.positions.generated.json'
 import { getFlagFromNationality, formatDOB } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
@@ -629,9 +630,17 @@ export default function Football501() {
       // Sources: the external API, the local list, AND the whole registry (so any
       // valid player is findable by name/surname), canonicalised + deduped.
       const refined = refineSuggestions([...apiPlayers, ...localMatches, ...searchRegistry(input)], usedNames)
-      // Prefer OUR position (same source as the filter) so the badge never lies.
-      return rankSuggestions(refined, input, knownNames).slice(0, 10)
-        .map(p => ({ ...p, position: (challenge && challenge.badgeFor(p.name)) || p.position || null }))
+      // Prefer OUR competition position (by id first — exact — then by name) so
+      // the badge never lies; then the identity registry's position (Wikidata ∪
+      // Transfermarkt, ~88% coverage), then any API/local position.
+      return rankSuggestions(refined, input, knownNames)
+        .map(p => ({ ...p, position: (challenge && (challenge.badgeForId(p.id) || challenge.badgeFor(p.name))) || positionById[p.id] || p.position || null }))
+        // 501 only validates Transfermarkt players, who all have a position — so a
+        // position-less suggestion is almost always a non-TM player that's
+        // auto-invalid. Drop it so the list isn't padded with names that can never
+        // be right (real answers, from the API or registry, all carry a position).
+        .filter(p => p.position)
+        .slice(0, 10)
     }
 
     const timer = setTimeout(async () => {
@@ -728,7 +737,7 @@ export default function Football501() {
       setCurrentPlayerIndex(idx)
     }
 
-    const result = challenge.validate(player.name)
+    const result = challenge.validate(player.name, player.id)
     if (result.status !== 'valid') {
       const reason = result.status === 'ambiguous'
         ? t('five01.ambiguous', { options: result.options.join(' / ') })

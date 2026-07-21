@@ -12,6 +12,8 @@
 //   • form history — last results by day, driving the hub's form-guide dots
 //   • matchday points — see the tunable economy constants below
 
+import { track } from '../utils/analytics'
+
 const KEY = 'ftg-stats-v1'
 const VISIT_KEY = 'ftg-visits-v1'
 const POINTS_KEY = 'ftg-points-v1'
@@ -140,5 +142,7 @@ export function recordResult(game, won, score = null) {
   all[game] = s
   saveJson(KEY, all)
   awardPoints(all, won, s.currentStreak)
+  // Fires once per game per day (guarded above) → daily engagement signal.
+  track('game_complete', { game, won: !!won, streak: s.currentStreak })
   return s
 }

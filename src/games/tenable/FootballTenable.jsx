@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useMemo } from 'react'
 import { getDailyTenableQuestion, getRandomTenableQuestion } from '../../data/tenable'
 import { players as localPlayers } from '../../data/players'
 import { clubs } from '../../data/clubs'
-import { refineSuggestions, searchRegistry } from '../../data/canonical/resolve.js'
+import { refineSuggestions, searchRegistry, resolveNameToId } from '../../data/canonical/resolve.js'
 import { getFlagFromNationality } from '../../utils/flags'
 import { SITE_URL } from '../../utils/site'
 import { ShareCard } from '../../components/ShareCard'
@@ -142,6 +142,19 @@ export default function FootballTenable() {
 
   const answersByRank = Object.fromEntries(question.answers.map(a => [a.rank, a]))
 
+  // Phase 3: id index for player questions — a picked suggestion matches an
+  // answer/tie-pool entry by stable player id (fixes surname namesakes). Clubs
+  // and unresolved names keep name matching.
+  const { idToAnswer, idToPooled, unresolvedValid } = useMemo(() => {
+    const a = new Map(), p = new Map()
+    let unresolved = 0
+    if (question.type === 'player') {
+      for (const ans of question.answers) { const id = resolveNameToId(ans.text); if (id) a.set(id, ans); else unresolved++ }
+      for (const pl of question.tiePool || []) { const id = resolveNameToId(pl.text); if (id) p.set(id, pl); else unresolved++ }
+    }
+    return { idToAnswer: a, idToPooled: p, unresolvedValid: unresolved }
+  }, [question])
+
   // ── Bottom-to-rank "counting" reveal animation ─────────────────
   useEffect(() => {
     if (pendingRank == null) return
@@ -263,16 +276,31 @@ export default function FootballTenable() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const submitGuess = (text) => {
+  const submitGuess = (text, selectedId = null) => {
     const norm = normalize(text)
     if (!norm) return
-    const match = question.answers.find(a => answerMatches(norm, a))
-    // Tie-pool match: a player/club tied at the cutoff value who isn't one of the
-    // listed 10 but is equally valid for a joint slot (e.g. any club with 2
-    // European Cups). They fill the lowest unfilled tied slot.
-    const pooled = !match && question.tieValue != null
-      ? (question.tiePool || []).find(p => answerMatches(norm, p))
-      : null
+    // Phase 3: a picked suggestion (selectedId) on a player question matches by
+    // id. Authoritative when the whole valid set resolved (a namesake pick is
+    // rejected); otherwise fall back to name matching below.
+    const idMode = selectedId != null && question.type === 'player'
+    let match, pooled
+    if (idMode) {
+      match = idToAnswer.get(selectedId) || null
+      pooled = !match && question.tieValue != null ? (idToPooled.get(selectedId) || null) : null
+      if (!match && !pooled && unresolvedValid > 0) {
+        // some valid entries unresolved → can't trust id; fall back to name match
+        match = question.answers.find(a => answerMatches(norm, a))
+        pooled = !match && question.tieValue != null ? (question.tiePool || []).find(p => answerMatches(norm, p)) : null
+      }
+    } else {
+      match = question.answers.find(a => answerMatches(norm, a))
+      // Tie-pool match: a player/club tied at the cutoff value who isn't one of
+      // the listed 10 but is equally valid for a joint slot (e.g. any club with
+      // 2 European Cups). They fill the lowest unfilled tied slot.
+      pooled = !match && question.tieValue != null
+        ? (question.tiePool || []).find(p => answerMatches(norm, p))
+        : null
+    }
     const alreadyNamed = pooled && Object.values(revealed).some(a => normalize(a.text) === normalize(pooled.text))
     const tieSlot = pooled && !alreadyNamed
       ? question.answers.find(a => a.value === question.tieValue && !revealed[a.rank] && pendingRank !== a.rank)
@@ -305,14 +333,15 @@ export default function FootballTenable() {
     if (phase !== 'playing' || pendingRank != null) return
 
     if (highlightedIndex >= 0 && visibleSuggestions[highlightedIndex]) {
-      submitGuess(visibleSuggestions[highlightedIndex].name)
+      const s = visibleSuggestions[highlightedIndex]
+      submitGuess(s.name, s.id)
       return
     }
     if (!input.trim()) return
     submitGuess(input.trim())
   }
 
-  const handleSelectSuggestion = (item) => submitGuess(item.name)
+  const handleSelectSuggestion = (item) => submitGuess(item.name, item.id)
 
   const confirmGiveUp = () => {
     setGaveUp(true)

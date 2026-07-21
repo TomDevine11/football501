@@ -69,10 +69,10 @@ export default function WorldCupSquads() {
     saveDailyProgress('wcsquads', { named: [...named], revealed }, over)
   }, [mode, squad, named, revealed, over])
 
-  const submit = (text) => {
+  const submit = (text, selectedId = null) => {
     if (!active || !text.trim()) return
     setInput('')
-    const m = matchPlayer(matcher, text)
+    const m = matchPlayer(matcher, text, selectedId)
     if (!m) {
       setFlash(t('wcsquads.notInSquad')); setShake(true); setTimeout(() => setShake(false), 400)
     } else if (named.has(m)) {
@@ -86,7 +86,7 @@ export default function WorldCupSquads() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!active) return
-    if (highlightedIndex >= 0 && visibleSuggestions[highlightedIndex]) { submit(visibleSuggestions[highlightedIndex].name); return }
+    if (highlightedIndex >= 0 && visibleSuggestions[highlightedIndex]) { const s = visibleSuggestions[highlightedIndex]; submit(s.name, s.id); return }
     if (input.trim()) submit(input.trim())
   }
   const handleKeyDown = (e) => {
@@ -200,7 +200,7 @@ export default function WorldCupSquads() {
           {visibleSuggestions.length > 0 && (
             <div ref={dropdownRef} id="wc-suggestions" role="listbox" className="absolute top-full left-0 right-0 mt-1 bg-surface border border-border-strong rounded-xl overflow-hidden z-dropdown shadow-float">
               {visibleSuggestions.map((item, i) => (
-                <button key={item.name} type="button" role="option" aria-selected={i === highlightedIndex} onMouseDown={e => { e.preventDefault(); submit(item.name) }} onMouseEnter={() => setHighlightedIndex(i)}
+                <button key={item.name} type="button" role="option" aria-selected={i === highlightedIndex} onMouseDown={e => { e.preventDefault(); submit(item.name, item.id) }} onMouseEnter={() => setHighlightedIndex(i)}
                   className={`w-full text-left px-4 py-2.5 transition-colors border-b border-border/50 last:border-0 ${i === highlightedIndex ? 'bg-border' : 'hover:bg-border/60'}`}>
                   <div className="flex items-center gap-2">
                     {item.flag && <span className="text-base shrink-0">{item.flag}</span>}

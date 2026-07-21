@@ -1,0 +1,496 @@
+# 501 — UPDATED DAILY QUESTION SET (playable only)
+#
+# Pruned to DOABLE questions only: each has 25+ checkout routes to 501 using
+# players a fan would recognise. Removed 30 impossible + 65 thin/borderline.
+#
+# PART A — 15 big clubs · position + home-nation   (194)
+# PART B — 18 more clubs · all players             (64)
+# PART C — Champions League: elite by position + all-players (91) · 7 more, all-players (21)
+#
+# Format:  League · Stat · Scope        TOTAL: 370
+
+# ============================================================
+# PART A — big clubs (position + home-nation)
+# ============================================================
+
+== Manchester City (Premier League) ==
+1. Premier League · Appearances · Manchester City defenders
+2. Premier League · Appearances + Goals · Manchester City defenders
+3. Premier League · Appearances − Goals · Manchester City defenders
+4. Premier League · Appearances · Manchester City midfielders
+5. Premier League · Appearances + Goals · Manchester City midfielders
+6. Premier League · Appearances − Goals · Manchester City midfielders
+7. Premier League · Goals · Manchester City forwards
+8. Premier League · Appearances · Manchester City forwards
+9. Premier League · Appearances + Goals · Manchester City forwards
+10. Premier League · Appearances − Goals · Manchester City forwards
+11. Premier League · Appearances · English Manchester City players
+12. Premier League · Appearances + Goals · English Manchester City players
+13. Premier League · Appearances − Goals · English Manchester City players
+
+== Manchester United (Premier League) ==
+14. Premier League · Appearances · Manchester United defenders
+15. Premier League · Appearances + Goals · Manchester United defenders
+16. Premier League · Appearances − Goals · Manchester United defenders
+17. Premier League · Appearances · Manchester United midfielders
+18. Premier League · Appearances + Goals · Manchester United midfielders
+19. Premier League · Appearances − Goals · Manchester United midfielders
+20. Premier League · Goals · Manchester United forwards
+21. Premier League · Appearances · Manchester United forwards
+22. Premier League · Appearances + Goals · Manchester United forwards
+23. Premier League · Appearances − Goals · Manchester United forwards
+24. Premier League · Appearances · English Manchester United players
+25. Premier League · Appearances + Goals · English Manchester United players
+26. Premier League · Appearances − Goals · English Manchester United players
+
+== Chelsea (Premier League) ==
+27. Premier League · Appearances · Chelsea defenders
+28. Premier League · Appearances + Goals · Chelsea defenders
+29. Premier League · Appearances − Goals · Chelsea defenders
+30. Premier League · Appearances · Chelsea midfielders
+31. Premier League · Appearances + Goals · Chelsea midfielders
+32. Premier League · Appearances − Goals · Chelsea midfielders
+33. Premier League · Goals · Chelsea forwards
+34. Premier League · Appearances · Chelsea forwards
+35. Premier League · Appearances + Goals · Chelsea forwards
+36. Premier League · Appearances − Goals · Chelsea forwards
+37. Premier League · Appearances · English Chelsea players
+38. Premier League · Appearances + Goals · English Chelsea players
+39. Premier League · Appearances − Goals · English Chelsea players
+
+== Arsenal (Premier League) ==
+40. Premier League · Appearances · Arsenal defenders
+41. Premier League · Appearances + Goals · Arsenal defenders
+42. Premier League · Appearances − Goals · Arsenal defenders
+43. Premier League · Appearances · Arsenal midfielders
+44. Premier League · Appearances + Goals · Arsenal midfielders
+45. Premier League · Appearances − Goals · Arsenal midfielders
+46. Premier League · Goals · Arsenal forwards
+47. Premier League · Appearances · Arsenal forwards
+48. Premier League · Appearances + Goals · Arsenal forwards
+49. Premier League · Appearances − Goals · Arsenal forwards
+50. Premier League · Appearances · English Arsenal players
+51. Premier League · Appearances + Goals · English Arsenal players
+52. Premier League · Appearances − Goals · English Arsenal players
+
+== Tottenham Hotspur (Premier League) ==
+53. Premier League · Appearances · Tottenham Hotspur defenders
+54. Premier League · Appearances + Goals · Tottenham Hotspur defenders
+55. Premier League · Appearances − Goals · Tottenham Hotspur defenders
+56. Premier League · Appearances · Tottenham Hotspur midfielders
+57. Premier League · Appearances + Goals · Tottenham Hotspur midfielders
+58. Premier League · Appearances − Goals · Tottenham Hotspur midfielders
+59. Premier League · Appearances · Tottenham Hotspur forwards
+60. Premier League · Appearances + Goals · Tottenham Hotspur forwards
+61. Premier League · Appearances − Goals · Tottenham Hotspur forwards
+62. Premier League · Appearances · English Tottenham Hotspur players
+63. Premier League · Appearances + Goals · English Tottenham Hotspur players
+64. Premier League · Appearances − Goals · English Tottenham Hotspur players
+
+== Liverpool (Premier League) ==
+65. Premier League · Appearances · Liverpool defenders
+66. Premier League · Appearances + Goals · Liverpool defenders
+67. Premier League · Appearances − Goals · Liverpool defenders
+68. Premier League · Appearances · Liverpool midfielders
+69. Premier League · Appearances + Goals · Liverpool midfielders
+70. Premier League · Appearances − Goals · Liverpool midfielders
+71. Premier League · Goals · Liverpool forwards
+72. Premier League · Appearances · Liverpool forwards
+73. Premier League · Appearances + Goals · Liverpool forwards
+74. Premier League · Appearances − Goals · Liverpool forwards
+75. Premier League · Appearances · English Liverpool players
+76. Premier League · Appearances + Goals · English Liverpool players
+77. Premier League · Appearances − Goals · English Liverpool players
+
+== Barcelona (La Liga) ==
+78. La Liga · Appearances · Barcelona defenders
+79. La Liga · Appearances + Goals · Barcelona defenders
+80. La Liga · Appearances − Goals · Barcelona defenders
+81. La Liga · Appearances · Barcelona midfielders
+82. La Liga · Appearances + Goals · Barcelona midfielders
+83. La Liga · Appearances − Goals · Barcelona midfielders
+84. La Liga · Goals · Barcelona forwards
+85. La Liga · Appearances · Barcelona forwards
+86. La Liga · Appearances + Goals · Barcelona forwards
+87. La Liga · Appearances − Goals · Barcelona forwards
+88. La Liga · Appearances · Spanish Barcelona players
+89. La Liga · Appearances + Goals · Spanish Barcelona players
+90. La Liga · Appearances − Goals · Spanish Barcelona players
+
+== Real Madrid (La Liga) ==
+91. La Liga · Appearances · Real Madrid defenders
+92. La Liga · Appearances + Goals · Real Madrid defenders
+93. La Liga · Appearances − Goals · Real Madrid defenders
+94. La Liga · Appearances · Real Madrid midfielders
+95. La Liga · Appearances + Goals · Real Madrid midfielders
+96. La Liga · Appearances − Goals · Real Madrid midfielders
+97. La Liga · Appearances · Real Madrid forwards
+98. La Liga · Appearances + Goals · Real Madrid forwards
+99. La Liga · Appearances − Goals · Real Madrid forwards
+100. La Liga · Appearances · Spanish Real Madrid players
+101. La Liga · Appearances + Goals · Spanish Real Madrid players
+102. La Liga · Appearances − Goals · Spanish Real Madrid players
+
+== Atlético Madrid (La Liga) ==
+103. La Liga · Appearances · Atlético Madrid defenders
+104. La Liga · Appearances + Goals · Atlético Madrid defenders
+105. La Liga · Appearances − Goals · Atlético Madrid defenders
+106. La Liga · Appearances · Atlético Madrid midfielders
+107. La Liga · Appearances + Goals · Atlético Madrid midfielders
+108. La Liga · Appearances − Goals · Atlético Madrid midfielders
+109. La Liga · Goals · Atlético Madrid forwards
+110. La Liga · Appearances · Atlético Madrid forwards
+111. La Liga · Appearances + Goals · Atlético Madrid forwards
+112. La Liga · Appearances − Goals · Atlético Madrid forwards
+113. La Liga · Appearances · Spanish Atlético Madrid players
+114. La Liga · Appearances + Goals · Spanish Atlético Madrid players
+115. La Liga · Appearances − Goals · Spanish Atlético Madrid players
+
+== Bayern Munich (Bundesliga) ==
+116. Bundesliga · Appearances · Bayern Munich defenders
+117. Bundesliga · Appearances + Goals · Bayern Munich defenders
+118. Bundesliga · Appearances − Goals · Bayern Munich defenders
+119. Bundesliga · Appearances · Bayern Munich midfielders
+120. Bundesliga · Appearances + Goals · Bayern Munich midfielders
+121. Bundesliga · Appearances − Goals · Bayern Munich midfielders
+122. Bundesliga · Goals · Bayern Munich forwards
+123. Bundesliga · Appearances · Bayern Munich forwards
+124. Bundesliga · Appearances + Goals · Bayern Munich forwards
+125. Bundesliga · Appearances − Goals · Bayern Munich forwards
+126. Bundesliga · Goals · German Bayern Munich players
+127. Bundesliga · Appearances · German Bayern Munich players
+128. Bundesliga · Appearances + Goals · German Bayern Munich players
+129. Bundesliga · Appearances − Goals · German Bayern Munich players
+
+== Borussia Dortmund (Bundesliga) ==
+130. Bundesliga · Appearances · Borussia Dortmund defenders
+131. Bundesliga · Appearances + Goals · Borussia Dortmund defenders
+132. Bundesliga · Appearances − Goals · Borussia Dortmund defenders
+133. Bundesliga · Appearances · Borussia Dortmund midfielders
+134. Bundesliga · Appearances + Goals · Borussia Dortmund midfielders
+135. Bundesliga · Appearances − Goals · Borussia Dortmund midfielders
+136. Bundesliga · Goals · Borussia Dortmund forwards
+137. Bundesliga · Appearances · Borussia Dortmund forwards
+138. Bundesliga · Appearances + Goals · Borussia Dortmund forwards
+139. Bundesliga · Appearances − Goals · Borussia Dortmund forwards
+140. Bundesliga · Appearances · German Borussia Dortmund players
+141. Bundesliga · Appearances + Goals · German Borussia Dortmund players
+142. Bundesliga · Appearances − Goals · German Borussia Dortmund players
+
+== Paris Saint-Germain (Ligue 1) ==
+143. Ligue 1 · Appearances · Paris Saint-Germain defenders
+144. Ligue 1 · Appearances + Goals · Paris Saint-Germain defenders
+145. Ligue 1 · Appearances − Goals · Paris Saint-Germain defenders
+146. Ligue 1 · Appearances · Paris Saint-Germain midfielders
+147. Ligue 1 · Appearances + Goals · Paris Saint-Germain midfielders
+148. Ligue 1 · Appearances − Goals · Paris Saint-Germain midfielders
+149. Ligue 1 · Goals · Paris Saint-Germain forwards
+150. Ligue 1 · Appearances · Paris Saint-Germain forwards
+151. Ligue 1 · Appearances + Goals · Paris Saint-Germain forwards
+152. Ligue 1 · Appearances − Goals · Paris Saint-Germain forwards
+153. Ligue 1 · Appearances · French Paris Saint-Germain players
+154. Ligue 1 · Appearances + Goals · French Paris Saint-Germain players
+155. Ligue 1 · Appearances − Goals · French Paris Saint-Germain players
+
+== Juventus (Serie A) ==
+156. Serie A · Appearances · Juventus defenders
+157. Serie A · Appearances + Goals · Juventus defenders
+158. Serie A · Appearances − Goals · Juventus defenders
+159. Serie A · Appearances · Juventus midfielders
+160. Serie A · Appearances + Goals · Juventus midfielders
+161. Serie A · Appearances − Goals · Juventus midfielders
+162. Serie A · Goals · Juventus forwards
+163. Serie A · Appearances · Juventus forwards
+164. Serie A · Appearances + Goals · Juventus forwards
+165. Serie A · Appearances − Goals · Juventus forwards
+166. Serie A · Appearances · Italian Juventus players
+167. Serie A · Appearances + Goals · Italian Juventus players
+168. Serie A · Appearances − Goals · Italian Juventus players
+
+== AC Milan (Serie A) ==
+169. Serie A · Appearances · AC Milan defenders
+170. Serie A · Appearances + Goals · AC Milan defenders
+171. Serie A · Appearances − Goals · AC Milan defenders
+172. Serie A · Appearances · AC Milan midfielders
+173. Serie A · Appearances + Goals · AC Milan midfielders
+174. Serie A · Appearances − Goals · AC Milan midfielders
+175. Serie A · Goals · AC Milan forwards
+176. Serie A · Appearances · AC Milan forwards
+177. Serie A · Appearances + Goals · AC Milan forwards
+178. Serie A · Appearances − Goals · AC Milan forwards
+179. Serie A · Appearances · Italian AC Milan players
+180. Serie A · Appearances + Goals · Italian AC Milan players
+181. Serie A · Appearances − Goals · Italian AC Milan players
+
+== Inter Milan (Serie A) ==
+182. Serie A · Appearances · Inter Milan defenders
+183. Serie A · Appearances + Goals · Inter Milan defenders
+184. Serie A · Appearances − Goals · Inter Milan defenders
+185. Serie A · Appearances · Inter Milan midfielders
+186. Serie A · Appearances + Goals · Inter Milan midfielders
+187. Serie A · Appearances − Goals · Inter Milan midfielders
+188. Serie A · Goals · Inter Milan forwards
+189. Serie A · Appearances · Inter Milan forwards
+190. Serie A · Appearances + Goals · Inter Milan forwards
+191. Serie A · Appearances − Goals · Inter Milan forwards
+192. Serie A · Appearances · Italian Inter Milan players
+193. Serie A · Appearances + Goals · Italian Inter Milan players
+194. Serie A · Appearances − Goals · Italian Inter Milan players
+
+# ============================================================
+# PART B — more clubs (all players)
+# ============================================================
+
+== Everton (Premier League) ==
+195. Premier League · Goals · Everton players
+196. Premier League · Appearances · Everton players
+197. Premier League · Appearances + Goals · Everton players
+198. Premier League · Appearances − Goals · Everton players
+
+== Aston Villa (Premier League) ==
+199. Premier League · Goals · Aston Villa players
+200. Premier League · Appearances · Aston Villa players
+201. Premier League · Appearances + Goals · Aston Villa players
+202. Premier League · Appearances − Goals · Aston Villa players
+
+== West Ham United (Premier League) ==
+203. Premier League · Goals · West Ham United players
+204. Premier League · Appearances · West Ham United players
+205. Premier League · Appearances + Goals · West Ham United players
+206. Premier League · Appearances − Goals · West Ham United players
+
+== Newcastle United (Premier League) ==
+207. Premier League · Goals · Newcastle United players
+208. Premier League · Appearances · Newcastle United players
+209. Premier League · Appearances + Goals · Newcastle United players
+210. Premier League · Appearances − Goals · Newcastle United players
+
+== Crystal Palace (Premier League) ==
+211. Premier League · Appearances · Crystal Palace players
+212. Premier League · Appearances + Goals · Crystal Palace players
+213. Premier League · Appearances − Goals · Crystal Palace players
+
+== Leicester City (Premier League) ==
+214. Premier League · Appearances · Leicester City players
+215. Premier League · Appearances + Goals · Leicester City players
+216. Premier League · Appearances − Goals · Leicester City players
+
+== AS Monaco (Ligue 1) ==
+217. Ligue 1 · Goals · AS Monaco players
+218. Ligue 1 · Appearances · AS Monaco players
+219. Ligue 1 · Appearances + Goals · AS Monaco players
+220. Ligue 1 · Appearances − Goals · AS Monaco players
+
+== Olympique Marseille (Ligue 1) ==
+221. Ligue 1 · Goals · Olympique Marseille players
+222. Ligue 1 · Appearances · Olympique Marseille players
+223. Ligue 1 · Appearances + Goals · Olympique Marseille players
+224. Ligue 1 · Appearances − Goals · Olympique Marseille players
+
+== Olympique Lyon (Ligue 1) ==
+225. Ligue 1 · Goals · Olympique Lyon players
+226. Ligue 1 · Appearances · Olympique Lyon players
+227. Ligue 1 · Appearances + Goals · Olympique Lyon players
+228. Ligue 1 · Appearances − Goals · Olympique Lyon players
+
+== Sevilla (La Liga) ==
+229. La Liga · Goals · Sevilla players
+230. La Liga · Appearances · Sevilla players
+231. La Liga · Appearances + Goals · Sevilla players
+232. La Liga · Appearances − Goals · Sevilla players
+
+== Athletic Bilbao (La Liga) ==
+233. La Liga · Goals · Athletic Bilbao players
+
+== Lazio (Serie A) ==
+234. Serie A · Goals · Lazio players
+235. Serie A · Appearances · Lazio players
+236. Serie A · Appearances + Goals · Lazio players
+237. Serie A · Appearances − Goals · Lazio players
+
+== Napoli (Serie A) ==
+238. Serie A · Goals · Napoli players
+239. Serie A · Appearances · Napoli players
+240. Serie A · Appearances + Goals · Napoli players
+241. Serie A · Appearances − Goals · Napoli players
+
+== Wolfsburg (Bundesliga) ==
+242. Bundesliga · Appearances · Wolfsburg players
+243. Bundesliga · Appearances + Goals · Wolfsburg players
+244. Bundesliga · Appearances − Goals · Wolfsburg players
+
+== RB Leipzig (Bundesliga) ==
+245. Bundesliga · Appearances · RB Leipzig players
+246. Bundesliga · Appearances + Goals · RB Leipzig players
+247. Bundesliga · Appearances − Goals · RB Leipzig players
+
+== Schalke 04 (Bundesliga) ==
+248. Bundesliga · Appearances · Schalke 04 players
+249. Bundesliga · Appearances + Goals · Schalke 04 players
+250. Bundesliga · Appearances − Goals · Schalke 04 players
+
+== Roma (Serie A) ==
+251. Serie A · Goals · Roma players
+252. Serie A · Appearances · Roma players
+253. Serie A · Appearances + Goals · Roma players
+254. Serie A · Appearances − Goals · Roma players
+
+== Bayer Leverkusen (Bundesliga) ==
+255. Bundesliga · Goals · Bayer Leverkusen players
+256. Bundesliga · Appearances · Bayer Leverkusen players
+257. Bundesliga · Appearances + Goals · Bayer Leverkusen players
+258. Bundesliga · Appearances − Goals · Bayer Leverkusen players
+
+# ============================================================
+# PART C — Champions League
+# ============================================================
+
+# --- Group A: elite clubs · all players + def/mid/fwd ---
+
+== Real Madrid (Champions League) ==
+259. Champions League · Appearances · Real Madrid players
+260. Champions League · Appearances + Goals · Real Madrid players
+261. Champions League · Appearances − Goals · Real Madrid players
+262. Champions League · Appearances · Real Madrid defenders
+263. Champions League · Appearances + Goals · Real Madrid defenders
+264. Champions League · Appearances − Goals · Real Madrid defenders
+265. Champions League · Appearances · Real Madrid midfielders
+266. Champions League · Appearances + Goals · Real Madrid midfielders
+267. Champions League · Appearances − Goals · Real Madrid midfielders
+268. Champions League · Appearances · Real Madrid forwards
+269. Champions League · Appearances + Goals · Real Madrid forwards
+
+== Barcelona (Champions League) ==
+270. Champions League · Appearances · Barcelona players
+271. Champions League · Appearances + Goals · Barcelona players
+272. Champions League · Appearances − Goals · Barcelona players
+273. Champions League · Appearances · Barcelona defenders
+274. Champions League · Appearances + Goals · Barcelona defenders
+275. Champions League · Appearances − Goals · Barcelona defenders
+276. Champions League · Appearances · Barcelona midfielders
+277. Champions League · Appearances + Goals · Barcelona midfielders
+278. Champions League · Appearances − Goals · Barcelona midfielders
+279. Champions League · Appearances · Barcelona forwards
+280. Champions League · Appearances + Goals · Barcelona forwards
+
+== Bayern Munich (Champions League) ==
+281. Champions League · Appearances · Bayern Munich players
+282. Champions League · Appearances + Goals · Bayern Munich players
+283. Champions League · Appearances − Goals · Bayern Munich players
+284. Champions League · Appearances · Bayern Munich defenders
+285. Champions League · Appearances + Goals · Bayern Munich defenders
+286. Champions League · Appearances − Goals · Bayern Munich defenders
+287. Champions League · Appearances · Bayern Munich midfielders
+288. Champions League · Appearances + Goals · Bayern Munich midfielders
+289. Champions League · Appearances − Goals · Bayern Munich midfielders
+290. Champions League · Appearances · Bayern Munich forwards
+291. Champions League · Appearances + Goals · Bayern Munich forwards
+292. Champions League · Appearances − Goals · Bayern Munich forwards
+
+== Liverpool (Champions League) ==
+293. Champions League · Appearances · Liverpool players
+294. Champions League · Appearances + Goals · Liverpool players
+295. Champions League · Appearances − Goals · Liverpool players
+296. Champions League · Appearances · Liverpool midfielders
+297. Champions League · Appearances + Goals · Liverpool midfielders
+298. Champions League · Appearances − Goals · Liverpool midfielders
+299. Champions League · Appearances + Goals · Liverpool forwards
+
+== Manchester City (Champions League) ==
+300. Champions League · Appearances · Manchester City players
+301. Champions League · Appearances + Goals · Manchester City players
+302. Champions League · Appearances − Goals · Manchester City players
+303. Champions League · Appearances · Manchester City defenders
+304. Champions League · Appearances + Goals · Manchester City defenders
+305. Champions League · Appearances − Goals · Manchester City defenders
+306. Champions League · Appearances · Manchester City midfielders
+307. Champions League · Appearances + Goals · Manchester City midfielders
+308. Champions League · Appearances − Goals · Manchester City midfielders
+309. Champions League · Appearances + Goals · Manchester City forwards
+
+== Manchester United (Champions League) ==
+310. Champions League · Appearances · Manchester United players
+311. Champions League · Appearances + Goals · Manchester United players
+312. Champions League · Appearances − Goals · Manchester United players
+313. Champions League · Appearances · Manchester United defenders
+314. Champions League · Appearances + Goals · Manchester United defenders
+315. Champions League · Appearances − Goals · Manchester United defenders
+316. Champions League · Appearances · Manchester United midfielders
+317. Champions League · Appearances + Goals · Manchester United midfielders
+318. Champions League · Appearances − Goals · Manchester United midfielders
+319. Champions League · Appearances + Goals · Manchester United forwards
+
+== Chelsea (Champions League) ==
+320. Champions League · Appearances · Chelsea players
+321. Champions League · Appearances + Goals · Chelsea players
+322. Champions League · Appearances − Goals · Chelsea players
+323. Champions League · Appearances · Chelsea defenders
+324. Champions League · Appearances + Goals · Chelsea defenders
+325. Champions League · Appearances − Goals · Chelsea defenders
+326. Champions League · Appearances · Chelsea midfielders
+327. Champions League · Appearances + Goals · Chelsea midfielders
+328. Champions League · Appearances · Chelsea forwards
+329. Champions League · Appearances + Goals · Chelsea forwards
+
+== Juventus (Champions League) ==
+330. Champions League · Appearances · Juventus players
+331. Champions League · Appearances + Goals · Juventus players
+332. Champions League · Appearances − Goals · Juventus players
+333. Champions League · Appearances · Juventus defenders
+334. Champions League · Appearances + Goals · Juventus defenders
+335. Champions League · Appearances − Goals · Juventus defenders
+336. Champions League · Appearances · Juventus midfielders
+337. Champions League · Appearances + Goals · Juventus midfielders
+338. Champions League · Appearances − Goals · Juventus midfielders
+339. Champions League · Appearances + Goals · Juventus forwards
+
+== AC Milan (Champions League) ==
+340. Champions League · Appearances · AC Milan players
+341. Champions League · Appearances + Goals · AC Milan players
+342. Champions League · Appearances − Goals · AC Milan players
+343. Champions League · Appearances + Goals · AC Milan midfielders
+
+== Inter Milan (Champions League) ==
+344. Champions League · Appearances · Inter Milan players
+345. Champions League · Appearances + Goals · Inter Milan players
+346. Champions League · Appearances − Goals · Inter Milan players
+347. Champions League · Appearances · Inter Milan defenders
+348. Champions League · Appearances + Goals · Inter Milan defenders
+349. Champions League · Appearances − Goals · Inter Milan defenders
+
+# --- Group B: all players ---
+
+== Arsenal (Champions League) ==
+350. Champions League · Appearances · Arsenal players
+351. Champions League · Appearances + Goals · Arsenal players
+352. Champions League · Appearances − Goals · Arsenal players
+
+== Tottenham Hotspur (Champions League) ==
+353. Champions League · Appearances · Tottenham Hotspur players
+354. Champions League · Appearances + Goals · Tottenham Hotspur players
+355. Champions League · Appearances − Goals · Tottenham Hotspur players
+
+== Borussia Dortmund (Champions League) ==
+356. Champions League · Appearances · Borussia Dortmund players
+357. Champions League · Appearances + Goals · Borussia Dortmund players
+358. Champions League · Appearances − Goals · Borussia Dortmund players
+
+== Napoli (Champions League) ==
+359. Champions League · Appearances · Napoli players
+360. Champions League · Appearances + Goals · Napoli players
+361. Champions League · Appearances − Goals · Napoli players
+
+== Ajax (Champions League) ==
+362. Champions League · Appearances · Ajax players
+363. Champions League · Appearances + Goals · Ajax players
+364. Champions League · Appearances − Goals · Ajax players
+
+== Paris Saint-Germain (Champions League) ==
+365. Champions League · Appearances · Paris Saint-Germain players
+366. Champions League · Appearances + Goals · Paris Saint-Germain players
+367. Champions League · Appearances − Goals · Paris Saint-Germain players
+
+== Atlético Madrid (Champions League) ==
+368. Champions League · Appearances · Atlético Madrid players
+369. Champions League · Appearances + Goals · Atlético Madrid players
+370. Champions League · Appearances − Goals · Atlético Madrid players

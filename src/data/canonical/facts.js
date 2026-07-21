@@ -23,6 +23,12 @@ import {
   MANAGER_MEMBERS, TROPHY_MEMBERS, AS_OF_DATE,
 } from './membership.js'
 import wikidata from './wikidata.generated.json'
+// Phase 2 — stable stored identity. The identity crosswalk is the source of
+// truth for player ids; facts.js resolves display names to those ids rather
+// than deriving them, so it shares ONE id space with the migrated games.
+import crosswalk from './players.crosswalk.json'
+import { normalize as normalizeName } from './normalize.js'
+import { fixName } from './nameFixes.js'
 
 // Fame threshold (number of language Wikipedias) at/above which a player is
 // "notable" enough to feature in generated grids. Curated players are always
@@ -56,11 +62,16 @@ for (const [club, league] of Object.entries(wikidata.clubLeague || {})) imported
 export const CLUB_LEAGUE = { ...CURATED_CLUB_LEAGUE, ...importedClubLeague }
 export const LEAGUES = [...new Set(Object.values(CLUB_LEAGUE))]
 
+// Resolve a display name to its persisted internal id via the identity
+// crosswalk. Ambiguous or unknown names fall back to a deterministic slug so
+// facts.js stays self-sufficient. IDs no longer carry the legacy 'p:' prefix or
+// derive from the (mutable) display name. `canonPlayer` is still applied by the
+// caller (ensurePlayer), so explicit aliases like "Ronaldo" stay unified.
 export function playerId(displayName) {
-  return 'p:' + displayName
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/['’ʼ.]/g, '')
-    .toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  const n = normalizeName(displayName)
+  const hit = crosswalk.byAlias[n]
+  if (typeof hit === 'string') return hit
+  return n.replace(/\s+/g, '-').replace(/^-|-$/g, '')
 }
 
 const registry = new Map()
@@ -68,7 +79,7 @@ const facts = []
 const factSeen = new Set()
 
 function ensurePlayer(displayName) {
-  displayName = canonPlayer(displayName)
+  displayName = fixName(canonPlayer(displayName))
   const id = playerId(displayName)
   if (!registry.has(id)) {
     registry.set(id, { id, displayName, nationalities: [], clubs: [], managers: [], trophies: [], positions: [], fame: 0, curated: false })

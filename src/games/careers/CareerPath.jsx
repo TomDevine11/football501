@@ -60,10 +60,16 @@ export default function CareerPath() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const submitGuess = (text) => {
+  // Phase 3: a picked suggestion is authoritative by player id (fixes namesake
+  // false-accepts like selecting a different "…Ronaldo"). Free-typed text with
+  // no id, or an ambiguous target, still uses the name matcher.
+  const submitGuess = (text, selectedId = null) => {
     if (!active || !text.trim()) return
     setInput('')
-    if (matchesTarget(target.name, text)) {
+    const correct = (selectedId != null && target.id != null)
+      ? selectedId === target.id
+      : matchesTarget(target.name, text)
+    if (correct) {
       setGuesses(g => [...g, { text, correct: true }])
       setPhase('won')
       return
@@ -78,7 +84,7 @@ export default function CareerPath() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!active) return
-    if (highlightedIndex >= 0 && visibleSuggestions[highlightedIndex]) { submitGuess(visibleSuggestions[highlightedIndex].name); return }
+    if (highlightedIndex >= 0 && visibleSuggestions[highlightedIndex]) { const s = visibleSuggestions[highlightedIndex]; submitGuess(s.name, s.id); return }
     if (input.trim()) submitGuess(input.trim())
   }
 
@@ -222,7 +228,7 @@ export default function CareerPath() {
                   type="button"
                   role="option"
                   aria-selected={i === highlightedIndex}
-                  onMouseDown={e => { e.preventDefault(); submitGuess(item.name) }}
+                  onMouseDown={e => { e.preventDefault(); submitGuess(item.name, item.id) }}
                   onMouseEnter={() => setHighlightedIndex(i)}
                   className={`w-full text-left px-4 py-2.5 transition-colors border-b border-border/50 last:border-0 ${i === highlightedIndex ? 'bg-border' : 'hover:bg-border/60'}`}
                 >
