@@ -23,15 +23,22 @@ function saveAll(all) {
 
 // The saved state for today, or null if there's nothing from today.
 // `state` is whatever the game passed; it also carries a `done` flag.
-export function loadDailyProgress(game) {
+// `sig` (optional) identifies WHICH puzzle the snapshot belongs to — pass the
+// day's question/challenge id. If today's puzzle changed (e.g. the pool was
+// edited), the stale snapshot is discarded so a new question starts fresh
+// instead of restoring the previous question's guesses/result.
+export function loadDailyProgress(game, sig = null) {
   const p = loadAll()[game]
-  return p && p.d === todayIndex() ? p.state : null
+  if (!p || p.d !== todayIndex()) return null
+  if (sig != null && p.sig !== sig) return null // today's puzzle changed → stale
+  return p.state
 }
 
 // Persist the daily's live state. `done` marks a finished round (won/lost/gave-up).
-export function saveDailyProgress(game, state, done = false) {
+// `sig` is the day's puzzle id (see loadDailyProgress).
+export function saveDailyProgress(game, state, done = false, sig = null) {
   const all = loadAll()
-  all[game] = { d: todayIndex(), state: { ...state, done } }
+  all[game] = { d: todayIndex(), sig, state: { ...state, done } }
   saveAll(all)
 }
 

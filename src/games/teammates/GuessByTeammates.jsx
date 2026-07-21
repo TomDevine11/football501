@@ -19,7 +19,7 @@ import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 export default function GuessByTeammates() {
   const { t } = useI18n()
   // Today's daily state, if any: resume it, or lock a finished one to its result.
-  const [saved] = useState(() => loadDailyProgress('teammates'))
+  const [saved] = useState(() => loadDailyProgress('teammates', getDailyTarget().name))
   const restoredDone = !!saved?.done
 
   const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
@@ -115,7 +115,7 @@ export default function GuessByTeammates() {
   useEffect(() => {
     if (mode !== 'daily') return
     if (guesses.length === 0 && phase === 'playing') return
-    saveDailyProgress('teammates', { revealed, guesses, phase }, phase !== 'playing')
+    saveDailyProgress('teammates', { revealed, guesses, phase }, phase !== 'playing', target.name)
   }, [mode, revealed, guesses, phase])
 
   // Leave the daily untouched; start a fresh, replayable Unlimited round.
@@ -125,7 +125,7 @@ export default function GuessByTeammates() {
   }
   // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
   const restoreDaily = () => {
-    const s = loadDailyProgress('teammates')
+    const s = loadDailyProgress('teammates', getDailyTarget().name)
     setMode('daily'); setTarget(getDailyTarget())
     setRevealed(s?.revealed ?? 1); setGuesses(s?.guesses ?? []); setInput(''); setPhase(s?.phase ?? 'playing')
     setHighlightedIndex(-1); setDailyStats(null); setShowResult(!!s?.done)

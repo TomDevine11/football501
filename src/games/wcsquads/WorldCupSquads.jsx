@@ -20,7 +20,7 @@ import { RESULT_REVEAL_DELAY_MS } from '../../utils/motion'
 export default function WorldCupSquads() {
   const { t, lp } = useI18n()
   // Today's daily state, if any: resume it, or lock a finished one to its result.
-  const [saved] = useState(() => loadDailyProgress('wcsquads'))
+  const [saved] = useState(() => loadDailyProgress('wcsquads', getDailySquad().year + '-' + getDailySquad().nation))
   const restoredDone = !!saved?.done
 
   const [mode, setMode] = useState('daily')        // 'daily' | 'unlimited'
@@ -66,7 +66,7 @@ export default function WorldCupSquads() {
   useEffect(() => {
     if (mode !== 'daily' || !squad) return
     if (named.size === 0 && !over) return
-    saveDailyProgress('wcsquads', { named: [...named], revealed }, over)
+    saveDailyProgress('wcsquads', { named: [...named], revealed }, over, squad.year + '-' + squad.nation)
   }, [mode, squad, named, revealed, over])
 
   const submit = (text, selectedId = null) => {
@@ -107,7 +107,7 @@ export default function WorldCupSquads() {
   const back = () => reset(null)                // unlimited: back to picker
   // Return to the daily: rehydrate today's saved squad progress (locked, resumed, or fresh).
   const restoreDaily = () => {
-    const s = loadDailyProgress('wcsquads')
+    const s = loadDailyProgress('wcsquads', getDailySquad().year + '-' + getDailySquad().nation)
     setSquad(getDailySquad()); setNamed(new Set(s?.named ?? [])); setRevealed(s?.revealed ?? false)
     setInput(''); setFlash(''); setDailyStats(null); setShowResult(!!s?.done)
   }

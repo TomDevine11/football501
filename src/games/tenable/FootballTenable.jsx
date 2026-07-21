@@ -79,7 +79,7 @@ function answerMatches(guessNorm, answer) {
 export default function FootballTenable() {
   const { t } = useI18n()
   // Today's daily state, if any: resume it, or lock a finished one to its result.
-  const [saved] = useState(() => loadDailyProgress('tenable'))
+  const [saved] = useState(() => loadDailyProgress('tenable', getDailyTenableQuestion().id))
   const restoredDone = !!saved?.done
 
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
@@ -107,7 +107,7 @@ export default function FootballTenable() {
   }
   // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
   const restoreDaily = () => {
-    const s = loadDailyProgress('tenable')
+    const s = loadDailyProgress('tenable', getDailyTenableQuestion().id)
     setMode('daily'); setQuestion(getDailyTenableQuestion())
     setRevealed(s?.revealed ?? {}); setLives(s?.lives ?? MAX_LIVES); setInput(''); setHistory(s?.history ?? [])
     setPhase(s?.phase ?? 'playing'); setDailyStats(null); setGaveUp(s?.gaveUp ?? false); setShowGiveUpConfirm(false)
@@ -137,7 +137,7 @@ export default function FootballTenable() {
     if (mode !== 'daily') return
     const started = Object.keys(revealed).length > 0 || history.length > 0 || phase !== 'playing'
     if (!started) return
-    saveDailyProgress('tenable', { revealed, lives, history, phase, gaveUp }, phase !== 'playing')
+    saveDailyProgress('tenable', { revealed, lives, history, phase, gaveUp }, phase !== 'playing', question.id)
   }, [mode, revealed, lives, history, phase, gaveUp])
 
   const answersByRank = Object.fromEntries(question.answers.map(a => [a.rank, a]))

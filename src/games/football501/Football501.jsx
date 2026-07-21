@@ -614,7 +614,7 @@ export default function Football501() {
   const soloDaily = isDaily && players.length === 1
   useEffect(() => {
     if (!soloDaily || (phase !== 'playing' && phase !== 'won')) return
-    saveDailyProgress('501', { players, history, currentPlayerIndex, gaveUp }, phase === 'won')
+    saveDailyProgress('501', { players, history, currentPlayerIndex, gaveUp }, phase === 'won', getDailyEntry().id)
   }, [soloDaily, players, history, currentPlayerIndex, gaveUp, phase])
 
   // ── Player search (TheSportsDB + local pool) ──────────────────
@@ -686,7 +686,7 @@ export default function Football501() {
   // 'won'), an in-progress one resumes mid-checkout. The board is restored from
   // the snapshot; the challenge is re-derived deterministically.
   const resumeDaily = async () => {
-    const snap = loadDailyProgress('501')
+    const snap = loadDailyProgress('501', getDailyEntry().id)
     if (!snap) { playDaily(); return }
     setLoading(true)
     try {
@@ -701,7 +701,7 @@ export default function Football501() {
     } finally { setLoading(false) }
   }
   // Route the entry Daily card: fresh, resume, or locked result.
-  const onDailyCard = () => (loadDailyProgress('501') ? resumeDaily() : playDaily())
+  const onDailyCard = () => (loadDailyProgress('501', getDailyEntry().id) ? resumeDaily() : playDaily())
   const playAgain = () => startFrom(isDaily ? getDailyChallenge() : getRandomChallenge(numPlayers), numPlayers, isDaily)
   const skipQuestion = () => startFrom(getRandomChallenge(numPlayers), numPlayers, false) // endless: new question
   const giveUp = () => {

@@ -56,11 +56,15 @@ function PlayerCard({ player, statLabel, showValue, mystery, revealTone }) {
   )
 }
 
+// Signature of a daily run — mode + pool size + first player — so saved progress
+// is discarded if the day's run changes (e.g. the stat pool was refreshed).
+const runSig = (r) => `${r.mode.id}:${r.sequence.length}:${r.sequence[0]?.name ?? ''}`
+
 export default function HigherLower() {
   const { t } = useI18n()
   const [dailyMode, setDailyMode] = useState('daily')  // 'daily' | 'unlimited'
   // Today's daily chain progress, if any (current/challenger derive from seqIdx).
-  const [saved] = useState(() => loadDailyProgress('higherlower'))
+  const [saved] = useState(() => loadDailyProgress('higherlower', runSig(getDailyRun(todayIndex()))))
   const restoredDone = !!saved?.done
   const [run, setRun] = useState(() => getDailyRun(todayIndex())) // daily chain
   const [seqIdx, setSeqIdx] = useState(() => saved?.seqIdx ?? 1)              // position in the daily chain
@@ -90,13 +94,13 @@ export default function HigherLower() {
   useEffect(() => {
     if (dailyMode !== 'daily' || phase === 'reveal') return
     if (streak === 0 && phase !== 'over') return
-    saveDailyProgress('higherlower', { seqIdx, streak, trail, phase, lastCorrect }, phase === 'over')
+    saveDailyProgress('higherlower', { seqIdx, streak, trail, phase, lastCorrect }, phase === 'over', runSig(run))
   }, [dailyMode, seqIdx, streak, trail, phase, lastCorrect])
 
   // Return to the daily: rehydrate today's chain (locked, resumed, or fresh).
   const startDaily = () => {
     const r = getDailyRun(todayIndex())
-    const s = loadDailyProgress('higherlower')
+    const s = loadDailyProgress('higherlower', runSig(getDailyRun(todayIndex())))
     const idx = s?.seqIdx ?? 1
     setRun(r); setSeqIdx(idx); setMode(r.mode)
     setCurrent(r.sequence[idx - 1]); setChallenger(r.sequence[idx])

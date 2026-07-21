@@ -57,7 +57,7 @@ function evaluateGuess(guess, answer) {
 export default function FootballWordle() {
   const { t } = useI18n()
   // Today's daily state, if any: resume it, or lock a finished one to its result.
-  const [saved] = useState(() => loadDailyProgress('wordle'))
+  const [saved] = useState(() => loadDailyProgress('wordle', getDailyWordlePlayer().surname))
   const restoredDone = !!saved?.done
 
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
@@ -81,7 +81,7 @@ export default function FootballWordle() {
   useEffect(() => {
     if (mode !== 'daily') return
     if (guesses.length === 0 && phase === 'playing') return
-    saveDailyProgress('wordle', { guesses, phase }, phase !== 'playing')
+    saveDailyProgress('wordle', { guesses, phase }, phase !== 'playing', question.surname)
   }, [mode, guesses, phase])
 
   const [showResult, setShowResult] = useState(restoredDone)
@@ -98,7 +98,7 @@ export default function FootballWordle() {
   }
   // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
   const restoreDaily = () => {
-    const s = loadDailyProgress('wordle')
+    const s = loadDailyProgress('wordle', getDailyWordlePlayer().surname)
     setMode('daily'); setQuestion(getDailyWordlePlayer())
     setGuesses(s?.guesses ?? []); setCurrent(''); setPhase(s?.phase ?? 'playing')
     setDailyStats(null); setShowResult(!!s?.done)

@@ -53,11 +53,15 @@ function CategoryPair({ rowCat, colCat, t, size = 13 }) {
   )
 }
 
+// Signature of a grid's category pairs — identifies WHICH daily puzzle this is,
+// so saved progress is discarded if the grid changes for a given day.
+const gridSig = (g) => [...g.rowCategories, ...g.colCategories].map(c => c.value).join('|')
+
 export default function FootballTicTacToe({ onBackToModes }) {
   const { t, lp } = useI18n()
   // Today's daily state, if any: a terminal snapshot (done) locks the round to
   // its result screen; a live snapshot resumes it. Read once at mount.
-  const [saved] = useState(() => loadDailyProgress('tictactoe'))
+  const [saved] = useState(() => loadDailyProgress('tictactoe', gridSig(getDailyGrid())))
   const restoredDone = !!saved?.done
 
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
@@ -90,7 +94,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
     if (mode !== 'daily') return
     const started = Object.keys(filled).length > 0 || history.length > 0 || phase !== 'playing'
     if (!started) return
-    saveDailyProgress('tictactoe', { filled, lives, history, phase, gaveUp }, phase !== 'playing')
+    saveDailyProgress('tictactoe', { filled, lives, history, phase, gaveUp }, phase !== 'playing', gridSig(grid))
   }, [mode, filled, lives, history, phase, gaveUp])
 
   // Leave the daily untouched; start a fresh, replayable Unlimited round.
@@ -101,7 +105,7 @@ export default function FootballTicTacToe({ onBackToModes }) {
   }
   // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
   const restoreDaily = () => {
-    const s = loadDailyProgress('tictactoe')
+    const s = loadDailyProgress('tictactoe', gridSig(getDailyGrid()))
     setMode('daily'); setGrid(getDailyGrid())
     setFilled(s?.filled ?? {}); setLives(s?.lives ?? MAX_LIVES); setHistory(s?.history ?? [])
     setPhase(s?.phase ?? 'playing'); setGaveUp(s?.gaveUp ?? false)

@@ -29,7 +29,7 @@ const keyOf = names => [...names].sort().join('|')
 export default function FootballConnections() {
   const { t } = useI18n()
   // Today's daily state, if any: resume it, or lock a finished one to its result.
-  const [saved] = useState(() => loadDailyProgress('connections'))
+  const [saved] = useState(() => loadDailyProgress('connections', getDailyConnections().tiles.join('|')))
   const restoredDone = !!saved?.done
 
   const [mode, setMode] = useState('daily') // 'daily' | 'unlimited'
@@ -61,7 +61,7 @@ export default function FootballConnections() {
   useEffect(() => {
     if (mode !== 'daily') return
     if (solved.length === 0 && guessRows.length === 0 && !over) return
-    saveDailyProgress('connections', { solved, lives, order, guessRows, pastGuesses: [...pastGuesses] }, over)
+    saveDailyProgress('connections', { solved, lives, order, guessRows, pastGuesses: [...pastGuesses] }, over, puzzle.tiles.join('|'))
   }, [mode, solved, lives, order, guessRows, pastGuesses, over])
 
   // Leave the daily untouched; start a fresh, replayable Unlimited round.
@@ -73,7 +73,7 @@ export default function FootballConnections() {
   }
   // Return to the daily: rehydrate today's saved state (locked, resumed, or fresh).
   const restoreDaily = () => {
-    const s = loadDailyProgress('connections')
+    const s = loadDailyProgress('connections', getDailyConnections().tiles.join('|'))
     const p = getDailyConnections()
     setMode('daily'); setPuzzle(p); setOrder(s?.order ?? p.tiles)
     setSolved(s?.solved ?? []); setSelected([]); setLives(s?.lives ?? MAX_LIVES); setMessage('')
