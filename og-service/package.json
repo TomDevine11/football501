@@ -1,0 +1,16 @@
+{
+  "name": "triviverse-og",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Dynamic OG share-card service for Triviverse (renders game results into unfurling link previews).",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

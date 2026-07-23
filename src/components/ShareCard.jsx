@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { SITE_URL } from '../utils/site'
 import { renderShareCard, GAME_ROUTES } from '../utils/shareImage'
+import { buildShareUrl, OG_ENABLED } from '../utils/shareUrl'
 import { useI18n } from '../i18n'
 import { track } from '../utils/analytics'
 
@@ -77,22 +78,33 @@ export function ShareCard({ text, card }) {
     setTimeout(() => setToast(''), 2500)
   }
 
+  // With an OG host configured (VITE_OG_HOST), the share IS a link that unfurls
+  // into the result image — one tappable triviverse link that previews the run
+  // and opens the game. `shareUrl` is that link (or the plain game link if the
+  // OG host isn't set yet, so nothing breaks before the service is deployed).
+  const linkFirst = OG_ENABLED && !!card
+  const shareUrl = card ? buildShareUrl(card) : SITE_URL
+  const gameUrl = card ? SITE_URL + (GAME_ROUTES[card.gameId] || '') : SITE_URL
+
   const handleCopy = () => {
     onShare('copy')
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(linkFirst ? shareUrl : text).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     })
   }
 
-  // The card image carries the game, result and branding, so the share is just
-  // the picture + a link straight to that gamemode — no emoji-grid text bubble.
-  const gameUrl = card ? SITE_URL + (GAME_ROUTES[card.gameId] || '') : SITE_URL
+  // Link-first: hand the native share sheet the unfurling link; on desktop (no
+  // share sheet) copy it, since it unfurls wherever it's pasted.
+  const handleShareLink = async () => {
+    onShare('link')
+    if (canNativeShare) { try { await navigator.share({ url: shareUrl }) } catch { /* cancelled */ } return }
+    try { await navigator.clipboard.writeText(shareUrl); flashToast(t('share.linkCopied')) } catch { /* denied */ }
+  }
 
-  // Share the generated Fixture Card image + game link; download it if the
-  // platform can't share files (most desktops). No `card` → plain text share.
-  // The link goes in `text` (not `url`) so messaging apps show it as a plain
-  // tappable link rather than unfurling a second rich link-preview card.
+  // Fallback (no OG host): share the generated Fixture Card image + game link;
+  // download it if the platform can't share files (most desktops). No `card`
+  // → plain text share.
   const handleShareImage = async () => {
     onShare('image')
     if (!card) return navigator.share({ text, url: SITE_URL }).catch(() => {})
@@ -119,19 +131,28 @@ export function ShareCard({ text, card }) {
 
   const handleInstagram = () => {
     onShare('instagram')
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(linkFirst ? shareUrl : text).then(() => {
       flashToast(t('share.instagram'))
       window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
     })
   }
 
+  // Social links carry the unfurling result link when it's available, otherwise
+  // the emoji-grid text / bare site link (previous behaviour).
   const encodedText = encodeURIComponent(text)
-  const encodedUrl = encodeURIComponent(SITE_URL)
+  const encodedShare = encodeURIComponent(linkFirst ? shareUrl : SITE_URL)
+  const waHref = linkFirst ? `https://wa.me/?text=${encodedShare}` : `https://wa.me/?text=${encodedText}`
+  const xHref = linkFirst ? `https://twitter.com/intent/tweet?url=${encodedShare}` : `https://twitter.com/intent/tweet?text=${encodedText}`
+  const fbHref = linkFirst ? `https://www.facebook.com/sharer/sharer.php?u=${encodedShare}` : `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodedText}`
 
   return (
     <div className="w-full max-w-md flex flex-col items-center gap-3 mb-2">
       <div className="flex flex-wrap items-center justify-center gap-3">
-        {card ? (
+        {linkFirst ? (
+          <button onClick={handleShareLink} className="flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-lg transition-colors">
+            <ShareIcon /> {t('share.share')}
+          </button>
+        ) : card ? (
           <button onClick={handleShareImage} disabled={busy} className="flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover disabled:opacity-60 text-white text-sm font-bold rounded-lg transition-colors">
             <ShareIcon /> {busy ? t('share.preparing') : t('share.shareCard')}
           </button>
@@ -145,13 +166,13 @@ export function ShareCard({ text, card }) {
         </button>
       </div>
       <div className="flex items-center justify-center gap-2.5">
-        <a href={`https://wa.me/?text=${encodedText}`} onClick={() => onShare('whatsapp')} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" className={ICON_BTN}>
+        <a href={waHref} onClick={() => onShare('whatsapp')} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" className={ICON_BTN}>
           <WhatsAppIcon />
         </a>
-        <a href={`https://twitter.com/intent/tweet?text=${encodedText}`} onClick={() => onShare('x')} target="_blank" rel="noopener noreferrer" aria-label="Share on X" className={ICON_BTN}>
+        <a href={xHref} onClick={() => onShare('x')} target="_blank" rel="noopener noreferrer" aria-label="Share on X" className={ICON_BTN}>
           <XIcon />
         </a>
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`} onClick={() => onShare('facebook')} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" className={ICON_BTN}>
+        <a href={fbHref} onClick={() => onShare('facebook')} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" className={ICON_BTN}>
           <FacebookIcon />
         </a>
         <button onClick={handleInstagram} aria-label="Share on Instagram" className={ICON_BTN}>
