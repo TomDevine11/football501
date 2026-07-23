@@ -41,16 +41,3 @@ export function decodeCard(r) {
     }
   } catch { return null }
 }
-
-// Load a Google font as TTF (Satori-compatible). The archaic User-Agent makes
-// the css2 API serve truetype instead of woff2; `text` subsets to only the
-// glyphs we render (so accented player names always resolve).
-export async function loadFont(family, text) {
-  const url = `https://fonts.googleapis.com/css2?family=${family}&text=${encodeURIComponent(text)}`
-  const css = await (await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0' },
-  })).text()
-  const m = css.match(/src:\s*url\((.+?)\)\s*format\('(?:opentype|truetype)'\)/)
-  if (!m) throw new Error(`font not found: ${family}`)
-  return (await fetch(m[1])).arrayBuffer()
-}

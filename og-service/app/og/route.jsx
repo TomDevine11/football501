@@ -1,7 +1,11 @@
 import { ImageResponse } from 'next/og'
-import { decodeCard, loadFont, C, TILE, ACCENT } from '../../lib/card'
+import { decodeCard, C, TILE, ACCENT } from '../../lib/card'
+import { INTER_500, INTER_800, BEBAS, toBuf } from '../../lib/fonts'
 
-export const runtime = 'edge'
+// Node runtime: local `next start` mirrors Vercel's node runtime exactly, so a
+// passing local render guarantees production. Fonts are embedded (base64) and
+// Satori decodes ttf/otf/woff (not woff2).
+export const runtime = 'nodejs'
 
 function Card({ card, accent }) {
   const gap = 8
@@ -37,7 +41,7 @@ function Card({ card, accent }) {
 
       {/* title */}
       <div style={{ fontFamily: 'Bebas Neue', fontSize: 96, lineHeight: 1, marginTop: 26, letterSpacing: 1 }}>{(card.title || '').toUpperCase()}</div>
-      {card.challenge ? <div style={{ fontSize: 26, color: C.muted, marginTop: 10 }}>{card.challenge}</div> : null}
+      {card.challenge ? <div style={{ fontSize: 26, fontWeight: 500, color: C.muted, marginTop: 10 }}>{card.challenge}</div> : null}
 
       {/* result + tiles (fills the middle) */}
       <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'center' }}>
@@ -72,19 +76,13 @@ export async function GET(request) {
   if (!card) return new Response('bad request', { status: 400 })
   const accent = ACCENT[card.gameId] || C.brandBright
 
-  const glyphs = `${card.title} ${card.result} ${card.challenge} TRIVIVERSE FOOTBALL MATCHDAY PLAY TODAY'S DAILY triviverse.com 0123456789`
   try {
-    const [inter500, inter800, bebas] = await Promise.all([
-      loadFont('Inter:wght@500', glyphs),
-      loadFont('Inter:wght@800', glyphs),
-      loadFont('Bebas+Neue', `${(card.title || '').toUpperCase()} 0123456789`),
-    ])
     return new ImageResponse(<Card card={card} accent={accent} />, {
       width: 1200, height: 630,
       fonts: [
-        { name: 'Inter', data: inter500, weight: 500, style: 'normal' },
-        { name: 'Inter', data: inter800, weight: 800, style: 'normal' },
-        { name: 'Bebas Neue', data: bebas, weight: 400, style: 'normal' },
+        { name: 'Inter', data: toBuf(INTER_500), weight: 500, style: 'normal' },
+        { name: 'Inter', data: toBuf(INTER_800), weight: 800, style: 'normal' },
+        { name: 'Bebas Neue', data: toBuf(BEBAS), weight: 400, style: 'normal' },
       ],
       headers: { 'cache-control': 'public, immutable, max-age=31536000' },
     })
